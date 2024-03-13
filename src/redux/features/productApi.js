@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import { apiSlice } from "../api/apiSlice";
 import { configuration } from "@/utils/constant";
-import {  PRODUCT_LIST } from "@/utils/query";
+import {  PRODUCT_LIST } from "@/utils/queries/productList";
 
 
 export const productApi = apiSlice.injectEndpoints({
