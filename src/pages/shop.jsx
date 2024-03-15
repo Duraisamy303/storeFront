@@ -10,12 +10,18 @@ import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
 import ShopLoader from "@/components/loader/shop/shop-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 import shopBanner from "../../public/assets/img/shop-banner.jpg";
+import { shortData } from "@/utils/functions";
 
 const ShopPage = ({ query }) => {
-  const { data: productsData, isError, isLoading } = useGetAllProductsQuery({ channel: 'india-channel', first: 20 });
-  const products=productsData?.data?.collections?.edges[0]?.node?.products?.edges
-  console.log("products: ", products);
+  const {
+    data: productsData,
+    isError,
+    isLoading,
+  } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
+  const products = productsData?.data?.products?.edges;
+  // console.log("products: ", products);
   const [priceValue, setPriceValue] = useState([0, 0]);
+  // console.log("priceValue: ", priceValue);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
   let product_items = products;
@@ -26,9 +32,16 @@ const ShopPage = ({ query }) => {
       const maxPrice = products.reduce((max, product) => {
         return product.price > max ? product.price : max;
       }, 0);
+
       setPriceValue([0, maxPrice]);
     }
   }, [isLoading, isError, products]);
+
+  // For sorting the products
+  if (selectValue) {
+    const shortDatas = shortData(selectValue, products);
+    product_items = shortDatas;
+  }
 
   // handleChanges
   const handleChanges = (val) => {
@@ -64,33 +77,10 @@ const ShopPage = ({ query }) => {
       </div>
     );
   }
-  if (!isLoading && !isError && products?.data?.length === 0) {
+  if (!isLoading && !isError && products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
   }
   if (!isLoading && !isError && products?.data?.length > 0) {
-    // products
-    // select short filtering
-    if (selectValue) {
-      if (selectValue === "Default Sorting") {
-        product_items = products;
-      } else if (selectValue === "Low to High") {
-        product_items = products
-          .slice()
-          .sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (selectValue === "High to Low") {
-        product_items = products
-          .slice()
-          .sort((a, b) => Number(b.price) - Number(a.price));
-      } else if (selectValue === "New Added") {
-        product_items = products
-          .slice()
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else if (selectValue === "On Sale") {
-        product_items = products.filter((p) => p.discount > 0);
-      } else {
-        product_items = products;
-      }
-    }
     // price filter
     product_items = product_items.filter(
       (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
@@ -148,31 +138,18 @@ const ShopPage = ({ query }) => {
           query.brand
       );
     }
-
-    content = (
-      <>
-        <ShopArea
-          all_products={products.data}
-          products={product_items}
-          otherProps={otherProps}
-        />
-        <ShopFilterOffCanvas
-          all_products={products.data}
-          otherProps={otherProps}
-        />
-      </>
-    );
   }
+
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb title="Shop" subtitle="Shop Grid" bgImage={shopBanner} />
       <ShopArea
-          all_products={products}
-          products={product_items}
-          otherProps={otherProps}
-        />
+        all_products={products}
+        products={product_items}
+        otherProps={otherProps}
+      />
       {/* {content} */}
       {/* <Footer primary_style={true} /> */}
       <FooterTwo primary-style={true} />
