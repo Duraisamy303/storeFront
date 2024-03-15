@@ -37,7 +37,6 @@ const ShopPage = ({ query }) => {
     }
   }, [isLoading, isError, products]);
 
-  // For sorting the products
   if (selectValue) {
     const shortDatas = shortData(selectValue, products);
     product_items = shortDatas;
@@ -81,6 +80,33 @@ const ShopPage = ({ query }) => {
     content = <ErrorMsg msg="No Products found!" />;
   }
   if (!isLoading && !isError && products?.data?.length > 0) {
+<<<<<<< HEAD
+=======
+    // products
+    // select short filtering
+    // if (selectValue) {
+    //   if (selectValue === "Default Sorting") {
+    //     product_items = products;
+    //   } else if (selectValue === "Low to High") {
+    //     product_items = products
+    //       .slice()
+    //       .sort((a, b) => Number(a.price) - Number(b.price));
+    //   } else if (selectValue === "High to Low") {
+    //     product_items = products
+    //       .slice()
+    //       .sort((a, b) => Number(b.price) - Number(a.price));
+    //   } else if (selectValue === "New Added") {
+    //     product_items = products
+    //       .slice()
+    //       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    //   } else if (selectValue === "On Sale") {
+    //     product_items = products.filter((p) => p.discount > 0);
+    //   } else {
+    //     product_items = products;
+    //   }
+    // }
+
+>>>>>>> 9a6a2f4c0e4daa896d01fc6c6e9701811a433efc
     // price filter
     product_items = product_items.filter(
       (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
@@ -138,7 +164,26 @@ const ShopPage = ({ query }) => {
           query.brand
       );
     }
+<<<<<<< HEAD
   }
+=======
+
+    // content = (
+    //   <>
+    //     <ShopArea
+    //       all_products={products.data}
+    //       products={product_items}
+    //       otherProps={otherProps}
+    //     />
+    //     <ShopFilterOffCanvas
+    //       all_products={products.data}
+    //       otherProps={otherProps}
+    //     />
+    //   </>
+    // );
+  }
+  console.log("product_items: ", product_items);
+>>>>>>> 9a6a2f4c0e4daa896d01fc6c6e9701811a433efc
 
   return (
     <Wrapper>

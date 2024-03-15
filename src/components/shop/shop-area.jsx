@@ -16,6 +16,7 @@ const ShopArea = ({ all_products, products, otherProps }) => {
   // console.log("all_products: ", all_products);
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
+
   const [filteredRows, setFilteredRows] = useState(products);
   const [pageStart, setPageStart] = useState(0);
   const [countOfPage, setCountOfPage] = useState(12);

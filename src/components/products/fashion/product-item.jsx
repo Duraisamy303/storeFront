@@ -13,9 +13,8 @@ import { capitalizeFLetter} from "@/utils/functions";
 
 const ProductItem = ({ products, style_2 = false }) => {
   let product = products.node;
-  console.log("ProductItem: ", product);
 
-  const { id, category, title, reviews, price, discount, tags, status } =
+  const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
   // const [ratingVal, setRatingVal] = useState(0);
   const { cart_products } = useSelector((state) => state.cart);
@@ -142,10 +141,10 @@ const ProductItem = ({ products, style_2 = false }) => {
           ))}
         </div>
         <h3 className="tp-product-title-2">
-          <Link href={`/product-details/${id}`}>{capitalizeFLetter(product?.name)}</Link>
+          <Link href={`/product-details/${_id}`}>{capitalizeFLetter(product?.name)}</Link>
         </h3>
         <h3 className="tp-product-title-2">
-          <Link href={`/product-details/${id}`}>
+          <Link href={`/product-details/${_id}`}>
             {capitalizeFLetter(product?.category?.name)}
           </Link>
         </h3>

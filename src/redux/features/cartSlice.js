@@ -13,6 +13,7 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     add_cart_product: (state, { payload }) => {
+      console.log("state: ", state);
       console.log("payload: ", payload);
       const isExist = state.cart_products.some((i) => i._id === payload._id);
       if (!isExist) {
