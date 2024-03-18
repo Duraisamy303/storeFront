@@ -15,7 +15,6 @@ const ProductDetailsPage = ({ query }) => {
   const { data: productData, isLoading, isError } = useGetProductQuery({productId:query.id});
 
   const product=productData?.data?.product
-  console.log("ProductDetailsPage: ", product);
   // decide what to render
   let content = null;
   if (isLoading) {

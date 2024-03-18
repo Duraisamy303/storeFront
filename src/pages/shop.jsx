@@ -18,6 +18,7 @@ const ShopPage = ({ query }) => {
     isError,
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
+
   const products = productsData?.data?.products?.edges;
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");

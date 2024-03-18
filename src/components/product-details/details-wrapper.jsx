@@ -19,7 +19,6 @@ const DetailsWrapper = ({
   activeImg,
   detailsBottom = false,
 }) => {
-  console.log("DetailsWrapper: ", productItem);
   const {
     sku,
     img,

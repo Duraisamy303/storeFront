@@ -18,7 +18,6 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  // const [loginUser, { }] = useLoginUserMutation();
   const [loginUser, { }] = useLoginUserMutation();
   const router = useRouter();
   const { redirect } = router.query;
@@ -33,12 +32,9 @@ const LoginForm = () => {
   });
   // onSubmit
   const onSubmit = (data) => {
-    console.log("data: ", data);
     loginUser({
-      variables: {
         email: data.email,
         password: data.password,
-      },
     })
       .then((data) => {
         console.log("response: ", data);
@@ -52,6 +48,7 @@ const LoginForm = () => {
       })
     // reset();
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="tp-login-input-wrapper">

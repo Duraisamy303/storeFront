@@ -23,7 +23,6 @@ const ProductModal = () => {
   const { productItem, isModalOpen } = useSelector(
     (state) => state.productModal
   );
-  console.log("productItem: ", productItem);
 
   const { img, imageURLs, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(img);

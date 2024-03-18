@@ -1,6 +1,7 @@
 import { PRODUCT_LIST_ITEM_FRAGMENT } from './productDetails';
 
 export const PRODUCT_LIST = ({ channel, first }) => {
+  console.log("channel, first : ", channel, first );
   return JSON.stringify({
     query: `
       query ProductListPaginated($first: Int!, $after: String, $channel: String!) {

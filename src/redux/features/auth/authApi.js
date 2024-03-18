@@ -48,27 +48,20 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // login
     loginUser: builder.mutation({
-      query: ({ email,password}) => configuration(LOGIN({ email,password})),
-      // query: (data) => ({
-      //   url: "api/user/login",
-      //   method: "POST",
-      //   body: data,
-      // }),
+      query: ({email, password}) => configuration(LOGIN({ email, password })),
 
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
-
           Cookies.set(
             "userInfo",
             JSON.stringify({
-              accessToken: result.data.data.token,
-              user: result.data.data.user,
+              accessToken: result.data.data.tokenCreate.token,
+              user: result.data.data.tokenCreate.user,
+              refreshToken: result.data.data.tokenCreate.refreshToken
             }),
             { expires: 0.5 }
           );
-
           dispatch(
             userLoggedIn({
               accessToken: result.data.data.token,
