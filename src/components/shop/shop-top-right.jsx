@@ -6,7 +6,6 @@ import NiceSelect from "@/ui/nice-select";
 import {handleFilterSidebarOpen } from "@/redux/features/shop-filter-slice";
 
 const ShopTopRight = ({selectHandleFilter}) => {
-  console.log("selectHandleFilter: ", selectHandleFilter);
   const dispatch = useDispatch()
   return (
     <div className="tp-shop-top-right d-sm-flex align-items-center justify-content-xl-end">

@@ -11,18 +11,32 @@ export const wishlistSlice = createSlice({
   initialState,
   reducers: {
     add_to_wishlist: (state, { payload }) => {
-      const isExist = state.wishlist.some((item) => item._id === payload._id);
-      if (!isExist) {
-        state.wishlist.push(payload);
-        notifySuccess(`${payload.title} added to wishlist`);
+      const local = getLocalStorage("wishlist_items");
+      console.log("local: ", local);
+      const { wishlist } = state;
+      let cartProductsArray = JSON.parse(JSON.stringify(wishlist));
+      console.log("cartProductsArray: ", cartProductsArray);
+      let updatedCartProducts = [...cartProductsArray]; // Create a copy of cart_products array
+
+      const existingProductIndex = updatedCartProducts.findIndex(
+        (item) => item.id === payload.id
+      );
+      console.log("existingProductIndex: ", existingProductIndex);
+
+
+      if (existingProductIndex === -1) {
+        updatedCartProducts.push(payload);
+        notifySuccess(`${payload.name} added to wishlist`);
       } else {
-        state.wishlist = state.wishlist.filter(
-          (item) => item._id !== payload._id
+        updatedCartProducts = updatedCartProducts.filter(
+          (item) => item.id !== payload.id
         );
-        notifyError(`${payload.title} removed from wishlist`);
+
+        notifyError(`${payload.name} removed from wishlist`);
       }
-      setLocalStorage("wishlist_items", state.wishlist);
+      setLocalStorage("wishlist_items", updatedCartProducts);
     },
+
     remove_wishlist_product: (state, { payload }) => {
       state.wishlist = state.wishlist.filter((item) => item._id !== payload.id);
       notifyError(`${payload.title} removed from wishlist`);

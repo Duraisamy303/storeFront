@@ -33,5 +33,6 @@ export const PRODUCT_LIST_ITEM_FRAGMENT = `
       alt
     }
     created
+    description
   }
 `;

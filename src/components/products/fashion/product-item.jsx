@@ -18,10 +18,9 @@ const ProductItem = ({ products, style_2 = false }) => {
     product || {};
   // const [ratingVal, setRatingVal] = useState(0);
   const { cart_products } = useSelector((state) => state.cart);
-  console.log("cart_products: ", cart_products);
   const { wishlist } = useSelector((state) => state.wishlist);
-  const isAddedToCart = cart_products.some((prd) => prd.id === id);
-  const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
+  const isAddedToCart = cart_products.some((prd) => prd.id === _id);
+  const isAddedToWishlist = wishlist.some((prd) => prd.id === _id);
   const dispatch = useDispatch();
 
   // useEffect(() => {

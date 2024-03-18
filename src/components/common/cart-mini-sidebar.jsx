@@ -10,7 +10,6 @@ import { closeCartMini, remove_product } from "@/redux/features/cartSlice";
 
 const CartMiniSidebar = () => {
   const { cart_products, cartMiniOpen } = useSelector((state) => state.cart);
-  console.log("cart_products: ", cart_products);
   const { total } = useCartInfo();
   const dispatch = useDispatch();
 
