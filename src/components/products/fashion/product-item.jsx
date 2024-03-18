@@ -36,6 +36,7 @@ const ProductItem = ({ products, style_2 = false }) => {
 
   // handle add product
   const handleAddProduct = (prd) => {
+    
     dispatch(add_cart_product(prd));
   };
   // handle wishlist product

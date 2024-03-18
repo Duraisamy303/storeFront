@@ -19,41 +19,30 @@ const ShopPage = ({ query }) => {
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
   const products = productsData?.data?.products?.edges;
-  // console.log("products: ", products);
   const [priceValue, setPriceValue] = useState([0, 0]);
-  // console.log("priceValue: ", priceValue);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
-  let product_items = products;
+  let productItems = products;
 
-  // Load the maximum price once the products have been loaded
   useEffect(() => {
     if (!isLoading && !isError && products?.length > 0) {
       const maxPrice = products.reduce((max, product) => {
         return product.price > max ? product.price : max;
       }, 0);
-
       setPriceValue([0, maxPrice]);
     }
   }, [isLoading, isError, products]);
 
-  if (selectValue) {
-    const shortDatas = shortData(selectValue, products);
-    product_items = shortDatas;
-  }
 
-  // handleChanges
   const handleChanges = (val) => {
     setCurrPage(1);
     setPriceValue(val);
   };
 
-  // selectHandleFilter
   const selectHandleFilter = (e) => {
     setSelectValue(e.value);
   };
 
-  // other props
   const otherProps = {
     priceFilterValues: {
       priceValue,
@@ -63,96 +52,17 @@ const ShopPage = ({ query }) => {
     currPage,
     setCurrPage,
   };
-  // decide what to render
+
   let content = null;
 
   if (isLoading) {
     content = <ShopLoader loading={isLoading} />;
-  }
-  if (!isLoading && isError) {
-    content = (
-      <div className="pb-80 text-center">
-        <ErrorMsg msg="There was an error" />
-      </div>
-    );
-  }
-  if (!isLoading && !isError && products?.length === 0) {
+  } else if (isError) {
+    content = <ErrorMsg msg="There was an error" />;
+  } else if (products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-  
-
-    // price filter
-    product_items = product_items.filter(
-      (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
-    );
-
-    // status filter
-    if (query.status) {
-      if (query.status === "on-sale") {
-        product_items = product_items.filter((p) => p.discount > 0);
-      } else if (query.status === "in-stock") {
-        product_items = product_items.filter((p) => p.status === "in-stock");
-      }
-    }
-
-    // category filter
-    if (query.category) {
-      product_items = product_items.filter(
-        (p) =>
-          p.parent.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.category
-      );
-    }
-
-    // category filter
-    if (query.subCategory) {
-      product_items = product_items.filter(
-        (p) =>
-          p.children.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.subCategory
-      );
-    }
-
-    // color filter
-    if (query.color) {
-      product_items = product_items.filter((product) => {
-        for (let i = 0; i < product.imageURLs.length; i++) {
-          const color = product.imageURLs[i]?.color;
-          if (
-            color &&
-            color?.name.toLowerCase().replace("&", "").split(" ").join("-") ===
-              query.color
-          ) {
-            return true; // match found, include product in result
-          }
-        }
-        return false; // no match found, exclude product from result
-      });
-    }
-
-    // brand filter
-    if (query.brand) {
-      product_items = product_items.filter(
-        (p) =>
-          p.brand.name.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.brand
-      );
-    }
-
-    // content = (
-    //   <>
-    //     <ShopArea
-    //       all_products={products.data}
-    //       products={product_items}
-    //       otherProps={otherProps}
-    //     />
-    //     <ShopFilterOffCanvas
-    //       all_products={products.data}
-    //       otherProps={otherProps}
-    //     />
-    //   </>
-    // );
+  } else {
+    // Render product items...
   }
 
   return (
@@ -162,12 +72,11 @@ const ShopPage = ({ query }) => {
       <ShopBreadcrumb title="Shop" subtitle="Shop Grid" bgImage={shopBanner} />
       <ShopArea
         all_products={products}
-        products={product_items}
+        products={productItems}
         otherProps={otherProps}
       />
-      {/* {content} */}
-      {/* <Footer primary_style={true} /> */}
-      <FooterTwo primary-style={true} />
+      {content}
+      <FooterTwo primary_style={true} />
     </Wrapper>
   );
 };

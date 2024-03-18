@@ -12,7 +12,10 @@ import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 import FooterTwo from '@/layout/footers/footer-2';
 
 const ProductDetailsPage = ({ query }) => {
-  const { data: product, isLoading, isError } = useGetProductQuery(query.id);
+  const { data: productData, isLoading, isError } = useGetProductQuery({productId:query.id});
+
+  const product=productData?.data?.product
+  console.log("ProductDetailsPage: ", product);
   // decide what to render
   let content = null;
   if (isLoading) {

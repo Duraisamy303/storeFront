@@ -1,6 +1,9 @@
 import { apiSlice } from "@/redux/api/apiSlice";
 import { userLoggedIn } from "./authSlice";
 import Cookies from "js-cookie";
+import { PRODUCT_LIST } from "@/utils/queries/productList";
+import { configuration } from "@/utils/constant";
+import { LOGIN } from "@/utils/queries/login/login";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -45,15 +48,17 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // login
     loginUser: builder.mutation({
-      query: (data) => ({
-        url: "api/user/login",
-        method: "POST",
-        body: data,
-      }),
+      query: ({ email,password}) => configuration(LOGIN({ email,password})),
+      // query: (data) => ({
+      //   url: "api/user/login",
+      //   method: "POST",
+      //   body: data,
+      // }),
 
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+          console.log("result: ", result);
 
           Cookies.set(
             "userInfo",

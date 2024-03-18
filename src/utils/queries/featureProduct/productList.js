@@ -25,4 +25,3 @@ export const PRODUCT_LIST = ({ channel, first }) => {
     variables: { channel, first },
   });
 };
-

@@ -19,6 +19,7 @@ const DetailsWrapper = ({
   activeImg,
   detailsBottom = false,
 }) => {
+  console.log("DetailsWrapper: ", productItem);
   const {
     sku,
     img,
@@ -66,10 +67,10 @@ const DetailsWrapper = ({
   return (
     <div className="tp-product-details-wrapper">
       <div className="tp-product-details-category">
-        <span>{capitalizeFLetter(productItem?.category?.name)}</span>
+        <span>{capitalizeFLetter(productItem?.category?.name || productItem?.node?.category?.name)}</span>
       </div>
       <h3 className="tp-product-details-title">
-        {capitalizeFLetter(productItem?.name)}
+        {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
 
       {/* inventory details */}
@@ -87,7 +88,7 @@ const DetailsWrapper = ({
         </div>
       </div> */}
       <p style={{ color: "black" }}>
-        {textMore ? description : `${description?.substring(0, 100)}...`}
+        {textMore ? description || productItem?.node?.description : `${description?.substring(0, 100) || productItem?.node?.description?.substring(0, 100) }...`}
         <span onClick={() => setTextMore(!textMore)}>
           {textMore ? "See less" : "See more"}
         </span>
@@ -99,13 +100,15 @@ const DetailsWrapper = ({
           <>
             <span className="tp-product-details-price old-price">${price}</span>
             <span className="tp-product-details-price new-price">
-              &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount}
+              &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount} 
               {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
             </span>
           </>
         ) : (
           <span className="tp-product-details-price new-price">
-            &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount}
+              &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount} 
+
+            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
           </span>
 
           // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
@@ -199,9 +202,9 @@ const DetailsWrapper = ({
       </div>
       {/* product-details-action-sm end */}
 
-      {detailsBottom && (
+    {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />
-      )}
+      )} 
     </div>
   );
 };

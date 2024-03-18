@@ -45,10 +45,12 @@ const slider_setting = {
 }
 
 const PopularProducts = () => {
-  const { data: products, isError, isLoading } =
-    useGetProductTypeQuery({ type: 'jewelry', query: `new=true` });
+  const { data: productsData, isError, isLoading } =
+    useGetProductTypeQuery({ channel:"india-channel",first:19 });
   // decide what to render
   let content = null;
+  const products = productsData?.data?.products?.edges;
+  console.log("products: ", products);
 
   if (isLoading) {
     content = (
@@ -58,15 +60,15 @@ const PopularProducts = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && products?.data?.length === 0) {
+  if (!isLoading && !isError && products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
   }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data.slice(0, 8);
+  if (!isLoading && !isError && products?.length > 0) {
+    // const product_items = products.slice(0, 8);
     content = (
       <Swiper {...slider_setting} modules={[Scrollbar, Pagination]} className="tp-category-slider-active-4 swiper-container mb-70">
-        {product_items.map(item => (
-          <SwiperSlide key={item._id}>
+        {products.map(item => (
+          <SwiperSlide key={item.id}>
             <ProductSliderItem product={item} />
           </SwiperSlide>
         ))}

@@ -61,7 +61,7 @@ const ProductModal = () => {
             </button>
             {/* product-details-thumb-wrapper start */}
             <DetailsThumbWrapper
-              activeImg={productItem.thumbnail.url}
+              activeImg={productItem?.node?.thumbnail.url || productItem?.thumbnail.url}
               handleImageActive={handleImageActive}
               imageURLs={imageURLs}
               imgWidth={416}

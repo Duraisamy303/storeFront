@@ -18,6 +18,7 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
+  // const [loginUser, { }] = useLoginUserMutation();
   const [loginUser, { }] = useLoginUserMutation();
   const router = useRouter();
   const { redirect } = router.query;
@@ -32,11 +33,15 @@ const LoginForm = () => {
   });
   // onSubmit
   const onSubmit = (data) => {
+    console.log("data: ", data);
     loginUser({
-      email: data.email,
-      password: data.password,
+      variables: {
+        email: data.email,
+        password: data.password,
+      },
     })
       .then((data) => {
+        console.log("response: ", data);
         if (data?.data) {
           notifySuccess("Login successfully");
           router.push(redirect || "/");
@@ -45,7 +50,7 @@ const LoginForm = () => {
           notifyError(data?.error?.data?.error)
         }
       })
-    reset();
+    // reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

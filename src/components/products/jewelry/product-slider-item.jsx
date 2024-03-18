@@ -9,11 +9,11 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError } from "@/utils/toast";
 
 const ProductSliderItem = ({ product }) => {
-  const { _id, title, price, img,status } = product || {};
+  const { _id, title, price, status } = product || {};
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
-  const isAddedToCart = cart_products.some((prd) => prd._id === _id);
-  const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
+  const isAddedToCart = cart_products.some((prd) => prd.id === _id);
+  const isAddedToWishlist = wishlist.some((prd) => prd.id === _id);
   const dispatch = useDispatch();
 
   // handle add product
@@ -29,6 +29,9 @@ const ProductSliderItem = ({ product }) => {
   const handleWishlistProduct = (prd) => {
     dispatch(add_to_wishlist(prd));
   };
+
+  const img = product?.node?.thumbnail?.url;
+
   return (
     <div className="tp-category-item-4 p-relative z-index-1 fix text-center">
       <div
@@ -82,7 +85,7 @@ const ProductSliderItem = ({ product }) => {
           <Link href={`/product-details/${_id}`}>{title}</Link>
         </h3>
         <div className="tp-category-price-wrapper-4">
-          <span className="tp-category-price-4">${price.toFixed(2)}</span>
+          {/* <span className="tp-category-price-4">${price.toFixed(2)}</span> */}
           <div className="tp-category-add-to-cart">
             {isAddedToCart ? (
               <Link href="/cart" className="tp-category-add-to-cart-4">
