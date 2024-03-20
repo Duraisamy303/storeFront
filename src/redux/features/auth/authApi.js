@@ -4,16 +4,38 @@ import Cookies from "js-cookie";
 import { PRODUCT_LIST } from "@/utils/queries/productList";
 import { configuration } from "@/utils/constant";
 import { LOGIN } from "@/utils/queries/login/login";
+import { REGISTER } from "@/utils/queries/register/register";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     registerUser: builder.mutation({
-      query: (data) => ({
-        url: "api/user/signup",
-        method: "POST",
-        body: data,
-      }),
+      query: ({ firstName,lastName,email,password }) =>
+        configuration(REGISTER({firstName,lastName,email,password })),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
+
+          Cookies.set(
+            "userInfo",
+            JSON.stringify({
+              accessToken: result.data.data.token,
+              user: result.data.data.user,
+            }),
+            { expires: 0.5 }
+          );
+
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.data.token,
+              user: result.data.data.user,
+            })
+          );
+        } catch (err) {
+          // do nothing
+        }
+      },
     }),
     // signUpProvider
     signUpProvider: builder.mutation({
@@ -48,7 +70,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // login
     loginUser: builder.mutation({
-      query: ({email, password}) => configuration(LOGIN({ email, password })),
+      query: ({ email, password }) => configuration(LOGIN({ email, password })),
 
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -58,7 +80,7 @@ export const authApi = apiSlice.injectEndpoints({
             JSON.stringify({
               accessToken: result.data.data.tokenCreate.token,
               user: result.data.data.tokenCreate.user,
-              refreshToken: result.data.data.tokenCreate.refreshToken
+              refreshToken: result.data.data.tokenCreate.refreshToken,
             }),
             { expires: 0.5 }
           );

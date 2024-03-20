@@ -11,7 +11,8 @@ import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 
 // schema
 const schema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
+  firstName: Yup.string().required().label("First name"),
+  lastName: Yup.string().required().label("Last name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(6).label("Password"),
   remember: Yup.bool()
@@ -30,19 +31,22 @@ const RegisterForm = () => {
   });
   // on submit
   const onSubmit = (data) => {
+    console.log("data: ", data);
     registerUser({
-      name: data.name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       email: data.email,
       password: data.password,
     }).then((result) => {
-      if (result?.error) {
-        notifyError("Register Failed");
+      console.log("result: ", result);
+      if (result?.data?.data?.accountRegister?.errors?.length>0) {
+        notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {
-        notifySuccess(result?.data?.message);
-        // router.push(redirect || "/");
+        notifySuccess("Register successfully");
+        router.push( "/login");
       }
     });
-    reset();
+    // reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -50,17 +54,33 @@ const RegisterForm = () => {
         <div className="tp-login-input-box">
           <div className="tp-login-input">
             <input
-              {...register("name", { required: `Name is required!` })}
-              id="name"
-              name="name"
+              {...register("firstName", { required: `First name is required!` })}
+              id="firstName"
+              name="firstName"
               type="text"
-              placeholder="Shahnewaz Sakil"
+              placeholder="Enter your first name"
             />
           </div>
           <div className="tp-login-input-title">
-            <label htmlFor="name">Your Name</label>
+            <label htmlFor="firstName">First Name</label>
           </div>
-          <ErrorMsg msg={errors.name?.message} />
+          <ErrorMsg msg={errors.firstName?.message} />
+        </div>
+        <div className="tp-login-input-box">
+          <div className="tp-login-input">
+            <input
+              {...register("lastName", { required: `Last name is required!` })}
+              id="lastName"
+              name="lastName"
+              type="text"
+              placeholder="Enter your last name"
+
+            />
+          </div>
+          <div className="tp-login-input-title">
+            <label htmlFor="lastName">Last Name</label>
+          </div>
+          <ErrorMsg msg={errors.lastName?.message} />
         </div>
         <div className="tp-login-input-box">
           <div className="tp-login-input">
@@ -69,11 +89,11 @@ const RegisterForm = () => {
               id="email"
               name="email"
               type="email"
-              placeholder="shofy@mail.com"
+              placeholder="Enter your email"
             />
           </div>
           <div className="tp-login-input-title">
-            <label htmlFor="email">Your Email</label>
+            <label htmlFor="email">Email</label>
           </div>
           <ErrorMsg msg={errors.email?.message} />
         </div>

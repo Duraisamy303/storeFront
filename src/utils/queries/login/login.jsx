@@ -1,5 +1,4 @@
 export const LOGIN = ({ email, password }) => {
-  console.log("email, password: ", email, password);
   return {
     query: `
     mutation LoginMutation($email: String!, $password: String!) {
