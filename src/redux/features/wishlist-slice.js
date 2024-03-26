@@ -12,16 +12,13 @@ export const wishlistSlice = createSlice({
   reducers: {
     add_to_wishlist: (state, { payload }) => {
       const local = getLocalStorage("wishlist_items");
-      console.log("local: ", local);
       const { wishlist } = state;
       let cartProductsArray = JSON.parse(JSON.stringify(wishlist));
-      console.log("cartProductsArray: ", cartProductsArray);
       let updatedCartProducts = [...cartProductsArray]; // Create a copy of cart_products array
 
       const existingProductIndex = updatedCartProducts.findIndex(
         (item) => item.id === payload.id
       );
-      console.log("existingProductIndex: ", existingProductIndex);
 
 
       if (existingProductIndex === -1) {

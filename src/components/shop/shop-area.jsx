@@ -12,7 +12,7 @@ import ShopTopLeft from "./shop-top-left";
 import ShopTopRight from "./shop-top-right";
 import ResetButton from "./shop-filter/reset-button";
 
-const ShopArea = ({ all_products, products, otherProps }) => {
+const ShopArea = ({ all_products, products, otherProps,updateData }) => {
   // console.log("all_products: ", all_products);
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -88,7 +88,7 @@ const ShopArea = ({ all_products, products, otherProps }) => {
                                 key={item._id}
                                 className="col-xl-4 col-md-6 col-sm-6"
                               >
-                                <ProductItem products={item} />
+                                <ProductItem products={item} updateData={updateData} />
                               </div>
                             ))}
                         </div>

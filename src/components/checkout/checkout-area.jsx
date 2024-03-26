@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 // internal
@@ -12,6 +12,18 @@ const CheckoutArea = () => {
   const checkoutData = useCheckoutSubmit();
   const {handleSubmit,submitHandler,register,errors,handleCouponCode,couponRef,couponApplyMsg} = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
+
+  const [accessToken, setToken] = useState("");
+
+  useEffect(()=>{
+    const user=localStorage.getItem("userInfo")
+    const accessToken = JSON.parse(user)?.accessToken;
+    setToken(accessToken)
+
+  },[])
+
+
+  
   return (
     <>
       <section
@@ -31,7 +43,9 @@ const CheckoutArea = () => {
             <div className="row">
               <div className="col-xl-7 col-lg-7">
                 <div className="tp-checkout-verify">
+                  {!accessToken &&
                   <CheckoutLogin />
+                }
                   <CheckoutCoupon
                     handleCouponCode={handleCouponCode}
                     couponRef={couponRef}

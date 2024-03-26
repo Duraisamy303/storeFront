@@ -6,40 +6,57 @@ import Link from "next/link";
 // internal
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import { add_cart_product, cart_list } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
-import { capitalizeFLetter} from "@/utils/functions";
+import { capitalizeFLetter } from "@/utils/functions";
+import {
+  useAddToCartMutation,
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
+import { notifySuccess } from "@/utils/toast";
 
-const ProductItem = ({ products, style_2 = false }) => {
+const ProductItem = ({ products, style_2 = false, updateData }) => {
   let product = products.node;
 
   const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
-  // const [ratingVal, setRatingVal] = useState(0);
-  const { cart_products } = useSelector((state) => state.cart);
+
+
+  const cart = useSelector((state) => state.cart?.cart_list);
+
   const { wishlist } = useSelector((state) => state.wishlist);
-  const isAddedToCart = cart_products.some((prd) => prd.id === _id);
+  const isAddedToCart = cart?.some(
+    (prd) => prd?.variant?.product?.id === product?.id
+  );
   const isAddedToWishlist = wishlist.some((prd) => prd.id === _id);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (reviews && reviews.length > 0) {
-  //     const rating =
-  //       reviews.reduce((acc, review) => acc + review.rating, 0) /
-  //       reviews.length;
-  //     setRatingVal(rating);
-  //   } else {
-  //     setRatingVal(0);
-  //   }
-  // }, [reviews]);
 
-  // handle add product
-  const handleAddProduct = (prd) => {
-    
-    dispatch(add_cart_product(prd));
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+    useAddToCartMutation();
+
+
+
+  const handleAddProduct = async (data) => {
+    try {
+      const response = await addToCartMutation({
+        variantId: data?.variants[0]?.id,
+      });
+      console.log(
+        "response: ",
+        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
+      );
+
+      notifySuccess(
+        `${data.name} added to cart successfully`
+      );
+      updateData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
-  // handle wishlist product
+
   const handleWishlistProduct = (prd) => {
     dispatch(add_to_wishlist(prd));
   };
@@ -141,7 +158,9 @@ const ProductItem = ({ products, style_2 = false }) => {
           ))}
         </div>
         <h3 className="tp-product-title-2">
-          <Link href={`/product-details/${_id}`}>{capitalizeFLetter(product?.name)}</Link>
+          <Link href={`/product-details/${_id}`}>
+            {capitalizeFLetter(product?.name)}
+          </Link>
         </h3>
         <h3 className="tp-product-title-2">
           <Link href={`/product-details/${_id}`}>

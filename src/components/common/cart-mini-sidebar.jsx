@@ -6,16 +6,33 @@ import { useDispatch, useSelector } from "react-redux";
 import useCartInfo from "@/hooks/use-cart-info";
 import RenderCartProgress from "./render-cart-progress";
 import empty_cart_img from "@assets/img/product/cartmini/empty-cart.png";
-import { closeCartMini, remove_product } from "@/redux/features/cartSlice";
+import { cart_list, closeCartMini, remove_product } from "@/redux/features/cartSlice";
+import { useRemoveToCartMutation } from "@/redux/features/card/cardApi";
 
 const CartMiniSidebar = () => {
-  const { cart_products, cartMiniOpen } = useSelector((state) => state.cart);
+  const {  cartMiniOpen } = useSelector((state) => state.cart);
+
+  const [removeToCart, {}] = useRemoveToCartMutation();
+
+  const cart = useSelector((state) => state.cart?.cart_list);
+
+  const totalAmount = cart?.reduce(
+    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+    0
+  );
   const { total } = useCartInfo();
   const dispatch = useDispatch();
 
-  // handle remove product
-  const handleRemovePrd = (prd) => {
-    dispatch(remove_product(prd));
+  const handleRemovePrd = (id) => {
+    const checkoutToken = localStorage.getItem("checkoutToken");
+    removeToCart({
+      checkoutToken,
+      lineId: id,
+    }).then((data) => {
+      const filter=cart.filter(item=>item.id != id)
+      dispatch(cart_list(filter))
+      
+    });
   };
 
   // handle close cart mini
@@ -48,14 +65,14 @@ const CartMiniSidebar = () => {
             <div className="cartmini__shipping">
               <RenderCartProgress />
             </div>
-            {cart_products.length > 0 && (
+            {cart?.length > 0 && (
               <div className="cartmini__widget">
-                {cart_products.map((item) => (
+                {cart?.map((item) => (
                   <div key={item._id} className="cartmini__widget-item">
                     <div className="cartmini__thumb">
                       <Link href={`/product-details/${item._id}`}>
                         <Image
-                          src={item?.thumbnail?.url}
+                          src={item?.variant?.product?.thumbnail?.url}
                           width={70}
                           height={60}
                           alt="product img"
@@ -65,7 +82,7 @@ const CartMiniSidebar = () => {
                     <div className="cartmini__content">
                       <h5 className="cartmini__title">
                         <Link href={`/product-details/${item._id}`}>
-                          {item.title}
+                          {item?.variant?.product?.name}
                         </Link>
                       </h5>
                       <div className="cartmini__price-wrapper">
@@ -80,18 +97,18 @@ const CartMiniSidebar = () => {
                           </span>
                         ) : (
                           <span className="cartmini__price">
-                            ${item?.price?.toFixed(2)}
+                            $
+                            {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                              2
+                            )}
                           </span>
                         )}
-                        <span className="cartmini__quantity">
-                          {" "}
-                          x{item.orderQuantity}
-                        </span>
+                        <span className="cartmini__quantity"> x {1}</span>
                       </div>
                     </div>
                     <a
                       onClick={() =>
-                        handleRemovePrd({ title: item.title, id: item._id })
+                        handleRemovePrd(item.id)
                       }
                       className="cartmini__del cursor-pointer"
                     >
@@ -102,7 +119,7 @@ const CartMiniSidebar = () => {
               </div>
             )}
             {/* if no item in cart */}
-            {cart_products.length === 0 && (
+            {cart?.length === 0 && (
               <div className="cartmini__empty text-center">
                 <Image src={empty_cart_img} alt="empty-cart-img" />
                 <p>Your Cart is empty</p>
@@ -115,7 +132,7 @@ const CartMiniSidebar = () => {
           <div className="cartmini__checkout">
             <div className="cartmini__checkout-title mb-30">
               <h4>Subtotal:</h4>
-              <span>${total.toFixed(2)}</span>
+              <span>${totalAmount?.toFixed(2)}</span>
             </div>
             <div className="cartmini__checkout-btn">
               <Link

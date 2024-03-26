@@ -11,6 +11,9 @@ import ShopLoader from "@/components/loader/shop/shop-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 import shopBanner from "../../public/assets/img/shop-banner.jpg";
 import { shortData } from "@/utils/functions";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import { cart_list } from "@/redux/features/cartSlice";
 
 const ShopPage = ({ query }) => {
   const {
@@ -19,7 +22,11 @@ const ShopPage = ({ query }) => {
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
 
+
+  const [cartUpdate, setCartUpdate] = useState(false);
+
   const products = productsData?.data?.products?.edges;
+
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
@@ -35,6 +42,7 @@ const ShopPage = ({ query }) => {
   }, [isLoading, isError, products]);
 
 
+ 
   const handleChanges = (val) => {
     setCurrPage(1);
     setPriceValue(val);
@@ -53,6 +61,11 @@ const ShopPage = ({ query }) => {
     currPage,
     setCurrPage,
   };
+
+  if (selectValue) {
+    const shortDatas = shortData(selectValue, products);
+    productItems = shortDatas;
+  }
 
   let content = null;
 
@@ -75,6 +88,7 @@ const ShopPage = ({ query }) => {
         all_products={products}
         products={productItems}
         otherProps={otherProps}
+        updateData={() => setCartUpdate(true)}
       />
       {content}
       <FooterTwo primary_style={true} />

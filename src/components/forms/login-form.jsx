@@ -42,7 +42,7 @@ const LoginForm = () => {
         router.push(redirect || "/");
       }
     });
-    // reset();
+    reset();
   };
 
   return (

@@ -28,7 +28,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
       } else {
         //new cart api and cart list api 
         dispatch(cart_count(1))
-        notifySuccess("Login successfully");
+        // notifySuccess("Login successfully");
         router.push(redirect || "/");
       }
     });

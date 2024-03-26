@@ -15,7 +15,12 @@ import useSearchFormSubmit from '@/hooks/use-search-form-submit';
 import OffCanvas from '@/components/common/off-canvas';
 import pradeLogo from '@assets/img/prade-logo.png';
 
-const HeaderTwo = ({ style_2 = false }) => {
+const HeaderTwo = ({ style_2 = false,data }) => {
+
+  const  cart  = useSelector((state) => state.cart?.cart_list);
+  console.log("HeaderTwo: ", cart);
+
+
   const { wishlist } = useSelector((state) => state.wishlist);
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
@@ -94,7 +99,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                         <div className="tp-header-action-item">
                           <button onClick={() => dispatch(openCartMini())} className="tp-header-action-btn cartmini-open-btn" >
                             <CartTwo />
-                            <span className="tp-header-action-badge">{quantity}</span>
+                            <span className="tp-header-action-badge">{cart?.length || 0}</span>
                           </button>
                         </div>
                         <div className="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">

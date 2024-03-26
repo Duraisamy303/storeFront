@@ -7,14 +7,22 @@ import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_cart_product } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError } from "@/utils/toast";
+import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 
 const ProductSliderItem = ({ product }) => {
   const { _id, title, price, status } = product || {};
-  const { cart_products } = useSelector((state) => state.cart);
+
+  const cart = useSelector((state) => state.cart.cart_list);
+
+
   const { wishlist } = useSelector((state) => state.wishlist);
-  const isAddedToCart = cart_products.some((prd) => prd.id === _id);
+  const isAddedToCart = cart?.some((prd) => prd?.variant?.product?.id == product?.node?.id);
   const isAddedToWishlist = wishlist.some((prd) => prd.id === _id);
   const dispatch = useDispatch();
+
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+  useAddToCartMutation();
+
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -22,9 +30,37 @@ const ProductSliderItem = ({ product }) => {
       notifyError(`This product out-of-stock`)
     }
     else {
-      dispatch(add_cart_product(prd));
+      addProduct(prd)
+      // dispatch(add_cart_product(prd));
     }
   };
+
+  const addProduct = async (data) => {
+    try {
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutToken,
+        variantId: data?.node?.variants[0]?.id,
+      });
+    ;
+
+      notifySuccess(
+        `${response[0].data.data.checkoutLinesAdd.checkout.lines[0].variant.product.name} added to cart successfully`
+      );
+      console.log(
+        "response: ",
+        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
+      )
+      // cart_list.push
+      dispatch(
+        cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+      );
+      updateData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   // handle wishlist product
   const handleWishlistProduct = (prd) => {
     dispatch(add_to_wishlist(prd));

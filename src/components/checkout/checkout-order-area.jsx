@@ -1,26 +1,131 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CardElement } from "@stripe/react-stripe-js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // internal
 import useCartInfo from "@/hooks/use-cart-info";
 import ErrorMsg from "../common/error-msg";
+import useRazorpay from "react-razorpay";
+import { notifySuccess } from "@/utils/toast";
 
 const CheckoutOrderArea = ({ checkoutData }) => {
   const {
     handleShippingCost,
     cartTotal = 0,
     stripe,
-    isCheckoutSubmit,
     clientSecret,
     register,
     errors,
     showCard,
     setShowCard,
     shippingCost,
-    discountAmount
+    discountAmount,
   } = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.cart?.cart_list);
+
+  const [cartTotals, setCartTotal] = useState(0);
+
   const { total } = useCartInfo();
+
+  const totalAmount = cart?.reduce(
+    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+    0
+  );
+
+  useEffect(() => {
+    // const result = cart?.filter(
+    //   (p) => p.productType === discountProductType
+    // );
+    // const discountProductTotal = result?.reduce(
+    //   (preValue, currentValue) =>
+    //     preValue + currentValue.price * currentValue.orderQuantity,
+    //   0
+    // );
+    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+    // let discountTotal = Number(
+    //   discountProductTotal * (discountPercentage / 100)
+    // );
+    // totalValue = Number(subTotal - discountTotal);
+    // setDiscountAmount(discountTotal);
+    setCartTotal(subTotal);
+  }, [total, shippingCost, cartTotals]);
+
+  useEffect(() => {
+    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+
+    setCartTotal(subTotal);
+  }, []);
+
+
+
+  const [Razorpay] = useRazorpay();
+
+  const handlePayment = useCallback(async () => {
+    const order = await createOrder();
+
+    const user = localStorage.getItem("userInfo");
+    const data = JSON.parse(user).user;
+
+    const options = {
+      key: "rzp_test_tEMCtcfElFdYts",
+      key_secret:"rRfAuSd9PLwbhIwUlBpTy4Gv",
+      amount: 10 * 100,
+      currency: "INR",
+      name: "Acme Corp",
+      description: "Test Transaction",
+      image: "https://example.com/your_logo",
+      // order_id: "ORD20156712",
+      handler: (res) => {
+        notifySuccess("Payment Successful");
+        console.log(res);
+      },
+      prefill: {
+        name: "Piyush Garg",
+        email: "youremail@example.com",
+        contact: "9999999999",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+      retry: {
+        enabled: true,
+        max_count: true,
+      },
+    };
+
+    const rzpay = new Razorpay(options);
+    rzpay.open();
+  }, [Razorpay]);
+
+  const createOrder = async () => {
+    try {
+      const padZero = (num) => (num < 10 ? "0" + num : num.toString());
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = padZero(now.getMonth() + 1);
+      const day = padZero(now.getDate());
+      const hours = padZero(now.getHours());
+      const minutes = padZero(now.getMinutes());
+      const seconds = padZero(now.getSeconds());
+      
+      const orderId = `ORD_${year}${month}${day}_${hours}${minutes}${seconds}`;
+      console.log("orderId: ", orderId);
+  
+      // Your logic to create and return an order object
+      return { id: orderId };
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
+
   return (
     <div className="tp-checkout-place white-bg">
       <h3 className="tp-checkout-place-title">Your Order</h3>
@@ -34,12 +139,14 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           </li>
 
           {/*  item list */}
-          {cart_products.map((item) => (
+          {cart?.map((item) => (
             <li key={item._id} className="tp-order-info-list-desc">
               <p className="para">
-                {item.title} <span> x {item.orderQuantity}</span>
+                {item?.variant?.product?.name} <span> x {1}</span>
               </p>
-              <span>${item.price.toFixed(2)}</span>
+              <span>
+                ${item?.variant?.pricing?.price?.gross?.amount.toFixed(2)}
+              </span>
             </li>
           ))}
 
@@ -84,20 +191,20 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             </div>
           </li>
 
-           {/*  subtotal */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  subtotal */}
+          <li className="tp-order-info-list-subtotal">
             <span>Subtotal</span>
-            <span>${total.toFixed(2)}</span>
+            <span>${totalAmount?.toFixed(2)}</span>
           </li>
 
-           {/*  shipping cost */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  shipping cost */}
+          <li className="tp-order-info-list-subtotal">
             <span>Shipping Cost</span>
             <span>${shippingCost.toFixed(2)}</span>
           </li>
 
-           {/* discount */}
-           <li className="tp-order-info-list-subtotal">
+          {/* discount */}
+          <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
             <span>${discountAmount.toFixed(2)}</span>
           </li>
@@ -105,7 +212,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           {/* total */}
           <li className="tp-order-info-list-total">
             <span>Total</span>
-            <span>${parseFloat(cartTotal).toFixed(2)}</span>
+            <span>${parseFloat(cartTotals).toFixed(2)}</span>
           </li>
         </ul>
       </div>
@@ -120,7 +227,11 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             name="payment"
             value="Card"
           />
-          <label onClick={() => setShowCard(true)} htmlFor="back_transfer" data-bs-toggle="direct-bank-transfer">
+          <label
+            onClick={() => setShowCard(true)}
+            htmlFor="back_transfer"
+            data-bs-toggle="direct-bank-transfer"
+          >
             Credit Card
           </label>
           {showCard && (
@@ -166,8 +277,9 @@ const CheckoutOrderArea = ({ checkoutData }) => {
       <div className="tp-checkout-btn-wrapper">
         <button
           type="submit"
-          disabled={!stripe || isCheckoutSubmit}
+          // disabled={!stripe || isCheckoutSubmit}
           className="tp-checkout-btn w-100"
+          onClick={() => handlePayment()}
         >
           Place Order
         </button>

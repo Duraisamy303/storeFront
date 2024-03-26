@@ -50,7 +50,6 @@ const PopularProducts = () => {
   // decide what to render
   let content = null;
   const products = productsData?.data?.products?.edges;
-  console.log("products: ", products);
 
   if (isLoading) {
     content = (

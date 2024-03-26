@@ -31,14 +31,12 @@ const RegisterForm = () => {
   });
   // on submit
   const onSubmit = (data) => {
-    console.log("data: ", data);
     registerUser({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
       password: data.password,
     }).then((result) => {
-      console.log("result: ", result);
       if (result?.data?.data?.accountRegister?.errors?.length>0) {
         notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {

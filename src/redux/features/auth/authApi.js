@@ -10,12 +10,11 @@ export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     registerUser: builder.mutation({
-      query: ({ firstName,lastName,email,password }) =>
-        configuration(REGISTER({firstName,lastName,email,password })),
+      query: ({ firstName, lastName, email, password }) =>
+        configuration(REGISTER({ firstName, lastName, email, password })),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
 
           Cookies.set(
             "userInfo",
@@ -75,15 +74,23 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          Cookies.set(
+          localStorage.setItem(
             "userInfo",
             JSON.stringify({
               accessToken: result.data.data.tokenCreate.token,
               user: result.data.data.tokenCreate.user,
               refreshToken: result.data.data.tokenCreate.refreshToken,
-            }),
-            { expires: 0.5 }
+            })
           );
+          // Cookies.set(
+          //   "userInfo",
+          //   JSON.stringify({
+          //     accessToken: result.data.data.tokenCreate.token,
+          //     user: result.data.data.tokenCreate.user,
+          //     refreshToken: result.data.data.tokenCreate.refreshToken,
+          //   }),
+          //   { expires: 0.5 }
+          // );
           dispatch(
             userLoggedIn({
               accessToken: result.data.data.token,
@@ -119,6 +126,7 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+          localStorage.setItem("userInfo", JSON.stringify(result.data.data));
 
           Cookies.set(
             "userInfo",
@@ -126,7 +134,7 @@ export const authApi = apiSlice.injectEndpoints({
               accessToken: result.data.data.token,
               user: result.data.data.user,
             }),
-            { expires: 0.5 }
+            { expires: 1 }
           );
 
           dispatch(

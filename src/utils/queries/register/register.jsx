@@ -1,5 +1,4 @@
 export const REGISTER = ({ firstName, lastName, email, password }) => {
-  console.log("firstName, lastName, email, password: ", firstName, lastName, email, password);
   return {
     query: `
     mutation RegisterMutation($firstName: String!, $lastName: String!, $email: String!, $password: String!) {

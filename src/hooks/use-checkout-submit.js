@@ -21,7 +21,7 @@ const useCheckoutSubmit = () => {
   // createPaymentIntent
   const [createPaymentIntent, {}] = useCreatePaymentIntentMutation();
   // cart_products
-  const { cart_products } = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart?.cart_list);
   // user
   const { user } = useSelector((state) => state.auth);
   // shipping_info
@@ -74,15 +74,15 @@ const useCheckoutSubmit = () => {
   }, []);
 
   useEffect(() => {
-    if (minimumAmount - discountAmount > total || cart_products.length === 0) {
+    if (minimumAmount - discountAmount > total || cart?.length === 0) {
       setDiscountPercentage(0);
       localStorage.removeItem("couponInfo");
     }
-  }, [minimumAmount, total, discountAmount, cart_products]);
+  }, [minimumAmount, total, discountAmount, cart]);
 
   //calculate total and discount value
   useEffect(() => {
-    const result = cart_products?.filter(
+    const result = cart?.filter(
       (p) => p.productType === discountProductType
     );
     const discountProductTotal = result?.reduce(
@@ -102,7 +102,7 @@ const useCheckoutSubmit = () => {
     total,
     shippingCost,
     discountPercentage,
-    cart_products,
+    cart,
     discountProductType,
     discountAmount,
     cartTotal,
@@ -205,7 +205,7 @@ const useCheckoutSubmit = () => {
       zipCode: data.zipCode,
       shippingOption: data.shippingOption,
       status: "Pending",
-      cart: cart_products,
+      cart: cart,
       paymentMethod: data.payment,
       subTotal: total,
       shippingCost: shippingCost,
@@ -246,7 +246,7 @@ const useCheckoutSubmit = () => {
         if(res?.error){
         }
         else {
-          localStorage.removeItem("cart_products")
+          localStorage.removeItem("cart")
           localStorage.removeItem("couponInfo");
           setIsCheckoutSubmit(false)
           notifySuccess("Your Order Confirmed!");

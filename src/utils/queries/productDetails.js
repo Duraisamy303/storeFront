@@ -32,6 +32,9 @@ export const PRODUCT_LIST_ITEM_FRAGMENT = `
       url
       alt
     }
+    variants {
+      id
+    }
     created
     description
   }

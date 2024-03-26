@@ -1,13 +1,20 @@
 import React from "react";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
 import { Close, Minus, Plus } from "@/svg";
-import { add_cart_product, quantityDecrement, remove_product } from "@/redux/features/cartSlice";
+import { add_cart_product, cart_list, quantityDecrement, remove_product } from "@/redux/features/cartSlice";
+import { useRemoveToCartMutation } from "@/redux/features/card/cardApi";
 
-const CartItem = ({product}) => {
-  const {_id, img,title,price, orderQuantity = 0 } = product || {};
+const CartItem = ({product,img,price}) => {
+
+  const cart = useSelector((state) => state.cart.cart_list);
+
+  const [removeToCart, {}] = useRemoveToCartMutation();
+
+
+  const {_id,title, orderQuantity = 0 } = product || {};
 
   const dispatch = useDispatch();
 
@@ -21,9 +28,21 @@ const CartItem = ({product}) => {
     }
   
     // handle remove product
-    const handleRemovePrd = (prd) => {
-      dispatch(remove_product(prd))
-    }
+    // const handleRemovePrd = (prd) => {
+    //   dispatch(remove_product(prd))
+    // }
+
+    const handleRemovePrd = (id) => {
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      removeToCart({
+        checkoutToken,
+        lineId: product?.id,
+      }).then((data) => {
+        const filter=cart.filter(item=>item.id !=  product?.id)
+        dispatch(cart_list(filter))
+        
+      });
+    };
 
   return (
     <tr>
@@ -39,10 +58,12 @@ const CartItem = ({product}) => {
       </td>
       {/* price */}
       <td className="tp-cart-price">
-        <span>${(price * orderQuantity).toFixed(2)}</span>
+        {/* <span>${(price * orderQuantity).toFixed(2)}</span> */}
+        <span>${price?.toFixed(2)}</span>
+
       </td>
       {/* quantity */}
-      <td className="tp-cart-quantity">
+      {/* <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
           <span onClick={()=> handleDecrement(product)} className="tp-cart-minus">
             <Minus />
@@ -52,10 +73,10 @@ const CartItem = ({product}) => {
             <Plus />
           </span>
         </div>
-      </td>
+      </td> */}
       {/* action */}
       <td className="tp-cart-action">
-        <button onClick={()=> handleRemovePrd({title,id:_id})} className="tp-cart-action-btn">
+        <button onClick={()=> handleRemovePrd()} className="tp-cart-action-btn">
           <Close />
           <span>{" "}Remove</span>
         </button>

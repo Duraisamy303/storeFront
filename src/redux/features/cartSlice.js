@@ -6,6 +6,8 @@ const initialState = {
   cart_products: [],
   orderQuantity: 1,
   cartMiniOpen: false,
+  cart_list: [],
+  checkout_token:""
 };
 
 export const cartSlice = createSlice({
@@ -52,6 +54,14 @@ export const cartSlice = createSlice({
       setLocalStorage("cart_products", updatedCartProducts);
 
       return { ...state, cart_products: updatedCartProducts }; // Return new state object with updated cart_products
+    },
+
+    cart_list: (state, { payload }) => {
+      state.cart_list = payload; // Return new state object with updated cart_products
+    },
+
+    checkout_token: (state, { payload }) => {
+      state.checkout_token = payload; // Return new state object with updated cart_products
     },
 
     increment: (state, { payload }) => {
@@ -107,6 +117,7 @@ export const cartSlice = createSlice({
 
 export const {
   add_cart_product,
+  cart_list,
   increment,
   decrement,
   get_cart_products,
@@ -116,5 +127,6 @@ export const {
   clearCart,
   closeCartMini,
   openCartMini,
+  checkout_token
 } = cartSlice.actions;
 export default cartSlice.reducer;

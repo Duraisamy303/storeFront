@@ -40,3 +40,4 @@ export const shortData = (selectValue, products) => {
 
   return product_items;
 };
+
