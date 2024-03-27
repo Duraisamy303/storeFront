@@ -12,6 +12,8 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
 import { capitalizeFLetter } from "@/utils/functions";
+import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const DetailsWrapper = ({
   productItem,
@@ -35,7 +37,13 @@ const DetailsWrapper = ({
   } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
+
   const dispatch = useDispatch();
+
+  const router=useRouter()
+
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+    useAddToCartMutation();
 
   useEffect(() => {
     if (reviews && reviews.length > 0) {
@@ -49,9 +57,35 @@ const DetailsWrapper = ({
   }, [reviews]);
 
   // handle add product
-  const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+
+  const handleAddProduct = async (data) => {
+    console.log("data: ", data);
+    try {
+      const checkoutToken=localStorage.getItem('checkoutToken');
+      if(checkoutToken){
+      const response = await addToCartMutation({
+        variantId: data?.variants[0]?.id,
+      });
+      console.log(
+        "response: ",
+        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
+      );
+
+      notifySuccess(
+        `${data.name} added to cart successfully`
+      );
+      updateData();
+    }else{
+      router.push('/login')
+    }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+  // const handleAddProduct = (prd) => {
+  //   console.log("prd: ", prd);
+  //   // dispatch(add_cart_product(prd));if (prd.`1
+  // };
 
   // handle wishlist product
   const handleWishlistProduct = (prd) => {
@@ -153,10 +187,10 @@ const DetailsWrapper = ({
 
       {/* actions */}
       <div className="tp-product-details-action-wrapper">
-        <h3 className="tp-product-details-action-title">Quantity</h3>
+        {/* <h3 className="tp-product-details-action-title">Quantity</h3> */}
         <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
           {/* product quantity */}
-          <ProductQuantity />
+          {/* <ProductQuantity /> */}
           {/* product quantity */}
           <div className="tp-product-details-add-to-cart mb-15 w-100">
             <button

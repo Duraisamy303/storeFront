@@ -6,13 +6,27 @@ import { clearCart } from "@/redux/features/cartSlice";
 import CartCheckout from "./cart-checkout";
 import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
+import { useGetAllProductsQuery, useOrderListQuery } from "@/redux/features/productApi";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 
-const CartArea = () => {
+const OrderList = () => {
   const { cart_products } = useSelector((state) => state.cart);
 
-  const cart = useSelector((state) => state.cart.cart_list);
+  const  { data: data } = useGetCartListQuery();
+
+  const {
+    data: orderList,
+    isError,
+    isLoading,
+  } = useOrderListQuery();
+
+  const cart=orderList?.data?.order?.lines
 
   const dispatch = useDispatch();
+
+ 
+
+
 
   return (
     <>
@@ -29,9 +43,9 @@ const CartArea = () => {
           {cart?.length > 0 && (
             <div className="row">
               <div className="col-xl-9 col-lg-8">
-                <div className="tp-cart-list mb-25 mr-30">
+                <div className="tp-cart-list  mr-30">
                   <div className="cartmini__shipping">
-                    <RenderCartProgress />
+                    {/* <RenderCartProgress /> */}
                   </div>
                   <table className="table">
                     <thead>
@@ -39,8 +53,9 @@ const CartArea = () => {
                         <th colSpan="2" className="tp-cart-header-product">
                           Product
                         </th>
+                        {/* <th className="tp-cart-header-quantity">Product name</th> */}
+
                         <th className="tp-cart-header-price">Price</th>
-                        <th className="tp-cart-header-quantity">Quantity</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -49,9 +64,10 @@ const CartArea = () => {
                         <CartItem
                           key={i}
                           product={item}
-                          title={item?.variant?.product?.name}
-                          img={item?.variant?.product?.thumbnail?.url}
-                          price={item?.variant?.pricing?.price?.gross?.amount}
+                          title={item.productName}
+                          img={item?.thumbnail?.url}
+                          price={item?.totalPrice?.gross?.amount}
+                          isRemove={true}
                         />
                       ))}
                     </tbody>
@@ -72,7 +88,7 @@ const CartArea = () => {
                         </form>
                       </div> */}
                     </div>
-                    <div className="col-xl-6 col-md-4">
+                    {/* <div className="col-xl-6 col-md-4">
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
                           onClick={() => dispatch(clearCart())}
@@ -82,13 +98,13 @@ const CartArea = () => {
                           Clear Cart
                         </button>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
-              <div className="col-xl-3 col-lg-4 col-md-6">
+              {/* <div className="col-xl-3 col-lg-4 col-md-6">
                 <CartCheckout />
-              </div>
+              </div> */}
             </div>
           )}
         </div>
@@ -97,4 +113,4 @@ const CartArea = () => {
   );
 };
 
-export default CartArea;
+export default OrderList;

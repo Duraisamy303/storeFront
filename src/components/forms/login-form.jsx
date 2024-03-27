@@ -9,6 +9,7 @@ import { CloseEye, OpenEye } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import { useLoginUserMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import { useCheckoutTokenMutation } from "@/redux/features/card/cardApi";
 
 // schema
 const schema = Yup.object().shape({
@@ -17,7 +18,11 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
+  
   const [loginUser, {}] = useLoginUserMutation();
+
+  const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
+
   const router = useRouter();
   const { redirect } = router.query;
   // react hook form
@@ -35,14 +40,28 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     }).then((data) => {
+      console.log("data?.data?.data: ", data?.data?.data);
       if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
         notifySuccess("Login successfully");
+        getCheckoutToken(data?.data?.data?.tokenCreate?.user?.email);
+
         router.push(redirect || "/");
       }
     });
     reset();
+  };
+
+  const getCheckoutToken = async (email) => {
+    try {
+      const data = await checkoutTokens({
+        email,
+      });
+      console.log("data: ", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

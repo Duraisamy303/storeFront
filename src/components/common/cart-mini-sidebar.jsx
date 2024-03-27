@@ -7,12 +7,14 @@ import useCartInfo from "@/hooks/use-cart-info";
 import RenderCartProgress from "./render-cart-progress";
 import empty_cart_img from "@assets/img/product/cartmini/empty-cart.png";
 import { cart_list, closeCartMini, remove_product } from "@/redux/features/cartSlice";
-import { useRemoveToCartMutation } from "@/redux/features/card/cardApi";
+import { useGetCartListQuery, useRemoveToCartMutation } from "@/redux/features/card/cardApi";
 
 const CartMiniSidebar = () => {
   const {  cartMiniOpen } = useSelector((state) => state.cart);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
+
+
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
@@ -31,6 +33,8 @@ const CartMiniSidebar = () => {
     }).then((data) => {
       const filter=cart.filter(item=>item.id != id)
       dispatch(cart_list(filter))
+  // const  { data: tokens } = useGetCartListQuery();
+
       
     });
   };

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import { apiSlice } from "../api/apiSlice";
 import { configuration } from "@/utils/constant";
-import {  PRODUCT_LIST } from "@/utils/queries/productList";
+import {  ORDER_LIST, PRODUCT_LIST } from "@/utils/queries/productList";
 import { SINGLE_PRODUCT } from "@/utils/queries/singleProduct/productDetailsByID";
 
 
@@ -46,6 +46,14 @@ export const productApi = apiSlice.injectEndpoints({
         { type: "RelatedProducts", id: arg },
       ],
     }),
+    orderList: builder.query({
+      query: () =>{
+        const orderid=localStorage.getItem('orderId');
+        return configuration(ORDER_LIST({ orderid }))
+      } ,
+       // query: () => `/api/product/all`,
+       providesTags: ["Products"],
+     }),
   }),
 });
 
@@ -57,4 +65,5 @@ export const {
   useGetTopRatedProductsQuery,
   useGetProductQuery,
   useGetRelatedProductsQuery,
+  useOrderListQuery
 } = productApi;

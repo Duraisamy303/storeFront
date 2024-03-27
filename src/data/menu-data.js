@@ -109,13 +109,19 @@ const menu_data = [
     title: 'Pre Orders',
     link: '/shop',
   },
-
   {
     id: 4,
     single_link: true,
-    title: 'Sale',
-    link: '/shop',
+    title: 'My Orders',
+    link: '/myOrders',
   },
+
+  // {
+  //   id: 4,
+  //   single_link: true,
+  //   title: 'Sale',
+  //   link: '/shop',
+  // },
 
   {
     id: 4,

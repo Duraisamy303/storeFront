@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -35,11 +35,16 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
     // reset();
   };
 
-  // handle add product
-  // const handleAddProduct = (prd) => {
+  useEffect(()=>{
+    getToken()
+  },[])
 
-  //   dispatch(add_cart_product(prd));
-  // };
+const getToken=()=>{
+  const token=localStorage.getItem('checkoutToken');
+  console.log("token: ", token);
+}
+
+
   // handle wishlist product
   const handleWishlistProduct = (prd) => {
     dispatch(add_to_wishlist(prd));

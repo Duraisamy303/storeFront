@@ -6,6 +6,12 @@ import useCartInfo from "@/hooks/use-cart-info";
 import ErrorMsg from "../common/error-msg";
 import useRazorpay from "react-razorpay";
 import { notifySuccess } from "@/utils/toast";
+import {
+  useCheckoutTokenMutation,
+  useCheckoutUpdateMutation,
+  useCreateCheckoutTokenMutation,
+  useCheckoutCompleteMutation,
+} from "@/redux/features/card/cardApi";
 
 const CheckoutOrderArea = ({ checkoutData }) => {
   const {
@@ -20,9 +26,14 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     shippingCost,
     discountAmount,
   } = checkoutData;
+
   const { cart_products } = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch();
+  const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
+
+  const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
+
+  const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
@@ -34,6 +45,13 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
     0
   );
+
+  let lines = [];
+  if (cart?.length > 0) {
+    lines = cart?.map((item) => {
+      return { quantity: 1, variantId: item?.variant?.id };
+    });
+  }
 
   useEffect(() => {
     // const result = cart?.filter(
@@ -55,53 +73,55 @@ const CheckoutOrderArea = ({ checkoutData }) => {
 
   useEffect(() => {
     let subTotal = Number((totalAmount + shippingCost).toFixed(2));
-
     setCartTotal(subTotal);
   }, []);
 
-
-
   const [Razorpay] = useRazorpay();
 
-  const handlePayment = useCallback(async () => {
-    const order = await createOrder();
+  const handlePayment = useCallback(
+    async (checkoutId) => {
+      const order = await createOrder();
 
-    const user = localStorage.getItem("userInfo");
-    const data = JSON.parse(user).user;
+      const user = localStorage.getItem("userInfo");
+      const data = JSON.parse(user).user;
 
-    const options = {
-      key: "rzp_test_tEMCtcfElFdYts",
-      key_secret:"rRfAuSd9PLwbhIwUlBpTy4Gv",
-      amount: 10 * 100,
-      currency: "INR",
-      name: "Acme Corp",
-      description: "Test Transaction",
-      image: "https://example.com/your_logo",
-      // order_id: "ORD20156712",
-      handler: (res) => {
-        notifySuccess("Payment Successful");
-        console.log(res);
-      },
-      prefill: {
-        name: "Piyush Garg",
-        email: "youremail@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-      retry: {
-        enabled: true,
-        max_count: true,
-      },
-    };
+      const options = {
+        key: "rzp_test_tEMCtcfElFdYts",
+        key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
+        amount: parseInt(cartTotals) * 100,
+        currency: "INR",
+        name: "Acme Corp",
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        // order_id: "ORD20156712",
+        handler: async (res) => {
+          notifySuccess("Payment Successful");
+          console.log(res);
+          const completeResponse = await checkoutComplete({ id: checkoutId });
+          console.log("Checkout Complete Response:", completeResponse);
+        },
+        prefill: {
+          name: "Piyush Garg",
+          email: "youremail@example.com",
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+        retry: {
+          enabled: true,
+          max_count: true,
+        },
+      };
 
-    const rzpay = new Razorpay(options);
-    rzpay.open();
-  }, [Razorpay]);
+      const rzpay = new Razorpay(options);
+      rzpay.open();
+    },
+    [Razorpay]
+  );
 
   const createOrder = async () => {
     try {
@@ -114,15 +134,45 @@ const CheckoutOrderArea = ({ checkoutData }) => {
       const hours = padZero(now.getHours());
       const minutes = padZero(now.getMinutes());
       const seconds = padZero(now.getSeconds());
-      
+
       const orderId = `ORD_${year}${month}${day}_${hours}${minutes}${seconds}`;
       console.log("orderId: ", orderId);
-  
+
       // Your logic to create and return an order object
       return { id: orderId };
     } catch (error) {
       console.error("Error:", error);
       throw error;
+    }
+  };
+
+  const checkoutCreate = async (data) => {
+    try {
+      const createCheckoutResponse = await createCheckout({
+        channel: "india-channel",
+        email: "madhanumk@gmail.com",
+        lines,
+        firstName: "Durai The king",
+        lastName: "Smith",
+        streetAddress1: "Kahe",
+        city: "Coimbatore",
+        country: "IN",
+        postalCode: "641021",
+        countryArea: "Tamil Nadu",
+      });
+
+      const checkoutId =
+        createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
+
+      if (checkoutId) {
+        const deliveryUpdateResponse = await createDeliveryUpdate({
+          id: checkoutId,
+        });
+        console.log("Delivery Update Response:", deliveryUpdateResponse);
+        // handlePayment(checkoutId);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -212,11 +262,20 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           {/* total */}
           <li className="tp-order-info-list-total">
             <span>Total</span>
-            <span>${parseFloat(cartTotals).toFixed(2)}</span>
+
+            <span>
+              {" "}
+              $
+              {totalAmount.toString() === "0"
+                ? shippingCost.toFixed(2)
+                : parseFloat(cartTotals).toFixed(2)}
+            </span>
+
+            {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
           </li>
         </ul>
       </div>
-      <div className="tp-checkout-payment">
+      {/* <div className="tp-checkout-payment">
         <div className="tp-checkout-payment-item">
           <input
             {...register(`payment`, {
@@ -272,14 +331,14 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           <label htmlFor="cod">Cash on Delivery</label>
           <ErrorMsg msg={errors?.payment?.message} />
         </div>
-      </div>
+      </div> */}
 
       <div className="tp-checkout-btn-wrapper">
         <button
           type="submit"
           // disabled={!stripe || isCheckoutSubmit}
           className="tp-checkout-btn w-100"
-          onClick={() => handlePayment()}
+          // onClick={() => checkoutCreate()}
         >
           Place Order
         </button>

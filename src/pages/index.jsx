@@ -22,36 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { cart_list, checkout_token } from "@/redux/features/cartSlice";
 
 const index = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
-
-  const checkToken = tokens?.data?.checkoutCreate?.checkout?.token;
-
-
-  useEffect(() => {
-    if (!checkToken) {
-      const timeoutId = setTimeout(() => {
-        getCheckoutToken();
-      }, 3000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, []);
-
-  const getCheckoutToken = async () => {
-    try {
-      const user = localStorage.getItem("userInfo");
-      const token = localStorage.getItem("checkoutToken");
-      dispatch(checkout_token(token));
-      
-      const email = JSON.parse(user).user?.email;
-      const data = await checkoutTokens({
-        email,
-      });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  const  { data: tokens } = useGetCartListQuery();
 
   return (
     <Wrapper>

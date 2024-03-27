@@ -22,6 +22,9 @@ const ShopPage = ({ query }) => {
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
 
+  const  { data: data } = useGetCartListQuery();
+
+
 
   const [cartUpdate, setCartUpdate] = useState(false);
 

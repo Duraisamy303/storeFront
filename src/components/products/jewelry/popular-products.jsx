@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper';
 // internal
@@ -6,6 +6,7 @@ import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import ProductSliderItem from './product-slider-item';
 import ErrorMsg from '@/components/common/error-msg';
 import { HomeTwoPopularPrdLoader } from '@/components/loader';
+import LoginForm from '@/components/forms/login-form';
 
 
 // slider setting 
@@ -45,6 +46,7 @@ const slider_setting = {
 }
 
 const PopularProducts = () => {
+
   const { data: productsData, isError, isLoading } =
     useGetProductTypeQuery({ channel:"india-channel",first:19 });
   // decide what to render
@@ -68,7 +70,7 @@ const PopularProducts = () => {
       <Swiper {...slider_setting} modules={[Scrollbar, Pagination]} className="tp-category-slider-active-4 swiper-container mb-70">
         {products.map(item => (
           <SwiperSlide key={item.id}>
-            <ProductSliderItem product={item} />
+            <ProductSliderItem product={item}  />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -97,6 +99,7 @@ const PopularProducts = () => {
           </div>
         </div>
       </section>
+    
     </>
   );
 };

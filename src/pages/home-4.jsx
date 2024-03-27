@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SEO from '@/components/seo';
 import Wrapper from '@/layout/wrapper';
 import HeaderFour from '@/layout/headers/header-4';
@@ -14,9 +14,12 @@ import InstagramAreaFour from '@/components/instagram/instagram-area-4';
 import FeatureAreaThree from '@/components/features/feature-area-3';
 import FooterTwo from '@/layout/footers/footer-2';
 import HeaderTwo from '@/layout/headers/header-2';
+import LoginForm from '@/components/forms/login-form';
 
 const HomeFour = () => {
+
   return (
+    <>
     <Wrapper>
       <SEO pageTitle="Home Four" />
       <HeaderTwo/>
@@ -24,7 +27,7 @@ const HomeFour = () => {
       <FeatureAreaThree />
       <JewelryShopBanner/>
       {/* <JewelryAbout/> */}
-      <PopularProducts/>
+      <PopularProducts />
       {/* <ProductArea/> */}
       <JewelryCollectionBanner/>
       {/* <BestSellerPrd/> */}
@@ -32,6 +35,8 @@ const HomeFour = () => {
       <InstagramAreaFour/>
       <FooterTwo/>
     </Wrapper>
+   
+  </>
   );
 };
 

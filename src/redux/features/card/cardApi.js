@@ -8,6 +8,8 @@ import { apiSlice } from "@/redux/api/apiSlice";
 import {
   ADDTOCART,
   CART_LIST,
+  CHECKOUT_COMPLETE,
+  CHECKOUT_DELIVERY_METHOD,
   CHECKOUT_TOKEN,
   CHECKOUT_UPDATE_SHIPPING_ADDRESS,
   REMOVETOCART,
@@ -18,9 +20,8 @@ export const cardApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     addToCart: builder.mutation({
-
-      query: ({  variantId }) => {
-        const checkoutToken=localStorage.getItem('checkoutToken');
+      query: ({ variantId }) => {
+        const checkoutToken = localStorage.getItem("checkoutToken");
         return configuration(ADDTOCART({ checkoutToken, variantId }));
       },
 
@@ -38,12 +39,9 @@ export const cardApi = apiSlice.injectEndpoints({
 
     checkoutToken: builder.mutation({
       query: ({ email }) => {
-        const checkoutToken=localStorage.getItem("checkoutToken")
-        if(!checkoutToken){
         return configuration(
           CHECKOUT_TOKEN({ channel: "india-channel", email })
         );
-      }
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -61,22 +59,17 @@ export const cardApi = apiSlice.injectEndpoints({
 
     getCartList: builder.query({
       query: () => {
-        const checkoutToken=localStorage.getItem("checkoutToken")
+        const checkoutToken = localStorage.getItem("checkoutToken");
         return configuration(CART_LIST({ checkoutToken }));
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          dispatch(
-            cart_list(result?.data.data?.checkout?.lines)
-          );
-
-          // dispatch(cart_list(cartData));
+          dispatch(cart_list(result?.data.data?.checkout?.lines));
         } catch (err) {
           // do nothing
         }
       },
-      // query: () => `/api/product/all`,
       providesTags: ["Products"],
     }),
 
@@ -88,31 +81,39 @@ export const cardApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }
       },
     }),
 
-    updateShippingAddress: builder.mutation({
+    createCheckoutToken: builder.mutation({
       query: ({
-        checkoutToken,
-        city,
-        streetAddress1,
+        channel,
+        email,
+        // lines: [{ quantity: 1, variantId: "UHJvZHVjdFZhcmlhbnQ6MTI=" }],
+        lines,
         firstName,
+        lastName,
+        streetAddress1,
+        city,
         country,
         postalCode,
-        state,
+        countryArea,
       }) => {
         return configuration(
           CHECKOUT_UPDATE_SHIPPING_ADDRESS({
-            checkoutToken,
+            channel,
+            email,
             city,
+            lastName,
+            lines,
             streetAddress1,
             firstName,
             country,
             postalCode,
-            state,
+            countryArea,
           })
         );
       },
@@ -120,6 +121,47 @@ export const cardApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+          console.log("result: ", result);
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
+
+    checkoutUpdate: builder.mutation({
+      query: ({ id }) => {
+        console.log(" ids: ", id);
+        return configuration(
+          CHECKOUT_DELIVERY_METHOD({
+            id,
+          })
+        );
+      },
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
+
+    checkoutComplete: builder.mutation({
+      query: ({ id }) => {
+        console.log(" ids: ", id);
+        return configuration(
+          CHECKOUT_COMPLETE({
+            id,
+          })
+        );
+      },
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }
@@ -133,5 +175,7 @@ export const {
   useCheckoutTokenMutation,
   useGetCartListQuery,
   useRemoveToCartMutation,
-  useUpdateShippingAddressMutation,
+  useCreateCheckoutTokenMutation,
+  useCheckoutUpdateMutation,
+  useCheckoutCompleteMutation,
 } = cardApi;

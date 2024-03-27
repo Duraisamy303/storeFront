@@ -18,7 +18,7 @@ import pradeLogo from '@assets/img/prade-logo.png';
 const HeaderTwo = ({ style_2 = false,data }) => {
 
   const  cart  = useSelector((state) => state.cart?.cart_list);
-  console.log("HeaderTwo: ", cart);
+  // console.log("HeaderTwo: ", cart);
 
 
   const { wishlist } = useSelector((state) => state.wishlist);

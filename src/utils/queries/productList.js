@@ -26,3 +26,31 @@ export const PRODUCT_LIST = ({ channel, first }) => {
   });
 };
 
+export const ORDER_LIST = ({ orderid }) => {
+  return JSON.stringify({
+    query: `
+    query MyQuery($orderid:ID!) {
+      order(id: $orderid) {
+        lines {
+          id
+          productName
+          productSku
+          quantity
+          thumbnail {
+            url
+          }
+          totalPrice {
+            currency
+            gross {
+              amount
+              currency
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { orderid },
+  });
+};
+

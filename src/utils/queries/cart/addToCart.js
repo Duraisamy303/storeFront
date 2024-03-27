@@ -80,6 +80,7 @@ export const CART_LIST = ({ checkoutToken }) => {
                 }
               }
               name
+              id
             }
           }
           totalPrice {
@@ -138,20 +139,85 @@ export const REMOVETOCART = ({ checkoutToken, lineId }) => {
 };
 
 export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
-  checkoutToken,
+  channel,
+  email,
   city,
+  lastName,
+  lines,
   streetAddress1,
   firstName,
   country,
   postalCode,
-  state,
+  countryArea,
 }) => {
   return {
     query: `
-    mutation CheckoutUpdateShippingAddress($checkoutToken: ID!, $firstName: String!, $streetAddress1: String!, $country: CountryCode!, $city: String!, $postalCode: String!,$state: String) {
-      checkoutShippingAddressUpdate(
-        id: $checkoutToken
-        shippingAddress: {firstName: $firstName, streetAddress1: $streetAddress1, city: $city, country: $country, postalCode: $postalCode, countryArea: $state}
+mutation CreateCheckout($channel: String!, $email: String!, $lines: [CheckoutLineInput!]!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!) {
+  checkoutCreate(
+    input: {
+      channel: $channel
+      email: $email
+      lines: $lines
+      shippingAddress: {
+        firstName: $firstName
+        lastName: $lastName
+        streetAddress1: $streetAddress1
+        city: $city
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+      }
+      billingAddress: {
+        firstName: $firstName
+        lastName: $lastName
+        streetAddress1: $streetAddress1
+        city: $city
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+      }
+    }
+  ) {
+    checkout {
+      id
+      totalPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+      isShippingRequired
+    }
+    errors {
+      field
+      code
+    }
+  }
+}
+      `,
+    variables: {
+      channel,
+      email,
+      city,
+      lastName,
+      lines,
+      streetAddress1,
+      firstName,
+      country,
+      postalCode,
+      countryArea,
+    },
+  };
+};
+
+export const CHECKOUT_DELIVERY_METHOD = ({ id }) => {
+  console.log("id: ", id);
+  return {
+    query: `
+    mutation CheckoutUpdateDeliveryMethod($id: ID!) {
+      checkoutDeliveryMethodUpdate(
+        deliveryMethodId: "U2hpcHBpbmdNZXRob2Q6MQ=="
+        id: $id
       ) {
         checkout {
           id
@@ -165,14 +231,26 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
     }
     
       `,
-    variables: {
-      checkoutToken,
-      city,
-      streetAddress1,
-      firstName,
-      country,
-      postalCode,
-      state,
-    },
+    variables: { id },
+  };
+};
+
+export const CHECKOUT_COMPLETE = ({ id }) => {
+  return {
+    query: `
+    mutation CheckoutComplete($id: ID!) {
+      checkoutComplete(id: $id) {
+        order {
+          id
+          status
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+      `,
+    variables: { id },
   };
 };

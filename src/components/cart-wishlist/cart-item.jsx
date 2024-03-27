@@ -7,14 +7,14 @@ import { Close, Minus, Plus } from "@/svg";
 import { add_cart_product, cart_list, quantityDecrement, remove_product } from "@/redux/features/cartSlice";
 import { useRemoveToCartMutation } from "@/redux/features/card/cardApi";
 
-const CartItem = ({product,img,price}) => {
+const CartItem = ({product,img,price,isRemove,title}) => {
 
   const cart = useSelector((state) => state.cart.cart_list);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 
 
-  const {_id,title, orderQuantity = 0 } = product || {};
+  const {_id, orderQuantity = 0 } = product || {};
 
   const dispatch = useDispatch();
 
@@ -75,12 +75,14 @@ const CartItem = ({product,img,price}) => {
         </div>
       </td> */}
       {/* action */}
+      {!isRemove &&
       <td className="tp-cart-action">
         <button onClick={()=> handleRemovePrd()} className="tp-cart-action-btn">
           <Close />
           <span>{" "}Remove</span>
         </button>
       </td>
+      }
     </tr>
   );
 };

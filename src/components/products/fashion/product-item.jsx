@@ -15,9 +15,11 @@ import {
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
+import { useRouter } from "next/router";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   let product = products.node;
+  const router=useRouter()
 
   const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
@@ -40,6 +42,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const handleAddProduct = async (data) => {
     try {
+      const checkoutToken=localStorage.getItem('checkoutToken');
+      if(checkoutToken){
       const response = await addToCartMutation({
         variantId: data?.variants[0]?.id,
       });
@@ -52,6 +56,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         `${data.name} added to cart successfully`
       );
       updateData();
+    }else{
+      router.push('/login')
+    }
     } catch (error) {
       console.error("Error:", error);
     }
