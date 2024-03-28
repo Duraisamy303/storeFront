@@ -14,6 +14,7 @@ import {
   useCreateCheckoutTokenMutation,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import { useRouter } from "next/router";
 
 const CheckoutArea = () => {
   // const {register,handleSubmit,setValue,formState: { errors }} = useForm();
@@ -39,6 +40,8 @@ const CheckoutArea = () => {
   } = checkoutData;
 
   const cart = useSelector((state) => state.cart?.cart_list);
+
+  const router=useRouter()
 
   const [cartTotals, setCartTotal] = useState(0);
 
