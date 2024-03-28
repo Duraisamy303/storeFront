@@ -6,7 +6,7 @@ import { AddCart, Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_cart_product } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { notifyError } from "@/utils/toast";
+import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import LoginForm from "@/components/forms/login-form";
 import { useRouter } from "next/router";
@@ -52,11 +52,7 @@ const ProductSliderItem = ({ product,loginPopup }) => {
         variantId: data?.node?.variants[0]?.id,
       });
       notifySuccess(
-        `${response[0].data.data.checkoutLinesAdd.checkout.lines[0].variant.product.name} added to cart successfully`
-      );
-      console.log(
-        "response: ",
-        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
+        `${data.node.name} added to cart successfully`
       );
       // cart_list.push
       dispatch(
@@ -78,6 +74,8 @@ const ProductSliderItem = ({ product,loginPopup }) => {
   return (
     <>
       <div className="tp-category-item-4 p-relative z-index-1 fix text-center">
+      <Link href={`/product-details/${product?.node?.id}`}>
+
         <div
           className="tp-category-thumb-4 include-bg"
           style={{
@@ -86,6 +84,7 @@ const ProductSliderItem = ({ product,loginPopup }) => {
             backgroundPosition: "0px -80px",
           }}
         ></div>
+        </Link>
         <div className="tp-product-action-3 tp-product-action-4 tp-product-action-blackStyle tp-product-action-brownStyle">
           <div className="tp-product-action-item-3 d-flex flex-column">
             {isAddedToCart ? (
