@@ -85,7 +85,7 @@ const HeaderTwo = ({ style_2 = false,data }) => {
                         </form>
                       </div>
                       <div className="tp-header-action d-flex align-items-center ml-30">
-                        <div className="tp-header-action-item d-none d-lg-block">
+                        {/* <div className="tp-header-action-item d-none d-lg-block">
                           <Link href="/compare" className="tp-header-action-btn">
                             <Compare />
                           </Link>
@@ -95,7 +95,7 @@ const HeaderTwo = ({ style_2 = false,data }) => {
                             <Wishlist />
                             <span className="tp-header-action-badge">{wishlist.length}</span>
                           </Link>
-                        </div>
+                        </div> */}
                         <div className="tp-header-action-item">
                           <button onClick={() => dispatch(openCartMini())} className="tp-header-action-btn cartmini-open-btn" >
                             <CartTwo />

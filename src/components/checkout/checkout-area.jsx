@@ -58,6 +58,7 @@ const CheckoutArea = () => {
     0
   );
 
+
   let lines = [];
   if (cart?.length > 0) {
     lines = cart?.map((item) => {
@@ -65,29 +66,28 @@ const CheckoutArea = () => {
     });
   }
 
-  useEffect(() => {
-    // const result = cart?.filter(
-    //   (p) => p.productType === discountProductType
-    // );
-    // const discountProductTotal = result?.reduce(
-    //   (preValue, currentValue) =>
-    //     preValue + currentValue.price * currentValue.orderQuantity,
-    //   0
-    // );
-    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
-    console.log("subTotal: ", subTotal);
-    // let discountTotal = Number(
-    //   discountProductTotal * (discountPercentage / 100)
-    // );
-    // totalValue = Number(subTotal - discountTotal);
-    // setDiscountAmount(discountTotal);
-    setCartTotal(subTotal);
-  }, [shippingCost, cartTotals,totalAmount]);
+  // useEffect(() => {
+  //   // const result = cart?.filter(
+  //   //   (p) => p.productType === discountProductType
+  //   // );
+  //   // const discountProductTotal = result?.reduce(
+  //   //   (preValue, currentValue) =>
+  //   //     preValue + currentValue.price * currentValue.orderQuantity,
+  //   //   0
+  //   // );
+  //   let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+  //   // let discountTotal = Number(
+  //   //   discountProductTotal * (discountPercentage / 100)
+  //   // );
+  //   // totalValue = Number(subTotal - discountTotal);
+  //   // setDiscountAmount(discountTotal);
+  //   setCartTotal(subTotal);
+  // }, [shippingCost, cartTotals,totalAmount]);
 
-  useEffect(() => {
-    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
-    setCartTotal(subTotal);
-  }, []);
+  // useEffect(() => {
+  //   let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+  //   setCartTotal(subTotal);
+  // }, []);
 
   // const submitHandler = async (data) => {
   //   console.log("data: ", data);
@@ -114,8 +114,9 @@ const CheckoutArea = () => {
   // }
 
   const submitHandler = async (data) => {
-    console.log("data: ", data);
+
     try {
+
       const createCheckoutResponse = await createCheckout({
         channel: "india-channel",
         email: data.email,
@@ -146,7 +147,7 @@ const CheckoutArea = () => {
           id: checkoutId,
         });
         console.log("Delivery Update Response:", deliveryUpdateResponse);
-        handlePayment(checkoutId, data);
+        handlePayment(checkoutId, data,cart);
 
       }
     } catch (error) {
@@ -156,19 +157,18 @@ const CheckoutArea = () => {
   };
 
   const handlePayment = useCallback(
-    async (checkoutId, data) => {
-      console.log("parseInt(cartTotals): ", parseInt(cartTotals));
+    async (checkoutId, data,cart) => {
 
-      // const order = await createOrder();
-
-      // const user = localStorage.getItem("userInfo");
-      // const data = JSON.parse(user).user;
+      const totalAmount = cart?.reduce(
+        (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+        0
+      );
 
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
         // amount: parseInt() * 100,
-        amount: 100 * 100,
+        amount: Number(totalAmount) * 100,
         currency: "INR",
         name: `${data.firstName} ${data.lastName}`,
         description: data.orderNote,

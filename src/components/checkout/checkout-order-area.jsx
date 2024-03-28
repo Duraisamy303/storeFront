@@ -198,7 +198,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           ))}
 
           {/*  shipping */}
-          <li className="tp-order-info-list-shipping">
+          {/* <li className="tp-order-info-list-shipping">
             <span>Shipping</span>
             <div className="tp-order-info-list-shipping-item d-flex flex-column align-items-end">
               <span>
@@ -236,25 +236,25 @@ const CheckoutOrderArea = ({ checkoutData }) => {
                 <ErrorMsg msg={errors?.shippingOption?.message} />
               </span>
             </div>
-          </li>
+          </li> */}
 
           {/*  subtotal */}
-          <li className="tp-order-info-list-subtotal">
+          {/* <li className="tp-order-info-list-subtotal">
             <span>Subtotal</span>
             <span>&#8377;{totalAmount?.toFixed(2)}</span>
-          </li>
+          </li> */}
 
           {/*  shipping cost */}
-          <li className="tp-order-info-list-subtotal">
+          {/* <li className="tp-order-info-list-subtotal">
             <span>Shipping Cost</span>
             <span>&#8377;{shippingCost.toFixed(2)}</span>
-          </li>
+          </li> */}
 
           {/* discount */}
-          <li className="tp-order-info-list-subtotal">
+          {/* <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
             <span>&#8377;{discountAmount.toFixed(2)}</span>
-          </li>
+          </li> */}
 
           {/* total */}
           <li className="tp-order-info-list-total">
