@@ -45,22 +45,20 @@ const DetailsWrapper = ({
   const { data: tokens } = useGetCartListQuery();
 
   const cart = useSelector((state) => state.cart?.cart_list);
-  console.log("cart: ", cart);
   let isAddedToCart = false;
   if (cart?.length > 0) {
     isAddedToCart = cart.some(
       (prd) => prd.variant.product.id === productItem.id
     );
-    console.log("isAddedToCart: ", isAddedToCart);
   }
 
-
+let textValue=""
   // Parse the JSON string
-const jsonObject = JSON.parse(productItem?.description);
-
+  if(productItem?.description|| productItem?.node?.description){
+const jsonObject = JSON.parse(productItem?.description || productItem?.node?.description);
 // Extract the text value
-const textValue = jsonObject?.blocks[0]?.data?.text;
-console.log("textValue: ", textValue);
+ textValue = jsonObject?.blocks[0]?.data?.text;
+}
 
 // Convert the text value to JSON format
 
