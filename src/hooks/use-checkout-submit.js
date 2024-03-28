@@ -55,8 +55,8 @@ const useCheckoutSubmit = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
 
   const {register,handleSubmit,setValue,formState: { errors }} = useForm();
 
@@ -191,70 +191,70 @@ const useCheckoutSubmit = () => {
   }, [user, setValue, shipping_info, router]);
 
   // submitHandler
-  const submitHandler = async (data) => {
-    dispatch(set_shipping(data));
-    setIsCheckoutSubmit(true);
+  // const submitHandler = async (data) => {
+  //   dispatch(set_shipping(data));
+  //   setIsCheckoutSubmit(true);
 
-    let orderInfo = {
-      name: `${data.firstName} ${data.lastName}`,
-      address: data.address,
-      contact: data.contactNo,
-      email: data.email,
-      city: data.city,
-      country: data.country,
-      zipCode: data.zipCode,
-      shippingOption: data.shippingOption,
-      status: "Pending",
-      cart: cart,
-      paymentMethod: data.payment,
-      subTotal: total,
-      shippingCost: shippingCost,
-      discount: discountAmount,
-      totalAmount: cartTotal,
-      orderNote:data.orderNote,
-      user: `${user?._id}`,
-    };
-    if (data.payment === 'Card') {
-      if (!stripe || !elements) {
-        return;
-      }
-      const card = elements.getElement(CardElement);
-      if (card == null) {
-        return;
-      }
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: card,
-      });
-      if (error && !paymentMethod) {
-        setCardError(error.message);
-        setIsCheckoutSubmit(false);
-      } else {
-        setCardError('');
-        const orderData = {
-          ...orderInfo,
-          cardInfo: paymentMethod,
-        };
+  //   let orderInfo = {
+  //     name: `${data.firstName} ${data.lastName}`,
+  //     address: data.address,
+  //     contact: data.contactNo,
+  //     email: data.email,
+  //     city: data.city,
+  //     country: data.country,
+  //     zipCode: data.zipCode,
+  //     shippingOption: data.shippingOption,
+  //     status: "Pending",
+  //     cart: cart,
+  //     paymentMethod: data.payment,
+  //     subTotal: total,
+  //     shippingCost: shippingCost,
+  //     discount: discountAmount,
+  //     totalAmount: cartTotal,
+  //     orderNote:data.orderNote,
+  //     user: `${user?._id}`,
+  //   };
+  //   if (data.payment === 'Card') {
+  //     // if (!stripe || !elements) {
+  //     //   return;
+  //     // }
+  //     // const card = elements.getElement(CardElement);
+  //     // if (card == null) {
+  //     //   return;
+  //     // }
+  //     // const { error, paymentMethod } = await stripe.createPaymentMethod({
+  //     //   type: 'card',
+  //     //   card: card,
+  //     // });
+  //     if (error && !paymentMethod) {
+  //       setCardError(error.message);
+  //       setIsCheckoutSubmit(false);
+  //     } else {
+  //       setCardError('');
+  //       const orderData = {
+  //         ...orderInfo,
+  //         cardInfo: paymentMethod,
+  //       };
 
-       return handlePaymentWithStripe(orderData);
-      }
-    }
-    if (data.payment === 'COD') {
-      saveOrder({
-        ...orderInfo
-      }).then(res => {
-        if(res?.error){
-        }
-        else {
-          localStorage.removeItem("cart")
-          localStorage.removeItem("couponInfo");
-          setIsCheckoutSubmit(false)
-          notifySuccess("Your Order Confirmed!");
-          router.push(`/order/${res.data?.order?._id}`);
-        }
-      })
-    }
-  };
+  //      return handlePaymentWithStripe(orderData);
+  //     }
+  //   }
+  //   if (data.payment === 'COD') {
+  //     saveOrder({
+  //       ...orderInfo
+  //     }).then(res => {
+  //       if(res?.error){
+  //       }
+  //       else {
+  //         localStorage.removeItem("cart")
+  //         localStorage.removeItem("couponInfo");
+  //         setIsCheckoutSubmit(false)
+  //         notifySuccess("Your Order Confirmed!");
+  //         router.push(`/order/${res.data?.order?._id}`);
+  //       }
+  //     })
+  //   }
+  // };
 
   // handlePaymentWithStripe
   const handlePaymentWithStripe = async (order) => {
@@ -314,8 +314,8 @@ const useCheckoutSubmit = () => {
     register,
     errors,
     cardError,
-    submitHandler,
-    stripe,
+    // submitHandler,
+    // stripe,
     handleSubmit,
     clientSecret,
     setClientSecret,

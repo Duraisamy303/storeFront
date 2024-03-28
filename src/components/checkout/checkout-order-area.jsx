@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { CardElement } from "@stripe/react-stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 // internal
 import useCartInfo from "@/hooks/use-cart-info";

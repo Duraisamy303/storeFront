@@ -26,11 +26,11 @@ export default function App({ Component, pageProps }) {
     <ApolloProvider client={client}>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
-          <Elements stripe={stripePromise}>
+          {/* <Elements stripe={stripePromise}> */}
             <div id="root">
               <Component {...pageProps} />
             </div>
-          </Elements>
+          {/* </Elements> */}
         </Provider>
       </GoogleOAuthProvider>
     </ApolloProvider>
