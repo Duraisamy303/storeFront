@@ -33,6 +33,9 @@ export const SINGLE_PRODUCT = ({ productId }) => {
             url
             alt
           }
+          variants {
+            id
+          }
           created
           description
           images {

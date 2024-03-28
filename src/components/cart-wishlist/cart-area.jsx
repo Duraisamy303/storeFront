@@ -8,7 +8,6 @@ import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
 
 const CartArea = () => {
-  const { cart_products } = useSelector((state) => state.cart);
 
   const cart = useSelector((state) => state.cart.cart_list);
 

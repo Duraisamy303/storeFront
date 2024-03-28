@@ -60,11 +60,13 @@ export const cardApi = apiSlice.injectEndpoints({
     getCartList: builder.query({
       query: () => {
         const checkoutToken = localStorage.getItem("checkoutToken");
+        console.log("checkoutToken: ", checkoutToken);
         return configuration(CART_LIST({ checkoutToken }));
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+          console.log("result: ", result);
           dispatch(cart_list(result?.data.data?.checkout?.lines));
         } catch (err) {
           // do nothing

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
 import { AskQuestion, CompareTwo, WishlistTwo } from "@/svg";
@@ -12,8 +12,12 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
 import { capitalizeFLetter } from "@/utils/functions";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
+import { notifySuccess } from "@/utils/toast";
 
 const DetailsWrapper = ({
   productItem,
@@ -38,9 +42,21 @@ const DetailsWrapper = ({
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
 
+  const { data: tokens } = useGetCartListQuery();
+
+  const cart = useSelector((state) => state.cart?.cart_list);
+  console.log("cart: ", cart);
+  let isAddedToCart = false;
+  if (cart?.length > 0) {
+    isAddedToCart = cart.some(
+      (prd) => prd.variant.product.id === productItem.id
+    );
+    console.log("isAddedToCart: ", isAddedToCart);
+  }
+
   const dispatch = useDispatch();
 
-  const router=useRouter()
+  const router = useRouter();
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -59,25 +75,22 @@ const DetailsWrapper = ({
   // handle add product
 
   const handleAddProduct = async (data) => {
-    console.log("data: ", data);
     try {
-      const checkoutToken=localStorage.getItem('checkoutToken');
-      if(checkoutToken){
-      const response = await addToCartMutation({
-        variantId: data?.variants[0]?.id,
-      });
-      console.log(
-        "response: ",
-        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
-      );
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      if (checkoutToken) {
+        const response = await addToCartMutation({
+          variantId: data?.variants[0]?.id,
+        });
+        console.log(
+          "response: ",
+          response?.data?.data?.checkoutLinesAdd?.checkout?.lines
+        );
 
-      notifySuccess(
-        `${data.name} added to cart successfully`
-      );
-      updateData();
-    }else{
-      router.push('/login')
-    }
+        notifySuccess(`${data.name} added to cart successfully`);
+        updateData();
+      } else {
+        router.push("/login");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -100,7 +113,11 @@ const DetailsWrapper = ({
   return (
     <div className="tp-product-details-wrapper">
       <div className="tp-product-details-category">
-        <span>{capitalizeFLetter(productItem?.category?.name || productItem?.node?.category?.name)}</span>
+        <span>
+          {capitalizeFLetter(
+            productItem?.category?.name || productItem?.node?.category?.name
+          )}
+        </span>
       </div>
       <h3 className="tp-product-details-title">
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
@@ -121,7 +138,12 @@ const DetailsWrapper = ({
         </div>
       </div> */}
       <p style={{ color: "black" }}>
-        {textMore ? description || productItem?.node?.description : `${description?.substring(0, 100) || productItem?.node?.description?.substring(0, 100) }...`}
+        {textMore
+          ? description || productItem?.node?.description
+          : `${
+              description?.substring(0, 100) ||
+              productItem?.node?.description?.substring(0, 100)
+            }...`}
         <span onClick={() => setTextMore(!textMore)}>
           {textMore ? "See less" : "See more"}
         </span>
@@ -133,14 +155,17 @@ const DetailsWrapper = ({
           <>
             <span className="tp-product-details-price old-price">${price}</span>
             <span className="tp-product-details-price new-price">
-              &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount} 
+              &#8377;{" "}
+              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
               {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
             </span>
           </>
         ) : (
           <span className="tp-product-details-price new-price">
-              &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount} 
-
+            &#8377;{" "}
+            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
             {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
           </span>
 
@@ -194,11 +219,17 @@ const DetailsWrapper = ({
           {/* product quantity */}
           <div className="tp-product-details-add-to-cart mb-15 w-100">
             <button
-              onClick={() => handleAddProduct(productItem)}
+              onClick={() => {
+                if (isAddedToCart) {
+                  router.push("/cart");
+                } else {
+                  handleAddProduct(productItem);
+                }
+              }}
               disabled={status === "out-of-stock"}
               className="tp-product-details-add-to-cart-btn w-100"
             >
-              Add To Cart
+              {isAddedToCart ? "View Cart" : "Add To Cart"}
             </button>
           </div>
         </div>
@@ -235,9 +266,9 @@ const DetailsWrapper = ({
       </div>
       {/* product-details-action-sm end */}
 
-    {detailsBottom && (
+      {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />
-      )} 
+      )}
     </div>
   );
 };

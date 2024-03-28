@@ -10,7 +10,6 @@ import { useGetAllProductsQuery, useOrderListQuery } from "@/redux/features/prod
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 
 const OrderList = () => {
-  const { cart_products } = useSelector((state) => state.cart);
 
   const  { data: data } = useGetCartListQuery();
 

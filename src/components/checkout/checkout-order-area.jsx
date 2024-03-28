@@ -27,8 +27,6 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     discountAmount,
   } = checkoutData;
 
-  const { cart_products } = useSelector((state) => state.cart);
-
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
