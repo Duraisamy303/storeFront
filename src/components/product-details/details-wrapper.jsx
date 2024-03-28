@@ -54,6 +54,17 @@ const DetailsWrapper = ({
     console.log("isAddedToCart: ", isAddedToCart);
   }
 
+
+  // Parse the JSON string
+const jsonObject = JSON.parse(productItem?.description);
+
+// Extract the text value
+const textValue = jsonObject?.blocks[0]?.data?.text;
+console.log("textValue: ", textValue);
+
+// Convert the text value to JSON format
+
+
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -138,15 +149,16 @@ const DetailsWrapper = ({
         </div>
       </div> */}
       <p style={{ color: "black" }}>
-        {textMore
+        {textValue}
+        {/* {textMore
           ? description || productItem?.node?.description
           : `${
               description?.substring(0, 100) ||
               productItem?.node?.description?.substring(0, 100)
-            }...`}
-        <span onClick={() => setTextMore(!textMore)}>
+            }...`} */}
+        {/* <span onClick={() => setTextMore(!textMore)}>
           {textMore ? "See less" : "See more"}
-        </span>
+        </span> */}
       </p>
 
       {/* price */}

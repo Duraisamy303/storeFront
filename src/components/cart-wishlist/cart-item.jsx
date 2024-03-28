@@ -59,7 +59,7 @@ const CartItem = ({product,img,price,isRemove,title}) => {
       {/* price */}
       <td className="tp-cart-price">
         {/* <span>${(price * orderQuantity).toFixed(2)}</span> */}
-        <span>${price?.toFixed(2)}</span>
+        <span>&#8377;{price?.toFixed(2)}</span>
 
       </td>
       {/* quantity */}

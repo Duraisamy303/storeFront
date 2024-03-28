@@ -41,7 +41,7 @@ const CartCheckout = () => {
     <div className="tp-cart-checkout-wrapper">
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>
-        <span className="tp-cart-checkout-top-price">${totalAmount}</span>
+        <span className="tp-cart-checkout-top-price">&#8377;{totalAmount}</span>
       </div>
       <div className="tp-cart-checkout-shipping">
         <h4 className="tp-cart-checkout-shipping-title">Shipping</h4>
@@ -74,7 +74,7 @@ const CartCheckout = () => {
       </div>
       <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
         <span>Total</span>
-        <span>${totals.toFixed(2)}</span>
+        <span>&#8377;{totals.toFixed(2)}</span>
       </div>
       <div className="tp-cart-checkout-proceed">
         <Link href="/checkout" className="tp-cart-checkout-btn w-100">

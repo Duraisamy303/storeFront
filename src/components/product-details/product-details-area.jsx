@@ -7,6 +7,7 @@ import RelatedProducts from "./related-products";
 
 const ProductDetailsArea = ({ productItem }) => {
   const {  images, imageURLs, videoId, status } = productItem || {};
+  console.log("productItem: ", productItem);
   const [activeImg, setActiveImg] = useState(images[0]);
   const dispatch = useDispatch();
   // active image change when img change
@@ -18,6 +19,18 @@ const ProductDetailsArea = ({ productItem }) => {
   const handleImageActive = (item) => {
     setActiveImg(item.img);
   };
+
+
+  const JsonToHtml = ({ data }) => {
+    // Map over the blocks array and generate HTML elements
+    const htmlContent = data.blocks.map(block => {
+      if (block.type === 'paragraph') {
+        return <p key={block.id}>{block.data.text}</p>;
+      }
+      // You can handle other block types here if needed
+      return null;
+    });
+  }
   return (
     <section className="tp-product-details-area">
       <div className="tp-product-details-top pb-115">
@@ -63,7 +76,7 @@ const ProductDetailsArea = ({ productItem }) => {
       {/* product details description */}
 
       {/* related products start */}
-      <section className="tp-related-product pt-50 pb-50">
+      {/* <section className="tp-related-product pt-50 pb-50">
         <div className="container-fluid">
           <div className="row">
             <div className="tp-section-title-wrapper-6 text-center mb-40">
@@ -75,7 +88,7 @@ const ProductDetailsArea = ({ productItem }) => {
             <RelatedProducts id={productItem?.id} />
           </div>
         </div>
-      </section>
+      </section> */}
       {/* related products end */}
     </section>
   );
