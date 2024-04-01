@@ -7,7 +7,8 @@ const initialState = {
   orderQuantity: 1,
   cartMiniOpen: false,
   cart_list: [],
-  checkout_token:""
+  compare_list: [],
+  checkout_token: "",
 };
 
 export const cartSlice = createSlice({
@@ -58,6 +59,14 @@ export const cartSlice = createSlice({
 
     cart_list: (state, { payload }) => {
       state.cart_list = payload; // Return new state object with updated cart_products
+    },
+
+    add_compare: (state, { payload }) => {
+      state.compare_list = payload; // Return new state object with updated cart_products
+    },
+
+   compare_list: (state, { payload }) => {
+      state.compare_list = payload; // Return new state object with updated cart_products
     },
 
     checkout_token: (state, { payload }) => {
@@ -118,6 +127,8 @@ export const cartSlice = createSlice({
 export const {
   add_cart_product,
   cart_list,
+  compare_list,
+  add_compare,
   increment,
   decrement,
   get_cart_products,
@@ -127,6 +138,6 @@ export const {
   clearCart,
   closeCartMini,
   openCartMini,
-  checkout_token
+  checkout_token,
 } = cartSlice.actions;
 export default cartSlice.reducer;

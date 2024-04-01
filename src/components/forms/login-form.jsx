@@ -18,7 +18,7 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  
+
   const [loginUser, {}] = useLoginUserMutation();
 
   const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
@@ -36,22 +36,23 @@ const LoginForm = () => {
   });
   // onSubmit
   const onSubmit = (data) => {
+    console.log("data: ", data);
     loginUser({
       email: data.email,
       password: data.password,
     }).then((data) => {
-      console.log("data?.data?.data: ", data?.data?.data);
       if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
         notifySuccess("Login successfully");
         getCheckoutToken(data?.data?.data?.tokenCreate?.user?.email);
-
         router.push(redirect || "/");
       }
     });
     reset();
   };
+
+
 
   const getCheckoutToken = async (email) => {
     try {
@@ -106,7 +107,11 @@ const LoginForm = () => {
       </div>
       <div className="tp-login-suggetions d-sm-flex align-items-center justify-content-between mb-20">
         <div className="tp-login-remeber">
-          <input id="remeber" type="checkbox" />
+          <input
+            id="remeber"
+            type="checkbox"
+           
+          />
           <label htmlFor="remeber">Remember me</label>
         </div>
         <div className="tp-login-forgot">

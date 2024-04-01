@@ -1,48 +1,79 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 // internal
-import Menus from './header-com/menus';
-import logo from '@assets/img/logo/logo.svg';
-import useSticky from '@/hooks/use-sticky';
-import useCartInfo from '@/hooks/use-cart-info';
-import { openCartMini } from '@/redux/features/cartSlice';
-import HeaderTopRight from './header-com/header-top-right';
-import CartMiniSidebar from '@/components/common/cart-mini-sidebar';
-import { CartTwo, Compare, Facebook, Menu, PhoneTwo, Wishlist, Search } from '@/svg';
-import useSearchFormSubmit from '@/hooks/use-search-form-submit';
-import OffCanvas from '@/components/common/off-canvas';
-import pradeLogo from '@assets/img/prade-logo.png';
+import Menus from "./header-com/menus";
+import logo from "@assets/img/logo/logo.svg";
+import useSticky from "@/hooks/use-sticky";
+import useCartInfo from "@/hooks/use-cart-info";
+import { compare_list, openCartMini } from "@/redux/features/cartSlice";
+import HeaderTopRight from "./header-com/header-top-right";
+import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
+import {
+  CartTwo,
+  Compare,
+  Facebook,
+  Menu,
+  PhoneTwo,
+  Wishlist,
+  Search,
+} from "@/svg";
+import useSearchFormSubmit from "@/hooks/use-search-form-submit";
+import OffCanvas from "@/components/common/off-canvas";
+import pradeLogo from "@assets/img/prade-logo.png";
 
-const HeaderTwo = ({ style_2 = false,data }) => {
-
-  const  cart  = useSelector((state) => state.cart?.cart_list);
-  // console.log("HeaderTwo: ", cart);
-
+const HeaderTwo = ({ style_2 = false, data }) => {
+  const cart = useSelector((state) => state.cart?.cart_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
+
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+
+ 
   return (
     <>
       <header>
-        <div className={`tp-header-area tp-header-style-${style_2 ? 'primary' : 'darkRed'} tp-header-height`}>
-          <div className="tp-header-top-2 p-relative z-index-11 tp-header-top-border d-none d-md-block" style={{ backgroundColor: "rgba(29, 30, 32, 1)" }}>
+        <div
+          className={`tp-header-area tp-header-style-${
+            style_2 ? "primary" : "darkRed"
+          } tp-header-height`}
+        >
+          <div
+            className="tp-header-top-2 p-relative z-index-11 tp-header-top-border d-none d-md-block"
+            style={{ backgroundColor: "rgba(29, 30, 32, 1)" }}
+          >
             <div className="container-fluid">
               <div className="row align-items-center">
                 <div className="col-md-6">
                   <div className="tp-header-info d-flex align-items-center">
-                    <p style={{ color: "white", fontWeight: "500", margin: "0px", fontSize: "14px", padding: "8px 0px" }}>ADD ANYTHING HERE OR JUST REMOVE IT...</p>
+                    <p
+                      style={{
+                        color: "white",
+                        fontWeight: "500",
+                        margin: "0px",
+                        fontSize: "14px",
+                        padding: "8px 0px",
+                      }}
+                    >
+                      ADD ANYTHING HERE OR JUST REMOVE IT...
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="tp-header-top-right tp-header-top-black d-flex align-items-center justify-content-end">
                     {/* <HeaderTopRight /> */}
-                    <ul style={{ color: "white", listStyle: "none", display: "flex" }}>
+                    <ul
+                      style={{
+                        color: "white",
+                        listStyle: "none",
+                        display: "flex",
+                      }}
+                    >
                       <li style={{ paddingRight: "20px" }}>News Letter</li>
                       <li>FAQ</li>
                     </ul>
@@ -52,8 +83,13 @@ const HeaderTwo = ({ style_2 = false,data }) => {
             </div>
           </div>
 
-          <div id="header-sticky" className={`tp-header-bottom-2 tp-header-sticky ${sticky ? 'header-sticky' : ''}`}>
-            <div style={{padding:"0px 15px"}}>
+          <div
+            id="header-sticky"
+            className={`tp-header-bottom-2 tp-header-sticky ${
+              sticky ? "header-sticky" : ""
+            }`}
+          >
+            <div style={{ padding: "0px 15px" }}>
               <div className="tp-mega-menu-wrapper p-relative">
                 <div className="row align-items-center">
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
@@ -78,32 +114,50 @@ const HeaderTwo = ({ style_2 = false,data }) => {
                             onChange={(e) => setSearchText(e.target.value)}
                             value={searchText}
                             type="text"
-                            placeholder="Search for Products..." />
+                            placeholder="Search for Products..."
+                          />
                           <button type="submit">
                             <Search />
                           </button>
                         </form>
                       </div>
                       <div className="tp-header-action d-flex align-items-center ml-30">
-                        {/* <div className="tp-header-action-item d-none d-lg-block">
-                          <Link href="/compare" className="tp-header-action-btn">
+                        <div className="tp-header-action-item d-none d-lg-block">
+                          <Link
+                            href="/compare"
+                            className="tp-header-action-btn"
+                          >
                             <Compare />
                           </Link>
                         </div>
                         <div className="tp-header-action-item d-none d-lg-block">
-                          <Link href="/wishlist" className="tp-header-action-btn">
+                          <Link
+                            href="/wishlist"
+                            className="tp-header-action-btn"
+                          >
                             <Wishlist />
-                            <span className="tp-header-action-badge">{wishlist.length}</span>
+                            <span className="tp-header-action-badge">
+                              {wishlist.length}
+                            </span>
                           </Link>
-                        </div> */}
+                        </div>
                         <div className="tp-header-action-item">
-                          <button onClick={() => dispatch(openCartMini())} className="tp-header-action-btn cartmini-open-btn" >
+                          <button
+                            onClick={() => dispatch(openCartMini())}
+                            className="tp-header-action-btn cartmini-open-btn"
+                          >
                             <CartTwo />
-                            <span className="tp-header-action-badge">{cart?.length || 0}</span>
+                            <span className="tp-header-action-badge">
+                              {cart?.length || 0}
+                            </span>
                           </button>
                         </div>
                         <div className="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">
-                          <button onClick={() => setIsCanvasOpen(true)} type="button" className="tp-offcanvas-open-btn">
+                          <button
+                            onClick={() => setIsCanvasOpen(true)}
+                            type="button"
+                            className="tp-offcanvas-open-btn"
+                          >
                             <Menu />
                           </button>
                         </div>
@@ -122,7 +176,11 @@ const HeaderTwo = ({ style_2 = false,data }) => {
       {/* cart mini sidebar end */}
 
       {/* off canvas start */}
-      <OffCanvas isOffCanvasOpen={isOffCanvasOpen} setIsCanvasOpen={setIsCanvasOpen} categoryType="fashion" />
+      <OffCanvas
+        isOffCanvasOpen={isOffCanvasOpen}
+        setIsCanvasOpen={setIsCanvasOpen}
+        categoryType="fashion"
+      />
       {/* off canvas end */}
     </>
   );

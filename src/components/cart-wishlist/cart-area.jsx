@@ -39,7 +39,7 @@ const CartArea = () => {
                           Product
                         </th>
                         <th className="tp-cart-header-price">Price</th>
-                        <th className="tp-cart-header-quantity">Quantity</th>
+                        <th className="tp-cart-header-quantity">Action</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -48,9 +48,9 @@ const CartArea = () => {
                         <CartItem
                           key={i}
                           product={item}
-                          title={item?.variant?.product?.name}
-                          img={item?.variant?.product?.thumbnail?.url}
-                          price={item?.variant?.pricing?.price?.gross?.amount}
+                          title={item?.variant?.product?.name || item?.node?.name}
+                          img={item?.variant?.product?.thumbnail?.url || item?.node?.thumbnail?.url}
+                          price={item?.variant?.pricing?.price?.gross?.amount || item?.node?.pricing?.priceRange?.start?.gross?.amount}
                         />
                       ))}
                     </tbody>

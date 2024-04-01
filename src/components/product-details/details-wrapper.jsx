@@ -7,7 +7,7 @@ import { AskQuestion, CompareTwo, WishlistTwo } from "@/svg";
 import DetailsBottomInfo from "./details-bottom-info";
 import ProductDetailsCountdown from "./product-details-countdown";
 import ProductQuantity from "./product-quantity";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import { add_cart_product, compare_list } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
@@ -18,6 +18,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifySuccess } from "@/utils/toast";
+import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 
 const DetailsWrapper = ({
   productItem,
@@ -44,6 +45,18 @@ const DetailsWrapper = ({
 
   const { data: tokens } = useGetCartListQuery();
 
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  const compareList = useSelector((state) => state.cart.compare_list);
+
+  useEffect(() => {
+    const compareList = localStorage.getItem("compareList");
+    const arr = JSON.parse(compareList);
+    dispatch(compare_list(arr));
+  }, []);
+
+  const [isAddWishlist, setWishlist] = useState(false);
+
   const cart = useSelector((state) => state.cart?.cart_list);
   let isAddedToCart = false;
   if (cart?.length > 0) {
@@ -52,16 +65,17 @@ const DetailsWrapper = ({
     );
   }
 
-let textValue=""
+  let textValue = "";
   // Parse the JSON string
-  if(productItem?.description|| productItem?.node?.description){
-const jsonObject = JSON.parse(productItem?.description || productItem?.node?.description);
-// Extract the text value
- textValue = jsonObject?.blocks[0]?.data?.text;
-}
+  if (productItem?.description || productItem?.node?.description) {
+    const jsonObject = JSON.parse(
+      productItem?.description || productItem?.node?.description
+    );
+    // Extract the text value
+    textValue = jsonObject?.blocks[0]?.data?.text;
+  }
 
-// Convert the text value to JSON format
-
+  // Convert the text value to JSON format
 
   const dispatch = useDispatch();
 
@@ -80,6 +94,31 @@ const jsonObject = JSON.parse(productItem?.description || productItem?.node?.des
       setRatingVal(0);
     }
   }, [reviews]);
+
+  useEffect(() => {
+    const whislist = checkWishlist(wishlist, productItem.id);
+    setWishlist(whislist);
+  }, [wishlist]);
+
+  const handleWishlist = async (prd) => {
+    if (isAddWishlist) {
+      router.push("/wishlist");
+    } else {
+      addWishlistProduct(prd);
+    }
+  };
+
+  const addWishlistProduct = async (prd) => {
+    try {
+      const modify = {
+        node: prd,
+      };
+      const addedWishlist = handleWishlistProduct(modify);
+      dispatch(add_to_wishlist(addedWishlist));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   // handle add product
 
@@ -110,13 +149,21 @@ const jsonObject = JSON.parse(productItem?.description || productItem?.node?.des
   // };
 
   // handle wishlist product
-  const handleWishlistProduct = (prd) => {
-    dispatch(add_to_wishlist(prd));
-  };
 
   // handle compare product
   const handleCompareProduct = (prd) => {
-    dispatch(add_to_compare(prd));
+    const compare = localStorage.getItem("compareList");
+
+    let arr = [];
+    if (!compare) {
+      arr = [];
+    } else {
+      arr = JSON.parse(compare);
+    }
+    arr.push(prd);
+    console.log("compare: ", arr);
+    localStorage.setItem("compareList", JSON.stringify(arr));
+    dispatch(compare_list(arr));
   };
 
   return (
@@ -231,6 +278,7 @@ const jsonObject = JSON.parse(productItem?.description || productItem?.node?.des
             <button
               onClick={() => {
                 if (isAddedToCart) {
+                  dispatch(handleModalClose());
                   router.push("/cart");
                 } else {
                   handleAddProduct(productItem);
@@ -253,21 +301,32 @@ const jsonObject = JSON.parse(productItem?.description || productItem?.node?.des
       <div className="tp-product-details-action-sm">
         <button
           disabled={status === "out-of-stock"}
-          onClick={() => handleCompareProduct(productItem)}
+          onClick={() => {
+            if (compareList?.some((prd) => prd?.id === productItem?.id)) {
+              dispatch(handleModalClose());
+              router.push("/compare");
+            } else {
+              handleCompareProduct(productItem);
+            }
+          }}
+          // onClick={() => handleCompareProduct(productItem)}
           type="button"
           className="tp-product-details-action-sm-btn"
         >
           <CompareTwo />
-          Compare
+          {compareList?.some((prd) => prd?.id === productItem?.id)
+            ? "View compare"
+            : "Add compare"}
         </button>
         <button
           disabled={status === "out-of-stock"}
-          onClick={() => handleWishlistProduct(productItem)}
+          onClick={() => handleWishlist(productItem)}
+          // onClick={() => handleWishlistProduct(productItem)}
           type="button"
           className="tp-product-details-action-sm-btn"
         >
           <WishlistTwo />
-          Add Wishlist
+          {isAddWishlist ? "View" : "Add"} To Wishlist
         </button>
         <button type="button" className="tp-product-details-action-sm-btn">
           <AskQuestion />

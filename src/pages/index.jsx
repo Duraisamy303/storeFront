@@ -16,6 +16,7 @@ import FooterTwo from "@/layout/footers/footer-2";
 import HeaderTwo from "@/layout/headers/header-2";
 import {
   useCheckoutTokenMutation,
+  useCreateCheckoutTokenWithoutEmailMutation,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +25,25 @@ import { cart_list, checkout_token } from "@/redux/features/cartSlice";
 const index = () => {
   // const dispatch = useDispatch();
 
-  const  { data: tokens } = useGetCartListQuery();
+  const { data: tokens } = useGetCartListQuery();
+
+  const [createCheckoutTokenWithoutEmail, { data: data }] =
+    useCreateCheckoutTokenWithoutEmailMutation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("checkoutToken");
+    if (!token) {
+      getCheckoutToken();
+    }
+  }, []);
+
+  const getCheckoutToken = async () => {
+    try {
+      await createCheckoutTokenWithoutEmail({});
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <Wrapper>

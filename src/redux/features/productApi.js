@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { apiSlice } from "../api/apiSlice";
 import { configuration } from "@/utils/constant";
 import {  ORDER_LIST, PRODUCT_LIST } from "@/utils/queries/productList";
-import { SINGLE_PRODUCT } from "@/utils/queries/singleProduct/productDetailsByID";
+import { RELATED_PRODUCT, SINGLE_PRODUCT } from "@/utils/queries/singleProduct/productDetailsByID";
 
 
 export const productApi = apiSlice.injectEndpoints({
@@ -17,6 +17,7 @@ export const productApi = apiSlice.injectEndpoints({
       query: ({ channel, first }) => configuration(PRODUCT_LIST({ channel, first })),
       providesTags: ["ProductType"],
     }),
+
     getOfferProducts: builder.query({
       query: (type) => `/api/product/offer?type=${type}`,
       providesTags: ["OfferProducts"],
@@ -41,7 +42,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     // get related products
     getRelatedProducts: builder.query({
-      query: (id) => `/api/product/related-product/${id}`,
+     query: ({id }) => configuration(RELATED_PRODUCT({ id })),
       providesTags: (result, error, arg) => [
         { type: "RelatedProducts", id: arg },
       ],

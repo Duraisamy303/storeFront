@@ -5,7 +5,7 @@ import HeaderTwo from '@/layout/headers/header-2';
 import Footer from '@/layout/footers/footer';
 import Wrapper from '@/layout/wrapper';
 import ErrorMsg from '@/components/common/error-msg';
-import { useGetProductQuery } from '@/redux/features/productApi';
+import { useGetProductQuery, useGetRelatedProductsQuery } from '@/redux/features/productApi';
 import ProductDetailsBreadcrumb from '@/components/breadcrumb/product-details-breadcrumb';
 import ProductDetailsArea from '@/components/product-details/product-details-area';
 import PrdDetailsLoader from '@/components/loader/prd-details-loader';
@@ -13,9 +13,9 @@ import FooterTwo from '@/layout/footers/footer-2';
 
 const ProductDetailsPage = ({ query }) => {
   const { data: productData, isLoading, isError } = useGetProductQuery({productId:query.id});
-  console.log("productData: ", productData);
-
+ 
   const product=productData?.data?.product
+
   // decide what to render
   let content = null;
   if (isLoading) {

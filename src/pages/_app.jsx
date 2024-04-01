@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 }
 
 // stripePromise
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
+// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
 const client = new ApolloClient({
   uri: "http://file.prade.in/graphql/",

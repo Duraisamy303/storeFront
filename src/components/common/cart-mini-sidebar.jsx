@@ -6,36 +6,42 @@ import { useDispatch, useSelector } from "react-redux";
 import useCartInfo from "@/hooks/use-cart-info";
 import RenderCartProgress from "./render-cart-progress";
 import empty_cart_img from "@assets/img/product/cartmini/empty-cart.png";
-import { cart_list, closeCartMini, remove_product } from "@/redux/features/cartSlice";
-import { useGetCartListQuery, useRemoveToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  cart_list,
+  closeCartMini,
+  remove_product,
+} from "@/redux/features/cartSlice";
+import {
+  useGetCartListQuery,
+  useRemoveToCartMutation,
+} from "@/redux/features/card/cardApi";
 
 const CartMiniSidebar = () => {
-  const {  cartMiniOpen } = useSelector((state) => state.cart);
+  const { cartMiniOpen } = useSelector((state) => state.cart);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 
-
-
-  const cart = useSelector((state) => state.cart?.cart_list);
+  const cartData = useSelector((state) => state.cart?.cart_list);
+  const cart = cartData?.node || cartData;
 
   const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+    (acc, curr) =>
+      acc + curr?.variant?.pricing?.price?.gross?.amount ||
+      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
     0
   );
+
   const { total } = useCartInfo();
   const dispatch = useDispatch();
 
-  const handleRemovePrd = (id) => {
+  const handleRemovePrd = (val) => {
     const checkoutToken = localStorage.getItem("checkoutToken");
     removeToCart({
       checkoutToken,
-      lineId: id,
+      lineId: val.id,
     }).then((data) => {
-      const filter=cart.filter(item=>item.id != id)
-      dispatch(cart_list(filter))
-  // const  { data: tokens } = useGetCartListQuery();
-
-      
+      const filter = cart.filter((item) => item.id != val.id);
+      dispatch(cart_list(filter));
     });
   };
 
@@ -76,7 +82,10 @@ const CartMiniSidebar = () => {
                     <div className="cartmini__thumb">
                       <Link href={`/product-details/${item._id}`}>
                         <Image
-                          src={item?.variant?.product?.thumbnail?.url}
+                          src={
+                            item?.variant?.product?.thumbnail?.url ||
+                            item?.node?.thumbnail?.url
+                          }
                           width={70}
                           height={60}
                           alt="product img"
@@ -86,7 +95,7 @@ const CartMiniSidebar = () => {
                     <div className="cartmini__content">
                       <h5 className="cartmini__title">
                         <Link href={`/product-details/${item._id}`}>
-                          {item?.variant?.product?.name}
+                          {item?.variant?.product?.name || item?.node?.name}
                         </Link>
                       </h5>
                       <div className="cartmini__price-wrapper">
@@ -101,19 +110,20 @@ const CartMiniSidebar = () => {
                           </span>
                         ) : (
                           <span className="cartmini__price">
-                           &#8377;
+                            &#8377;
                             {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
                               2
-                            )}
+                            ) ||
+                              item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                2
+                              )}
                           </span>
                         )}
                         <span className="cartmini__quantity"> x {1}</span>
                       </div>
                     </div>
                     <a
-                      onClick={() =>
-                        handleRemovePrd(item.id)
-                      }
+                      onClick={() => handleRemovePrd(item)}
                       className="cartmini__del cursor-pointer"
                     >
                       <i className="fa-regular fa-xmark"></i>

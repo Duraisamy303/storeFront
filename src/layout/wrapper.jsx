@@ -16,6 +16,7 @@ import Loader from "@/components/loader/loader";
 
 const Wrapper = ({ children }) => {
   const { productItem } = useSelector((state) => state.productModal);
+  console.log("productItem: ", productItem);
   const dispatch = useDispatch();
   const authChecked = useAuthCheck();
 

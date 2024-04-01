@@ -14,7 +14,7 @@ const CartCheckout = () => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount || acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
     0
   );
   // handle shipping cost

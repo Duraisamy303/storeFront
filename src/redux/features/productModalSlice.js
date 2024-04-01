@@ -10,6 +10,7 @@ export const productModalSlice = createSlice({
   initialState,
   reducers: {
     handleProductModal: (state, { payload }) => {
+      console.log("payload: ", payload);
       state.productItem = payload;
       state.isModalOpen = true;
     },

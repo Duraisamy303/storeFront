@@ -118,6 +118,28 @@ export const CHECKOUT_TOKEN = ({ channel, email }) => {
   };
 };
 
+export const CHECKOUT_TOKEN_WITHOUT_EMAIL = ({ channel }) => {
+  return {
+    query: `
+    mutation CheckoutCreate($channel:String, ) {
+      checkoutCreate(
+        input: {channel: $channel,  lines: []}
+      ) {
+        checkout {
+          token
+        }
+        errors {
+          field
+          code
+        
+      }
+    }
+    }
+      `,
+    variables: { channel },
+  };
+};
+
 export const REMOVETOCART = ({ checkoutToken, lineId }) => {
   return {
     query: `
@@ -141,77 +163,93 @@ export const REMOVETOCART = ({ checkoutToken, lineId }) => {
 export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
   channel,
   email,
-  city,
-  lastName,
   lines,
-  streetAddress1,
   firstName,
-  country,
+  lastName,
+  streetAddress1,
+  city,
   postalCode,
+  country,
   countryArea,
+  firstName1,
+  lastName1,
+  streetAddress2,
+  city1,
+  postalCode1,
+  country1,
+  countryArea1,
 }) => {
+  console.log("first", 
+  lastName1,
+ )
   return {
     query: `
-mutation CreateCheckout($channel: String!, $email: String!, $lines: [CheckoutLineInput!]!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!) {
-  checkoutCreate(
-    input: {
-      channel: $channel
-      email: $email
-      lines: $lines
-      shippingAddress: {
-        firstName: $firstName
-        lastName: $lastName
-        streetAddress1: $streetAddress1
-        city: $city
-        postalCode: $postalCode
-        country: $country
-        countryArea: $countryArea
-      }
-      billingAddress: {
-        firstName: $firstName
-        lastName: $lastName
-        streetAddress1: $streetAddress1
-        city: $city
-        postalCode: $postalCode
-        country: $country
-        countryArea: $countryArea
-      }
-    }
-  ) {
-    checkout {
-      id
-      totalPrice {
-        gross {
-          amount
-          currency
+    mutation CreateCheckout($channel: String!, $email: String!, $lines: [CheckoutLineInput!]!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!,$firstName1: String!, $lastName1: String!, $streetAddress2: String!, $city1: String!, $postalCode1: String!, $country1: CountryCode!, $countryArea1: String!) {
+      checkoutCreate(
+        input: {
+          channel: $channel
+          email: $email
+          lines: $lines
+          shippingAddress: {
+            firstName: $firstName
+            lastName: $lastName
+            streetAddress1: $streetAddress1
+            city: $city
+            postalCode: $postalCode
+            country: $country
+            countryArea: $countryArea
+          }
+          billingAddress: {
+            firstName: $firstName1
+            lastName: $lastName1
+            streetAddress1: $streetAddress2
+            city: $city1
+            postalCode: $postalCode1
+            country: $country1
+            countryArea: $countryArea1
+          }
+        }
+      ) {
+        checkout {
+          id
+          totalPrice {
+            gross {
+              amount
+              currency
+            }
+          }
+          isShippingRequired
+        }
+        errors {
+          field
+          code
         }
       }
-      isShippingRequired
     }
-    errors {
-      field
-      code
-    }
-  }
-}
       `,
     variables: {
       channel,
       email,
-      city,
-      lastName,
       lines,
-      streetAddress1,
       firstName,
-      country,
+      lastName,
+      streetAddress1,
+      city,
       postalCode,
+      country,
       countryArea,
+      firstName1,
+      lastName1,
+      streetAddress2,
+      city1,
+      postalCode1,
+      country1,
+      countryArea1,
     },
   };
 };
 
 export const CHECKOUT_DELIVERY_METHOD = ({ id }) => {
-  console.log("id: ", id);
   return {
     query: `
     mutation CheckoutUpdateDeliveryMethod($id: ID!) {

@@ -25,21 +25,19 @@ const ProductModal = () => {
   );
 
   const { img, imageURLs, status } = productItem || {};
+  const imageUrls=productItem?.images?.map((item)=>item?.url)
+  console.log("imageUrls: ", imageUrls);
+
   const [activeImg, setActiveImg] = useState(img);
-  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   // active image change when img change
   useEffect(() => {
-    setActiveImg(img);
     dispatch(initialOrderQuantity());
-    setLoading(false);
   }, [img, dispatch]);
 
   // handle image active
-  const handleImageActive = (item) => {
-    setActiveImg(item.img);
-    setLoading(true);
-  };
+ 
 
   return (
     <div>
@@ -60,12 +58,7 @@ const ProductModal = () => {
             </button>
             {/* product-details-thumb-wrapper start */}
             <DetailsThumbWrapper
-              activeImg={productItem?.node?.thumbnail.url || productItem?.thumbnail.url}
-              handleImageActive={handleImageActive}
-              imageURLs={imageURLs}
-              imgWidth={416}
-              imgHeight={480}
-              loading={loading}
+              product={productItem}
               status={status}
             />
             {/* product-details-thumb-wrapper end */}
@@ -73,7 +66,7 @@ const ProductModal = () => {
             {/* product-details-wrapper start */}
             <DetailsWrapper
               productItem={productItem}
-              handleImageActive={handleImageActive}
+              // handleImageActive={handleImageActive}
               activeImg={activeImg}
             />
             {/* product-details-wrapper end */}

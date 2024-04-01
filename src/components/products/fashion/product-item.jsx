@@ -6,7 +6,11 @@ import Link from "next/link";
 // internal
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product, cart_list } from "@/redux/features/cartSlice";
+import {
+  add_cart_product,
+  cart_list,
+  compare_list,
+} from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { capitalizeFLetter } from "@/utils/functions";
@@ -16,61 +20,95 @@ import {
 } from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
+import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   let product = products.node;
-  const router=useRouter()
+  const router = useRouter();
+
+  const [isAddWishlist, setWishlist] = useState(false);
 
   const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
-
+    console.log("product: ", product);
 
   const cart = useSelector((state) => state.cart?.cart_list);
+
+  const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id === product?.id
   );
-  const isAddedToWishlist = wishlist.some((prd) => prd.id === _id);
   const dispatch = useDispatch();
-
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+  useEffect(() => {
+    const whislist = checkWishlist(wishlist, product.id);
+    setWishlist(whislist);
+  }, [wishlist]);
 
+  useEffect(() => {
+    const compareList = localStorage.getItem("compareList");
+    const arr = JSON.parse(compareList);
+    dispatch(compare_list(arr));
+  }, [dispatch]);
 
   const handleAddProduct = async (data) => {
     try {
-      const checkoutToken=localStorage.getItem('checkoutToken');
-      if(checkoutToken){
-      const response = await addToCartMutation({
-        variantId: data?.variants[0]?.id,
-      });
-      console.log(
-        "response: ",
-        response?.data?.data?.checkoutLinesAdd?.checkout?.lines
-      );
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      if (checkoutToken) {
+        const response = await addToCartMutation({
+          variantId: data?.variants[0]?.id,
+        });
 
-      notifySuccess(
-        `${data.name} added to cart successfully`
-      );
-      updateData();
-    }else{
-      router.push('/login')
-    }
+        notifySuccess(`${data.name} added to cart successfully`);
+        updateData();
+      } else {
+        router.push("/login");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const handleWishlistProduct = (prd) => {
-    dispatch(add_to_wishlist(prd));
+  const handleWishlist = async (prd) => {
+    if (isAddWishlist) {
+      router.push("/wishlist");
+    } else {
+      addWishlistProduct(prd);
+    }
+  };
+
+  const addWishlistProduct = async (prd) => {
+    try {
+      const modify = {
+        node: prd,
+      };
+      const addedWishlist = handleWishlistProduct(modify);
+      dispatch(add_to_wishlist(addedWishlist));
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   // handle compare product
   const handleCompareProduct = (prd) => {
-    dispatch(add_to_compare(prd));
+    console.log("prd: ", prd);
+    const compare = localStorage.getItem("compareList");
+
+    let arr = [];
+    if (!compare) {
+      arr = [];
+    } else {
+      arr = JSON.parse(compare);
+    }
+    arr.push(prd);
+    console.log("compare: ", arr);
+    localStorage.setItem("compareList", JSON.stringify(arr));
+    dispatch(compare_list(arr));
   };
   const img = product?.thumbnail?.url;
 
@@ -132,24 +170,33 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             </button>
             <button
               disabled={status === "out-of-stock"}
-              onClick={() => handleWishlistProduct(product)}
+              onClick={() => handleWishlist(product)}
+              // onClick={() => addWishlistProduct(product)}
               className={`tp-product-action-btn-2 ${
-                isAddedToWishlist ? "active" : ""
+                isAddWishlist ? "active" : ""
               } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
               <span className="tp-product-tooltip tp-product-tooltip-right">
-                Add To Wishlist
+                {isAddWishlist ? "View" : "Add"} To Wishlist
               </span>
             </button>
             <button
               disabled={status === "out-of-stock"}
-              onClick={() => handleCompareProduct(product)}
+              onClick={() => {
+                if (compareList?.some((prd) => prd?.id === product?.id)) {
+                  router.push("/compare")
+                } else {
+                  handleCompareProduct(product);
+                }
+              }}
               className="tp-product-action-btn-2 tp-product-add-to-compare-btn"
             >
               <CompareThree />
               <span className="tp-product-tooltip tp-product-tooltip-right">
-                Add To Compare
+                {compareList?.some((prd) => prd?.id === product?.id)
+                  ? "View To Compare"
+                  : "Add To Compare"}
               </span>
             </button>
           </div>

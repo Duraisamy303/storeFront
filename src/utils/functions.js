@@ -1,8 +1,19 @@
+import { useState } from "react";
+
 export const capitalizeFLetter = (string = "") => {
   if (string.length > 0) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   return string;
+};
+
+export const useSetState = (initialState) => {
+  const [state, setState] = useState(initialState);
+
+  const newSetState = (newState) => {
+    setState((prevState) => ({...prevState, ...newState}));
+  };
+  return [state, newSetState];
 };
 
 export const getPrice = () => {

@@ -41,7 +41,7 @@ const CheckoutArea = () => {
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
-  const router=useRouter()
+  const router = useRouter();
 
   const [cartTotals, setCartTotal] = useState(0);
 
@@ -57,7 +57,6 @@ const CheckoutArea = () => {
     (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
     0
   );
-
 
   let lines = [];
   if (cart?.length > 0) {
@@ -89,123 +88,6 @@ const CheckoutArea = () => {
   //   setCartTotal(subTotal);
   // }, []);
 
-  // const submitHandler = async (data) => {
-  //   console.log("data: ", data);
-
-  //   let orderInfo = {
-  //     name: `${data.firstName} ${data.lastName}`,
-  //     address: data.address,
-  //     contact: data.contactNo,
-  //     email: data.email,
-  //     city: data.city,
-  //     country: data.country,
-  //     zipCode: data.zipCode,
-  //     shippingOption: data.shippingOption,
-  //     status: "Pending",
-  //     cart: cart,
-  //     paymentMethod: data.payment,
-  //     subTotal: total,
-  //     shippingCost: shippingCost,
-  //     discount: discountAmount,
-  //     totalAmount: cartTotal,
-  //     orderNote:data.orderNote,
-  //     user: `${user?._id}`,
-  //   };
-  // }
-
-  const submitHandler = async (data) => {
-
-    try {
-
-      const createCheckoutResponse = await createCheckout({
-        channel: "india-channel",
-        email: data.email,
-        lines,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        streetAddress1: data.address,
-        city: data.city,
-        country: "IN",
-        postalCode: data.zipCode,
-        countryArea: "Tamil Nadu",
-      });
-      console.log("createCheckoutResponse: ", createCheckoutResponse);
-      if (
-        createCheckoutResponse?.data?.data?.checkoutCreate?.errors?.length > 0
-      ) {
-        notifyError(
-          `${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.code} ${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.field}`
-        );
-        return;
-      }
-
-      const checkoutId =
-        createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
-
-      if (checkoutId) {
-        const deliveryUpdateResponse = await createDeliveryUpdate({
-          id: checkoutId,
-        });
-        console.log("Delivery Update Response:", deliveryUpdateResponse);
-        handlePayment(checkoutId, data,cart);
-
-      }
-    } catch (error) {
-      console.log("error: ", error);
-      console.error("Error:", error);
-    }
-  };
-
-  const handlePayment = useCallback(
-    async (checkoutId, data,cart) => {
-
-      const totalAmount = cart?.reduce(
-        (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
-        0
-      );
-
-      const options = {
-        key: "rzp_test_tEMCtcfElFdYts",
-        key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        // amount: parseInt() * 100,
-        amount: Number(totalAmount) * 100,
-        currency: "INR",
-        name: `${data.firstName} ${data.lastName}`,
-        description: data.orderNote,
-        image: "https://example.com/your_logo",
-        // order_id: "ORD20156712",
-        handler: async (res) => {
-          notifySuccess("Payment Successful");
-          console.log(res);
-          const completeResponse = await checkoutComplete({ id: checkoutId });
-          const orderId=completeResponse.data?.data?.checkoutComplete?.order?.id
-          console.log("orderId: ", orderId);
-          localStorage.setItem("orderId", orderId)
-          console.log("Checkout Complete Response:", completeResponse);
-          router.push("/myOrders")
-        },
-        prefill: {
-          name: `${data.firstName} ${data.lastName}`,
-          email: data.email,
-          contact: data.contactNo,
-        },
-        notes: {
-          address: data.address,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-        retry: {
-          enabled: true,
-          max_count: true,
-        },
-      };
-
-      const rzpay = new Razorpay(options);
-      rzpay.open();
-    },
-    [Razorpay]
-  );
 
   return (
     <>
@@ -236,16 +118,16 @@ const CheckoutArea = () => {
                   />
                 </div>
               </div>
-              <form onSubmit={handleSubmit(submitHandler)}>
+              {/* <form onSubmit={handleSubmit(submitHandler)}> */}
                 <div className="row">
-                  <div className="col-lg-7">
-                    <CheckoutBillingArea register={register} errors={errors} />
-                  </div>
-                  <div className="col-lg-5">
-                    <CheckoutOrderArea checkoutData={checkoutData} />
-                  </div>
+                  {/* <div className="col-lg-7"> */}
+                  <CheckoutBillingArea />
+                  {/* </div> */}
+                  {/* <div className="col-lg-5"> */}
+                  {/* <CheckoutOrderArea checkoutData={checkoutData} /> */}
+                  {/* </div> */}
                 </div>
-              </form>
+              {/* </form> */}
             </div>
           )}
         </div>

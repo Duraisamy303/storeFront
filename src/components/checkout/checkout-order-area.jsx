@@ -12,19 +12,21 @@ import {
   useCheckoutCompleteMutation,
 } from "@/redux/features/card/cardApi";
 
-const CheckoutOrderArea = ({ checkoutData }) => {
-  const {
-    handleShippingCost,
-    cartTotal = 0,
-    stripe,
-    clientSecret,
-    register,
-    errors,
-    showCard,
-    setShowCard,
-    shippingCost,
-    discountAmount,
-  } = checkoutData;
+const CheckoutOrderArea = () => {
+  // const {
+  //   handleShippingCost,
+  //   cartTotal = 0,
+  //   stripe,
+  //   clientSecret,
+  //   register,
+  //   errors,
+  //   showCard,
+  //   setShowCard,
+  //   shippingCost,
+  //   discountAmount,
+  // } = checkoutData;
+
+  const shippingCost=100
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 

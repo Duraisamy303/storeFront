@@ -257,48 +257,48 @@ const useCheckoutSubmit = () => {
   // };
 
   // handlePaymentWithStripe
-  const handlePaymentWithStripe = async (order) => {
-    try {
-      const {paymentIntent, error:intentErr} = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: user?.firstName,
-              email: user?.email,
-            },
-          },
-        },
-      );
-      if (intentErr) {
-        notifyError(intentErr.message);
-      } else {
-        // notifySuccess("Your payment processed successfully");
-      }
+  // const handlePaymentWithStripe = async (order) => {
+  //   try {
+  //     const {paymentIntent, error:intentErr} = await stripe.confirmCardPayment(
+  //       clientSecret,
+  //       {
+  //         payment_method: {
+  //           card: elements.getElement(CardElement),
+  //           billing_details: {
+  //             name: user?.firstName,
+  //             email: user?.email,
+  //           },
+  //         },
+  //       },
+  //     );
+  //     if (intentErr) {
+  //       notifyError(intentErr.message);
+  //     } else {
+  //       // notifySuccess("Your payment processed successfully");
+  //     }
 
-      const orderData = {
-        ...order,
-        paymentIntent,
-      };
+  //     const orderData = {
+  //       ...order,
+  //       paymentIntent,
+  //     };
 
-      saveOrder({
-        ...orderData
-      })
-      .then((result) => {
-          if(result?.error){
-          }
-          else {
-            localStorage.removeItem("couponInfo");
-            notifySuccess("Your Order Confirmed!");
-            router.push(`/order/${result.data?.order?._id}`);
-          }
-        })
-       } 
-    catch (err) {
-      console.log(err);
-    }
-  };
+  //     saveOrder({
+  //       ...orderData
+  //     })
+  //     .then((result) => {
+  //         if(result?.error){
+  //         }
+  //         else {
+  //           localStorage.removeItem("couponInfo");
+  //           notifySuccess("Your Order Confirmed!");
+  //           router.push(`/order/${result.data?.order?._id}`);
+  //         }
+  //       })
+  //      } 
+  //   catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return {
     handleCouponCode,

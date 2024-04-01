@@ -23,8 +23,8 @@ const WishlistArea = () => {
                     <thead>
                       <tr>
                         <th colSpan="2" className="tp-cart-header-product">Product</th>
+                        <th className="tp-cart-header-quantity">Product name</th>
                         <th className="tp-cart-header-price">Price</th>
-                        <th className="tp-cart-header-quantity">Quantity</th>
                         <th>Action</th>
                         <th></th>
                       </tr>

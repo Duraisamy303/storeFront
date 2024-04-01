@@ -8,42 +8,57 @@ import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
+import { notifySuccess } from "@/utils/toast";
 
 const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
   const [addToCart, {}] = useAddToCartMutation();
 
-  const { _id, img, title, discount, price, tags, status } = product || {};
+  const { id, thumbnail, name, discount, pricing, tags, status } =
+    product || {};
+
+  const cart = useSelector((state) => state.cart?.cart_list);
+
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+    useAddToCartMutation();
+
   const { cart_products } = useSelector((state) => state.cart);
+
   const { wishlist } = useSelector((state) => state.wishlist);
-  const isAddedToCart = cart_products.some((prd) => prd._id === _id);
-  const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
+
+  const isAddedToCart = cart?.some(
+    (prd) => prd?.variant?.product?.id === product?.id
+  );
+  // const isAddedToCart = cart_products.some((prd) => prd.id === id);
+  const isAddedToWishlist = wishlist.some((prd) => prd.id === id);
   const dispatch = useDispatch();
 
-  const handleAddProduct = (data) => {
-    addToCart({
-      data,
-    }).then((data) => {
-      if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
-        notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
+
+  const handleAddProduct = async (data) => {
+    try {
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      if (checkoutToken) {
+        const response = await addToCartMutation({
+          variantId: data?.variants[0]?.id,
+        });
+       
+
+        notifySuccess(`${data.name} added to cart successfully`);
       } else {
-        //new cart api and cart list api 
-        dispatch(cart_count(1))
-        // notifySuccess("Login successfully");
-        router.push(redirect || "/");
+        router.push("/login");
       }
-    });
-    // reset();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  useEffect(()=>{
-    getToken()
-  },[])
 
-const getToken=()=>{
-  const token=localStorage.getItem('checkoutToken');
-  console.log("token: ", token);
-}
+  useEffect(() => {
+    getToken();
+  }, []);
 
+  const getToken = () => {
+    const token = localStorage.getItem("checkoutToken");
+  };
 
   // handle wishlist product
   const handleWishlistProduct = (prd) => {
@@ -57,8 +72,13 @@ const getToken=()=>{
       } ${prdCenter ? "text-center" : ""}`}
     >
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
-        <Link href={`/product-details/${_id}`}>
-          <Image src={img} alt="product image" width={282} height={320} />
+        <Link href={`/product-details/${id}`}>
+          <Image
+            src={thumbnail.url}
+            alt="product image"
+            width={282}
+            height={320}
+          />
         </Link>
 
         <div className="tp-product-badge">
@@ -136,14 +156,14 @@ const getToken=()=>{
         </div>
       </div>
       <div className="tp-product-content-3">
-        <div className="tp-product-tag-3">
-          <span>{tags[1]}</span>
-        </div>
+        {/* <div className="tp-product-tag-3"><span>{tags[1]}</span></div> */}
         <h3 className="tp-product-title-3">
-          <Link href={`/product-details/${_id}`}>{title}</Link>
+          <Link href={`/product-details/${id}`}>{name}</Link>
         </h3>
         <div className="tp-product-price-wrapper-3">
-          <span className="tp-product-price-3">${price.toFixed(2)}</span>
+          <span className="tp-product-price-3">
+            ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
+          </span>
         </div>
       </div>
     </div>

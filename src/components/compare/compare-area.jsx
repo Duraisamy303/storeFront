@@ -1,23 +1,77 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "react-simple-star-rating";
 // internal
-import { add_cart_product } from "@/redux/features/cartSlice";
+import {
+  add_cart_product,
+  add_compare,
+  compare_list,
+} from "@/redux/features/cartSlice";
 import { remove_compare_product } from "@/redux/features/compareSlice";
+import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import { notifySuccess } from "@/utils/toast";
 
 const CompareArea = () => {
   const { compareItems } = useSelector((state) => state.compare);
+
+  const compareList = useSelector((state) => state.cart.compare_list);
+
+  const cart = useSelector((state) => state.cart.cart_list);
+  console.log("cart: ", cart);
+
+
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+    useAddToCartMutation();
+
   const dispatch = useDispatch();
 
+ 
+
+  useEffect(() => {
+    const compareList = localStorage.getItem("compareList");
+    const arr = JSON.parse(compareList);
+    dispatch(compare_list(arr));
+  }, []);
+
   // handle add product
-  const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+  // const handleAddProduct = (prd) => {
+  //   dispatch(add_cart_product(prd));
+  // };
+
+  const handleAddProduct = async (data) => {
+    console.log("data: ", data);
+    try {
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      if (checkoutToken) {
+        const response = await addToCartMutation({
+          variantId: data?.variants[0]?.id,
+        });
+
+        notifySuccess(`${data.name} added to cart successfully`);
+      } else {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   // handle add product
   const handleRemoveComparePrd = (prd) => {
-    dispatch(remove_compare_product(prd));
+    console.log("prd: ", prd);
+    const filter = compareList.filter((item) => item.id !== prd.id);
+    console.log("filter: ", filter);
+    localStorage.setItem("compareList", JSON.stringify(filter));
+    dispatch(compare_list(filter));
+  };
+
+  const description = (item) => {
+    if (item) {
+      const jsonObject = JSON.parse(item);
+      const textValue = jsonObject?.blocks[0]?.data?.text;
+      return textValue;
+    }
   };
 
   return (
@@ -26,7 +80,7 @@ const CompareArea = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-xl-12">
-              {compareItems.length === 0 && (
+              {compareList?.length === 0 && (
                 <div className="text-center pt-50">
                   <h3>No Compare Items Found</h3>
                   <Link href="/shop" className="tp-cart-checkout-btn mt-20">
@@ -34,24 +88,24 @@ const CompareArea = () => {
                   </Link>
                 </div>
               )}
-              {compareItems.length > 0 && (
+              {compareList?.length > 0 && (
                 <div className="tp-compare-table table-responsive text-center">
                   <table className="table">
                     <tbody>
                       <tr>
                         <th>Product</th>
-                        {compareItems.map(item => (
+                        {compareList?.map((item) => (
                           <td key={item._id} className="">
                             <div className="tp-compare-thumb">
                               <Image
-                                src={item.img}
+                                src={item?.thumbnail?.url}
                                 alt="compare"
                                 width={205}
                                 height={176}
                               />
                               <h4 className="tp-compare-product-title">
                                 <Link href={`/product-details/${item._id}`}>
-                                  {item.title}
+                                  {item.name}
                                 </Link>
                               </h4>
                             </div>
@@ -61,13 +115,10 @@ const CompareArea = () => {
                       {/* Description */}
                       <tr>
                         <th>Description</th>
-                        {compareItems.map(item => (
-                          <td key={item._id}>
-                            <div className="tp-compare-desc">
-                              <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing
-                                elit. Ad, distinctio.
-                              </p>
+                        {compareList?.map((item) => (
+                          <td key={item.id}>
+                            <div className="tp-compare-add-to-cart">
+                              <span>{description(item?.description)}</span>
                             </div>
                           </td>
                         ))}
@@ -75,10 +126,13 @@ const CompareArea = () => {
                       {/* Price */}
                       <tr>
                         <th>Price</th>
-                        {compareItems.map(item => (
+                        {compareList.map((item) => (
                           <td key={item._id}>
-                            <div className="tp-compare-price">
-                              <span>${item.price.toFixed(2)}</span>
+                            <div className="tp-compare-add-to-cart">
+                              &#8377;
+                              {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                2
+                              )}
                             </div>
                           </td>
                         ))}
@@ -86,18 +140,41 @@ const CompareArea = () => {
                       {/* Add to cart*/}
                       <tr>
                         <th>Add to cart</th>
-                        {compareItems.map(item => (
+                        {compareList.map((item) => (
                           <td key={item._id}>
                             <div className="tp-compare-add-to-cart">
-                              <button onClick={() => handleAddProduct(item)} type="button" className="tp-btn">
+                              {cart.some(
+                                (prd) => prd?.variant?.product?.id === item?.id
+                              ) ? (
+                                <button
+                                  disabled
+                                  className="tp-btn-disabled"
+                                  type="button"
+                                >
+                                 View Cart
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleAddProduct(item)}
+                                  type="button"
+                                  className="tp-btn"
+                                >
+                                  Add to Cart
+                                </button>
+                              )}
+                              {/* <button
+                                onClick={() => handleAddProduct(item)}
+                                type="button"
+                                className="tp-btn"
+                              >
                                 Add to Cart
-                              </button>
+                              </button> */}
                             </div>
                           </td>
                         ))}
                       </tr>
                       {/* Rating */}
-                      <tr>
+                      {/* <tr>
                         <th>Rating</th>
                         {compareItems.map(item => (
                           <td key={item._id}>
@@ -111,14 +188,16 @@ const CompareArea = () => {
                             </div>
                           </td>
                         ))}
-                      </tr>
+                      </tr> */}
                       {/* Remove */}
                       <tr>
                         <th>Remove</th>
-                        {compareItems.map(item => (
+                        {compareList?.map((item) => (
                           <td key={item._id}>
                             <div className="tp-compare-remove">
-                              <button onClick={()=>handleRemoveComparePrd({title:item.title,id:item._id })}>
+                              <button
+                                onClick={() => handleRemoveComparePrd(item)}
+                              >
                                 <i className="fal fa-trash-alt"></i>
                               </button>
                             </div>
