@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
 import CheckoutBillingArea from "./checkout-billing-area";
@@ -43,14 +43,15 @@ const CheckoutArea = () => {
 
   const router = useRouter();
 
+  const dispatch=useDispatch()
+
   const [cartTotals, setCartTotal] = useState(0);
 
-  const [accessToken, setToken] = useState("");
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    const user = localStorage.getItem("userInfo");
-    const accessToken = JSON.parse(user)?.accessToken;
-    setToken(accessToken);
+    const token = localStorage.getItem("token");
+    setToken(token);
   }, []);
 
   const totalAmount = cart?.reduce(
@@ -88,7 +89,6 @@ const CheckoutArea = () => {
   //   setCartTotal(subTotal);
   // }, []);
 
-
   return (
     <>
       <section
@@ -108,9 +108,7 @@ const CheckoutArea = () => {
             <div className="row">
               <div className="col-xl-7 col-lg-7">
                 <div className="tp-checkout-verify">
-                  {/* {!accessToken && */}
-                  <CheckoutLogin />
-                  {/* } */}
+                  {!token && <CheckoutLogin />}
                   <CheckoutCoupon
                     handleCouponCode={handleCouponCode}
                     couponRef={couponRef}
@@ -119,14 +117,14 @@ const CheckoutArea = () => {
                 </div>
               </div>
               {/* <form onSubmit={handleSubmit(submitHandler)}> */}
-                <div className="row">
-                  {/* <div className="col-lg-7"> */}
-                  <CheckoutBillingArea />
-                  {/* </div> */}
-                  {/* <div className="col-lg-5"> */}
-                  {/* <CheckoutOrderArea checkoutData={checkoutData} /> */}
-                  {/* </div> */}
-                </div>
+              <div className="row">
+                {/* <div className="col-lg-7"> */}
+                <CheckoutBillingArea />
+                {/* </div> */}
+                {/* <div className="col-lg-5"> */}
+                {/* <CheckoutOrderArea checkoutData={checkoutData} /> */}
+                {/* </div> */}
+              </div>
               {/* </form> */}
             </div>
           )}

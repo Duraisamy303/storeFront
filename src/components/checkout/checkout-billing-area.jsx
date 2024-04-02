@@ -45,7 +45,17 @@ const CheckoutBillingArea = ({ register, errors }) => {
     errors: {},
     COD: "",
     razorpay: "",
+    paymentType: [
+      { id: 1, label: "COD", checked: false },
+      { id: 2, label: "Razorpay", checked: false },
+    ],
+    pType: false,
   });
+
+  const checkedCheckbox = state.paymentType.find(
+    (checkbox) => checkbox.checked
+  );
+  console.log("checkedCheckbox: ", checkedCheckbox);
 
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
@@ -86,6 +96,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
         errors[name] = `${label} is required`;
       }
     });
+    if (!state.COD) {
+      errors.paymentType = "Payment type is required";
+    }
 
     if (state.diffAddress) {
       const fieldsToValidate2 = [
@@ -177,7 +190,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
           await createDeliveryUpdate({
             id: checkoutId,
           });
+
+          const paymentType = state.paymentType.find(
+            (checkbox) => checkbox.checked
+          );
+          console.log("checkedCheckbox: ", checkedCheckbox);
+          // if (!state.pType) {
+          //   notifyError("COD");
+          // } else {
           handlePayment(checkoutId, amount);
+          // }
         }
       } else {
         console.log("Form contains errors!");
@@ -257,16 +279,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
     [Razorpay]
   );
 
-  const paymentType = [
-    {
-      type: "Case on delivery",
-      value: "COD",
-    },
-    {
-      type: "Razorpay",
-      value: "razorpay",
-    },
-  ];
+  const handleCheckboxChange = (id) => {
+    const updatedCheckboxes = state.paymentType.map((checkbox) =>
+      checkbox.id === id
+        ? { ...checkbox, checked: true }
+        : { ...checkbox, checked: false }
+    );
+    setState({ paymentType: updatedCheckboxes, pType: true });
+  };
 
   return (
     <div className="row">
@@ -691,21 +711,56 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                 {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
               </li>
-              {paymentType.map((item) => (
-                <li>
-                  <div className="tp-login-remeber">
-                    <input
-                      id={item.value}
-                      type="checkbox"
-                      checked={state[item.value]} // Use dynamic property access
-                      onChange={(e) =>
-                        setState({ [item.value]: e.target.checked })
-                      } // Update the state dynamically
-                    />
-                    <label htmlFor={item.value}>{item.type}</label>
-                  </div>
-                </li>
-              ))}
+              <li>
+                <div className="tp-login-remeber">
+                  <input
+                    id="cash"
+                    type="checkbox"
+                    checked={state.COD}
+                    onChange={(e) =>
+                      setState({ COD: e.target.checked, pType: true })
+                    }
+                  />
+                  <label htmlFor="cash">Razorpay</label>
+                </div>
+              </li>
+              {state.errors.paymentType && (
+                <ErrorMsg msg={state.errors.paymentType} />
+              )}
+              {/* {state.paymentType.map((checkbox) => {
+                return (
+                  <li>
+                    <div key={checkbox.id} className="">
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checkbox.checked}
+                          onChange={() => handleCheckboxChange(checkbox.id)}
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                            border: "2px solid #ccc",
+                            borderRadius: "4px",
+                            marginRight: "10px",
+                            display: "inline-block",
+                            backgroundColor: "orange",
+                          }}
+                        />
+                        {checkbox.label}
+                      </label>
+                    </div>
+                  </li>
+                );
+              })}
+              {state.errors.paymentType && (
+                <ErrorMsg msg={state.errors.paymentType} />
+              )} */}
             </ul>
           </div>
           {/* <div className="tp-checkout-payment">
@@ -766,7 +821,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         </div>
       </div> */}
 
-          <div className="tp-checkout-btn-wrapper">
+          <div className="tp-checkout-btn-wrapper pt-20">
             <button
               type="submit"
               // disabled={!stripe || isCheckoutSubmit}

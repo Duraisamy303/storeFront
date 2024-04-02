@@ -30,7 +30,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
-    console.log("product: ", product);
 
   const cart = useSelector((state) => state.cart?.cart_list);
 

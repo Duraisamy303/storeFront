@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LoginForm from "../forms/login-form";
+import CheckoutLoginForm from "../forms/checkout-login";
 
 const CheckoutLogin = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ const CheckoutLogin = () => {
 
       {isOpen && (
         <div id="tpReturnCustomerLoginForm" className="tp-return-customer">
-          <LoginForm />
+          <CheckoutLoginForm  update={()=> setIsOpen(!isOpen)}/>
         </div>
       )}
     </div>

@@ -10,24 +10,28 @@ import {
   compare_list,
 } from "@/redux/features/cartSlice";
 import { remove_compare_product } from "@/redux/features/compareSlice";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
+import { useRouter } from "next/router";
 
 const CompareArea = () => {
   const { compareItems } = useSelector((state) => state.compare);
 
+  const { data: tokens } = useGetCartListQuery();
+
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const cart = useSelector((state) => state.cart.cart_list);
-  console.log("cart: ", cart);
-
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
   const dispatch = useDispatch();
 
- 
+  const router = useRouter()
 
   useEffect(() => {
     const compareList = localStorage.getItem("compareList");
@@ -95,7 +99,7 @@ const CompareArea = () => {
                       <tr>
                         <th>Product</th>
                         {compareList?.map((item) => (
-                          <td key={item._id} className="">
+                          <td key={item?.id} className="">
                             <div className="tp-compare-thumb">
                               <Image
                                 src={item?.thumbnail?.url}
@@ -105,7 +109,7 @@ const CompareArea = () => {
                               />
                               <h4 className="tp-compare-product-title">
                                 <Link href={`/product-details/${item._id}`}>
-                                  {item.name}
+                                  {item?.name}
                                 </Link>
                               </h4>
                             </div>
@@ -116,7 +120,7 @@ const CompareArea = () => {
                       <tr>
                         <th>Description</th>
                         {compareList?.map((item) => (
-                          <td key={item.id}>
+                          <td key={item?.id}>
                             <div className="tp-compare-add-to-cart">
                               <span>{description(item?.description)}</span>
                             </div>
@@ -127,7 +131,7 @@ const CompareArea = () => {
                       <tr>
                         <th>Price</th>
                         {compareList.map((item) => (
-                          <td key={item._id}>
+                          <td key={item?.id}>
                             <div className="tp-compare-add-to-cart">
                               &#8377;
                               {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
@@ -141,17 +145,17 @@ const CompareArea = () => {
                       <tr>
                         <th>Add to cart</th>
                         {compareList.map((item) => (
-                          <td key={item._id}>
+                          <td key={item?.id}>
                             <div className="tp-compare-add-to-cart">
                               {cart.some(
                                 (prd) => prd?.variant?.product?.id === item?.id
                               ) ? (
                                 <button
-                                  disabled
-                                  className="tp-btn-disabled"
+                                  onClick={() => router.push("/cart")}
+                                  className="tp-btn"
                                   type="button"
                                 >
-                                 View Cart
+                                  View Cart
                                 </button>
                               ) : (
                                 <button
@@ -193,7 +197,7 @@ const CompareArea = () => {
                       <tr>
                         <th>Remove</th>
                         {compareList?.map((item) => (
-                          <td key={item._id}>
+                          <td key={item?.id}>
                             <div className="tp-compare-remove">
                               <button
                                 onClick={() => handleRemoveComparePrd(item)}

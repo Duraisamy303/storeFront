@@ -25,6 +25,7 @@ import pradeLogo from "@assets/img/prade-logo.png";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
+  const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
@@ -128,6 +129,9 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             className="tp-header-action-btn"
                           >
                             <Compare />
+                            <span className="tp-header-action-badge">
+                              {compareList?.length || 0}
+                            </span>
                           </Link>
                         </div>
                         <div className="tp-header-action-item d-none d-lg-block">
@@ -137,7 +141,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                           >
                             <Wishlist />
                             <span className="tp-header-action-badge">
-                              {wishlist.length}
+                              {wishlist?.length || 0}
                             </span>
                           </Link>
                         </div>
