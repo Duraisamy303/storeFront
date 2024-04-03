@@ -136,12 +136,12 @@
                 font-weight: 500;
                 font-size: 16px;
                 color: var(--tp-common-white);
-                background-color: var(--tp-common-black);
+                background-color: #c3935b;
                 padding: 10px 30px;
 
                 &:hover{
                     color: var(--tp-common-white);
-                    background-color: var(--tp-theme-primary);
+                    background-color: #9d6d35;
                 }
             }
         }
@@ -151,15 +151,13 @@
         &-btn{
             font-weight: 500;
             font-size: 16px;
-            color:white;
-            background-color:#c3935b;
+            color:#706969;
+            background-color:white;
             padding: 9px 29px;
-            border: 1px solid #c3935b;
 
             &:hover{
-                background-color:#c99252;
-                border-color: #c99252;
-                color: var(--tp-common-white);
+                background-color:#ececec;
+                color: #706969;
             }
         }
     }
@@ -180,7 +178,7 @@
             margin-bottom: 19px;
             border-bottom: 1px solid #E0E2E3;
             & span{
-                font-size: 20px;
+                font-size: 16px;
                 color: var(--tp-common-black);
                 font-weight: 500;
             }

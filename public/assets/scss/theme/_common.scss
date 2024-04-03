@@ -213,8 +213,6 @@
 .main-discount{
 	text-align: center;
 	line-height: 50px;
-
-
 }
 
 .discound {
@@ -251,6 +249,91 @@ color: white;
 	width: 100%;
 	height: 225px;
 }
+
+
+
+
+// Shop Page
+
+.shop-bg{
+	height: 290px;
+}
+
+.shop-banner-title{
+	text-align: center;
+	color: white;
+	font-size: 70px;
+	padding-bottom: 60px;
+}
+
+.shop-banner-categoryList{
+list-style: none;
+display: flex;
+justify-content: space-between;
+}
+
+.shop-banner-categoryList-title{
+	color: white;
+	font-size: 16px;
+	margin-bottom: 0px;
+	font-weight: 500;
+	position: relative;
+	display: inline-block;
+	text-decoration: none;
+}
+
+.shop-banner-categoryList-title::before {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 0;
+	height: 2px; /* Height of the underline */
+	background-color: #c3935b; /* Color of the underline */
+	transition: width 0.2s ease; /* Animation transition */
+}
+
+/* Hover effect: increase the width of the underline */
+.shop-banner-categoryList-title:hover::before {
+	width: 100%;
+}
+
+.shop-banner-categoryList-count{
+	color: #ece8e8;
+}
+
+.shop-submenu-catageroy-list{
+	padding: 15px 0px 15px 10px;
+	margin: 0px !important;
+}
+.shop-submenu-catageroy-list-a{
+	font-size: 18px !important;
+color: white !important;
+font-weight: 600;
+}
+
+.shop-submenu-catageroy-list.active {
+	background-color: white;
+  }
+
+  .shop-submenu-catageroy-list.active:hover {
+	background-color: white;
+  }
+
+  .shop-submenu-catageroy-list.active:hover .shop-submenu-catageroy-list-a {
+	color: Black !important;
+  }
+
+  .shop-submenu-catageroy-list-a.active{
+	color: Black !important;
+}
+
+// .shop-submenu-catageroy-list:hover{
+// 	background-color: white;
+// }
+// .shop-submenu-catageroy-list:hover .shop-submenu-catageroy-list-a{
+// 	color: Black !important;
+// }
 
 @media(max-width:768px){
 	.actor-image{

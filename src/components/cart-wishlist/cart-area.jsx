@@ -8,14 +8,13 @@ import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
 
 const CartArea = () => {
-
   const cart = useSelector((state) => state.cart.cart_list);
 
   const dispatch = useDispatch();
 
   return (
     <>
-      <section className="tp-cart-area pb-50">
+      <section className="tp-cart-area pb-50 mt-50">
         <div className="container-fluid">
           {cart?.length === 0 && (
             <div className="text-center pt-50">
@@ -36,9 +35,11 @@ const CartArea = () => {
                     <thead>
                       <tr>
                         <th colSpan="2" className="tp-cart-header-product">
-                          Product
+                          PRODUCT
                         </th>
-                        <th className="tp-cart-header-price">Price</th>
+                        <th className="tp-cart-header-price">PRICE</th>
+                        <th className="tp-cart-header-price">QUANTITY</th>
+                        <th className="tp-cart-header-price">SUBTOTAL</th>
                         <th className="tp-cart-header-quantity">Action</th>
                         <th></th>
                       </tr>
@@ -48,9 +49,18 @@ const CartArea = () => {
                         <CartItem
                           key={i}
                           product={item}
-                          title={item?.variant?.product?.name || item?.node?.name}
-                          img={item?.variant?.product?.thumbnail?.url || item?.node?.thumbnail?.url}
-                          price={item?.variant?.pricing?.price?.gross?.amount || item?.node?.pricing?.priceRange?.start?.gross?.amount}
+                          title={
+                            item?.variant?.product?.name || item?.node?.name
+                          }
+                          img={
+                            item?.variant?.product?.thumbnail?.url ||
+                            item?.node?.thumbnail?.url
+                          }
+                          price={
+                            item?.variant?.pricing?.price?.gross?.amount ||
+                            item?.node?.pricing?.priceRange?.start?.gross
+                              ?.amount
+                          }
                         />
                       ))}
                     </tbody>
@@ -59,29 +69,29 @@ const CartArea = () => {
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
                     <div className="col-xl-6 col-md-8">
-                      {/* <div className="tp-cart-coupon">
+                      <div className="tp-cart-coupon">
                         <form action="#">
                           <div className="tp-cart-coupon-input-box">
-                            <label>Coupon Code:</label>
+                            {/* <label>Coupon Code:</label> */}
                             <div className="tp-cart-coupon-input d-flex align-items-center">
-                              <input type="text" placeholder="Enter Coupon Code" />
-                              <button type="submit">Apply</button>
+                              <input type="text" placeholder="Coupon Code" />
+                              <button type="submit">APPLY COUPON</button>
                             </div>
                           </div>
                         </form>
-                      </div> */}
+                      </div>
                     </div>
-                    {/* <div className="col-xl-6 col-md-4">
+                    <div className="col-xl-6 col-md-4">
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
                           onClick={() => dispatch(clearCart())}
                           type="button"
                           className="tp-cart-update-btn"
                         >
-                          Clear Cart
+                          UPDATE CART
                         </button>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -90,6 +100,10 @@ const CartArea = () => {
               </div>
             </div>
           )}
+
+          <div style={{ paddingTop: "50px" }}>
+            <h5>YOU MAY BE INTERESTED IN…</h5>
+          </div>
         </div>
       </section>
     </>

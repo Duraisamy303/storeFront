@@ -1,19 +1,84 @@
-import React from 'react';
+import React from "react";
 
-
-const ShopBreadcrumb = ({title,subtitle, }) => {
+const ShopBreadcrumb = ({ title, subtitle, bgImage }) => {
+  console.log("✌️bgImage --->", bgImage);
   return (
     <>
-      <section className="breadcrumb__area include-bg pt-50 pb-50" >
+      <section
+        className="breadcrumb__area include-bg pt-50 pb-50 shop-bg"
+        style={{ backgroundImage: `url(${bgImage?.src})` }}
+      >
         <div className="container-fluid">
-          <div className="row" >
+          <div className="row">
             <div className="col-xxl-12">
               <div className="breadcrumb__content p-relative z-index-1">
-                <h3 className="breadcrumb__title">{title}</h3>
-                <div className="breadcrumb__list">
+                <h3 className="breadcrumb__title shop-banner-title">{title}</h3>
+                {/* <div className="breadcrumb__list">
                   <span><a href="#">Home</a></span>
                   <span>{subtitle}</span>
-                </div>
+                </div> */}
+                <ul className="container shop-banner-categoryList">
+                  <li>
+                    <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      BANGLES & BRACELETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">121 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      EARRINGS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">383 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      FINGER RINGS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">95 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                  <li>
+                  <h5 className="shop-banner-categoryList-title">
+                      ANKLETS
+                    </h5>
+                    <p className="shop-banner-categoryList-count">3 Products</p>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

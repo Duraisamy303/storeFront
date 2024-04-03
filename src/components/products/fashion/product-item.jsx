@@ -124,14 +124,24 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           />
         </Link>
         <div className="tp-product-badge">
-          {status === "out-of-stock" && (
-            <span className="product-hot">out-stock</span>
+          {status === "out-of-stock" ? (
+            <span className="product-hot">
+              SOLD
+              <br /> OUT
+            </span>
+          ) : (
+            <div style={{ display: "none" }}></div>
           )}
         </div>
+
+        <div className="tp-product-badge-2">
+          <span className="product-hot">HOT</span>
+        </div>
+
         {/* product action */}
         <div className="tp-product-action-2 tp-product-action-blackStyle">
-          <div className="tp-product-action-item-2 d-flex flex-column">
-            {isAddedToCart ? (
+          <div className="tp-product-action-item-2 d-flex ">
+            {/* {isAddedToCart ? (
               <Link
                 href="/cart"
                 className={`tp-product-action-btn-2 ${
@@ -145,7 +155,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               </Link>
             ) : (
               <button
-                type="button"
+                type="button" style={{marginRight:"5px"}}
                 onClick={() => handleAddProduct(product)}
                 className={`tp-product-action-btn-2 ${
                   isAddedToCart ? "active" : ""
@@ -157,17 +167,34 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   Add to Cart
                 </span>
               </button>
-            )}
+            )} */}
+
             <button
+              type="button"
+              style={{ marginRight: "5px" }}
+              onClick={() => handleAddProduct(product)}
+              className={`tp-product-action-btn-2 ${
+                isAddedToCart ? "active" : ""
+              } tp-product-add-cart-btn`}
+              disabled={status === "out-of-stock"}
+            >
+              <Cart />
+              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
+                Add to Cart
+              </span> */}
+            </button>
+            <button
+              style={{ marginRight: "5px" }}
               onClick={() => dispatch(handleProductModal(product))}
               className="tp-product-action-btn-2 tp-product-quick-view-btn"
             >
               <QuickView />
-              <span className="tp-product-tooltip tp-product-tooltip-right">
+              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
                 Quick View
-              </span>
+              </span> */}
             </button>
             <button
+              style={{ marginRight: "5px" }}
               disabled={status === "out-of-stock"}
               onClick={() => handleWishlist(product)}
               // onClick={() => addWishlistProduct(product)}
@@ -176,15 +203,16 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
-              <span className="tp-product-tooltip tp-product-tooltip-right">
+              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
                 {isAddWishlist ? "View" : "Add"} To Wishlist
-              </span>
+              </span> */}
             </button>
             <button
+              style={{ marginRight: "5px" }}
               disabled={status === "out-of-stock"}
               onClick={() => {
                 if (compareList?.some((prd) => prd?.id === product?.id)) {
-                  router.push("/compare")
+                  router.push("/compare");
                 } else {
                   handleCompareProduct(product);
                 }
@@ -192,11 +220,11 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               className="tp-product-action-btn-2 tp-product-add-to-compare-btn"
             >
               <CompareThree />
-              <span className="tp-product-tooltip tp-product-tooltip-right">
+              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
                 {compareList?.some((prd) => prd?.id === product?.id)
                   ? "View To Compare"
                   : "Add To Compare"}
-              </span>
+              </span> */}
             </button>
           </div>
         </div>
@@ -210,24 +238,28 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             </a>
           ))}
         </div>
-        <h3 className="tp-product-title-2">
-          <Link href={`/product-details/${_id}`}>
-            {capitalizeFLetter(product?.name)}
-          </Link>
-        </h3>
-        <h3 className="tp-product-title-2">
-          <Link href={`/product-details/${_id}`}>
-            {capitalizeFLetter(product?.category?.name)}
-          </Link>
-        </h3>
-        {/* <div className="tp-product-rating-icon tp-product-rating-icon-2">
+        <div style={{ textAlign: "center" }}>
+          <h3 className="tp-product-title-2">
+            <Link href={`/product-details/${_id}`}>
+              {capitalizeFLetter(product?.name)}
+            </Link>
+          </h3>
+          <h3
+            className="tp-product-title-2"
+            style={{ fontSize: "16px", color: "rgb(144 141 141)" }}
+          >
+            <Link href={`/product-details/${_id}`}>
+              {capitalizeFLetter(product?.category?.name)}
+            </Link>
+          </h3>
+          {/* <div className="tp-product-rating-icon tp-product-rating-icon-2">
           <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
         </div> */}
-        <div className="tp-product-price-wrapper-2">
-          <span className="tp-product-price-2 new-price">
-            &#8377; {product?.pricing?.priceRange?.start?.gross?.amount}
-          </span>
-          {/* {discount > 0 ? (
+          <div className="tp-product-price-wrapper-2">
+            <span className="tp-product-price-2 new-price">
+              &#8377; {product?.pricing?.priceRange?.start?.gross?.amount}
+            </span>
+            {/* {discount > 0 ? (
 
             <>
               <span className="tp-product-price-2 new-price">
@@ -242,6 +274,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               ${price?.toFixed(2)}
             </span>
           )} */}
+          </div>
         </div>
       </div>
     </div>

@@ -6,13 +6,15 @@ import Wrapper from '@/layout/wrapper';
 import WishlistArea from '@/components/cart-wishlist/wishlist-area';
 import CommonBreadcrumb from '@/components/breadcrumb/common-breadcrumb';
 import FooterTwo from '@/layout/footers/footer-2';
+import WishlistBanner from "../../public/assets/img/shop-banner.jpg";
+
 
 const WishlistPage = () => {
   return (
     <Wrapper>
       <SEO pageTitle="Wishlist" />
       <HeaderTwo style_2={true} />
-      <CommonBreadcrumb title="Wishlist" subtitle="Wishlist" />
+      <CommonBreadcrumb title="WISHLIST" subtitle="WISHLIST" BgImage={WishlistBanner} />
       <WishlistArea/>
       <FooterTwo primary_style={true} />
     </Wrapper>
