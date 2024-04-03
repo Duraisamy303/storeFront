@@ -309,7 +309,7 @@ justify-content: space-between;
 .shop-submenu-catageroy-list-a{
 	font-size: 18px !important;
 color: white !important;
-font-weight: 600;
+font-weight: 500;
 }
 
 .shop-submenu-catageroy-list.active {
@@ -352,6 +352,10 @@ font-weight: 600;
   }
   
   /* Additional styles for the out-of-stock badge */
+
+  .theme-color{
+	color: rgb(204, 147, 91);
+  }
 
 @media(max-width: 1024px){
 	.product-side-nav-img{

@@ -333,13 +333,24 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("description")}
         >
-          <div style={{ fontSize: "16px" }}>DESCRIPTION</div>{" "}
+          <div
+            className={`${visibility.description ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            DESCRIPTION
+          </div>{" "}
           <div>{visibility.description ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.description && (
-          <ul style={{  paddingTop : "20px" }}>
-            <li style={{ fontSize: "16px", paddingBottom: "10px", paddingLeft:"20px" }}>
+          <ul style={{ paddingTop: "20px" }}>
+            <li
+              style={{
+                fontSize: "16px",
+                paddingBottom: "10px",
+                paddingLeft: "20px",
+              }}
+            >
               Pure silver jewellery has a tendency to oxidise especially when
               it’s worn regularly.
             </li>
@@ -370,7 +381,12 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("additionalInfo")}
         >
-          <div style={{ fontSize: "16px" }}>ADDITIONAL INFORMATION</div>{" "}
+          <div
+            className={`${visibility.additionalInfo ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            ADDITIONAL INFORMATION
+          </div>{" "}
           <div>{visibility.additionalInfo ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
@@ -407,13 +423,18 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("shipping")}
         >
-          <div style={{ fontSize: "16px" }}>SHIPPING & DELIVERY</div>{" "}
+          <div
+            className={`${visibility.shipping ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            SHIPPING & DELIVERY
+          </div>{" "}
           <div>{visibility.shipping ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.shipping && (
           <div style={{ paddingTop: "10px" }}>
-            <h4 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h4>
+            <h5 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h5>
             <p style={{ color: "#55585b" }}>
               Vestibulum curae torquent diam diam commodo parturient penatibus
               nunc dui adipiscing convallis bulum parturient suspendisse
@@ -421,7 +442,7 @@ const DetailsWrapper = ({
               a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
               natoque dui.
             </p>
-            <h4 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h4>
+            <h5 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h5>
             <p style={{ color: "#55585b" }}>
               {" "}
               &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
@@ -465,13 +486,18 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("maintenance")}
         >
-          <div style={{ fontSize: "16px" }}>MAINTENENCE TIPS</div>{" "}
+          <div
+            className={`${visibility.maintenance ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            MAINTENENCE TIPS
+          </div>{" "}
           <div>{visibility.maintenance ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.maintenance && (
           <div style={{ paddingTop: "20px" }}>
-            <h4 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h4>
+            <h5 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h5>
             <p style={{ color: "#55585b" }}>
               Vestibulum curae torquent diam diam commodo parturient penatibus
               nunc dui adipiscing convallis bulum parturient suspendisse
@@ -479,7 +505,7 @@ const DetailsWrapper = ({
               a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
               natoque dui.
             </p>
-            <h4 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h4>
+            <h5 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h5>
             <p style={{ color: "#55585b" }}>
               {" "}
               &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
@@ -546,9 +572,7 @@ const DetailsWrapper = ({
           </div>
         </div> */}
         <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
-          <button className="tp-btn tp-btn-border ">
-            SHARE THIS PAGE
-          </button>
+          <button className="tp-btn tp-btn-border ">SHARE THIS PAGE</button>
         </Link>
       </div>
 

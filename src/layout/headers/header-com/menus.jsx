@@ -176,11 +176,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4>
+              <h4 style={{fontWeight:"400"}}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn">Shop Now</button>
+              <button className="tp-btn tp-btn-border">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -228,11 +228,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4>
+              <h4 style={{ fontWeight:"400"}}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn">Shop Now</button>
+              <button className="tp-btn tp-btn-border">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -277,11 +277,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4>
+              <h4 style={{fontWeight:"400"}}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn">Shop Now</button>
+              <button  className="tp-btn tp-btn-border">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -334,11 +334,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4>
+              <h4 style={{fontWeight:"400"}}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn">Shop Now</button>
+              <button className="tp-btn tp-btn-border">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
