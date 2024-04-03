@@ -13,7 +13,6 @@ const Menus = () => {
   const handleCategoryHover = (category) => {
     setHoveredCategory(category);
     setLastHoveredCategory(category);
-
   };
 
   const handleCategoryLeave = () => {
@@ -86,7 +85,10 @@ const Menus = () => {
           </div>
         </div>
       );
-    } else if (hoveredCategory === "Neckless" || lastHoveredCategory === "Neckless") {
+    } else if (
+      hoveredCategory === "Neckless" ||
+      lastHoveredCategory === "Neckless"
+    ) {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -142,7 +144,10 @@ const Menus = () => {
           </div>
         </div>
       );
-    } else if (hoveredCategory === "Bangles" || lastHoveredCategory === "Bangles") {
+    } else if (
+      hoveredCategory === "Bangles" ||
+      lastHoveredCategory === "Bangles"
+    ) {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -169,6 +174,13 @@ const Menus = () => {
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -198,26 +210,15 @@ const Menus = () => {
           </div>
         </div>
       );
-    } else if (hoveredCategory === "Pendants" || lastHoveredCategory === "Pendants") {
+    } else if (
+      hoveredCategory === "Pendants" ||
+      lastHoveredCategory === "Pendants"
+    ) {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6>
-              <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Chokers
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Everyday Jewellery
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Gold Plated Silver
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Mope Chains
-                </li>
-              </ul>
             </div>
             <div>
               <Image
@@ -225,6 +226,13 @@ const Menus = () => {
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -260,20 +268,6 @@ const Menus = () => {
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px" }}>ALL RINGS</h6>
-              <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Chokers
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Everyday Jewellery
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Gold Plated Silver
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Mope Chains
-                </li>
-              </ul>
             </div>
             <div>
               <Image
@@ -281,6 +275,13 @@ const Menus = () => {
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -310,7 +311,10 @@ const Menus = () => {
           </div>
         </div>
       );
-    } else if (hoveredCategory === "Anklets" || lastHoveredCategory === "Anklets") {
+    } else if (
+      hoveredCategory === "Anklets" ||
+      lastHoveredCategory === "Anklets"
+    ) {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -329,12 +333,12 @@ const Menus = () => {
                 style={{ width: "100%", height: "200px" }}
               />
             </div>
-              <div style={{ textAlign: "center" }}>
-                <h4>
-                  Excepteur sint occaecat
-                  <br /> cupidatat
-                </h4>
-                <button className="tp-btn">Shop Now</button>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn">Shop Now</button>
             </div>
           </div>
           <div className="col-9">
@@ -435,11 +439,11 @@ const Menus = () => {
       )} */}
 
       <li>
-        <Link href="/">HOME</Link>
+        <Link href="/" style={{fontWeight:'500'}}>HOME</Link>
       </li>
 
       <li className="has-dropdown has-mega-menu">
-        <Link href="/shop">SHOP</Link>
+        <Link href="/shop" style={{fontWeight:'500'}}>SHOP</Link>
         <div className="home-menu tp-submenu tp-mega-menu">
           <div className="row">
             <div
@@ -448,61 +452,103 @@ const Menus = () => {
             >
               <ul>
                 <li
-                   className={`shop-submenu-catageroy-list ${lastHoveredCategory === "Earrings" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Earrings" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Earrings")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${lastHoveredCategory === "Earrings" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Earrings" ? "active" : ""
+                    }`}
+                  >
                     Earrings
                   </Link>
                 </li>
 
                 <li
-                  className={`shop-submenu-catageroy-list ${lastHoveredCategory === "Neckless" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Neckless" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Neckless")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${lastHoveredCategory === "Neckless" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Neckless" ? "active" : ""
+                    }`}
+                  >
                     Neckless
                   </Link>
                 </li>
 
                 <li
-                 className={`shop-submenu-catageroy-list ${ lastHoveredCategory === "Bangles" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Bangles" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Bangles")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${lastHoveredCategory === "Bangles" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Bangles" ? "active" : ""
+                    }`}
+                  >
                     Bangles & Bracelets
                   </Link>
                 </li>
 
                 <li
-                   className={`shop-submenu-catageroy-list ${ lastHoveredCategory === "Pendants" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Pendants" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Pendants")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${ lastHoveredCategory === "Pendants" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Pendants" ? "active" : ""
+                    }`}
+                  >
                     Pendants
                   </Link>
                 </li>
 
                 <li
-                  className={`shop-submenu-catageroy-list ${lastHoveredCategory === "Rings" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Rings" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Rings")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${lastHoveredCategory === "Rings" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Rings" ? "active" : ""
+                    }`}
+                  >
                     Rings
                   </Link>
                 </li>
 
                 <li
-                   className={`shop-submenu-catageroy-list ${lastHoveredCategory === "Anklets" ? "active" : ""}`}
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Anklets" ? "active" : ""
+                  }`}
                   onMouseEnter={() => handleCategoryHover("Anklets")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
-                  <Link href="#" className={`shop-submenu-catageroy-list-a ${ lastHoveredCategory === "Anklets" ? "active" : ""}`}>
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Anklets" ? "active" : ""
+                    }`}
+                  >
                     Anklets
                   </Link>
                 </li>
@@ -515,23 +561,23 @@ const Menus = () => {
       </li>
 
       <li>
-        <Link href="/about">ABOUT US</Link>
+        <Link href="/about" style={{fontWeight:'500'}}>ABOUT US</Link>
       </li>
 
       <li>
-        <Link href="/coupon">GIFT CARD</Link>
+        <Link href="/coupon" style={{fontWeight:'500'}}>GIFT CARD</Link>
       </li>
 
       <li>
-        <Link href="/shop">PRE-ORDERS</Link>
+        <Link href="/shop" style={{fontWeight:'500'}}>PRE-ORDERS</Link>
       </li>
 
       <li>
-        <Link href="/my-orders">SALE</Link>
+        <Link href="/my-orders" style={{fontWeight:'500'}}>SALE</Link>
       </li>
 
       <li>
-        <Link href="/contact">CONTACT US</Link>
+        <Link href="/contact" style={{fontWeight:'500'}}>CONTACT US</Link>
       </li>
     </ul>
   );

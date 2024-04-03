@@ -67,8 +67,8 @@ const ProductDetailsArea = ({ productItem }) => {
      <section className="tp-related-product pt-50 pb-50">
         <div className="container-fluid">
           <div className="row">
-            <div className="tp-section-title-wrapper-6 text-center mb-40">
-              <span className="tp-section-title-pre-6">Next day Products</span>
+            <div className="tp-section-title-wrapper-6 mb-40">
+              {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
               <h3 className="tp-section-title-6">Related Products</h3>
             </div>
           </div>

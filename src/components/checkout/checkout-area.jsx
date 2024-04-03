@@ -92,7 +92,7 @@ const CheckoutArea = () => {
   return (
     <>
       <section
-        className="tp-checkout-area pb-50"
+        className="tp-checkout-area pb-50 pt-50"
         style={{ backgroundColor: "#EFF1F5" }}
       >
         <div className="container-fluid">
