@@ -101,9 +101,9 @@ const CartArea = () => {
             </div>
           )}
 
-          <div style={{ paddingTop: "50px" }}>
+          {/* <div style={{ paddingTop: "50px" }}>
             <h5>YOU MAY BE INTERESTED IN…</h5>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 // internal
 import { CloseTwo } from '@/svg';
-import logo from '@assets/img/logo/logo.svg';
+import logo from '@assets/img/prade-logo.png';
 import contact_img from '@assets/img/icon/contact.png';
 import language_img from '@assets/img/icon/language-flag.png';
 import MobileCategory from '@/layout/headers/header-com/mobile-category';
@@ -41,7 +41,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                 </Link>
               </div>
             </div>
-            <div className="offcanvas__category pb-40">
+            {/* <div className="offcanvas__category pb-40">
               <button onClick={() => setIsCategoryActive(!isCategoryActive)} className="tp-offcanvas-category-toggle">
                 <i className="fa-solid fa-bars"></i>
                 All Categories
@@ -51,7 +51,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                   <MobileCategory categoryType={categoryType} isCategoryActive={isCategoryActive} />
                 </nav>
               </div>
-            </div>
+            </div> */}
             <div className="tp-main-menu-mobile fix d-lg-none mb-40">
               <MobileMenus />
             </div>
@@ -68,11 +68,11 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                 </h3>
               </div>
             </div>
-            <div className="offcanvas__btn">
+            {/* <div className="offcanvas__btn">
               <Link href="/contact" className="tp-btn-2 tp-btn-border-2">Contact Us</Link>
-            </div>
+            </div> */}
           </div>
-          <div className="offcanvas__bottom">
+          {/* <div className="offcanvas__bottom">
             <div className="offcanvas__footer d-flex align-items-center justify-content-between">
               <div className="offcanvas__currency-wrapper currency">
                 <span onClick={handleCurrencyActive} className="offcanvas__currency-selected-currency tp-currency-toggle" id="tp-offcanvas-currency-toggle">Currency : USD</span>
@@ -100,7 +100,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* body overlay start */}
