@@ -19,6 +19,7 @@ import {
 import { useRouter } from "next/router";
 import { notifySuccess } from "@/utils/toast";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
 
 const DetailsWrapper = ({
   productItem,
@@ -168,16 +169,40 @@ const DetailsWrapper = ({
 
   return (
     <div className="tp-product-details-wrapper">
-      <div className="tp-product-details-category">
+        <ProductDetailsBreadcrumb category={ productItem?.category?.name} title={productItem?.name} />
+      {/* <div className="tp-product-details-category">
         <span>
           {capitalizeFLetter(
             productItem?.category?.name || productItem?.node?.category?.name
           )}
         </span>
-      </div>
+      </div> */}
       <h3 className="tp-product-details-title">
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
+      {/* price */}
+      <div className="tp-product-details-price-wrapper mb-20">
+        {discount > 0 ? (
+          <>
+            <span className="tp-product-details-price old-price">${price}</span>
+            <span className="tp-product-details-price new-price">
+              &#8377;{" "}
+              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+              {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
+            </span>
+          </>
+        ) : (
+          <span className="tp-product-details-price new-price">
+            &#8377;{" "}
+            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
+          </span>
+
+          // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
+        )}
+      </div>
 
       {/* inventory details */}
       {/* <div className="tp-product-details-inventory d-flex align-items-center mb-10">
@@ -206,29 +231,7 @@ const DetailsWrapper = ({
         </span> */}
       </p>
 
-      {/* price */}
-      <div className="tp-product-details-price-wrapper mb-20">
-        {discount > 0 ? (
-          <>
-            <span className="tp-product-details-price old-price">${price}</span>
-            <span className="tp-product-details-price new-price">
-              &#8377;{" "}
-              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-              {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
-            </span>
-          </>
-        ) : (
-          <span className="tp-product-details-price new-price">
-            &#8377;{" "}
-            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
-          </span>
-
-          // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
-        )}
-      </div>
+      
 
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
@@ -260,6 +263,44 @@ const DetailsWrapper = ({
           </div>
         </div>
       )}
+
+       {/* product-details-action-sm start */}
+       <div className="tp-product-details-action-sm">
+        <button
+          disabled={status === "out-of-stock"}
+          onClick={() => {
+            if (compareList?.some((prd) => prd?.id === productItem?.id)) {
+              dispatch(handleModalClose());
+              router.push("/compare");
+            } else {
+              handleCompareProduct(productItem);
+            }
+          }}
+          // onClick={() => handleCompareProduct(productItem)}
+          type="button"
+          className="tp-product-details-action-sm-btn"
+        >
+          <CompareTwo />
+          {compareList?.some((prd) => prd?.id === productItem?.id)
+            ? "View compare"
+            : "Add compare"}
+        </button>
+        <button
+          disabled={status === "out-of-stock"}
+          onClick={() => handleWishlist(productItem)}
+          // onClick={() => handleWishlistProduct(productItem)}
+          type="button"
+          className="tp-product-details-action-sm-btn"
+        >
+          <WishlistTwo />
+          {isAddWishlist ? "View" : "Add"} To Wishlist
+        </button>
+        {/* <button type="button" className="tp-product-details-action-sm-btn">
+          <AskQuestion />
+          Ask a question
+        </button> */}
+      </div>
+      {/* product-details-action-sm end */}
 
       {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && (
@@ -297,43 +338,7 @@ const DetailsWrapper = ({
           </button>
         </Link>
       </div>
-      {/* product-details-action-sm start */}
-      <div className="tp-product-details-action-sm">
-        <button
-          disabled={status === "out-of-stock"}
-          onClick={() => {
-            if (compareList?.some((prd) => prd?.id === productItem?.id)) {
-              dispatch(handleModalClose());
-              router.push("/compare");
-            } else {
-              handleCompareProduct(productItem);
-            }
-          }}
-          // onClick={() => handleCompareProduct(productItem)}
-          type="button"
-          className="tp-product-details-action-sm-btn"
-        >
-          <CompareTwo />
-          {compareList?.some((prd) => prd?.id === productItem?.id)
-            ? "View compare"
-            : "Add compare"}
-        </button>
-        <button
-          disabled={status === "out-of-stock"}
-          onClick={() => handleWishlist(productItem)}
-          // onClick={() => handleWishlistProduct(productItem)}
-          type="button"
-          className="tp-product-details-action-sm-btn"
-        >
-          <WishlistTwo />
-          {isAddWishlist ? "View" : "Add"} To Wishlist
-        </button>
-        <button type="button" className="tp-product-details-action-sm-btn">
-          <AskQuestion />
-          Ask a question
-        </button>
-      </div>
-      {/* product-details-action-sm end */}
+     
 
       {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />

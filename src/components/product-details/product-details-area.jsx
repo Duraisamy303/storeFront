@@ -26,18 +26,18 @@ const ProductDetailsArea = ({ productItem }) => {
       <div className="tp-product-details-top pb-115">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-5 col-lg-6">
+            <div className="col-xl-7 col-lg-6">
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}
-                imgWidth={600}
-                imgHeight={540}
+                imgWidth={700}
+                imgHeight={740}
                 videoId={videoId}
                 status={status}
               />
               {/* product-details-thumb-wrapper end */}
             </div>
-            <div className="col-xl-7 col-lg-6">
+            <div className="col-xl-5 col-lg-6">
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}
