@@ -22,22 +22,22 @@ const ProductDetailsArea = ({ productItem }) => {
   const imageUrls=productItem?.images?.map((item)=>item?.url)
 
   return (
-    <section className="tp-product-details-area">
+    <section className="tp-product-details-area pt-50" style={{backgroundColor:"#f4f4f4"}}>
       <div className="tp-product-details-top pb-115">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-7 col-lg-6">
+            <div className="col-xl-8 col-lg-6">
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}
-                imgWidth={700}
+                imgWidth={800}
                 imgHeight={740}
                 videoId={videoId}
                 status={status}
               />
               {/* product-details-thumb-wrapper end */}
             </div>
-            <div className="col-xl-5 col-lg-6">
+            <div className="col-xl-4 col-lg-6">
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}

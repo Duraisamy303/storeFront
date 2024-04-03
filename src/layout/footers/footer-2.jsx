@@ -60,7 +60,7 @@ const FooterTwo = () => {
   return (
     <>
       <footer>
-        <div className="tp-footer-area tp-footer-style-2 tp-footer-style-3 tp-footer-style-4" data-bg-color="#F5F5F5" style={{ backgroundColor: `rgb(245, 245, 245)` }}>
+        <div className="tp-footer-area tp-footer-style-2 tp-footer-style-3 tp-footer-style-4" data-bg-color="#F5F5F5" style={{ backgroundColor: `#eaeaea` }}>
           <div className="tp-footer-top pt-50">
             <div className="container-fluid">
               <div style={{ padding: "0px 50px" }}>

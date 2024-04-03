@@ -225,9 +225,9 @@
         font-weight: 500;
         font-size: 24px;
         letter-spacing: -0.02em;
-        color: var(--tp-common-black);
+        color: #c3935b;
         &.new-price{
-            color: var(--tp-common-black);
+            color:#c3935b;
         }
         &.old-price{
             font-weight: 400;
@@ -409,7 +409,7 @@
         }
         &-sm{
             padding-bottom: 9px;
-            border-bottom: 1px solid #EAEBED;
+            border-bottom: 3px solid #EAEBED;
             margin-bottom: 25px;
             &-btn{
                 font-size: 16px;

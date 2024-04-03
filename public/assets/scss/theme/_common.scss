@@ -335,6 +335,24 @@ font-weight: 600;
 // 	color: Black !important;
 // }
 
+
+.tp-product-details-nav-main-thumb {
+	position: relative;
+	overflow: hidden;
+  }
+  
+  .tp-product-details-nav-main-thumb img {
+	transition: transform 0.25s;
+	width: 100%;
+	height: auto;
+  }
+  
+  .tp-product-details-nav-main-thumb:hover img {
+	transform: scale(1.5); /* Adjust the scale factor as needed */
+  }
+  
+  /* Additional styles for the out-of-stock badge */
+
 @media(max-width:768px){
 	.actor-image{
 		width: 100%;

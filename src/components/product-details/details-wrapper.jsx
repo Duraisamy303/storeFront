@@ -43,6 +43,19 @@ const DetailsWrapper = ({
   } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
+  const [visibility, setVisibility] = useState({
+    description: false,
+    additionalInfo: false,
+    shipping: false,
+    maintenance: false,
+  });
+
+  const toggleVisibility = (section) => {
+    setVisibility((prevState) => ({
+      ...prevState,
+      [section]: !prevState[section],
+    }));
+  };
 
   const { data: tokens } = useGetCartListQuery();
 
@@ -169,7 +182,10 @@ const DetailsWrapper = ({
 
   return (
     <div className="tp-product-details-wrapper">
-        <ProductDetailsBreadcrumb category={ productItem?.category?.name} title={productItem?.name} />
+      <ProductDetailsBreadcrumb
+        category={productItem?.category?.name}
+        title={productItem?.name}
+      />
       {/* <div className="tp-product-details-category">
         <span>
           {capitalizeFLetter(
@@ -231,8 +247,6 @@ const DetailsWrapper = ({
         </span> */}
       </p>
 
-      
-
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
         <div className="tp-product-details-variation">
@@ -264,8 +278,8 @@ const DetailsWrapper = ({
         </div>
       )}
 
-       {/* product-details-action-sm start */}
-       <div className="tp-product-details-action-sm">
+      {/* product-details-action-sm start */}
+      <div className="tp-product-details-action-sm">
         <button
           disabled={status === "out-of-stock"}
           onClick={() => {
@@ -302,6 +316,207 @@ const DetailsWrapper = ({
       </div>
       {/* product-details-action-sm end */}
 
+      {/* dESCRIPTION */}
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}
+          onClick={() => toggleVisibility("description")}
+        >
+          <div style={{ fontSize: "16px" }}>DESCRIPTION</div>{" "}
+          <div>{visibility.description ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.description && (
+          <ul style={{  paddingTop : "20px" }}>
+            <li style={{ fontSize: "16px", paddingBottom: "10px", paddingLeft:"20px" }}>
+              Pure silver jewellery has a tendency to oxidise especially when
+              it’s worn regularly.
+            </li>
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              To maintain the lustre of your jewellery, place it in re-sealable
+              poly bags/ air-tight container to prevent it from oxidation.
+            </li>
+            <li style={{ fontSize: "16px" }}>
+              A gentle wipe before storing is recommended. Avoid direct contact
+              with moisture/perfumes.
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}
+          onClick={() => toggleVisibility("additionalInfo")}
+        >
+          <div style={{ fontSize: "16px" }}>ADDITIONAL INFORMATION</div>{" "}
+          <div>{visibility.additionalInfo ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.additionalInfo && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+            }}
+          >
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              Item type
+            </li>
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              Only Necklace, Necklace with Earrings
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+          }}
+          onClick={() => toggleVisibility("shipping")}
+        >
+          <div style={{ fontSize: "16px" }}>SHIPPING & DELIVERY</div>{" "}
+          <div>{visibility.shipping ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.shipping && (
+          <div style={{ paddingTop: "10px" }}>
+            <h4 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h4>
+            <p style={{ color: "#55585b" }}>
+              Vestibulum curae torquent diam diam commodo parturient penatibus
+              nunc dui adipiscing convallis bulum parturient suspendisse
+              parturient a.Parturient in parturient scelerisque nibh lectus quam
+              a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
+              natoque dui.
+            </p>
+            <h4 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h4>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
+              parturient suspendisse.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Abitur parturient praesent lectus quam a natoque
+              adipiscing a vestibulum hendre.
+            </p>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Diam parturient dictumst parturient scelerisque nibh
+              lectus.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              Scelerisque adipiscing bibendum sem vestibulum et in a a a purus
+              lectus faucibus lobortis tincidunt purus lectus nisl class
+              eros.Condimentum a et ullamcorper dictumst mus et tristique
+              elementum nam inceptos hac parturient scelerisque vestibulum amet
+              elit ut volutpat.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+          }}
+          onClick={() => toggleVisibility("maintenance")}
+        >
+          <div style={{ fontSize: "16px" }}>MAINTENENCE TIPS</div>{" "}
+          <div>{visibility.maintenance ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.maintenance && (
+          <div style={{ paddingTop: "20px" }}>
+            <h4 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h4>
+            <p style={{ color: "#55585b" }}>
+              Vestibulum curae torquent diam diam commodo parturient penatibus
+              nunc dui adipiscing convallis bulum parturient suspendisse
+              parturient a.Parturient in parturient scelerisque nibh lectus quam
+              a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
+              natoque dui.
+            </p>
+            <h4 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h4>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
+              parturient suspendisse.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Abitur parturient praesent lectus quam a natoque
+              adipiscing a vestibulum hendre.
+            </p>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Diam parturient dictumst parturient scelerisque nibh
+              lectus.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              Scelerisque adipiscing bibendum sem vestibulum et in a a a purus
+              lectus faucibus lobortis tincidunt purus lectus nisl class
+              eros.Condimentum a et ullamcorper dictumst mus et tristique
+              elementum nam inceptos hac parturient scelerisque vestibulum amet
+              elit ut volutpat.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <p style={{ color: "#55585b" }}>
+          <b>SKU:</b> PBS_NP_33
+        </p>
+        <p style={{ color: "#55585b" }}>
+          <b>Categories:</b> Necklaces, New Arrivals
+        </p>
+      </div>
+
       {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && (
         <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />
@@ -311,10 +526,8 @@ const DetailsWrapper = ({
       {/* actions */}
       <div className="tp-product-details-action-wrapper">
         {/* <h3 className="tp-product-details-action-title">Quantity</h3> */}
-        <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
-          {/* product quantity */}
-          {/* <ProductQuantity /> */}
-          {/* product quantity */}
+        {/* <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
+         
           <div className="tp-product-details-add-to-cart mb-15 w-100">
             <button
               onClick={() => {
@@ -331,14 +544,13 @@ const DetailsWrapper = ({
               {isAddedToCart ? "View Cart" : "Add To Cart"}
             </button>
           </div>
-        </div>
+        </div> */}
         <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
-          <button className="tp-product-details-buy-now-btn w-100">
-            Buy Now
+          <button className="tp-btn tp-btn-border ">
+            SHARE THIS PAGE
           </button>
         </Link>
       </div>
-     
 
       {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />
