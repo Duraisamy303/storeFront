@@ -343,7 +343,7 @@ font-weight: 600;
   
   .tp-product-details-nav-main-thumb img {
 	transition: transform 0.25s;
-	width: 100%;
+	// width: 100%;
 	height: auto;
   }
   
@@ -353,9 +353,27 @@ font-weight: 600;
   
   /* Additional styles for the out-of-stock badge */
 
+@media(max-width: 1024px){
+	.product-side-nav-img{
+		display: none;
+	}
+}
+
+
+
 @media(max-width:768px){
 	.actor-image{
 		width: 100%;
 		height: auto;
 	}
+
+	.prade-navbar-logo{
+		width: 75px;
+		height: 50px;
+	}
+
+	.tp-product-details-thumb-wrapper{
+margin-right: 0px !important;
+	}
+
 }

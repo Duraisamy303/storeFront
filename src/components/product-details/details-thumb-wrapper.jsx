@@ -25,7 +25,7 @@ const DetailsThumbWrapper = ({
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
-        <nav>
+        <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => (
             <button

@@ -23,10 +23,10 @@ const ProductDetailsArea = ({ productItem }) => {
 
   return (
     <section className="tp-product-details-area pt-50" style={{backgroundColor:"#f4f4f4"}}>
-      <div className="tp-product-details-top pb-115">
+      <div className="tp-product-details-top">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-8 col-lg-6">
+            <div className="col-xl-8 col-lg-7">
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}
@@ -37,7 +37,7 @@ const ProductDetailsArea = ({ productItem }) => {
               />
               {/* product-details-thumb-wrapper end */}
             </div>
-            <div className="col-xl-4 col-lg-6">
+            <div className="col-xl-4 col-lg-5">
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}
