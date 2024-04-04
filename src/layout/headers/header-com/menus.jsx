@@ -176,11 +176,13 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{fontWeight:"400"}}>
+              <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border">Shop Now</button>
+              <button className="tp-btn tp-btn-border">
+                <Link href="/shop">Shop Now</Link>
+              </button>
             </div>
           </div>
           <div className="col-9">
@@ -228,11 +230,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight:"400"}}>
+              <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border">Shop Now</button>
+              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
             </div>
           </div>
           <div className="col-9">
@@ -277,11 +279,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{fontWeight:"400"}}>
+              <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button  className="tp-btn tp-btn-border">Shop Now</button>
+              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
             </div>
           </div>
           <div className="col-9">
@@ -334,11 +336,11 @@ const Menus = () => {
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{fontWeight:"400"}}>
+              <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border">Shop Now</button>
+              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
             </div>
           </div>
           <div className="col-9">
@@ -439,11 +441,15 @@ const Menus = () => {
       )} */}
 
       <li>
-        <Link href="/" style={{fontWeight:'500'}}>HOME</Link>
+        <Link href="/" style={{ fontWeight: "500" }}>
+          HOME
+        </Link>
       </li>
 
       <li className="has-dropdown has-mega-menu">
-        <Link href="/shop" style={{fontWeight:'500'}}>SHOP</Link>
+        <Link href="/shop" style={{ fontWeight: "500" }}>
+          SHOP
+        </Link>
         <div className="home-menu tp-submenu tp-mega-menu">
           <div className="row">
             <div
@@ -561,23 +567,33 @@ const Menus = () => {
       </li>
 
       <li>
-        <Link href="/about" style={{fontWeight:'500'}}>ABOUT US</Link>
+        <Link href="/about" style={{ fontWeight: "500" }}>
+          ABOUT US
+        </Link>
       </li>
 
       <li>
-        <Link href="/coupon" style={{fontWeight:'500'}}>GIFT CARD</Link>
+        <Link href="/coupon" style={{ fontWeight: "500" }}>
+          GIFT CARD
+        </Link>
       </li>
 
       <li>
-        <Link href="/shop" style={{fontWeight:'500'}}>PRE-ORDERS</Link>
+        <Link href="/shop" style={{ fontWeight: "500" }}>
+          PRE-ORDERS
+        </Link>
       </li>
 
       <li>
-        <Link href="/my-orders" style={{fontWeight:'500'}}>SALE</Link>
+        <Link href="/my-orders" style={{ fontWeight: "500" }}>
+          SALE
+        </Link>
       </li>
 
       <li>
-        <Link href="/contact" style={{fontWeight:'500'}}>CONTACT US</Link>
+        <Link href="/contact" style={{ fontWeight: "500" }}>
+          CONTACT US
+        </Link>
       </li>
     </ul>
   );
