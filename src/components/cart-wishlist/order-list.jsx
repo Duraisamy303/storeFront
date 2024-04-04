@@ -6,26 +6,21 @@ import { clearCart } from "@/redux/features/cartSlice";
 import CartCheckout from "./cart-checkout";
 import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
-import { useGetAllProductsQuery, useOrderListQuery } from "@/redux/features/productApi";
+import {
+  useGetAllProductsQuery,
+  useOrderListQuery,
+} from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 
 const OrderList = () => {
+  const { data: data } = useGetCartListQuery();
 
-  const  { data: data } = useGetCartListQuery();
+  const { data: orderList, isError, isLoading } = useOrderListQuery();
 
-  const {
-    data: orderList,
-    isError,
-    isLoading,
-  } = useOrderListQuery();
-
-  const cart=orderList?.data?.order?.lines
+  const cart = orderList?.data?.order?.lines;
+  console.log("cart: ", cart);
 
   const dispatch = useDispatch();
-
- 
-
-
 
   return (
     <>
@@ -61,6 +56,7 @@ const OrderList = () => {
                     <tbody>
                       {cart?.map((item, i) => (
                         <CartItem
+                          isQuantity={false}
                           key={i}
                           product={item}
                           title={item.productName}

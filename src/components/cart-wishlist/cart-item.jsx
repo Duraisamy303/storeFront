@@ -24,7 +24,8 @@ const CartItem = ({
   title,
   incQuantity,
   decQuantity,
-  quantityCount
+  quantityCount,
+  isQuantity,
 }) => {
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
@@ -48,12 +49,6 @@ const CartItem = ({
     });
   };
 
- 
-
- 
-
-
-
   return (
     <tr>
       {/* img */}
@@ -66,47 +61,52 @@ const CartItem = ({
       <td className="tp-cart-title">
         <Link href={`/product-details/${_id}`}>{title}</Link>
       </td>
+
+      {/* <td className="tp-cart-price">
+        <span>{product?.quantity}</span>
+      </td> */}
       {/* price */}
       <td className="tp-cart-price">
         {/* <span>${(price * orderQuantity).toFixed(2)}</span> */}
         <span>&#8377;{price?.toFixed(2)}</span>
       </td>
       {/* quantity */}
-      <td className="tp-cart-quantity">
-        <div className="tp-product-quantity mt-10 mb-10">
-          <span
-            onClick={() => {
-              console.log("quantity: ", quantity);
+      {isQuantity && (
+        <td className="tp-cart-quantity">
+          <div className="tp-product-quantity mt-10 mb-10">
+            <span
+              onClick={() => {
+                console.log("quantity: ", quantity);
 
-              if (quantity != 1) {
-                setQuantity(quantity - 1);
-                decQuantity(quantity - 1);
-              }
-            }}
-            className="tp-cart-minus"
-          >
-            <Minus />
-          </span>
-          <input
-            className="tp-cart-input"
-            type="text"
-            value={quantity}
-            readOnly
-          />
-          <span
-            onClick={() => {
-              if (quantity >= 1) {
-                setQuantity(quantity + 1);
-                incQuantity(quantity + 1);
-              }
-            }}
-            className="tp-cart-plus"
-          >
-            <Plus />
-          </span>
-        </div>
-      </td>
-
+                if (quantity != 1) {
+                  setQuantity(quantity - 1);
+                  decQuantity(quantity - 1);
+                }
+              }}
+              className="tp-cart-minus"
+            >
+              <Minus />
+            </span>
+            <input
+              className="tp-cart-input"
+              type="text"
+              value={quantity}
+              readOnly
+            />
+            <span
+              onClick={() => {
+                if (quantity >= 1) {
+                  setQuantity(quantity + 1);
+                  incQuantity(quantity + 1);
+                }
+              }}
+              className="tp-cart-plus"
+            >
+              <Plus />
+            </span>
+          </div>
+        </td>
+      )}
       {/* subtotal */}
       <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">

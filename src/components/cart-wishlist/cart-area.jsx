@@ -17,7 +17,7 @@ const CartArea = () => {
 
   const { data: list } = useGetCartListQuery();
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const [cartData, setCartData] = useState([]);
 
@@ -38,9 +38,10 @@ const CartArea = () => {
           lineId: item.id,
           quantity: item.quantity,
         }).then((data) => {
-          const updateData=data?.data?.data?.checkoutLinesUpdate?.checkout?.lines
-          dispatch(cart_list(updateData))
-          notifySuccess("Quantity update completed")
+          const updateData =
+            data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
+          dispatch(cart_list(updateData));
+          notifySuccess("Quantity update completed");
 
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })
@@ -106,6 +107,7 @@ const CartArea = () => {
                     <tbody>
                       {cartData?.map((item, i) => (
                         <CartItem
+                          isQuantity={true}
                           key={i}
                           product={item}
                           title={
@@ -162,7 +164,7 @@ const CartArea = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6">
-                <CartCheckout  />
+                <CartCheckout />
               </div>
             </div>
           )}
