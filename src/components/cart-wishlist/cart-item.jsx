@@ -110,7 +110,11 @@ const CartItem = ({
       {/* subtotal */}
       <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
-          <span>${(price * quantity).toFixed(2)}</span>
+          {!isQuantity ? (
+            <span>&#8377;{price?.toFixed(2)}</span>
+          ) : (
+            <span>${(price * quantity).toFixed(2)}</span>
+          )}
         </div>
       </td>
 
