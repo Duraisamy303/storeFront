@@ -19,6 +19,7 @@ import {
 import { useRouter } from "next/router";
 import { notifySuccess } from "@/utils/toast";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
 
 const DetailsWrapper = ({
   productItem,
@@ -42,6 +43,19 @@ const DetailsWrapper = ({
   } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
+  const [visibility, setVisibility] = useState({
+    description: false,
+    additionalInfo: false,
+    shipping: false,
+    maintenance: false,
+  });
+
+  const toggleVisibility = (section) => {
+    setVisibility((prevState) => ({
+      ...prevState,
+      [section]: !prevState[section],
+    }));
+  };
 
   const { data: tokens } = useGetCartListQuery();
 
@@ -168,16 +182,43 @@ const DetailsWrapper = ({
 
   return (
     <div className="tp-product-details-wrapper">
-      <div className="tp-product-details-category">
+      <ProductDetailsBreadcrumb
+        category={productItem?.category?.name}
+        title={productItem?.name}
+      />
+      {/* <div className="tp-product-details-category">
         <span>
           {capitalizeFLetter(
             productItem?.category?.name || productItem?.node?.category?.name
           )}
         </span>
-      </div>
+      </div> */}
       <h3 className="tp-product-details-title">
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
+      {/* price */}
+      <div className="tp-product-details-price-wrapper mb-20">
+        {discount > 0 ? (
+          <>
+            <span className="tp-product-details-price old-price">${price}</span>
+            <span className="tp-product-details-price new-price">
+              &#8377;{" "}
+              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+              {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
+            </span>
+          </>
+        ) : (
+          <span className="tp-product-details-price new-price">
+            &#8377;{" "}
+            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
+          </span>
+
+          // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
+        )}
+      </div>
 
       {/* inventory details */}
       {/* <div className="tp-product-details-inventory d-flex align-items-center mb-10">
@@ -205,30 +246,6 @@ const DetailsWrapper = ({
           {textMore ? "See less" : "See more"}
         </span> */}
       </p>
-
-      {/* price */}
-      <div className="tp-product-details-price-wrapper mb-20">
-        {discount > 0 ? (
-          <>
-            <span className="tp-product-details-price old-price">${price}</span>
-            <span className="tp-product-details-price new-price">
-              &#8377;{" "}
-              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-              {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
-            </span>
-          </>
-        ) : (
-          <span className="tp-product-details-price new-price">
-            &#8377;{" "}
-            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
-          </span>
-
-          // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
-        )}
-      </div>
 
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
@@ -261,42 +278,6 @@ const DetailsWrapper = ({
         </div>
       )}
 
-      {/* if ProductDetailsCountdown true start */}
-      {offerDate?.endDate && (
-        <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />
-      )}
-      {/* if ProductDetailsCountdown true end */}
-
-      {/* actions */}
-      <div className="tp-product-details-action-wrapper">
-        {/* <h3 className="tp-product-details-action-title">Quantity</h3> */}
-        <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
-          {/* product quantity */}
-          {/* <ProductQuantity /> */}
-          {/* product quantity */}
-          <div className="tp-product-details-add-to-cart mb-15 w-100">
-            <button
-              onClick={() => {
-                if (isAddedToCart) {
-                  dispatch(handleModalClose());
-                  router.push("/cart");
-                } else {
-                  handleAddProduct(productItem);
-                }
-              }}
-              disabled={status === "out-of-stock"}
-              className="tp-product-details-add-to-cart-btn w-100"
-            >
-              {isAddedToCart ? "View Cart" : "Add To Cart"}
-            </button>
-          </div>
-        </div>
-        <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
-          <button className="tp-product-details-buy-now-btn w-100">
-            Buy Now
-          </button>
-        </Link>
-      </div>
       {/* product-details-action-sm start */}
       <div className="tp-product-details-action-sm">
         <button
@@ -328,12 +309,272 @@ const DetailsWrapper = ({
           <WishlistTwo />
           {isAddWishlist ? "View" : "Add"} To Wishlist
         </button>
-        <button type="button" className="tp-product-details-action-sm-btn">
+        {/* <button type="button" className="tp-product-details-action-sm-btn">
           <AskQuestion />
           Ask a question
-        </button>
+        </button> */}
       </div>
       {/* product-details-action-sm end */}
+
+      {/* dESCRIPTION */}
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}
+          onClick={() => toggleVisibility("description")}
+        >
+          <div
+            className={`${visibility.description ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            DESCRIPTION
+          </div>{" "}
+          <div>{visibility.description ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.description && (
+          <ul style={{ paddingTop: "20px" }}>
+            <li
+              style={{
+                fontSize: "16px",
+                paddingBottom: "10px",
+                paddingLeft: "20px",
+              }}
+            >
+              Pure silver jewellery has a tendency to oxidise especially when
+              it’s worn regularly.
+            </li>
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              To maintain the lustre of your jewellery, place it in re-sealable
+              poly bags/ air-tight container to prevent it from oxidation.
+            </li>
+            <li style={{ fontSize: "16px" }}>
+              A gentle wipe before storing is recommended. Avoid direct contact
+              with moisture/perfumes.
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}
+          onClick={() => toggleVisibility("additionalInfo")}
+        >
+          <div
+            className={`${visibility.additionalInfo ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            ADDITIONAL INFORMATION
+          </div>{" "}
+          <div>{visibility.additionalInfo ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.additionalInfo && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+            }}
+          >
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              Item type
+            </li>
+            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+              Only Necklace, Necklace with Earrings
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+          }}
+          onClick={() => toggleVisibility("shipping")}
+        >
+          <div
+            className={`${visibility.shipping ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            SHIPPING & DELIVERY
+          </div>{" "}
+          <div>{visibility.shipping ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.shipping && (
+          <div style={{ paddingTop: "10px" }}>
+            <h5 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h5>
+            <p style={{ color: "#55585b" }}>
+              Vestibulum curae torquent diam diam commodo parturient penatibus
+              nunc dui adipiscing convallis bulum parturient suspendisse
+              parturient a.Parturient in parturient scelerisque nibh lectus quam
+              a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
+              natoque dui.
+            </p>
+            <h5 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h5>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
+              parturient suspendisse.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Abitur parturient praesent lectus quam a natoque
+              adipiscing a vestibulum hendre.
+            </p>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Diam parturient dictumst parturient scelerisque nibh
+              lectus.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              Scelerisque adipiscing bibendum sem vestibulum et in a a a purus
+              lectus faucibus lobortis tincidunt purus lectus nisl class
+              eros.Condimentum a et ullamcorper dictumst mus et tristique
+              elementum nam inceptos hac parturient scelerisque vestibulum amet
+              elit ut volutpat.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div
+        style={{
+          borderBottom: "1px solid #EAEBED",
+          paddingBottom: "25px",
+          marginBottom: "25px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+          }}
+          onClick={() => toggleVisibility("maintenance")}
+        >
+          <div
+            className={`${visibility.maintenance ? "theme-color" : ""}`}
+            style={{ fontSize: "16px" }}
+          >
+            MAINTENENCE TIPS
+          </div>{" "}
+          <div>{visibility.maintenance ? "▲" : "▼"}</div>{" "}
+          {/* Toggle arrow up/down based on content visibility */}
+        </div>
+        {visibility.maintenance && (
+          <div style={{ paddingTop: "20px" }}>
+            <h5 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h5>
+            <p style={{ color: "#55585b" }}>
+              Vestibulum curae torquent diam diam commodo parturient penatibus
+              nunc dui adipiscing convallis bulum parturient suspendisse
+              parturient a.Parturient in parturient scelerisque nibh lectus quam
+              a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
+              natoque dui.
+            </p>
+            <h5 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h5>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
+              parturient suspendisse.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Abitur parturient praesent lectus quam a natoque
+              adipiscing a vestibulum hendre.
+            </p>
+            <p style={{ color: "#55585b" }}>
+              {" "}
+              &#129174; Diam parturient dictumst parturient scelerisque nibh
+              lectus.
+            </p>
+
+            <p style={{ color: "#55585b" }}>
+              Scelerisque adipiscing bibendum sem vestibulum et in a a a purus
+              lectus faucibus lobortis tincidunt purus lectus nisl class
+              eros.Condimentum a et ullamcorper dictumst mus et tristique
+              elementum nam inceptos hac parturient scelerisque vestibulum amet
+              elit ut volutpat.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <p style={{ color: "#55585b" }}>
+          <b>SKU:</b> PBS_NP_33
+        </p>
+        <p style={{ color: "#55585b" }}>
+          <b>Categories:</b> Necklaces, New Arrivals
+        </p>
+      </div>
+
+      {/* if ProductDetailsCountdown true start */}
+      {offerDate?.endDate && (
+        <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />
+      )}
+      {/* if ProductDetailsCountdown true end */}
+
+      {/* actions */}
+      <div className="tp-product-details-action-wrapper">
+        {/* <h3 className="tp-product-details-action-title">Quantity</h3> */}
+        {/* <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
+         
+          <div className="tp-product-details-add-to-cart mb-15 w-100">
+            <button
+              onClick={() => {
+                if (isAddedToCart) {
+                  dispatch(handleModalClose());
+                  router.push("/cart");
+                } else {
+                  handleAddProduct(productItem);
+                }
+              }}
+              disabled={status === "out-of-stock"}
+              className="tp-product-details-add-to-cart-btn w-100"
+            >
+              {isAddedToCart ? "View Cart" : "Add To Cart"}
+            </button>
+          </div>
+        </div> */}
+        <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
+          <button className="tp-btn tp-btn-border ">SHARE THIS PAGE</button>
+        </Link>
+      </div>
 
       {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />

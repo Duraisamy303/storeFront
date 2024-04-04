@@ -99,18 +99,18 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
                       <Link href="/">
-                        <Image src={pradeLogo} alt="logo" priority />
+                        <Image src={pradeLogo} alt="logo" priority className="prade-navbar-logo"/>
                       </Link>
                     </div>
                   </div>
-                  <div className="col-xl-5 d-none d-xl-block">
+                  <div className="col-xl-6 d-none d-xl-block">
                     <div className="main-menu menu-style-2">
                       <nav className="tp-main-menu-content">
                         <Menus />
                       </nav>
                     </div>
                   </div>
-                  <div className="col-xl-5 col-lg-7 col-md-7 col-sm-8 col-6">
+                  <div className="col-xl-4 col-lg-7 col-md-7 col-sm-8 col-6">
                     <div className="tp-header-bottom-right d-flex align-items-center justify-content-end pl-30">
                       <div className="tp-header-search-2 d-none d-sm-block">
                         <form onSubmit={handleSubmit}>

@@ -7,6 +7,7 @@ import HeaderTwo from "@/layout/headers/header-2";
 import Footer from "@/layout/footers/footer";
 import Wrapper from "@/layout/wrapper";
 import error from '@assets/img/error/error.png';
+import FooterTwo from "@/layout/footers/footer-2";
 
 const ErrorPage = () => {
   return (
@@ -38,7 +39,7 @@ const ErrorPage = () => {
         </div>
       </section>
       {/* 404 area end */}
-      <Footer primary_style={true} />
+      <FooterTwo primary_style={true} />
     </Wrapper>
   );
 };

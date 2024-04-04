@@ -9,12 +9,14 @@ const CartCheckout = () => {
   const [shipCost, setShipCost] = useState(0);
   const [totals, setTotal] = useState(0);
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount || acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
+    (acc, curr) =>
+      acc + curr?.variant?.pricing?.price?.gross?.amount ||
+      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
     0
   );
   // handle shipping cost
@@ -34,16 +36,31 @@ const CartCheckout = () => {
       total = totalAmount + shipCost;
     }
     setTotal(total);
-  }, [shipCost,dispatch,cart]);
-
+  }, [shipCost, dispatch, cart]);
 
   return (
     <div className="tp-cart-checkout-wrapper">
+      <div>
+        <h5 style={{fontWeight:"500", paddingBottom:"20px"}}>CART TOTAlS</h5>
+      </div>
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>
         <span className="tp-cart-checkout-top-price">&#8377;{totalAmount}</span>
       </div>
-      <div className="tp-cart-checkout-shipping">
+
+      <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
+        <span className="tp-cart-checkout-top-title">Shipping</span>
+        <span
+          className="tp-cart-checkout-top-price"
+          style={{ textAlign: "right" }}
+        >
+          Free shipping
+          <br />
+          Shipping to <b>Tamil Nadu</b>.<br />
+          <span style={{ color: "#c3935b" }}>Change address</span>
+        </span>
+      </div>
+      {/* <div className="tp-cart-checkout-shipping">
         <h4 className="tp-cart-checkout-shipping-title">Shipping</h4>
         <div className="tp-cart-checkout-shipping-option-wrapper">
           <div className="tp-cart-checkout-shipping-option">
@@ -71,14 +88,17 @@ const CartCheckout = () => {
             </label>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
         <span>Total</span>
-        <span>&#8377;{totals.toFixed(2)}</span>
+        <span>
+          &#8377;{totals.toFixed(2)}
+          <br/><span style={{fontSize:"14px"}}>(includes ₹1,012.14 VAT)</span>
+        </span>
       </div>
       <div className="tp-cart-checkout-proceed">
         <Link href="/checkout" className="tp-cart-checkout-btn w-100">
-          Proceed to Checkout
+          PROCEED TO CHECKOUT
         </Link>
       </div>
     </div>

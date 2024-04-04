@@ -22,22 +22,22 @@ const ProductDetailsArea = ({ productItem }) => {
   const imageUrls=productItem?.images?.map((item)=>item?.url)
 
   return (
-    <section className="tp-product-details-area">
-      <div className="tp-product-details-top pb-115">
+    <section className="tp-product-details-area pt-50" style={{backgroundColor:"#f4f4f4"}}>
+      <div className="tp-product-details-top">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-5 col-lg-6">
+            <div className="col-xl-8 col-lg-7">
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}
-                imgWidth={600}
-                imgHeight={540}
+                imgWidth={800}
+                imgHeight={740}
                 videoId={videoId}
                 status={status}
               />
               {/* product-details-thumb-wrapper end */}
             </div>
-            <div className="col-xl-7 col-lg-6">
+            <div className="col-xl-4 col-lg-5">
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}
@@ -67,8 +67,8 @@ const ProductDetailsArea = ({ productItem }) => {
      <section className="tp-related-product pt-50 pb-50">
         <div className="container-fluid">
           <div className="row">
-            <div className="tp-section-title-wrapper-6 text-center mb-40">
-              <span className="tp-section-title-pre-6">Next day Products</span>
+            <div className="tp-section-title-wrapper-6 mb-40">
+              {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
               <h3 className="tp-section-title-6">Related Products</h3>
             </div>
           </div>

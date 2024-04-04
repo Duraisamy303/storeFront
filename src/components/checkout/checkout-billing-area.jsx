@@ -821,6 +821,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
         </div>
       </div> */}
 
+          <div>
+            <p style={{color:"black", paddingTop:"20px"}}>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <b>privacy policy</b>.</p>
+          </div>
+
+
           <div className="tp-checkout-btn-wrapper pt-20">
             <button
               type="submit"

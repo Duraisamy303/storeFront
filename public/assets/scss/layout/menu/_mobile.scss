@@ -160,7 +160,7 @@
                 font-size: 16px;
                 color: var(--tp-common-black);
                 position: relative;
-                padding: 10px 0;
+                padding: 13px 0;
                 padding-right: 20px;
                 & svg{
                     @extend %tp-svg-y-2;
@@ -234,12 +234,12 @@
     
             &:hover{
                 & > a{
-                    color: var(--tp-theme-primary);
+                    color: #d79e4b;
                     &::after{
-                        color: var(--tp-theme-primary);
+                        color: #d79e4b;
                     }
                     & .dropdown-toggle-btn i{
-                        color: var(--tp-theme-primary);
+                        color: #d79e4b;
                     }
                 }
     

@@ -47,7 +47,7 @@ const index = () => {
 
   return (
     <Wrapper>
-      <SEO pageTitle="Home Four" />
+      <SEO pageTitle="Home" />
       <HeaderTwo />
       <JewelryBanner />
       <FeatureAreaThree />

@@ -81,11 +81,32 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
           />
         </Link>
 
-        <div className="tp-product-badge">
+        {/* <div className="tp-product-badge">
           {status === "out-of-stock" && (
             <span className="product-hot">out-stock</span>
           )}
+        </div> */}
+
+
+        <div className="tp-product-badge">
+          {status === "out-of-stock" ? (
+            <span className="product-hot">
+              SOLD
+              <br /> OUT
+            </span>
+          ) : (
+            <div style={{ display: "none" }}></div>
+          )}
         </div>
+
+        <div className="tp-product-badge-2">
+          <span className="product-hot">HOT</span>
+        </div>
+
+
+
+
+
 
         {/* product action */}
         <div className="tp-product-action-3 tp-product-action-blackStyle">
@@ -98,7 +119,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
                 } tp-product-add-cart-btn text-center`}
               >
                 <Cart />
-                <span className="tp-product-tooltip">View Cart</span>
+                {/* <span className="tp-product-tooltip">View Cart</span> */}
               </Link>
             ) : (
               <button
@@ -110,7 +131,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
                 disabled={status === "out-of-stock"}
               >
                 <Cart />
-                <span className="tp-product-tooltip">Add to Cart</span>
+                {/* <span className="tp-product-tooltip">Add to Cart</span> */}
               </button>
             )}
             <button
@@ -118,7 +139,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
               className="tp-product-action-btn-3 tp-product-quick-view-btn"
             >
               <QuickView />
-              <span className="tp-product-tooltip">Quick View</span>
+              {/* <span className="tp-product-tooltip">Quick View</span> */}
             </button>
 
             <button
@@ -130,12 +151,12 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
             } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
-              <span className="tp-product-tooltip">Add To Wishlist</span>
+              {/* <span className="tp-product-tooltip">Add To Wishlist</span> */}
             </button>
           </div>
         </div>
 
-        <div className="tp-product-add-cart-btn-large-wrapper">
+        {/* <div className="tp-product-add-cart-btn-large-wrapper">
           {isAddedToCart ? (
             <Link
               href="/cart"
@@ -153,13 +174,14 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
               Add To Cart
             </button>
           )}
-        </div>
+        </div> */}
       </div>
-      <div className="tp-product-content-3">
+      <div className="tp-product-content-3" style={{textAlign:"center"}}>
         {/* <div className="tp-product-tag-3"><span>{tags[1]}</span></div> */}
         <h3 className="tp-product-title-3">
           <Link href={`/product-details/${id}`}>{name}</Link>
         </h3>
+        <p style={{color:"gray", marginBottom:"0px"}}>Neckless</p>
         <div className="tp-product-price-wrapper-3">
           <span className="tp-product-price-3">
             ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}

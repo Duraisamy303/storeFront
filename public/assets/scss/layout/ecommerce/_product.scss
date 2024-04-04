@@ -35,23 +35,56 @@
     }
     &-badge{
         position: absolute;
-        top: 16px;
-        right: 20px;
+        top: 80px;
+        left: 20px;
         z-index: 1;
         & span{
             @extend %tp-ff-roboto;
             font-weight: 500;
             font-size: 14px;
             line-height: 1;
-            color: var(--tp-common-white);
+            color: black;
             background-color: var(--tp-theme-primary);
             border-radius: 4px;
             display: inline-block;
-            padding: 4px 8px 2px;
+            padding: 12px 10px;
+            border-radius: 50%;
             text-transform: capitalize;
 
             &.product-hot{
-                background-color: var(--tp-pink-2);
+                background-color:white;
+            }
+            &.product-trending{
+                background-color: var(--tp-green-1);
+            }
+            &.product-offer{
+                background-color: var(--tp-orange-1);
+            }
+            &.product-sale{
+                background-color: var(--tp-blue-1);
+            }
+        }
+    }
+    &-badge-2{
+        position: absolute;
+        top: 16px;
+        left: 20px;
+        z-index: 1;
+        & span{
+            @extend %tp-ff-roboto;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1;
+            color: white;
+            background-color: var(--tp-theme-primary);
+            border-radius: 4px;
+            display: inline-block;
+            padding: 17px 10px;
+            border-radius: 50%;
+            text-transform: capitalize;
+
+            &.product-hot{
+                background-color:#e22d2d;
             }
             &.product-trending{
                 background-color: var(--tp-green-1);

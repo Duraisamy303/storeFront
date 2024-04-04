@@ -65,7 +65,7 @@ const CartItem = ({ product, img, price, isRemove, title }) => {
         <span>&#8377;{price?.toFixed(2)}</span>
       </td>
       {/* quantity */}
-      {/* <td className="tp-cart-quantity">
+      <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
           <span onClick={()=> handleDecrement(product)} className="tp-cart-minus">
             <Minus />
@@ -75,7 +75,16 @@ const CartItem = ({ product, img, price, isRemove, title }) => {
             <Plus />
           </span>
         </div>
-      </td> */}
+      </td>
+
+       {/* subtotal */}
+       <td className="tp-cart-quantity">
+        <div className="tp-product-quantity mt-10 mb-10">
+                 <span>${(price * orderQuantity).toFixed(2)}</span>
+
+        </div>
+      </td>
+
       {/* action */}
       {!isRemove && (
         <td className="tp-cart-action">

@@ -12,7 +12,13 @@ import ShopTopLeft from "./shop-top-left";
 import ShopTopRight from "./shop-top-right";
 import ResetButton from "./shop-filter/reset-button";
 
-const ShopArea = ({ all_products, products, otherProps,updateData }) => {
+const ShopArea = ({
+  all_products,
+  products,
+  otherProps,
+  updateData,
+  subtitle,
+}) => {
   // console.log("all_products: ", all_products);
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -33,8 +39,23 @@ const ShopArea = ({ all_products, products, otherProps,updateData }) => {
   }, 0);
   return (
     <>
-      <section className="tp-shop-area pb-50">
+      <section className="tp-shop-area pb-50 mt-50">
         <div className="container-fluid">
+          <div
+            style={{
+              borderBottom: "1px solid #eee",
+              paddingBottom: "10px",
+              marginBottom: "20px",
+            }}
+          >
+            <div >
+              <span>
+                <a href="#">Home</a>
+              </span>{" "}
+              / <span style={{ color: "black" , fontWeight:"600"}}>{subtitle}</span>
+            </div>
+          </div>
+
           <div className="row">
             {/*  */}
             <div className="col-xl-12 col-lg-8">
@@ -82,13 +103,17 @@ const ShopArea = ({ all_products, products, otherProps,updateData }) => {
                         tabIndex="0"
                       >
                         <div className="row">
-                          {filteredRows?.slice(pageStart, pageStart + countOfPage)
+                          {filteredRows
+                            ?.slice(pageStart, pageStart + countOfPage)
                             .map((item) => (
                               <div
                                 key={item._id}
                                 className="col-xl-4 col-md-6 col-sm-6"
                               >
-                                <ProductItem products={item} updateData={updateData} />
+                                <ProductItem
+                                  products={item}
+                                  updateData={updateData}
+                                />
                               </div>
                             ))}
                         </div>

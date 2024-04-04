@@ -86,12 +86,13 @@ const ShopPage = ({ query }) => {
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb title="Shop" subtitle="Shop Grid" bgImage={shopBanner} />
+      <ShopBreadcrumb title="Shop" subtitle="Shop" bgImage={shopBanner} />
       <ShopArea
         all_products={products}
         products={productItems}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
+        subtitle="Shop"
       />
       {content}
       <FooterTwo primary_style={true} />

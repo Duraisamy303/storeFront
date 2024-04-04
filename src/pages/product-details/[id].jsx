@@ -27,7 +27,7 @@ const ProductDetailsPage = ({ query }) => {
   if (!isLoading && !isError && product) {
     content = (
       <>
-        <ProductDetailsBreadcrumb category={product.category.name} title={product.title} />
+        {/* <ProductDetailsBreadcrumb category={product.category.name} title={product.title} /> */}
         <ProductDetailsArea productItem={product} />
       </>
     );
