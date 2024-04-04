@@ -5,9 +5,9 @@ export const handleWishlistProduct = (prd) => {
     try {
       const token = localStorage.getItem("token");
       let whishlist = localStorage.getItem("whishlist");
-      if (token) {
-        //backend mutation
-      } else {
+      // if (token) {
+      //   //backend mutation
+      // } else {
         if (!whishlist) {
           whishlist = [];
         } else {
@@ -16,7 +16,7 @@ export const handleWishlistProduct = (prd) => {
         whishlist.push(prd);
         localStorage.setItem("whishlist", JSON.stringify(whishlist));
         return whishlist;
-      }
+      // }
     } catch (error) {
       console.error("Error:", error);
     }
