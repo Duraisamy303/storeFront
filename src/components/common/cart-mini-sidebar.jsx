@@ -26,8 +26,8 @@ const CartMiniSidebar = () => {
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount ||
-      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
+      acc + curr?.variant?.pricing?.price?.gross?.amount * curr.quantity||
+      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount  * curr.quantity,
     0
   );
 
@@ -119,7 +119,7 @@ const CartMiniSidebar = () => {
                               )}
                           </span>
                         )}
-                        <span className="cartmini__quantity"> x {1}</span>
+                        <span className="cartmini__quantity"> x {item?.quantity}</span>
                       </div>
                     </div>
                     <a

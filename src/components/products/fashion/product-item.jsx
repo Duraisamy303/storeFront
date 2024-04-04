@@ -105,8 +105,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       arr = JSON.parse(compare);
     }
     arr.push(prd);
-    console.log("compare: ", arr);
     localStorage.setItem("compareList", JSON.stringify(arr));
+    notifySuccess("Product to added to compare list");
     dispatch(compare_list(arr));
   };
   const img = product?.thumbnail?.url;
@@ -172,7 +172,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             <button
               type="button"
               style={{ marginRight: "5px" }}
-              onClick={() => handleAddProduct(product)}
+              onClick={() => {
+                if (isAddedToCart) {
+                  router.push("/cart");
+                } else {
+                  handleAddProduct(product);
+                }
+              }}
               className={`tp-product-action-btn-2 ${
                 isAddedToCart ? "active" : ""
               } tp-product-add-cart-btn`}

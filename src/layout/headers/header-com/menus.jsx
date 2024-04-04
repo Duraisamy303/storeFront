@@ -373,7 +373,6 @@ const Menus = () => {
 
     return null; // If no category is hovered, return null
   };
-  console.log("categoryImages", categoryImages);
 
   return (
     <ul style={{ display: "flex", justifyContent: "end" }}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -10,31 +10,32 @@ import {
   quantityDecrement,
   remove_product,
 } from "@/redux/features/cartSlice";
-import { useRemoveToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useRemoveToCartMutation,
+  useUpdateCartQuantity,
+  useUpdateCartQuantityMutation,
+} from "@/redux/features/card/cardApi";
 
-const CartItem = ({ product, img, price, isRemove, title }) => {
+const CartItem = ({
+  product,
+  img,
+  price,
+  isRemove,
+  title,
+  incQuantity,
+  decQuantity,
+  quantityCount
+}) => {
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 
+  const [quantity, setQuantity] = useState(quantityCount);
+
   const { _id, orderQuantity = 0 } = product || {};
 
   const dispatch = useDispatch();
-
-  // handle add product
-  const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
-  };
-  // handle decrement product
-  const handleDecrement = (prd) => {
-    dispatch(quantityDecrement(prd));
-  };
-
-  // handle remove product
-  // const handleRemovePrd = (prd) => {
-  //   dispatch(remove_product(prd))
-  // }
 
   const handleRemovePrd = () => {
     const checkoutToken = localStorage.getItem("checkoutToken");
@@ -46,6 +47,12 @@ const CartItem = ({ product, img, price, isRemove, title }) => {
       dispatch(cart_list(filter));
     });
   };
+
+ 
+
+ 
+
+
 
   return (
     <tr>
@@ -67,21 +74,43 @@ const CartItem = ({ product, img, price, isRemove, title }) => {
       {/* quantity */}
       <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
-          <span onClick={()=> handleDecrement(product)} className="tp-cart-minus">
+          <span
+            onClick={() => {
+              console.log("quantity: ", quantity);
+
+              if (quantity != 1) {
+                setQuantity(quantity - 1);
+                decQuantity(quantity - 1);
+              }
+            }}
+            className="tp-cart-minus"
+          >
             <Minus />
           </span>
-          <input className="tp-cart-input" type="text" value={orderQuantity} readOnly />
-          <span onClick={()=> handleAddProduct(product)} className="tp-cart-plus">
+          <input
+            className="tp-cart-input"
+            type="text"
+            value={quantity}
+            readOnly
+          />
+          <span
+            onClick={() => {
+              if (quantity >= 1) {
+                setQuantity(quantity + 1);
+                incQuantity(quantity + 1);
+              }
+            }}
+            className="tp-cart-plus"
+          >
             <Plus />
           </span>
         </div>
       </td>
 
-       {/* subtotal */}
-       <td className="tp-cart-quantity">
+      {/* subtotal */}
+      <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
-                 <span>${(price * orderQuantity).toFixed(2)}</span>
-
+          <span>${(price * quantity).toFixed(2)}</span>
         </div>
       </td>
 

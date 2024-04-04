@@ -82,6 +82,7 @@ export const CART_LIST = ({ checkoutToken }) => {
               name
               id
             }
+            quantity
           }
           totalPrice {
             gross {
@@ -115,6 +116,60 @@ export const CHECKOUT_TOKEN = ({ channel, email }) => {
       }
       `,
     variables: { channel, email },
+  };
+};
+
+export const UPDATE_CART_QUANTITY = ({ checkoutId, lineId, quantity }) => {
+  return {
+    query: `
+    mutation UpdateCart($checkoutId:,ID!,$lineId: ID!,$quantity:Int!) {
+      checkoutLinesUpdate(
+        id: $checkoutId
+        lines: [{ quantity: $quantity, lineId:$lineId }]
+      ) {
+        checkout {
+          lines {
+            id
+            totalPrice {
+              gross {
+                amount
+                currency
+              }
+            }
+            variant {
+              product {
+                id
+                name
+                slug
+                thumbnail {
+                  url
+                  alt
+                }
+              }
+              pricing {
+                price {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+              name
+              id
+            }
+            quantity
+          }
+          totalPrice {
+            gross {
+              currency
+              amount
+            }
+          }
+        }
+      }
+    }
+      `,
+    variables: { checkoutId, lineId, quantity },
   };
 };
 
@@ -179,9 +234,7 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
   country1,
   countryArea1,
 }) => {
-  console.log("first", 
-  lastName1,
- )
+  console.log("first", lastName1);
   return {
     query: `
     mutation CreateCheckout($channel: String!, $email: String!, $lines: [CheckoutLineInput!]!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!,$firstName1: String!, $lastName1: String!, $streetAddress2: String!, $city1: String!, $postalCode1: String!, $country1: CountryCode!, $countryArea1: String!) {

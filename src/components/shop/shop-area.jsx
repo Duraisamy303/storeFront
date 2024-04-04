@@ -27,6 +27,9 @@ const ShopArea = ({
   const [pageStart, setPageStart] = useState(0);
   const [countOfPage, setCountOfPage] = useState(12);
 
+  console.log("filteredRows: ", filteredRows);
+
+
   const paginatedData = (items, startPage, pageCount) => {
     setFilteredRows(items);
     setPageStart(startPage);

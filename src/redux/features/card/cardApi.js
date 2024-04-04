@@ -14,6 +14,7 @@ import {
   CHECKOUT_TOKEN_WITHOUT_EMAIL,
   CHECKOUT_UPDATE_SHIPPING_ADDRESS,
   REMOVETOCART,
+  UPDATE_CART_QUANTITY,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
 
@@ -68,7 +69,6 @@ export const cardApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
           const checkoutToken =
             result?.data.data?.checkoutCreate?.checkout?.token;
           dispatch(checkout_token(checkoutToken));
@@ -197,6 +197,26 @@ export const cardApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    updateCartQuantity: builder.mutation({
+      query: ({ checkoutId, lineId, quantity }) => {
+        return configuration(
+          UPDATE_CART_QUANTITY({
+            checkoutId,
+            lineId,
+            quantity,
+          })
+        );
+      },
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
   }),
 });
 
@@ -209,4 +229,5 @@ export const {
   useCreateCheckoutTokenWithoutEmailMutation,
   useCheckoutUpdateMutation,
   useCheckoutCompleteMutation,
+  useUpdateCartQuantityMutation,
 } = cardApi;

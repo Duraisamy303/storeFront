@@ -66,7 +66,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const router = useRouter();
 
   const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
+    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
     0
   );
 
@@ -180,6 +180,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           );
           return;
         }
+        console.log("createCheckoutResponse: ", createCheckoutResponse);
 
         const checkoutId =
           createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
@@ -215,7 +216,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount: parseInt(amount) * 100,
+        amount: parseInt(totalAmount) * 100,
         currency: "INR",
         name: state.firstName + " " + state.lastName,
         description: "Test Transaction",
@@ -629,11 +630,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
               {cart?.map((item) => (
                 <li key={item._id} className="tp-order-info-list-desc">
                   <p className="para">
-                    {item?.variant?.product?.name} <span> x {1}</span>
+                    {item?.variant?.product?.name} <span> x {item?.quantity}</span>
                   </p>
                   <span>
                     &#8377;
-                    {item?.variant?.pricing?.price?.gross?.amount.toFixed(2)}
+                    {item?.variant?.pricing?.price?.gross?.amount.toFixed(2) * item?.quantity}
                   </span>
                 </li>
               ))}

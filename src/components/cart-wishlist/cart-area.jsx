@@ -2,15 +2,74 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
-import { clearCart } from "@/redux/features/cartSlice";
+import { cart_list, clearCart } from "@/redux/features/cartSlice";
 import CartCheckout from "./cart-checkout";
 import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
+import {
+  useGetCartListQuery,
+  useUpdateCartQuantityMutation,
+} from "@/redux/features/card/cardApi";
+import { notifySuccess } from "@/utils/toast";
 
 const CartArea = () => {
   const cart = useSelector((state) => state.cart.cart_list);
 
-  const dispatch = useDispatch();
+  const { data: list } = useGetCartListQuery();
+
+  const dispatch=useDispatch()
+
+  const [cartData, setCartData] = useState([]);
+
+  useEffect(() => {
+    const data = cart?.map((item) => {
+      return { ...item, quantity: item.quantity ? item.quantity : 1 };
+    });
+    setCartData(data);
+  }, [cart]);
+
+  const [updateCartQuantity, {}] = useUpdateCartQuantityMutation();
+
+  const updateCart = () => {
+    if (cartData?.length > 0) {
+      cartData?.map((item) =>
+        updateCartQuantity({
+          checkoutId: list?.data?.checkout?.id,
+          lineId: item.id,
+          quantity: item.quantity,
+        }).then((data) => {
+          const updateData=data?.data?.data?.checkoutLinesUpdate?.checkout?.lines
+          dispatch(cart_list(updateData))
+          notifySuccess("Quantity update completed")
+
+          // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
+        })
+      );
+    }
+  };
+
+  const incQuantity = (quantity, id) => {
+    console.log("quantity: ", quantity);
+    const data = cartData.map((item) => {
+      if (item.id == id) {
+        // Increase quantity by 1
+        return { ...item, quantity: quantity };
+      }
+      return item;
+    });
+    setCartData(data);
+  };
+
+  const decQuantity = (quantity, id) => {
+    const data = cartData.map((item) => {
+      if (item.id === id) {
+        // Decrease quantity by 1
+        return { ...item, quantity };
+      }
+      return item;
+    });
+    setCartData(data);
+  };
 
   return (
     <>
@@ -45,7 +104,7 @@ const CartArea = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {cart?.map((item, i) => (
+                      {cartData?.map((item, i) => (
                         <CartItem
                           key={i}
                           product={item}
@@ -61,6 +120,13 @@ const CartArea = () => {
                             item?.node?.pricing?.priceRange?.start?.gross
                               ?.amount
                           }
+                          incQuantity={(quantity) =>
+                            incQuantity(quantity, item.id)
+                          }
+                          decQuantity={(quantity) =>
+                            decQuantity(quantity, item.id)
+                          }
+                          quantityCount={item.quantity}
                         />
                       ))}
                     </tbody>
@@ -84,7 +150,7 @@ const CartArea = () => {
                     <div className="col-xl-6 col-md-4">
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
-                          onClick={() => dispatch(clearCart())}
+                          onClick={() => updateCart()}
                           type="button"
                           className="tp-cart-update-btn"
                         >
@@ -96,7 +162,7 @@ const CartArea = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6">
-                <CartCheckout />
+                <CartCheckout  />
               </div>
             </div>
           )}

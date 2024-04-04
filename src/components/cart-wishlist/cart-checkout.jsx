@@ -15,8 +15,8 @@ const CartCheckout = () => {
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount ||
-      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount,
+      acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity ||
+      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount * curr?.quantity,
     0
   );
   // handle shipping cost
@@ -41,7 +41,7 @@ const CartCheckout = () => {
   return (
     <div className="tp-cart-checkout-wrapper">
       <div>
-        <h5 style={{fontWeight:"500", paddingBottom:"20px"}}>CART TOTAlS</h5>
+        <h5 style={{fontWeight:"500", paddingBottom:"20px"}}>CART TOTALS</h5>
       </div>
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>

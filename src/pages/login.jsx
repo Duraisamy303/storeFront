@@ -6,8 +6,12 @@ import Wrapper from '@/layout/wrapper';
 import CommonBreadcrumb from '@/components/breadcrumb/common-breadcrumb';
 import LoginArea from '@/components/login-register/login-area';
 import FooterTwo from '@/layout/footers/footer-2';
+import { useSelector } from 'react-redux';
 
 const LoginPage = () => {
+  const cartData = useSelector((state) => state);
+  console.log("cartData: ", cartData);
+
   return (
     <Wrapper>
       <SEO pageTitle="Login" />

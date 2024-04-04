@@ -10,8 +10,6 @@ import { useGetCartListQuery } from '@/redux/features/card/cardApi';
 import CartBanner from "../../public/assets/img/shop-banner.jpg";
 
 const CartPage = () => {
-  const  { data: tokens } = useGetCartListQuery();
-
   return (
     <Wrapper>
       <SEO pageTitle="Cart" />
