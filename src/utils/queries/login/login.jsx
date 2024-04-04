@@ -20,3 +20,28 @@ export const LOGIN = ({ email, password }) => {
     variables: { email, password },
   };
 };
+
+
+export const CHANGE_PASSWORD = ({ old_password, new_password }) => {
+  console.log("CHANGE_PASSWORD: ",  old_password, new_password);
+  return {
+    query: `
+    mutation PasswordChange($old_password: String!, $new_password: String!) {
+      passwordChange( 
+        newPassword: $new_password
+        oldPassword: $old_password
+      ) {
+        user {
+          id
+          email
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { old_password, new_password },
+  };
+};

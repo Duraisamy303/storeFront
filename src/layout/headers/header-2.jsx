@@ -7,7 +7,7 @@ import Menus from "./header-com/menus";
 import logo from "@assets/img/logo/logo.svg";
 import useSticky from "@/hooks/use-sticky";
 import useCartInfo from "@/hooks/use-cart-info";
-import { compare_list, openCartMini } from "@/redux/features/cartSlice";
+import { compare_list, openCartMini, openUserSidebar } from "@/redux/features/cartSlice";
 import HeaderTopRight from "./header-com/header-top-right";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
 import {
@@ -18,10 +18,14 @@ import {
   PhoneTwo,
   Wishlist,
   Search,
+  User,
+  UserTwo,
+  UserThree,
 } from "@/svg";
 import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
+import UserMiniSidebar from "@/components/common/user-sidebar";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
@@ -35,7 +39,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { sticky } = useSticky();
   const dispatch = useDispatch();
 
- 
   return (
     <>
       <header>
@@ -165,6 +168,15 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <Menu />
                           </button>
                         </div>
+                        <div className="tp-header-action-item">
+                          <button
+                            onClick={() => dispatch(openUserSidebar())}
+                            className="tp-header-action-btn cartmini-open-btn"
+                          >
+                            <UserThree />
+
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -178,6 +190,9 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       {/* cart mini sidebar start */}
       <CartMiniSidebar />
       {/* cart mini sidebar end */}
+
+      <UserMiniSidebar />
+
 
       {/* off canvas start */}
       <OffCanvas

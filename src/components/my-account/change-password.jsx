@@ -10,8 +10,8 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 
 // schema
 const schema = Yup.object().shape({
-  password: Yup.string().required().min(6).label("Password"),
-  newPassword: Yup.string().required().min(6).label("New Password"),
+  password: Yup.string().required().min(1).label("Password"),
+  newPassword: Yup.string().required().min(1).label("New Password"),
   confirmPassword: Yup.string().oneOf(
     [Yup.ref("newPassword"), null],
     "Passwords must match"
@@ -41,11 +41,14 @@ const ChangePassword = () => {
 
   // on submit
   const onSubmit = (data) => {
+    const token = localStorage.getItem("token");
+    console.log("token: ", token);
     changePassword({
-      email: user?.email,
-      password: data.password,
-      newPassword: data.newPassword,
-      googleSignIn: user?.googleSignIn,
+      old_password: data.password,
+      // email: user?.email,
+      // password: data.password,
+      new_password: data.newPassword,
+      // googleSignIn: user?.googleSignIn,
     }).then((result) => {
       if (result?.error) {
         notifyError(result?.error?.data?.message);
@@ -53,7 +56,7 @@ const ChangePassword = () => {
         notifySuccess(result?.data?.message);
       }
     });
-    reset();
+    // reset();
   };
   return (
     <div className="profile__password">

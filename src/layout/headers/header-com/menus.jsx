@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const Menus = () => {
+
   return (
     <ul style={{display:"flex", justifyContent:"end"}}>
       {menu_data.map((menu) =>

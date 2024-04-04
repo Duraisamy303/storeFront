@@ -13,12 +13,12 @@ import Loader from "@/components/loader/loader";
 const ProfilePage = () => {
   const router = useRouter();
   const {data: orderData, isError, isLoading, } = useGetUserOrdersQuery();
-  useEffect(() => {
-    const isAuthenticate = Cookies.get("userInfo");
-    if (!isAuthenticate) {
-      router.push("/login");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   const isAuthenticate = Cookies.get("userInfo");
+  //   if (!isAuthenticate) {
+  //     router.push("/login");
+  //   }
+  // }, [router]);
 
   if (isLoading) {
     return (

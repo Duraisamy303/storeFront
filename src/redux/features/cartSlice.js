@@ -9,6 +9,7 @@ const initialState = {
   cart_list: [],
   compare_list: [],
   checkout_token: "",
+  userMiniOpen:false
 };
 
 export const cartSlice = createSlice({
@@ -121,6 +122,14 @@ export const cartSlice = createSlice({
     closeCartMini: (state, { payload }) => {
       state.cartMiniOpen = false;
     },
+
+    openUserSidebar: (state, { payload }) => {
+      console.log('clicked')
+      state.userMiniOpen = true;
+    },
+    closeUserSidebar: (state, { payload }) => {
+      state.userMiniOpen = false;
+    },
   },
 });
 
@@ -139,5 +148,8 @@ export const {
   closeCartMini,
   openCartMini,
   checkout_token,
+  openUserSidebar,
+  closeUserSidebar
+
 } = cartSlice.actions;
 export default cartSlice.reducer;

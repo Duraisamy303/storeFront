@@ -33,7 +33,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const compareList = useSelector((state) => state.cart.compare_list);
-  console.log("compareList: ", compareList);
 
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id == product?.node?.id

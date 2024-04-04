@@ -3,7 +3,7 @@ import { userLoggedIn } from "./authSlice";
 import Cookies from "js-cookie";
 import { PRODUCT_LIST } from "@/utils/queries/productList";
 import { configuration } from "@/utils/constant";
-import { LOGIN } from "@/utils/queries/login/login";
+import { CHANGE_PASSWORD, LOGIN } from "@/utils/queries/login/login";
 import { REGISTER } from "@/utils/queries/register/register";
 
 export const authApi = apiSlice.injectEndpoints({
@@ -168,12 +168,20 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // change password
     changePassword: builder.mutation({
-      query: (data) => ({
-        url: "api/user/change-password",
-        method: "PATCH",
-        body: data,
-      }),
+      query: ({  old_password, new_password }) =>{
+        console.log(" old_password, new_password: ",  old_password, new_password);
+        return configuration(CHANGE_PASSWORD({  old_password, new_password }))
+
+      }
     }),
+    async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+      try {
+        const result = await queryFulfilled;
+        console.log("result: ", result);
+      } catch (err) {
+        // do nothing
+      }
+    },
     // updateProfile password
     updateProfile: builder.mutation({
       query: ({ id, ...data }) => ({
