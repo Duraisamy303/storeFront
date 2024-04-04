@@ -110,7 +110,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
 
         {/* product action */}
         <div className="tp-product-action-3 tp-product-action-blackStyle">
-          <div className="tp-product-action-item-3 d-flex flex-column">
+          <div className="tp-product-action-item-3 d-flex ">
             {isAddedToCart ? (
               <Link
                 href="/cart"
@@ -119,7 +119,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
                 } tp-product-add-cart-btn text-center`}
               >
                 <Cart />
-                {/* <span className="tp-product-tooltip">View Cart</span> */}
+                <span className="tp-product-tooltip  tp-product-tooltip-top">View Cart</span>
               </Link>
             ) : (
               <button
@@ -131,7 +131,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
                 disabled={status === "out-of-stock"}
               >
                 <Cart />
-                {/* <span className="tp-product-tooltip">Add to Cart</span> */}
+                <span className="tp-product-tooltip tp-product-tooltip-top">Add to Cart</span>
               </button>
             )}
             <button
@@ -139,7 +139,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
               className="tp-product-action-btn-3 tp-product-quick-view-btn"
             >
               <QuickView />
-              {/* <span className="tp-product-tooltip">Quick View</span> */}
+              <span className="tp-product-tooltip tp-product-tooltip-top">Quick View</span>
             </button>
 
             <button
@@ -151,7 +151,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
             } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
-              {/* <span className="tp-product-tooltip">Add To Wishlist</span> */}
+              <span className="tp-product-tooltip tp-product-tooltip-top">Add To Wishlist</span>
             </button>
           </div>
         </div>

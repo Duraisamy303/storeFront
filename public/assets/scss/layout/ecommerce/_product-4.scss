@@ -35,12 +35,13 @@
     &-action{
         &-4{
             position: absolute;
-            top: 20px;
-            right: 0;
-            bottom: auto;
+            // top: 20px;
+            right:55px;
+            bottom: 10px;
             z-index: 1;
             visibility: hidden;
             opacity: 0;
+            
             @extend %tp-transition;
 
             @media #{$xs}{

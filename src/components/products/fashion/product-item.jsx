@@ -139,9 +139,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         </div>
 
         {/* product action */}
-        <div className="tp-product-action-2 tp-product-action-blackStyle">
+        <div className="tp-product-action-2 tp-product-action-blackStyle" >
           <div className="tp-product-action-item-2 d-flex ">
-            {/* {isAddedToCart ? (
+            {isAddedToCart ? (
               <Link
                 href="/cart"
                 className={`tp-product-action-btn-2 ${
@@ -149,12 +149,12 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 } tp-product-add-cart-btn`}
               >
                 <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-right">
+                <span className="tp-product-tooltip tp-product-tooltip-top">
                   View Cart
                 </span>
               </Link>
             ) : (
-              <button
+              <button 
                 type="button" style={{marginRight:"5px"}}
                 onClick={() => handleAddProduct(product)}
                 className={`tp-product-action-btn-2 ${
@@ -163,13 +163,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 disabled={status === "out-of-stock"}
               >
                 <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-right">
+                <span className="tp-product-tooltip tp-product-tooltip-top">
                   Add to Cart
                 </span>
               </button>
-            )} */}
+            )}
 
-            <button
+            {/* <button
               type="button"
               style={{ marginRight: "5px" }}
               onClick={() => handleAddProduct(product)}
@@ -179,19 +179,19 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               disabled={status === "out-of-stock"}
             >
               <Cart />
-              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 Add to Cart
-              </span> */}
-            </button>
+              </span>
+            </button> */}
             <button
               style={{ marginRight: "5px" }}
               onClick={() => dispatch(handleProductModal(product))}
               className="tp-product-action-btn-2 tp-product-quick-view-btn"
             >
               <QuickView />
-              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 Quick View
-              </span> */}
+              </span>
             </button>
             <button
               style={{ marginRight: "5px" }}
@@ -203,9 +203,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
-              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 {isAddWishlist ? "View" : "Add"} To Wishlist
-              </span> */}
+              </span>
             </button>
             <button
               style={{ marginRight: "5px" }}
@@ -220,11 +220,11 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               className="tp-product-action-btn-2 tp-product-add-to-compare-btn"
             >
               <CompareThree />
-              {/* <span className="tp-product-tooltip tp-product-tooltip-right">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.id)
                   ? "View To Compare"
                   : "Add To Compare"}
-              </span> */}
+              </span>
             </button>
           </div>
         </div>

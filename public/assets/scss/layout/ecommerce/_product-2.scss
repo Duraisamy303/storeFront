@@ -101,7 +101,8 @@
             & #{$self}{
                 &-action-btn-2{
                     &.active{
-                        background-color: #c3935b; 
+                        background-color: #c3935b;
+                        margin-right: 5px; 
                     }
                     &:hover{
                         background-color: #c3935b;

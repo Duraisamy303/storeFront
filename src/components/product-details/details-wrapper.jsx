@@ -348,7 +348,6 @@ const DetailsWrapper = ({
               style={{
                 fontSize: "16px",
                 paddingBottom: "10px",
-                paddingLeft: "20px",
               }}
             >
               Pure silver jewellery has a tendency to oxidise especially when
