@@ -28,9 +28,9 @@ const CartArea = () => {
             <div className="row">
               <div className="col-xl-9 col-lg-8">
                 <div className="tp-cart-list mb-25 mr-30">
-                  <div className="cartmini__shipping">
+                  {/* <div className="cartmini__shipping">
                     <RenderCartProgress />
-                  </div>
+                  </div> */}
                   <table className="table">
                     <thead>
                       <tr>
