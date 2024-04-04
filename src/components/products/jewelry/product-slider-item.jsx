@@ -136,7 +136,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
           ></div>
         </Link>
         <div className="tp-product-action-3 tp-product-action-4 tp-product-action-blackStyle tp-product-action-brownStyle">
-          <div className="tp-product-action-item-3 d-flex flex-column">
+          <div className="tp-product-action-item-3 d-flex">
             {isAddedToCart ? (
               <Link
                 href="/cart"
@@ -145,7 +145,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 } tp-product-add-cart-btn`}
               >
                 <Cart />
-                <span className="tp-product-tooltip">View Cart</span>
+                <span className="tp-product-tooltip tp-product-tooltip-top" >View Cart</span>
               </Link>
             ) : (
               <button
@@ -156,7 +156,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 } tp-product-add-cart-btn`}
               >
                 <Cart />
-                <span className="tp-product-tooltip">Add to Cart</span>
+                <span className="tp-product-tooltip tp-product-tooltip-top">Add to Cart</span>
               </button>
             )}
             <button
@@ -165,7 +165,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               onClick={() => dispatch(handleProductModal(product.node))}
             >
               <QuickView />
-              <span className="tp-product-tooltip">Quick View</span>
+              <span className="tp-product-tooltip tp-product-tooltip-top">Quick View</span>
             </button>
             <button
               type="button"
@@ -175,7 +175,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               } tp-product-add-to-wishlist-btn`}
             >
               <Wishlist />
-              <span className="tp-product-tooltip">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 {isAddWishlist ? "View" : "Add"} To Wishlist
               </span>
             </button>
@@ -195,7 +195,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               // onClick={() => handleCompare()}
             >
               <CompareThree />
-              <span className="tp-product-tooltip ">
+              <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.node?.id)
                   ? "View To Compare"
                   : "Add To Compare"}
@@ -207,9 +207,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
           <h3 className="tp-category-title-4">
             <Link href={`/product-details/${_id}`}>{title}</Link>
           </h3>
-          <div className="tp-category-price-wrapper-4">
+          {/* <div className="tp-category-price-wrapper-4"> */}
             {/* <span className="tp-category-price-4">${price.toFixed(2)}</span> */}
-            <div className="tp-category-add-to-cart">
+            {/* <div className="tp-category-add-to-cart">
               {isAddedToCart ? (
                 <Link
                   href="/cart"
@@ -227,7 +227,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 </button>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

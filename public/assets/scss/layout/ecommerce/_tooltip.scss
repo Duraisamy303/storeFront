@@ -51,5 +51,13 @@
                 border-right: 8px solid var(--tp-common-black);
             }
         }
+
+        &-top{
+           top: -50%;
+           left: -70%;
+           &::before{
+            border: none;
+        }
+        }
     }
 }
