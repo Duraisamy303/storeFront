@@ -77,7 +77,6 @@ const UserMiniSidebar = () => {
                 </button>
               </div>
             </div>
-            <SEO pageTitle="404" />
             {!token && (
               <>
                 <div>

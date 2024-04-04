@@ -12,7 +12,7 @@ import FooterTwo from "@/layout/footers/footer-2";
 const ErrorPage = () => {
   return (
     <Wrapper>
-      <SEO pageTitle="404" />
+      {/* <SEO pageTitle="404" /> */}
       <HeaderTwo style_2={true} />
       {/* 404 area start */}
       <section className="tp-error-area pt-110 pb-110">

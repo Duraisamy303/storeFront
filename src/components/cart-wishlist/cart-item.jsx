@@ -15,6 +15,7 @@ import {
   useUpdateCartQuantity,
   useUpdateCartQuantityMutation,
 } from "@/redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const CartItem = ({
   product,
@@ -38,6 +39,8 @@ const CartItem = ({
 
   const dispatch = useDispatch();
 
+  const router=useRouter()
+
   const handleRemovePrd = () => {
     const checkoutToken = localStorage.getItem("checkoutToken");
     removeToCart({
@@ -53,9 +56,9 @@ const CartItem = ({
     <tr>
       {/* img */}
       <td className="tp-cart-img">
-        <Link href={`/product-details/${_id}`}>
+        <div onClick={()=>router.push(`/product-details/${product?.variant?.product?.id}`)}>
           <Image src={img} alt="product img" width={70} height={100} />
-        </Link>
+        </div>
       </td>
       {/* title */}
       <td className="tp-cart-title">

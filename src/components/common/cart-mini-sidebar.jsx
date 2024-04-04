@@ -15,6 +15,7 @@ import {
   useGetCartListQuery,
   useRemoveToCartMutation,
 } from "@/redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
@@ -24,10 +25,13 @@ const CartMiniSidebar = () => {
   const cartData = useSelector((state) => state.cart?.cart_list);
   const cart = cartData?.node || cartData;
 
+  const router=useRouter()
+
   const totalAmount = cart?.reduce(
     (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount * curr.quantity||
-      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount  * curr.quantity,
+      acc + curr?.variant?.pricing?.price?.gross?.amount * curr.quantity ||
+      acc +
+        curr?.node?.pricing?.priceRange?.start?.gross?.amount * curr.quantity,
     0
   );
 
@@ -80,7 +84,14 @@ const CartMiniSidebar = () => {
                 {cart?.map((item) => (
                   <div key={item._id} className="cartmini__widget-item">
                     <div className="cartmini__thumb">
-                      <Link href={`/product-details/${item._id}`}>
+                      <div
+                        onClick={() => {
+                          dispatch(closeCartMini());
+                          router.push(
+                            `/product-details/${item?.variant?.product?.id}`
+                          );
+                        }}
+                      >
                         <Image
                           src={
                             item?.variant?.product?.thumbnail?.url ||
@@ -90,7 +101,7 @@ const CartMiniSidebar = () => {
                           height={60}
                           alt="product img"
                         />
-                      </Link>
+                      </div>
                     </div>
                     <div className="cartmini__content">
                       <h5 className="cartmini__title">
@@ -119,7 +130,10 @@ const CartMiniSidebar = () => {
                               )}
                           </span>
                         )}
-                        <span className="cartmini__quantity"> x {item?.quantity}</span>
+                        <span className="cartmini__quantity">
+                          {" "}
+                          x {item?.quantity}
+                        </span>
                       </div>
                     </div>
                     <a
