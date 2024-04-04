@@ -63,7 +63,7 @@ const RelatedProducts = ({id}) => {
       >
         {products.map((item) => (
           <SwiperSlide key={item._id}>
-            <ProductItem product={item?.node} primary_style={true} />
+            <ProductItem product={item?.node} primary_style={true} data={products} />
           </SwiperSlide>
         ))}
       </Swiper>

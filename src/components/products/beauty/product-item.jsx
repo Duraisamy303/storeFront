@@ -3,14 +3,17 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
-import { Cart, QuickView, Wishlist } from "@/svg";
+import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
 import { notifySuccess } from "@/utils/toast";
+import { compare_list } from "@/redux/features/cartSlice";
+import { handleWishlistProduct } from "@/utils/common_function";
+import { useRouter } from "next/router";
 
-const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
+const ProductItem = ({ product, prdCenter = false, primary_style = false,data }) => {
   const [addToCart, {}] = useAddToCartMutation();
 
   const { id, thumbnail, name, discount, pricing, tags, status } =
@@ -21,17 +24,21 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+    const router=useRouter()
+
   const { cart_products } = useSelector((state) => state.cart);
+
+  const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id === product?.id
   );
-  // const isAddedToCart = cart_products.some((prd) => prd.id === id);
-  const isAddedToWishlist = wishlist.some((prd) => prd.id === id);
-  const dispatch = useDispatch();
 
+  // const isAddedToCart = cart_products.some((prd) => prd.id === id);
+  const isAddedToWishlist = data?.some((prd) => prd.id === id);
+  const dispatch = useDispatch();
 
   const handleAddProduct = async (data) => {
     try {
@@ -40,7 +47,6 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
         const response = await addToCartMutation({
           variantId: data?.variants[0]?.id,
         });
-       
 
         notifySuccess(`${data.name} added to cart successfully`);
       } else {
@@ -51,7 +57,6 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
     }
   };
 
-
   useEffect(() => {
     getToken();
   }, []);
@@ -61,8 +66,37 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
   };
 
   // handle wishlist product
-  const handleWishlistProduct = (prd) => {
-    dispatch(add_to_wishlist(prd));
+ 
+
+ 
+
+  const addWishlistProduct = async () => {
+    try {
+      const modify = {
+        node: product,
+      };
+      const addedWishlist = handleWishlistProduct(modify);
+      dispatch(add_to_wishlist(addedWishlist));
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleCompareProduct = (prd) => {
+    console.log("prd: ", prd);
+    const products=product || product.node
+    const compare = localStorage.getItem("compareList");
+
+    let arr = [];
+    if (!compare) {
+      arr = [];
+    } else {
+      arr = JSON.parse(compare);
+    }
+    arr.push(products);
+    console.log("compare: ", arr);
+    localStorage.setItem("compareList", JSON.stringify(arr));
+    dispatch(compare_list(arr));
   };
 
   return (
@@ -87,7 +121,6 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
           )}
         </div> */}
 
-
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (
             <span className="product-hot">
@@ -102,11 +135,6 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
         <div className="tp-product-badge-2">
           <span className="product-hot">HOT</span>
         </div>
-
-
-
-
-
 
         {/* product action */}
         <div className="tp-product-action-3 tp-product-action-blackStyle">
@@ -144,7 +172,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
 
             <button
               disabled={status === "out-of-stock"}
-              onClick={() => handleWishlistProduct(product)}
+              onClick={() => addWishlistProduct(product)}
               className={`tp-product-action-btn-3 
             ${
               isAddedToWishlist ? "active" : ""
@@ -153,8 +181,32 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
               <Wishlist />
               {/* <span className="tp-product-tooltip">Add To Wishlist</span> */}
             </button>
+            <button
+          type="button"
+          className={`tp-product-action-btn-3 ${
+            isAddedToWishlist ? "active" : ""
+          } tp-product-add-to-wishlist-btn`}
+          onClick={() => {
+            if (compareList?.some((prd) => prd?.id === product?.node?.id)) {
+              router.push("/compare");
+            } else {
+              handleCompareProduct(product);
+            }
+          }}
+          // onClick={() => handleCompare()}
+        >
+          <CompareThree />
+          <span className="tp-product-tooltip ">
+            {compareList?.some((prd) => prd?.id === product?.node?.id)
+              ? "View To Compare"
+              : "Add To Compare"}
+          </span>
+        </button>
           </div>
+
         </div>
+
+     
 
         {/* <div className="tp-product-add-cart-btn-large-wrapper">
           {isAddedToCart ? (
@@ -176,12 +228,12 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
           )}
         </div> */}
       </div>
-      <div className="tp-product-content-3" style={{textAlign:"center"}}>
+      <div className="tp-product-content-3" style={{ textAlign: "center" }}>
         {/* <div className="tp-product-tag-3"><span>{tags[1]}</span></div> */}
         <h3 className="tp-product-title-3">
           <Link href={`/product-details/${id}`}>{name}</Link>
         </h3>
-        <p style={{color:"gray", marginBottom:"0px"}}>Neckless</p>
+        <p style={{ color: "gray", marginBottom: "0px" }}>Neckless</p>
         <div className="tp-product-price-wrapper-3">
           <span className="tp-product-price-3">
             ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}

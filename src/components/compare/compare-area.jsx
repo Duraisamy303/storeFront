@@ -110,7 +110,7 @@ const CompareArea = () => {
                                 height={500}
                               />
                               <h4 className="tp-compare-product-title">
-                                <Link href={`/product-details/${item._id}`}>
+                                <Link href={`/product-details/${item?.id}`}>
                                   {item?.name}
                                 </Link>
                               </h4>

@@ -12,6 +12,7 @@ import {
 import { remove_wishlist_product } from "@/redux/features/wishlist-slice";
 import { notifyError } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const WishlistItem = ({ product }) => {
   const { _id, img, title, price } = product || {};
@@ -20,9 +21,11 @@ const WishlistItem = ({ product }) => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+    const router=useRouter()
+
   const data = product?.node;
-  const { cart_products } = useSelector((state) => state.cart);
-  const isAddToCart = cart_products.find((item) => item._id === _id);
+  const cart = useSelector((state) => state.cart.cart_list);
+  const isAddToCart = cart.some((item) => item?.variant?.product?.id === data?.id);
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
 
@@ -124,11 +127,17 @@ const WishlistItem = ({ product }) => {
 
       <td className="tp-cart-add-to-cart">
         <button
-          onClick={() => handleAddProduct(product)}
+          onClick={() => {
+            if (isAddToCart) {
+              router.push("/cart");
+            } else {
+              handleAddProduct(product);
+            }
+          }}
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          Add To Cart
+          {isAddToCart?"View":"Add"} To Cart
         </button>
       </td>
 

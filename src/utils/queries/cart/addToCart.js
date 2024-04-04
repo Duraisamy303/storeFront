@@ -8,9 +8,15 @@ export const ADDTOCART = ({ checkoutToken, variantId }) => {
         ) {
           checkout {
             id
+            email
             lines {
               id
-              quantity
+              totalPrice {
+                gross {
+                  amount
+                  currency
+                }
+              }
               variant {
                 product {
                   id
@@ -30,6 +36,14 @@ export const ADDTOCART = ({ checkoutToken, variantId }) => {
                   }
                 }
                 name
+                id
+              }
+              quantity
+            }
+            totalPrice {
+              gross {
+                amount
+                currency
               }
             }
           }
