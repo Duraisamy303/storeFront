@@ -44,39 +44,39 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage }) => {
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  GIFT CARD
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">1 Product</p>
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  NECKLACES
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">860 Products</p>
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  NEW ARRIVALS
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">1,360 Products</p>
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  PENDANTS
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">21 Products</p>
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  PRE-ORDERS
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">33 Products</p>
                   </li>
                   <li>
                   <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
+                  SALE
                     </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
+                    <p className="shop-banner-categoryList-count">41 Products</p>
                   </li>
                 </ul>
               </div>

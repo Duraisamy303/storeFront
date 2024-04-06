@@ -51,10 +51,22 @@ const DetailsWrapper = ({
   });
 
   const toggleVisibility = (section) => {
-    setVisibility((prevState) => ({
-      ...prevState,
-      [section]: !prevState[section],
-    }));
+    setVisibility((prevState) => {
+      // If the clicked section is currently active, toggle it off
+      if (prevState[section]) {
+        return {
+          ...prevState,
+          [section]: false,
+        };
+      }
+
+      // If the clicked section is not active, toggle it on and toggle off all other sections
+      const updatedVisibility = {};
+      for (const key in prevState) {
+        updatedVisibility[key] = key === section;
+      }
+      return updatedVisibility;
+    });
   };
 
   const { data: tokens } = useGetCartListQuery();
@@ -278,8 +290,41 @@ const DetailsWrapper = ({
         </div>
       )}
 
+      <p style={{ color: "gray" }}>
+        Note : The stones we use are either natural or glass stones, the
+        imperfections found on them are natural and inevitable. These
+        imperfections add characteristics to the stones making it distinct and
+        unique.
+      </p>
+
+      <p style={{ color: "black" }}>1 in stock</p>
+
+      <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
+        <div className="tp-product-details-add-to-cart mb-15">
+          <button
+            onClick={() => {
+              if (isAddedToCart) {
+                dispatch(handleModalClose());
+                router.push("/cart");
+              } else {
+                handleAddProduct(productItem);
+              }
+            }}
+            disabled={status === "out-of-stock"}
+            className="tp-btn tp-btn-border"
+          >
+            {isAddedToCart ? "View Cart" : "Add To Cart"}
+          </button>
+        </div>
+      </div>
+
       {/* product-details-action-sm start */}
-      <div className="tp-product-details-action-sm">
+      <div
+        className="tp-product-details-action-sm"
+        style={{
+          paddingTop: "20px",
+        }}
+      >
         <button
           disabled={status === "out-of-stock"}
           onClick={() => {
@@ -296,8 +341,8 @@ const DetailsWrapper = ({
         >
           <CompareTwo />
           {compareList?.some((prd) => prd?.id === productItem?.id)
-            ? "View compare"
-            : "Add compare"}
+            ? " View Compare"
+            : " Add  Compare"}
         </button>
         <button
           disabled={status === "out-of-stock"}
@@ -307,7 +352,7 @@ const DetailsWrapper = ({
           className="tp-product-details-action-sm-btn"
         >
           <WishlistTwo />
-          {isAddWishlist ? "View" : "Add"} To Wishlist
+          {isAddWishlist ? " View" : " Add"} To Wishlist
         </button>
         {/* <button type="button" className="tp-product-details-action-sm-btn">
           <AskQuestion />
@@ -395,6 +440,7 @@ const DetailsWrapper = ({
               display: "flex",
               justifyContent: "space-between",
               listStyleType: "none",
+              paddingTop: "20px",
             }}
           >
             <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
