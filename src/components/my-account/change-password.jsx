@@ -41,22 +41,17 @@ const ChangePassword = () => {
 
   // on submit
   const onSubmit = (data) => {
-    const token = localStorage.getItem("token");
-    console.log("token: ", token);
     changePassword({
       old_password: data.password,
-      // email: user?.email,
-      // password: data.password,
       new_password: data.newPassword,
-      // googleSignIn: user?.googleSignIn,
     }).then((result) => {
-      if (result?.error) {
-        notifyError(result?.error?.data?.message);
+      if (result?.data?.errors?.length>0) {
+        notifyError(result?.data?.errors[0]?.message);
       } else {
         notifySuccess(result?.data?.message);
       }
     });
-    // reset();
+    reset();
   };
   return (
     <div className="profile__password">

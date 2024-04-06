@@ -17,38 +17,27 @@ if (typeof window !== "undefined") {
   ReactModal.setAppElement("body");
 }
 
-// stripePromise
-// const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
-
 const httpLink = createHttpLink({
   uri: 'http://file.prade.in/graphql/',
 });
 
 const authLink = setContext((_, { headers }) => {
-  // Get the authentication token from local storage if it exists
   const token = localStorage.getItem('token');
-  console.log("Token:", token); // Log the token
-  // Return the headers to the context so httpLink can read them
+
   return {
     headers: {
       ...headers,
-      Authorization: token ? `JWT ${token}` : '',
-    }
+      Authorization: token ? `JWT ${token}` : '', 
+    },
   };
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  link: authLink.concat(httpLink), 
+  cache: new InMemoryCache(),
 });
 
 export default function App({ Component, pageProps }) {
-
-  // const httpLink = createHttpLink({
-  //   uri: "http://file.prade.in/graphql/",
-  // });
-
- 
 
   return (
     <ApolloProvider client={client}>

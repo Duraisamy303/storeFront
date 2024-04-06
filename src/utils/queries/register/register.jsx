@@ -22,3 +22,39 @@ export const REGISTER = ({ firstName, lastName, email, password }) => {
     variables: { firstName, lastName, email, password },
   };
 };
+
+export const GET_ORDER_LIST_BY_EMAIL = ({ email }) => {
+  return {
+    query: `
+    query orders($email: String!) {
+      orders(filter: { customer: $email }, first: 10) {
+        totalCount
+        edges {
+          node {
+            id
+            created
+            status
+            total {
+              gross {
+                amount
+              }
+            }
+            lines {
+              id
+              productName
+              quantity
+              totalPrice {
+                gross {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { email },
+  };
+};
+

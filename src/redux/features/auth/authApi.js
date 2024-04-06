@@ -4,7 +4,10 @@ import Cookies from "js-cookie";
 import { PRODUCT_LIST } from "@/utils/queries/productList";
 import { configuration } from "@/utils/constant";
 import { CHANGE_PASSWORD, LOGIN } from "@/utils/queries/login/login";
-import { REGISTER } from "@/utils/queries/register/register";
+import {
+  GET_ORDER_LIST_BY_EMAIL,
+  REGISTER,
+} from "@/utils/queries/register/register";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -168,20 +171,19 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // change password
     changePassword: builder.mutation({
-      query: ({  old_password, new_password }) =>{
-        console.log(" old_password, new_password: ",  old_password, new_password);
-        return configuration(CHANGE_PASSWORD({  old_password, new_password }))
-
-      }
+      query: ({ old_password, new_password }) => {
+        return configuration(CHANGE_PASSWORD({ old_password, new_password }));
+      },
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
+        } catch (err) {
+          // do nothing
+        }
+      },
     }),
-    async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-      try {
-        const result = await queryFulfilled;
-        console.log("result: ", result);
-      } catch (err) {
-        // do nothing
-      }
-    },
+
     // updateProfile password
     updateProfile: builder.mutation({
       query: ({ id, ...data }) => ({
@@ -214,6 +216,25 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    getOrderList: builder.query({
+      query: () => {
+        const user = localStorage.getItem("userInfo");
+
+        const email=JSON.parse(user).user.email
+        console.log("email: ", email);
+        return configuration(GET_ORDER_LIST_BY_EMAIL({email}));
+      },
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
+        } catch (err) {
+          // do nothing
+        }
+      },
+      providesTags: ["UserOrders"],
+    }),
   }),
 });
 
@@ -226,4 +247,5 @@ export const {
   useChangePasswordMutation,
   useUpdateProfileMutation,
   useSignUpProviderMutation,
+  useGetOrderListQuery,
 } = authApi;

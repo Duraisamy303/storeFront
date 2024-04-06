@@ -15,8 +15,8 @@ const WishlistArea = () => {
               {/* <Wishlist style={{ width: "200px !important", height: "200px !important", opacity:"0.1", color:"#dedede" }} /> */}
               <h3 style={{ paddingBottom: "15px" }}>This wishlist is empty.</h3>
               <p style={{ color: "gray" }}>
-                You don't have any products in the wishlist yet.
-                <br /> You will find a lot of interesting products on our "Shop"
+                You dont have any products in the wishlist yet.
+                <br /> You will find a lot of interesting products on our Shop
                 page.
               </p>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">

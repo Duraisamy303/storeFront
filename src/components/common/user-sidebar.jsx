@@ -96,24 +96,27 @@ const UserMiniSidebar = () => {
                   </button>
                 </div>
 
-                <div>
-                  <button
-                    onClick={() => {
-                      dispatch(closeUserSidebar());
-                      router.push("/profile");
-                    }}
-                  >
-                    <div>Profile</div>
-                  </button>
-                </div>
+               
               </>
             )}
             {token && (
+              <>
+               <div>
+               <button
+                 onClick={() => {
+                   dispatch(closeUserSidebar());
+                   router.push("/profile");
+                 }}
+               >
+                 <div>Profile</div>
+               </button>
+             </div>
               <div>
                 <button onClick={() => closeCart()}>
                   <div>Logout</div>
                 </button>
               </div>
+              </>
             )}
           </div>
         </div>

@@ -22,7 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { cart_list, checkout_token } from "@/redux/features/cartSlice";
 
-const index = () => {
+const Index = () => {
   // const dispatch = useDispatch();
 
   const { data: tokens } = useGetCartListQuery();
@@ -64,4 +64,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
