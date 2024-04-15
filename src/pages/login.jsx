@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 
 const LoginPage = () => {
   const cartData = useSelector((state) => state);
-  console.log("cartData: ", cartData);
 
   return (
     <Wrapper>

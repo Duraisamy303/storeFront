@@ -15,10 +15,10 @@ const authSlice = createSlice({
       state.refreshToken = payload.refreshToken;
     },
     userLoggedOut: (state) => {
-      localStorage.clear()
+      // localStorage.clear()
       state=initialState
       Cookies.remove('userInfo');
-      localStorage.clear();
+      // localStorage.clear();
 
     },
   },

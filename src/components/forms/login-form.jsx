@@ -10,6 +10,10 @@ import ErrorMsg from "../common/error-msg";
 import { useLoginUserMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useCheckoutTokenMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddWishlistMutation,
+  useWishlistMutation,
+} from "@/redux/features/productApi";
 
 // schema
 const schema = Yup.object().shape({
@@ -20,6 +24,8 @@ const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
 
   const [loginUser, {}] = useLoginUserMutation();
+
+  const [addWishlist, {}] = useAddWishlistMutation();
 
   const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
 
@@ -41,18 +47,49 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     }).then((data) => {
+      let whishlist = localStorage.getItem("whishlist");
+
       if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
         notifySuccess("Login successfully");
+        console.log("data?.data?.data: ", data?.data?.data);
+
+        if (!whishlist) {
+          whishlist = [];
+        } else {
+          whishlist = JSON.parse(whishlist);
+          console.log("wishlist: ", whishlist);
+          if (whishlist?.length > 0) {
+            whishlist.map((item) =>
+              wishlistData(data?.data?.data?.tokenCreate, item.node)
+            );
+          }
+        }
         getCheckoutToken(data?.data?.data?.tokenCreate?.user?.email);
+
         router.push(redirect || "/");
       }
     });
     reset();
   };
 
+  const wishlistData = async (user, data) => {
+    console.log("user,data: ", user, data);
+    try {
+      const input = {
+        input: {
+          user: user.user.id,
+          variant: data.id,
+        },
+      };
+      const res = await addWishlist(input);
 
+      console.log("res: ", res);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const getCheckoutToken = async (email) => {
     try {
@@ -107,11 +144,7 @@ const LoginForm = () => {
       </div>
       <div className="tp-login-suggetions d-sm-flex align-items-center justify-content-between mb-20">
         <div className="tp-login-remeber">
-          <input
-            id="remeber"
-            type="checkbox"
-           
-          />
+          <input id="remeber" type="checkbox" />
           <label htmlFor="remeber">Remember me</label>
         </div>
         <div className="tp-login-forgot">

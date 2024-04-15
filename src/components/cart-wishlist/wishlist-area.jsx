@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import WishlistItem from "./wishlist-item";
 import { Wishlist } from "@/svg";
+import {
+  useGetProductByIdQuery,
+  useGetWishlistQuery,
+} from "@/redux/features/productApi";
+import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 
 const WishlistArea = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
+
+  const dispatch = useDispatch();
+
+  const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
+  console.log("wishlistData: ", wishlistData);
+
+    const { data: getData } = useGetProductByIdQuery(wishlist);
+    
+    console.log("getData: ", getData);
+  useEffect(() => {
+    if (wishlistData) {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const modify = wishlistData?.data?.wishlists.edges;
+        dispatch(get_wishlist_products(modify));
+      } else {
+        dispatch(get_wishlist_products([]));
+      }
+    } else {
+      dispatch(get_wishlist_products([]));
+    }
+  }, [wishlistData]);
+
   return (
     <>
       <section className="tp-cart-area pb-50">
@@ -24,7 +51,7 @@ const WishlistArea = () => {
               </Link>
             </div>
           )}
-          {wishlist.length > 0 && (
+          {wishlist?.length > 0 && (
             <div className="row">
               <div className="col-xl-12">
                 <div className="tp-cart-list mb-45 mr-30">
@@ -43,8 +70,8 @@ const WishlistArea = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {wishlist.map((item, i) => (
-                        <WishlistItem key={i} product={item} />
+                      {wishlist?.map((item, i) => (
+                        <WishlistItem key={i} product={item?.node} />
                       ))}
                     </tbody>
                   </table>

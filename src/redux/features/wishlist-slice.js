@@ -18,11 +18,7 @@ export const wishlistSlice = createSlice({
       state.wishlist = payload;
     },
     get_wishlist_products: (state, { payload }) => {
-      let whishlist = localStorage.getItem("whishlist");
-      if (!whishlist) {
-      } else {
-        state.wishlist = getLocalStorage("whishlist");
-      }
+      state.wishlist = payload;
     },
   },
 });

@@ -19,11 +19,17 @@ import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import LoginForm from "@/components/forms/login-form";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import {
+  useAddWishlistMutation,
+  useWishlistMutation,
+} from "@/redux/features/productApi";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
   const { _id, title, price, status } = product || {};
 
   const router = useRouter();
+
+  const [addWishlist, {}] = useAddWishlistMutation();
 
   const [isAddWishlist, setWishlist] = useState(false);
   const [isCartlist, setCartList] = useState(false);
@@ -37,7 +43,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id == product?.node?.id
   );
-
 
   const dispatch = useDispatch();
 
@@ -98,9 +103,28 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   };
 
   const addWishlistProduct = async (prd) => {
+    console.log("prd: ", prd);
     try {
-      const addedWishlist = handleWishlistProduct(prd);
-      dispatch(add_to_wishlist(addedWishlist));
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("userInfo");
+
+      if (token) {
+        const users = JSON.parse(user);
+        console.log("users: ", users);
+        const input = {
+          input: {
+            user: users.user.id,
+            variant: prd.node.id,
+          },
+        };
+        console.log("input: ", input);
+
+        const res = await addWishlist(input);
+        console.log("res: ", res);
+      } else {
+        const addedWishlist = handleWishlistProduct(prd);
+        dispatch(add_to_wishlist(addedWishlist));
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -145,7 +169,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 } tp-product-add-cart-btn`}
               >
                 <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top" >View Cart</span>
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  View Cart
+                </span>
               </Link>
             ) : (
               <button
@@ -156,7 +182,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 } tp-product-add-cart-btn`}
               >
                 <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">Add to Cart</span>
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  Add to Cart
+                </span>
               </button>
             )}
             <button
@@ -165,7 +193,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               onClick={() => dispatch(handleProductModal(product.node))}
             >
               <QuickView />
-              <span className="tp-product-tooltip tp-product-tooltip-top">Quick View</span>
+              <span className="tp-product-tooltip tp-product-tooltip-top">
+                Quick View
+              </span>
             </button>
             <button
               type="button"
@@ -208,8 +238,8 @@ const ProductSliderItem = ({ product, loginPopup }) => {
             <Link href={`/product-details/${_id}`}>{title}</Link>
           </h3>
           {/* <div className="tp-category-price-wrapper-4"> */}
-            {/* <span className="tp-category-price-4">${price.toFixed(2)}</span> */}
-            {/* <div className="tp-category-add-to-cart">
+          {/* <span className="tp-category-price-4">${price.toFixed(2)}</span> */}
+          {/* <div className="tp-category-add-to-cart">
               {isAddedToCart ? (
                 <Link
                   href="/cart"
