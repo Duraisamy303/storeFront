@@ -16,8 +16,12 @@ import {
 } from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
+import { useGetWishlistQuery } from "@/redux/features/productApi";
 
 const CompareArea = () => {
+
+  const { data: wishlistData } = useGetWishlistQuery();
+
   const { compareItems } = useSelector((state) => state.compare);
 
   const { data: tokens } = useGetCartListQuery();

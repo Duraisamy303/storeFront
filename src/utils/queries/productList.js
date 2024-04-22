@@ -76,13 +76,31 @@ export const WISHLIST_LIST = ({ userEmail }) => {
   return JSON.stringify({
     query: `
     query GetWishListQuery($userEmail: String!) {
-      wishlists(first: 100, filter: { user: $userEmail }) {
+      wishlists(first: 100, filter: {user: $userEmail}) {
         edges {
           node {
             variant
             user {
               firstName
               email
+            }
+            product {
+              id
+              name
+              slug
+              media {
+                alt
+                url
+              }
+              category {
+                id
+                name
+              }
+              indiaChannelPricing
+              defaultVariant {
+                id
+                name
+              }
             }
           }
         }
@@ -130,5 +148,154 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
     }
     `,
     variables: { ids, channel },
+  });
+};
+
+export const CATEGORY_LIST = ({ channel, first }) => {
+  return JSON.stringify({
+    query: `
+    query CategoryList($first: Int!,$after: String, $channel: String!) {
+      categories(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            description
+            products(channel: $channel) {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { channel, first },
+  });
+};
+
+export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
+  return JSON.stringify({
+    query: `
+    query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+      products(filter: $filter, channel: $channel, first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            slug
+            pricing {
+              priceRange {
+                start {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+                stop {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+            }
+            category {
+              id
+              name
+              description
+            }
+            thumbnail(size: 1024, format: WEBP) {
+              url
+              alt
+            }
+            created
+            images {
+              url
+            }
+            variants {
+              id
+            }
+            description
+          }
+        }
+      }
+    }
+    `,
+    variables: { channel, first, after, filter },
+  });
+};
+
+export const FINISH_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query GetProductFinished {
+      productFinishes(first: 100) {
+        edges {
+          node {
+            name
+            slug
+            id
+          }
+        }
+        totalCount
+      }
+    }
+    `,
+  });
+};
+
+export const STONE_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query MyQuery {
+      productStoneTypes(first: 100) {
+          edges {
+              node {
+                  id
+                  name
+                  slug
+              }
+          }
+      }
+  }
+    `,
+  });
+};
+
+export const STYLE_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query GetProductStyles {
+      productStyles(first: 100) {
+          edges {
+              node {
+                  id
+                  name
+                  slug
+              }
+          }
+          totalCount
+      }
+  }
+    `,
+  });
+};
+
+export const DESIGN_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query MyQuery {
+      productDesigns(first: 100) {
+          totalCount
+          edges {
+              node {
+                  id
+                  name
+                  slug
+              }
+          }
+      }
+  }
+    `,
   });
 };

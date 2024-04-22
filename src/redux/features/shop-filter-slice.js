@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   filterSidebar: false,
+  filterData:[]
 };
 
 export const shopFilterSlice = createSlice({
@@ -9,13 +10,17 @@ export const shopFilterSlice = createSlice({
   initialState,
   reducers: {
     handleFilterSidebarOpen: (state, { payload }) => {
-      state.filterSidebar = true
+      state.filterSidebar = true;
     },
     handleFilterSidebarClose: (state, { payload }) => {
-      state.filterSidebar = false
+      state.filterSidebar = false;
+    },
+    filterData: (state, { payload }) => {
+      state.filterData = payload;
     },
   },
 });
 
-export const { handleFilterSidebarOpen,handleFilterSidebarClose } = shopFilterSlice.actions;
+export const { handleFilterSidebarOpen, handleFilterSidebarClose,filterData } =
+  shopFilterSlice.actions;
 export default shopFilterSlice.reducer;

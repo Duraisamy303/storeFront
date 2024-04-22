@@ -4,7 +4,11 @@ import Wrapper from "@/layout/wrapper";
 import HeaderTwo from "@/layout/headers/header-2";
 import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
-import { useGetAllProductsQuery } from "@/redux/features/productApi";
+import {
+  useGetAllProductsQuery,
+  useGetCategoryListQuery,
+  usePriceFilterMutation,
+} from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
 import ShopLoader from "@/components/loader/shop/shop-loader";
@@ -14,44 +18,103 @@ import { shortData } from "@/utils/functions";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { cart_list } from "@/redux/features/cartSlice";
+import {
+  filterData,
+  handleFilterSidebarClose,
+} from "@/redux/features/shop-filter-slice";
+import { get_wishlist_products } from "@/redux/features/wishlist-slice";
+import { useGetWishlistQuery } from "@/redux/features/productApi";
 
-const ShopPage = ({ query }) => {
+const ShopPage = () => {
   const {
     data: productsData,
     isError,
     isLoading,
-  } = useGetAllProductsQuery({ channel: "india-channel", first: 20 });
+  } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
 
-  const  { data: data } = useGetCartListQuery();
+  const filter = useSelector((state) => state.shopFilter.filterData);
 
+  const { data: wishlistData } = useGetWishlistQuery();
 
+  useEffect(() => {
+    if (wishlistData) {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const modify = wishlistData?.data?.wishlists.edges;
+        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
+      } else {
+        dispatch(get_wishlist_products([]));
+      }
+    } else {
+      dispatch(get_wishlist_products([]));
+    }
+  }, [wishlistData]);
+
+  const dispatch = useDispatch();
+
+  const { data: data } = useGetCartListQuery();
+  const { data: categoryData } = useGetCategoryListQuery();
+
+  const [priceFilter, {}] = usePriceFilterMutation();
 
   const [cartUpdate, setCartUpdate] = useState(false);
 
-  const products = productsData?.data?.products?.edges;
+  let products = productsData?.data?.products?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
+
   const [selectValue, setSelectValue] = useState("");
+  const [categoryList, setCategoryList] = useState("");
+  const [productList, setProductList] = useState("");
+  const [filterList, setFilterList] = useState([]);
+
   const [currPage, setCurrPage] = useState(1);
-  let productItems = products;
 
   useEffect(() => {
     if (!isLoading && !isError && products?.length > 0) {
-      const maxPrice = products.reduce((max, product) => {
-        return product.price > max ? product.price : max;
+      const maxPrice = products?.reduce((max, item) => {
+        const price =
+          item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
+        return price > max ? price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
     }
   }, [isLoading, isError, products]);
 
+  useEffect(() => {
+    productLists();
+  }, [productsData]);
 
- 
+  const productLists = () => {
+    if (
+      productsData &&
+      productsData?.data &&
+      productsData?.data?.products &&
+      productsData?.data?.products?.edges?.length > 0
+    ) {
+      const list = productsData?.data?.products?.edges;
+      setProductList(list);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      categoryData &&
+      categoryData?.data &&
+      categoryData?.data?.categories &&
+      categoryData?.data?.categories?.edges
+    ) {
+      const catList = categoryData?.data?.categories?.edges;
+      setCategoryList(catList);
+    }
+  }, [categoryData]);
+
   const handleChanges = (val) => {
     setCurrPage(1);
     setPriceValue(val);
   };
 
   const selectHandleFilter = (e) => {
+    console.log("e: ", e);
     setSelectValue(e.value);
   };
 
@@ -65,10 +128,20 @@ const ShopPage = ({ query }) => {
     setCurrPage,
   };
 
-  if (selectValue) {
-    const shortDatas = shortData(selectValue, products);
-    productItems = shortDatas;
-  }
+  useEffect(() => {
+    if (selectValue !== "") {
+      sortingFilter();
+    }
+  }, [selectValue]);
+
+  useEffect(() => {
+    filters();
+  }, [filter]);
+
+  const sortingFilter = () => {
+    const shortDatas = shortData(selectValue, productList);
+    setProductList(shortDatas);
+  };
 
   let content = null;
 
@@ -82,19 +155,84 @@ const ShopPage = ({ query }) => {
     // Render product items...
   }
 
+  const filters = () => {
+    const datas = {};
+    if (filter?.length > 0) {
+      filter.forEach((item) => {
+        if (item.type === "finish") {
+          datas.finish = item.id;
+        } else if (item.type === "style") {
+          datas.style = item.id;
+        } else if (item.type === "design") {
+          datas.design = item.id;
+        } else if (item.type === "stone") {
+          datas.stone = item.id;
+        }
+      });
+
+      priceFilter({
+        filter: datas,
+      }).then((res) => {
+        const list = res?.data?.data?.products?.edges;
+        setProductList(list);
+        dispatch(handleFilterSidebarClose());
+      });
+    } else {
+      productLists();
+    }
+  };
+
+  const filterByPrice = (data, type) => {
+    const bodyData = {
+      price: { gte: priceValue[0], lte: priceValue[1] },
+    };
+    priceFilter({
+      filter: bodyData,
+    }).then((res) => {
+      const list = res?.data?.data?.products?.edges;
+      setProductList(list);
+      const body = {
+        type: "price",
+        min: priceValue[0],
+        max: priceValue[1],
+      };
+
+      const listd = [...filter, body];
+      dispatch(filterData(listd));
+      setPriceValue([priceValue[0],priceValue[1]])
+      console.log("[priceValue[0],priceValue[1]]: ", [priceValue[0],priceValue[1]]);
+
+
+      setFilterList([...filterList, body]);
+      dispatch(handleFilterSidebarClose());
+    });
+  };
+
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
-      <ShopBreadcrumb title="Shop" subtitle="Shop" bgImage={shopBanner} />
+      <ShopBreadcrumb
+        title="Shop"
+        subtitle="Shop"
+        bgImage={shopBanner}
+        catList={categoryList}
+      />
       <ShopArea
-        all_products={products}
-        products={productItems}
+        all_products={productList}
+        products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
         subtitle="Shop"
+        updateRange={(range)=>setPriceValue(range)}
       />
-      {content}
+      <ShopFilterOffCanvas
+        all_products={products}
+        otherProps={otherProps}
+        filterByPrice={() => filterByPrice()}
+        finishFilterData={(data, type) => filterByPrice(data, type)}
+      
+      />
       <FooterTwo primary_style={true} />
     </Wrapper>
   );

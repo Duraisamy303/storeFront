@@ -11,6 +11,8 @@ import {
 import { notifyError, notifySuccess } from "@/utils/toast";
 import useRazorpay from "react-razorpay";
 import { useRouter } from "next/router";
+import NiceSelect from "@/ui/nice-select";
+import HeaderSearchForm from "../forms/header-search-form";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -66,7 +68,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const router = useRouter();
 
   const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
+    (acc, curr) =>
+      acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
     0
   );
 
@@ -356,6 +359,28 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 </div>
                 <div className="col-md-12">
                   <div className="tp-checkout-input">
+                  <label>
+                      Country <span>*</span>
+                    </label>
+                    <select
+                      name="address"
+                      id="address"
+                      value={state.streetAddress1}
+                      onChange={(e) => handleInputChange(e, "streetAddress1")}
+                    >
+                      <option value="">Select an address</option>
+                      <option value="address1">Address 1</option>
+                      <option value="address2">Address 2</option>
+                      {/* Add more options as needed */}
+                    </select>
+                    {state.errors.streetAddress1 && (
+                      <ErrorMsg msg={state.errors.streetAddress1} />
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-md-12">
+                  <div className="tp-checkout-input">
                     <label>Street address</label>
                     <input
                       name="address"
@@ -522,6 +547,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       )}
                     </div>
                   </div>
+
                   <div className="col-md-12">
                     <div className="tp-checkout-input">
                       <label>Street address</label>
@@ -630,11 +656,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
               {cart?.map((item) => (
                 <li key={item._id} className="tp-order-info-list-desc">
                   <p className="para">
-                    {item?.variant?.product?.name} <span> x {item?.quantity}</span>
+                    {item?.variant?.product?.name}{" "}
+                    <span> x {item?.quantity}</span>
                   </p>
                   <span>
                     &#8377;
-                    {item?.variant?.pricing?.price?.gross?.amount.toFixed(2) * item?.quantity}
+                    {item?.variant?.pricing?.price?.gross?.amount.toFixed(2) *
+                      item?.quantity}
                   </span>
                 </li>
               ))}
@@ -823,9 +851,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
       </div> */}
 
           <div>
-            <p style={{color:"black", paddingTop:"20px"}}>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <b>privacy policy</b>.</p>
+            <p style={{ color: "black", paddingTop: "20px" }}>
+              Your personal data will be used to process your order, support
+              your experience throughout this website, and for other purposes
+              described in our <b>privacy policy</b>.
+            </p>
           </div>
-
 
           <div className="tp-checkout-btn-wrapper pt-20">
             <button

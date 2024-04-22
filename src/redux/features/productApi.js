@@ -3,9 +3,13 @@ import { apiSlice } from "../api/apiSlice";
 import { configuration } from "@/utils/constant";
 import {
   ADD_WISHLIST,
+  CATEGORY_LIST,
+  FINISH_LIST,
   GET_PRODUCTLIST_BY_ID,
   ORDER_LIST,
+  PRODUCT_FILTER,
   PRODUCT_LIST,
+  STYLE_LIST,
   WISHLIST_LIST,
 } from "@/utils/queries/productList";
 import {
@@ -13,6 +17,7 @@ import {
   SINGLE_PRODUCT,
 } from "@/utils/queries/singleProduct/productDetailsByID";
 import { useSelector } from "react-redux";
+import { DESIGN_LIST, STONE_LIST } from "../../utils/queries/productList";
 
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -20,12 +25,20 @@ export const productApi = apiSlice.injectEndpoints({
     getAllProducts: builder.query({
       query: ({ channel, first }) =>
         configuration(PRODUCT_LIST({ channel, first })),
-      // query: () => `/api/product/all`,
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          console.log("result: ", result);
+        } catch (err) {
+          // do nothing
+        }
+      },
       providesTags: ["Products"],
     }),
     getProductType: builder.query({
       query: ({ channel, first }) =>
         configuration(PRODUCT_LIST({ channel, first })),
+
       providesTags: ["ProductType"],
     }),
 
@@ -45,7 +58,6 @@ export const productApi = apiSlice.injectEndpoints({
     getProduct: builder.query({
       query: ({ productId }) => configuration(SINGLE_PRODUCT({ productId })),
 
-      // query: (id) => `/api/product/single-product/${id}`,
       providesTags: (result, error, arg) => [{ type: "Product", id: arg }],
       invalidatesTags: (result, error, arg) => [
         { type: "RelatedProducts", id: arg },
@@ -63,7 +75,6 @@ export const productApi = apiSlice.injectEndpoints({
         const orderid = localStorage.getItem("orderId");
         return configuration(ORDER_LIST({ orderid }));
       },
-      // query: () => `/api/product/all`,
       providesTags: ["Products"],
     }),
 
@@ -83,6 +94,7 @@ export const productApi = apiSlice.injectEndpoints({
     getWishlist: builder.query({
       query: () => {
         const user = localStorage.getItem("userInfo");
+        console.log("user: ", user);
         let userEmail = "";
         if (user) {
           const users = JSON.parse(user);
@@ -90,24 +102,69 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(WISHLIST_LIST({ userEmail }));
       },
-      // query: () => `/api/product/all`,
       providesTags: ["Products"],
     }),
 
     getProductById: builder.query({
       query: (data) => {
-  // const { wishlist } = useSelector((state) => state.wishlist);
-  // console.log("wishlist: ", wishlist);
-
-        console.log("data: ", data);
         const ids = data?.map((item) => item.node.variant);
-        console.log("ids: ", ids);
         return configuration(
           GET_PRODUCTLIST_BY_ID({ ids, channel: "india-channel", first: 100 })
         );
       },
-      // query: () => `/api/product/all`,
       providesTags: ["Products"],
+    }),
+
+    getCategoryList: builder.query({
+      query: (data) => {
+        return configuration(
+          CATEGORY_LIST({ channel: "india-channel", first: 100 })
+        );
+      },
+      providesTags: ["Products"],
+    }),
+
+    getFinishList: builder.query({
+      query: (data) => {
+        return configuration(FINISH_LIST());
+      },
+      providesTags: ["Products"],
+    }),
+
+    getStyleList: builder.query({
+      query: (data) => {
+        return configuration(STYLE_LIST());
+      },
+      providesTags: ["Products"],
+    }),
+
+    getDesignList: builder.query({
+      query: (data) => {
+        return configuration(DESIGN_LIST());
+      },
+      providesTags: ["Products"],
+    }),
+
+    getStoneList: builder.query({
+      query: (data) => {
+        return configuration(STONE_LIST());
+      },
+      providesTags: ["Products"],
+    }),
+
+    //filters
+    priceFilter: builder.mutation({
+      query: ({ filter }) => {
+        return configuration(
+          PRODUCT_FILTER({
+            channel: "india-channel",
+            first: 100,
+            after: null,
+            filter,
+          })
+        );
+      },
+     
     }),
   }),
 });
@@ -124,4 +181,14 @@ export const {
   useAddWishlistMutation,
   useGetWishlistQuery,
   useGetProductByIdQuery,
+  useGetCategoryListQuery,
+  //filter
+  usePriceFilterMutation,
+  useGetFinishListQuery,
+  useGetStyleListQuery,
+  useGetDesignListQuery,
+  useGetStoneListQuery,
+
+
+
 } = productApi;

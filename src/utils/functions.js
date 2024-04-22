@@ -11,7 +11,7 @@ export const useSetState = (initialState) => {
   const [state, setState] = useState(initialState);
 
   const newSetState = (newState) => {
-    setState((prevState) => ({...prevState, ...newState}));
+    setState((prevState) => ({ ...prevState, ...newState }));
   };
   return [state, newSetState];
 };
@@ -29,14 +29,18 @@ export const shortData = (selectValue, products) => {
 
   if (selectValue === "Low to High") {
     product_items.sort((a, b) => {
-      const priceA = Number(a?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
-      const priceB = Number(b?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
+      const priceA =
+        Number(a?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
+      const priceB =
+        Number(b?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
       return priceA - priceB;
     });
   } else if (selectValue === "High to Low") {
     product_items.sort((a, b) => {
-      const priceA = Number(a?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
-      const priceB = Number(b?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
+      const priceA =
+        Number(a?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
+      const priceB =
+        Number(b?.node?.pricing?.priceRange?.start?.gross?.amount) || 0;
       return priceB - priceA;
     });
   } else if (selectValue === "New Added") {
@@ -47,8 +51,7 @@ export const shortData = (selectValue, products) => {
     });
   } else if (selectValue === "On Sale") {
     product_items = products.filter((p) => p.node.pricing.discount > 0);
-  }
+  } 
 
   return product_items;
 };
-

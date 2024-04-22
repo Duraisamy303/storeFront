@@ -11,20 +11,18 @@ import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 
 const WishlistArea = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
+  console.log("wishlist: ", wishlist);
 
   const dispatch = useDispatch();
 
   const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
   console.log("wishlistData: ", wishlistData);
 
-    const { data: getData } = useGetProductByIdQuery(wishlist);
-    
-    console.log("getData: ", getData);
   useEffect(() => {
     if (wishlistData) {
       if (wishlistData?.data?.wishlists?.edges?.length > 0) {
         const modify = wishlistData?.data?.wishlists.edges;
-        dispatch(get_wishlist_products(modify));
+        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
       } else {
         dispatch(get_wishlist_products([]));
       }
@@ -71,7 +69,7 @@ const WishlistArea = () => {
                     </thead>
                     <tbody>
                       {wishlist?.map((item, i) => (
-                        <WishlistItem key={i} product={item?.node} />
+                        <WishlistItem key={i} product={item} />
                       ))}
                     </tbody>
                   </table>

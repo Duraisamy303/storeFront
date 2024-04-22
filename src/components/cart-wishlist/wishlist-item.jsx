@@ -10,9 +10,10 @@ import {
   quantityDecrement,
 } from "@/redux/features/cartSlice";
 import { remove_wishlist_product } from "@/redux/features/wishlist-slice";
-import { notifyError } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
+import { notifyError, notifySuccess } from "@/utils/toast";
+
 
 const WishlistItem = ({ product }) => {
   const { _id, img, title, price } = product || {};
@@ -21,11 +22,13 @@ const WishlistItem = ({ product }) => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
-    const router=useRouter()
+  const router = useRouter();
 
-  const data = product?.node;
+  const data = product?.product;
   const cart = useSelector((state) => state.cart.cart_list);
-  const isAddToCart = cart.some((item) => item?.variant?.product?.id === data?.id);
+  const isAddToCart = cart?.some(
+    (item) => item?.variant?.product?.id === data?.id
+  );
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
 
@@ -37,14 +40,16 @@ const WishlistItem = ({ product }) => {
 
       if (token) {
         const checkoutToken = localStorage.getItem("checkoutToken");
+        console.log("data: ", data);
 
         if (checkoutToken) {
           const response = await addToCart({
-            variantId: data?.node?.variants[0]?.id,
+            variantId: data?.product.defaultVariant?.id,
           });
+          console.log("response: ", response);
 
-          notifySuccess(`${data.name} added to cart successfully`);
-          updateData();
+          // notifySuccess(`${data.name} added to cart successfully`);
+          // updateData();
         } else {
           router.push("/login");
         }
@@ -73,17 +78,20 @@ const WishlistItem = ({ product }) => {
 
   // handle remove product
   const handleRemovePrd = () => {
-    const filter = wishlist?.filter((item) => item.node.id !== data.id);
-    localStorage.setItem("whishlist", JSON.stringify(filter));
-    dispatch(remove_wishlist_product(filter));
-    notifyError(`${data.name} removed from wishlist`);
+    console.log("wishlist: ", wishlist);
+    console.log("data: ", data);
+    // const filter = wishlist?.filter((item) => item.id !== data.id);
+   
+    // localStorage.setItem("whishlist", JSON.stringify(filter));
+    // dispatch(remove_wishlist_product(filter));
+    // notifyError(`${data.name} removed from wishlist`);
   };
   return (
     <tr>
       <td className="tp-cart-img">
         <Link href={`/product-details/${_id}`}>
           <Image
-            src={data?.thumbnail?.url}
+            src={data?.media[0]?.url}
             alt="product img"
             width={70}
             height={100}
@@ -97,9 +105,7 @@ const WishlistItem = ({ product }) => {
         <span>{data?.name}</span>
       </td>
       <td className="tp-cart-price">
-        <span>
-          &#8377;{data?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
-        </span>
+        <span>&#8377;{parseFloat(data.indiaChannelPricing)?.toFixed(2)}</span>
       </td>
 
       {/* <td className="tp-cart-quantity">
@@ -137,7 +143,7 @@ const WishlistItem = ({ product }) => {
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          {isAddToCart?"View":"Add"} To Cart
+          {isAddToCart ? "View" : "Add"} To Cart
         </button>
       </td>
 

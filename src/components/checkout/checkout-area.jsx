@@ -66,28 +66,6 @@ const CheckoutArea = () => {
     });
   }
 
-  // useEffect(() => {
-  //   // const result = cart?.filter(
-  //   //   (p) => p.productType === discountProductType
-  //   // );
-  //   // const discountProductTotal = result?.reduce(
-  //   //   (preValue, currentValue) =>
-  //   //     preValue + currentValue.price * currentValue.orderQuantity,
-  //   //   0
-  //   // );
-  //   let subTotal = Number((totalAmount + shippingCost).toFixed(2));
-  //   // let discountTotal = Number(
-  //   //   discountProductTotal * (discountPercentage / 100)
-  //   // );
-  //   // totalValue = Number(subTotal - discountTotal);
-  //   // setDiscountAmount(discountTotal);
-  //   setCartTotal(subTotal);
-  // }, [shippingCost, cartTotals,totalAmount]);
-
-  // useEffect(() => {
-  //   let subTotal = Number((totalAmount + shippingCost).toFixed(2));
-  //   setCartTotal(subTotal);
-  // }, []);
 
   return (
     <>

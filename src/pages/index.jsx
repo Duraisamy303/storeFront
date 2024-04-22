@@ -21,6 +21,9 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useDispatch, useSelector } from "react-redux";
 import { cart_list, checkout_token } from "@/redux/features/cartSlice";
+import { useGetWishlistQuery } from "@/redux/features/productApi";
+import { get_wishlist_products } from "@/redux/features/wishlist-slice";
+
 
 const Index = () => {
   // const dispatch = useDispatch();
@@ -44,6 +47,21 @@ const Index = () => {
       console.error("Error:", error);
     }
   };
+
+  const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (wishlistData) {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const modify = wishlistData?.data?.wishlists.edges;
+        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
+      } else {
+        dispatch(get_wishlist_products([]));
+      }
+    } else {
+      dispatch(get_wishlist_products([]));
+    }
+  }, [wishlistData]);
 
   return (
     <Wrapper>

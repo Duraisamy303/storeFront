@@ -14,7 +14,7 @@ export const handleWishlistProduct = (prd) => {
           whishlist = JSON.parse(whishlist);
         }
         whishlist.push(prd);
-        localStorage.setItem("whishlist", JSON.stringify(whishlist));
+        // localStorage.setItem("whishlist", JSON.stringify(whishlist));
         return whishlist;
       // }
     } catch (error) {

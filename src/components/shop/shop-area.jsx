@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "@/ui/Pagination";
 import ProductItem from "../products/fashion/product-item";
 import CategoryFilter from "./shop-filter/category-filter";
@@ -11,6 +11,8 @@ import ShopListItem from "./shop-list-item";
 import ShopTopLeft from "./shop-top-left";
 import ShopTopRight from "./shop-top-right";
 import ResetButton from "./shop-filter/reset-button";
+import { useDispatch, useSelector } from "react-redux";
+import { filterData } from "@/redux/features/shop-filter-slice";
 
 const ShopArea = ({
   all_products,
@@ -18,17 +20,20 @@ const ShopArea = ({
   otherProps,
   updateData,
   subtitle,
+  updateRange,
 }) => {
-  // console.log("all_products: ", all_products);
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
 
-  const [filteredRows, setFilteredRows] = useState(products);
+  const { priceValue, handleChanges } = priceFilterValues;
+
+  const filter = useSelector((state) => state.shopFilter.filterData);
+
+  const dispatch = useDispatch();
+
+  const [filteredRows, setFilteredRows] = useState([]);
   const [pageStart, setPageStart] = useState(0);
   const [countOfPage, setCountOfPage] = useState(12);
-
-  console.log("filteredRows: ", filteredRows);
-
 
   const paginatedData = (items, startPage, pageCount) => {
     setFilteredRows(items);
@@ -36,10 +41,50 @@ const ShopArea = ({
     setCountOfPage(pageCount);
   };
 
-  // max price
-  const maxPrice = all_products?.reduce((max, product) => {
-    return product.price > max ? product.price : max;
-  }, 0);
+  const removeFilter = (item, type, index, price) => {
+    if (type === "price") {
+      const removemin = filter.find((data) => data.type === type);
+
+      let updatedFilter = [...filter]; // Create a copy of the original filter array
+
+      if (removemin) {
+        if ((price === "min" && item.max) || (price !== "min" && item.min)) {
+          updatedFilter[index] = {
+            type: "price",
+            ...(price === "min"
+              ? { max: removemin.max }
+              : { min: removemin.min }),
+          };
+          const maxPrice = all_products?.reduce((max, item) => {
+            const price =
+              item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
+            return price > max ? price : max;
+          }, 0);
+          let range = [];
+          if (price === "min") {
+            range[(0, removemin.max)];
+          } else {
+            range = [removemin.min, maxPrice];
+            console.log("max", [removemin.min, maxPrice]);
+          }
+          updateRange(range);
+          // updateRange([price === "min" && 0, price === "max" && maxPrice]);
+        } else {
+          updatedFilter[index] = { type: "price" };
+        }
+      } else {
+        updatedFilter = filter.filter((data) => data.id !== item.id);
+      }
+
+      console.log("updated filter: ", updatedFilter);
+      dispatch(filterData(updatedFilter));
+    }
+  };
+
+  const clearFilter = () => {
+    dispatch(filterData([]));
+  };
+
   return (
     <>
       <section className="tp-shop-area pb-50 mt-50">
@@ -51,11 +96,14 @@ const ShopArea = ({
               marginBottom: "20px",
             }}
           >
-            <div >
+            <div>
               <span>
                 <a href="#">Home</a>
               </span>{" "}
-              / <span style={{ color: "black" , fontWeight:"600"}}>{subtitle}</span>
+              /{" "}
+              <span style={{ color: "black", fontWeight: "600" }}>
+                {subtitle}
+              </span>
             </div>
           </div>
 
@@ -94,6 +142,58 @@ const ShopArea = ({
                     </div>
                   </div>
                 </div>
+                {filter?.length > 0 && (
+                  <div
+                    className="d-flex cursor"
+                    style={{ gap: 20, cursor: "pointer" }}
+                  >
+                    <div className="cartmini__close">
+                      <button
+                        // onClick={() => dispatch(closeCartMini())}
+                        type="button"
+                        className="cartmini__close-btn cartmini-close-btn"
+                      >
+                        <i className="fal fa-times"></i>
+                      </button>
+                    </div>
+                    <div onClick={() => clearFilter()}>
+                      <span>Clear filter</span>
+                    </div>
+                    <div
+                      className="pb-20"
+                      style={{ display: "flex", gap: 10, cursor: "pointer" }}
+                    >
+                      {filter?.map((item, index) =>
+                        item?.type == "price" ? (
+                          <>
+                            {item?.min && (
+                              <div
+                                onClick={() =>
+                                  removeFilter(item, "price", index, "min")
+                                }
+                              >
+                                <span>Min {item.min}</span>
+                              </div>
+                            )}
+                            {item?.max && (
+                              <div
+                                onClick={() =>
+                                  removeFilter(item, "price", index, "max")
+                                }
+                              >
+                                <span>Max {item.max}</span>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div onClick={() => removeFilter(item)}>
+                            <span>{item.name}</span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
                 {products?.length === 0 && <h2>No products found</h2>}
                 {products?.length > 0 && (
                   <div className="tp-shop-items-wrapper tp-shop-item-primary">
@@ -108,7 +208,7 @@ const ShopArea = ({
                         <div className="row">
                           {filteredRows
                             ?.slice(pageStart, pageStart + countOfPage)
-                            .map((item) => (
+                            ?.map((item) => (
                               <div
                                 key={item._id}
                                 className="col-xl-4 col-md-6 col-sm-6"

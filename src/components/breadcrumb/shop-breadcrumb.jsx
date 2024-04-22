@@ -1,7 +1,8 @@
 import React from "react";
+import { capitalizeFLetter } from "../../utils/functions";
 
-const ShopBreadcrumb = ({ title, subtitle, bgImage }) => {
-  console.log("✌️bgImage --->", bgImage);
+const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
+
   return (
     <>
       <section
@@ -18,7 +19,18 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage }) => {
                   <span>{subtitle}</span>
                 </div> */}
                 <ul className="container shop-banner-categoryList">
-                  <li>
+                  {catList?.length > 0 &&
+                    catList?.map((item) => (
+                      <li>
+                        <h5 className="shop-banner-categoryList-title">
+                          {item?.node?.name?.toUpperCase()}
+                        </h5>
+                        <p className="shop-banner-categoryList-count">
+                          {item?.node?.products?.totalCount} Products
+                        </p>
+                      </li>
+                    ))}
+                  {/* <li>
                     <h5 className="shop-banner-categoryList-title">
                       ANKLETS
                     </h5>
@@ -77,7 +89,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage }) => {
                   SALE
                     </h5>
                     <p className="shop-banner-categoryList-count">41 Products</p>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
