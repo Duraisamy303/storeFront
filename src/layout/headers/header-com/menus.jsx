@@ -57,28 +57,28 @@ const Menus = () => {
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
               <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
               <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
               <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>
@@ -119,25 +119,32 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+              <div className="col-lg-3">
+                <Image
+                  src={categoryImages}
+                  alt="category image"
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>
@@ -187,25 +194,33 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+
+              <div className="col-lg-3">
+                <Image
+                  src={categoryImages}
+                  alt="category image"
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>
@@ -239,25 +254,33 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+
+              <div className="col-lg-3">
+                <Image
+                  src={categoryImages}
+                  alt="category image"
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>
@@ -288,25 +311,32 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+              <div className="col-lg-3">
+                <Image
+                  src={categoryImages}
+                  alt="category image"
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>
@@ -345,25 +375,32 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-4">
+              <div className="col-lg-3">
                 <Image
                   src={categoryImages}
                   alt="category image"
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </div>
+              <div className="col-lg-3">
+                <Image
+                  src={categoryImages}
+                  alt="category image"
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             </div>

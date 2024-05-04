@@ -415,3 +415,71 @@ margin-right: 0px !important;
 	}
 
 }
+
+
+.about-section-brand{
+	text-align: center;
+	padding:30px;
+	margin-top: 50px;
+}
+.about-section-brand:hover{
+	background-color: #c2882b;
+}
+
+.about-section-brand:hover p{
+	
+	color: white !important;
+}
+
+
+.common-breadcrumb-content{
+	color: white;
+	font-size: 18px;
+	line-height: 30px;
+	width:50%;
+font-weight:500;
+}
+
+.terms-para{
+	color: #777777;
+	font-size: 16px;
+	line-height: 30px;
+	margin-top: 25px;
+}
+
+.terms-heading{
+	color: #555555;
+	font-size: 30px;
+	margin-top: 25px;
+	line-height: 36px;
+}
+
+.terms-lists{
+	
+	list-style-type: circle	;
+	padding-left: 20px;
+}
+
+.terms-sub-heading{
+	color: #555555;
+	font-size: 24px;
+	margin-top: 25px;
+	font-style: italic;
+}
+.terms-lists li{
+	color: #777777;
+	font-size: 16px;
+	line-height: 30px;
+	margin-top: 25px;
+}
+
+@media(max-width:768px) {
+	.common-breadcrumb-content{
+		width: 70%;
+	}
+}
+@media(max-width:500px) {
+	.common-breadcrumb-content{
+		width: 90%;
+	}
+}

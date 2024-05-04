@@ -6,6 +6,7 @@ const CommonBreadcrumb = ({
   BgImage,
   center = false,
   bg_clr = false,
+  content,
 }) => {
   return (
     <section
@@ -40,6 +41,11 @@ const CommonBreadcrumb = ({
                   <a href="#">HOME</a>
                 </span>{" "}
                 / <span>{subtitle}</span>
+              </div>
+              <div className="d-flex justify-content-center mt-30">
+                <p className="common-breadcrumb-content">
+                  {content}
+                </p>
               </div>
             </div>
           </div>
