@@ -52,7 +52,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                 </nav>
               </div>
             </div> */}
-            <div className="tp-main-menu-mobile fix d-lg-none mb-40">
+            <div className="tp-main-menu-mobile fix d-xl-none mb-40">
               <MobileMenus />
             </div>
 
