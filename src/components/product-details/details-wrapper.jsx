@@ -7,7 +7,11 @@ import { AskQuestion, CompareTwo, WishlistTwo } from "@/svg";
 import DetailsBottomInfo from "./details-bottom-info";
 import ProductDetailsCountdown from "./product-details-countdown";
 import ProductQuantity from "./product-quantity";
-import { add_cart_product, compare_list } from "@/redux/features/cartSlice";
+import {
+  add_cart_product,
+  cart_list,
+  compare_list,
+} from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
@@ -17,7 +21,7 @@ import {
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
-import { notifySuccess } from "@/utils/toast";
+import { notifyError, notifySuccess } from "@/utils/toast";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
 
@@ -41,6 +45,7 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
+  console.log("productItem: ", productItem);
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
   const [visibility, setVisibility] = useState({
@@ -148,22 +153,25 @@ const DetailsWrapper = ({
 
   // handle add product
 
-  const handleAddProduct = async (data) => {
+  const handleAddProduct = async () => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
-      if (checkoutToken) {
-        const response = await addToCartMutation({
-          variantId: data?.variants[0]?.id,
-        });
-        console.log(
-          "response: ",
-          response?.data?.data?.checkoutLinesAdd?.checkout?.lines
-        );
-
-        notifySuccess(`${data.name} added to cart successfully`);
-        updateData();
+      const response = await addToCartMutation({
+        checkoutToken: checkoutToken,
+        variantId: productItem?.variants[0]?.id,
+      });
+      console.log("response: ", response);
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
       } else {
-        router.push("/login");
+        notifySuccess(`${productItem.name} added to cart successfsully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
+        updateData();
       }
     } catch (error) {
       console.error("Error:", error);

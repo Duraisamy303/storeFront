@@ -82,12 +82,19 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         checkoutToken: checkoutToken,
         variantId: product?.node?.variants[0]?.id,
       });
-      notifySuccess(`${product.node.name} added to cart successfully`);
-      // cart_list.push
-      dispatch(
-        cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-      );
-      updateData();
+      console.log("response: ", response);
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
+      } else {
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
+        updateData();
+      }
     } catch (error) {
       console.error("Error:", error);
     }

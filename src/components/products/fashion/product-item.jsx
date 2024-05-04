@@ -58,16 +58,16 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const handleAddProduct = async (data) => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
-      if (checkoutToken) {
-        const response = await addToCartMutation({
-          variantId: data?.variants[0]?.id,
-        });
+      const response = await addToCartMutation({
+        variantId: data?.variants[0]?.id,
+      });
+      console.log("response: ", response);
 
-        notifySuccess(`${data.name} added to cart successfully`);
-        updateData();
-      } else {
-        router.push("/login");
-      }
+      notifySuccess(`${data.name} added to cart successfully`);
+      // updateData();
+      dispatch(
+        cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+      );
     } catch (error) {
       console.error("Error:", error);
     }
@@ -139,7 +139,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         </div>
 
         {/* product action */}
-        <div className="tp-product-action-2 tp-product-action-blackStyle" >
+        <div className="tp-product-action-2 tp-product-action-blackStyle">
           <div className="tp-product-action-item-2 d-flex ">
             {isAddedToCart ? (
               <Link
@@ -154,8 +154,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 </span>
               </Link>
             ) : (
-              <button 
-                type="button" style={{marginRight:"5px"}}
+              <button
+                type="button"
+                style={{ marginRight: "5px" }}
                 onClick={() => handleAddProduct(product)}
                 className={`tp-product-action-btn-2 ${
                   isAddedToCart ? "active" : ""

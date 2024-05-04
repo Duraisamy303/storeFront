@@ -82,7 +82,7 @@ const CartMiniSidebar = () => {
             {cart?.length > 0 && (
               <div className="cartmini__widget">
                 {cart?.map((item) => (
-                  <div key={item._id} className="cartmini__widget-item">
+                  <div key={item.id} className="cartmini__widget-item">
                     <div className="cartmini__thumb">
                       <div
                         onClick={() => {
@@ -105,7 +105,7 @@ const CartMiniSidebar = () => {
                     </div>
                     <div className="cartmini__content">
                       <h5 className="cartmini__title">
-                        <Link href={`/product-details/${item._id}`}>
+                        <Link href={`/product-details/${item?.variant?.product?.id}`}>
                           {item?.variant?.product?.name || item?.node?.name}
                         </Link>
                       </h5>

@@ -7,6 +7,7 @@ import { Rating } from "react-simple-star-rating";
 import {
   add_cart_product,
   add_compare,
+  cart_list,
   compare_list,
 } from "@/redux/features/cartSlice";
 import { remove_compare_product } from "@/redux/features/compareSlice";
@@ -14,12 +15,11 @@ import {
   useAddToCartMutation,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
-import { notifySuccess } from "@/utils/toast";
+import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 
 const CompareArea = () => {
-
   const { data: wishlistData } = useGetWishlistQuery();
 
   const { compareItems } = useSelector((state) => state.compare);
@@ -27,6 +27,7 @@ const CompareArea = () => {
   const { data: tokens } = useGetCartListQuery();
 
   const compareList = useSelector((state) => state.cart.compare_list);
+  console.log("compareList: ", compareList);
 
   const cart = useSelector((state) => state.cart.cart_list);
 
@@ -48,18 +49,24 @@ const CompareArea = () => {
   //   dispatch(add_cart_product(prd));
   // };
 
-  const handleAddProduct = async (data) => {
-    console.log("data: ", data);
+  const handleAddProduct = async (item) => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
-      if (checkoutToken) {
-        const response = await addToCartMutation({
-          variantId: data?.variants[0]?.id,
-        });
-
-        notifySuccess(`${data.name} added to cart successfully`);
+      const response = await addToCartMutation({
+        checkoutToken: checkoutToken,
+        variantId: item?.variants[0]?.id,
+      });
+      console.log("response: ", response);
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
       } else {
-        router.push("/login");
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -118,7 +125,10 @@ const CompareArea = () => {
                                   {item?.name}
                                 </Link>
                               </h4>
-                              <div className="tp-compare-add-to-cart" style={{paddingBottom: '10px'}}>
+                              <div
+                                className="tp-compare-add-to-cart"
+                                style={{ paddingBottom: "10px" }}
+                              >
                                 &#8377;
                                 {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
                                   2
@@ -126,33 +136,34 @@ const CompareArea = () => {
                               </div>
 
                               <div className="tp-compare-add-to-cart">
-                              {cart.some(
-                                (prd) => prd?.variant?.product?.id === item?.id
-                              ) ? (
-                                <button
-                                  onClick={() => router.push("/cart")}
-                                  className="tp-btn"
-                                  type="button"
-                                >
-                                  View Cart
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => handleAddProduct(item)}
-                                  type="button"
-                                  className="tp-btn"
-                                >
-                                  Add to Cart
-                                </button>
-                              )}
-                              {/* <button
+                                {cart?.some(
+                                  (prd) =>
+                                    prd?.variant?.product?.id === item?.id
+                                ) ? (
+                                  <button
+                                    onClick={() => router.push("/cart")}
+                                    className="tp-btn"
+                                    type="button"
+                                  >
+                                    View Cart
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => handleAddProduct(item)}
+                                    type="button"
+                                    className="tp-btn"
+                                  >
+                                    Add to Cart
+                                  </button>
+                                )}
+                                {/* <button
                                 onClick={() => handleAddProduct(item)}
                                 type="button"
                                 className="tp-btn"
                               >
                                 Add to Cart
                               </button> */}
-                            </div>
+                              </div>
                             </div>
                           </td>
                         ))}
@@ -236,8 +247,8 @@ const CompareArea = () => {
                         ))}
                       </tr>
 
-                       {/* availability */}
-                       <tr>
+                      {/* availability */}
+                      <tr>
                         <th>Availability</th>
                         {compareList.map((item) => (
                           <td key={item?.id}>
