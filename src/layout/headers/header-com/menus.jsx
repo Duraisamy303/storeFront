@@ -53,28 +53,28 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -119,28 +119,28 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -194,21 +194,21 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -216,7 +216,7 @@ const Menus = () => {
                 />
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -254,21 +254,21 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -276,7 +276,7 @@ const Menus = () => {
                 />
               </div>
 
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -311,28 +311,28 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -375,28 +375,28 @@ const Menus = () => {
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3">
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"

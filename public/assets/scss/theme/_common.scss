@@ -303,7 +303,12 @@ color: white;
 .shop-banner-categoryList{
 list-style: none;
 display: flex;
-justify-content: space-between;
+justify-content: center;
+flex-wrap: wrap;
+}
+
+.shop-banner-categoryList li{
+	padding: 0px 20px 0px 0px;
 }
 
 .shop-banner-categoryList-title{
@@ -414,8 +419,25 @@ font-weight: 500;
 margin-right: 0px !important;
 	}
 
+	.shop-bg{
+		height:auto;
+	}
 }
 
+
+@media(max-width: 500px){
+	.shop-banner-categoryList{
+	
+		display: block;
+		}
+
+		.shop-banner-categoryList li{
+			padding: 0px;
+			text-align: center;
+		}
+	
+		
+}
 
 .about-section-brand{
 	text-align: center;
@@ -426,8 +448,7 @@ margin-right: 0px !important;
 	background-color: #c2882b;
 }
 
-.about-section-brand:hover p{
-	
+.about-section-brand:hover p{	
 	color: white !important;
 }
 
