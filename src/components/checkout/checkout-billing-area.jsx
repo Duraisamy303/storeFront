@@ -13,11 +13,16 @@ import useRazorpay from "react-razorpay";
 import { useRouter } from "next/router";
 import NiceSelect from "@/ui/nice-select";
 import HeaderSearchForm from "../forms/header-search-form";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
 
   const cart = useSelector((state) => state.cart?.cart_list);
+
+  const { data: list, refetch } = useGetCartListQuery();
+  console.log("list: ", list);
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 

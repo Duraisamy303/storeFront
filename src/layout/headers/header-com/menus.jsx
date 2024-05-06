@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import menu_data from "@/data/menu-data";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +8,8 @@ import earingModel from "@assets/img/earring-menu-pic-1.png";
 const Menus = () => {
   // State to store the currently hovered category
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [token, setToken] = useState("");
+
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
 
   const handleCategoryHover = (category) => {
@@ -19,6 +21,11 @@ const Menus = () => {
     setLastHoveredCategory(hoveredCategory);
     setHoveredCategory(hoveredCategory);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
 
   // Render category-related content based on the hovered category
   const renderCategoryContent = () => {
@@ -60,21 +67,21 @@ const Menus = () => {
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -249,7 +256,10 @@ const Menus = () => {
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
             </div>
           </div>
           <div className="col-9">
@@ -306,7 +316,10 @@ const Menus = () => {
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
             </div>
           </div>
           <div className="col-9">
@@ -318,21 +331,21 @@ const Menus = () => {
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -370,7 +383,10 @@ const Menus = () => {
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border"> <Link href="/shop">Shop Now</Link></button>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
             </div>
           </div>
           <div className="col-9">
@@ -382,21 +398,21 @@ const Menus = () => {
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
                   style={{ width: "100%", height: "auto" }}
                 />
               </div>
-              <div className="col-lg-3"  style={{ padding: "0px 8px 0px 0px" }}>
+              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
                 <Image
                   src={categoryImages}
                   alt="category image"
@@ -613,6 +629,13 @@ const Menus = () => {
           GIFT CARD
         </Link>
       </li>
+      {token && (
+        <li>
+          <Link href="/shop" style={{ fontWeight: "500" }}>
+            MY-ORDERS
+          </Link>
+        </li>
+      )}
 
       <li>
         <Link href="/shop" style={{ fontWeight: "500" }}>

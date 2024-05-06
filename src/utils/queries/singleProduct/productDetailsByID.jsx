@@ -1,64 +1,65 @@
 export const SINGLE_PRODUCT = ({ productId, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($productId: ID!,$channel: String!) {
-        product(id: $productId, channel: $channel) {
-          id
-          name
-          slug
-          pricing {
-            priceRange {
-              start {
-                gross {
-                  amount
-                  currency
-                }
-              }
-              stop {
-                gross {
-                  amount
-                  currency
-                }
+    query MyQuery($productId: ID!, $channel: String!) {
+      product(id: $productId, channel: $channel) {
+        id
+        name
+        slug
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
               }
             }
-            discount {
-              currency
+            stop {
+              gross {
+                amount
+                currency
+              }
             }
           }
-          category {
-            id
-            name
-          }
-          thumbnail(size: 1024, format: WEBP) {
-            url
-            alt
-          }
-          images {
-            url
-            alt
-          }
-          variants {
-            id
-          }
-          created
-          description
-          images {
-            url
+          discount {
+            currency
           }
         }
+        category {
+          id
+          name
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        images {
+          url
+          alt
+        }
+        variants {
+          id
+          quantityAvailable
+        }
+        created
+        description
+        images {
+          url
+        }
       }
+    }
     `,
     variables: { productId, channel },
   });
 };
 
-export const RELATED_PRODUCT = ({ id }) => {
+export const RELATED_PRODUCT = ({ id, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($id: ID!) {
+    query MyQuery($id: ID!, $channel:String!) {
       category(id: $id) {
         id
-        products(channel: "india-channel", first: 10) {
+        products(channel: $channel, first: 10) {
           edges {
             node {
               id
@@ -102,6 +103,6 @@ export const RELATED_PRODUCT = ({ id }) => {
       }
     }
     `,
-    variables: { id },
+    variables: { id, channel },
   });
 };

@@ -71,7 +71,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       const checkoutToken = localStorage.getItem("checkoutToken");
       const response = await addToCartMutation({
         checkoutToken: checkoutToken,
-        variantId: product?.variants[0]?.id,
+        variantId: product?.defaultVariant?.id,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -180,7 +180,11 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   }, []);
 
   return (
-    <div className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}>
+    <div
+      className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}${
+        product?.defaultVariant?.quantityAvailable == 0 && "bg-opacity-100"
+      }`}
+    >
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
         <Link href={`/product-details/${product?.id}`}>
           <Image
@@ -202,40 +206,55 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           )}
         </div>
 
+        {/* <div className="tp-product-badge-2">
+          {product?.defaultVariant?.quantityAvailable == 0 && (
+            <span className="product-hot">HOT</span>
+          )}
+        </div> */}
+
         <div className="tp-product-badge-2">
-          <span className="product-hot">HOT</span>
+          {product?.defaultVariant?.quantityAvailable == 0 && (
+            <span className="product-hot">
+              SOLD
+              <br /> OUT
+            </span>
+          )}
         </div>
 
         {/* product action */}
         <div className="tp-product-action-2 tp-product-action-blackStyle">
           <div className="tp-product-action-item-2 d-flex ">
-            {isAddedToCart ? (
-              <Link
-                href="/cart"
-                className={`tp-product-action-btn-2 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn`}
-              >
-                <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View Cart
-                </span>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                style={{ marginRight: "5px" }}
-                onClick={() => handleAddProduct(product)}
-                className={`tp-product-action-btn-2 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn`}
-                disabled={status === "out-of-stock"}
-              >
-                <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  Add to Cart
-                </span>
-              </button>
+            {product?.defaultVariant?.quantityAvailable != 0 && (
+              <>
+                {isAddedToCart ? (
+                  <Link
+                    href="/cart"
+                    className={`tp-product-action-btn-2 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn`}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      View Cart
+                    </span>
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    style={{ marginRight: "5px" }}
+                    onClick={() => handleAddProduct(product)}
+                    className={`tp-product-action-btn-2 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn`}
+                    disabled={status === "out-of-stock"}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      Add to Cart
+                    </span>
+                  </button>
+                )}
+              </>
             )}
 
             {/* <button

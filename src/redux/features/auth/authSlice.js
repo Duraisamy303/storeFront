@@ -15,7 +15,7 @@ const authSlice = createSlice({
       state.refreshToken = payload.refreshToken;
     },
     userLoggedOut: (state) => {
-      // localStorage.clear()
+      localStorage.removeItem("token")
       state=initialState
       Cookies.remove('userInfo');
       // localStorage.clear();
