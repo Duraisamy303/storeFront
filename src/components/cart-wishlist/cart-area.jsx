@@ -64,6 +64,7 @@ const CartArea = () => {
     setCartData(data);
   };
 
+  console.log("data: ", cartData);
   const decQuantity = (quantity, id) => {
     const data = cartData.map((item) => {
       if (item.id === id) {
@@ -185,7 +186,7 @@ const CartArea = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6">
-                <CartCheckout />
+                <CartCheckout  cartData={cartData}/>
               </div>
             </div>
           )}
