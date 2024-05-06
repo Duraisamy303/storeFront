@@ -24,8 +24,9 @@ const CartMiniSidebar = () => {
 
   const cartData = useSelector((state) => state.cart?.cart_list);
   const cart = cartData?.node || cartData;
+  console.log("✌️cart --->", cart);
 
-  const router=useRouter()
+  const router = useRouter();
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>
@@ -53,6 +54,13 @@ const CartMiniSidebar = () => {
   const handleCloseCartMini = () => {
     dispatch(closeCartMini());
   };
+
+  const quantityDisable = cart.some((item) => {
+    console.log("✌️item --->", item.quantity);
+    return item.variant.quantityAvailable >= 100;
+  });
+  console.log("quantityDisable: ", quantityDisable);
+
   return (
     <>
       <div
@@ -81,69 +89,144 @@ const CartMiniSidebar = () => {
             </div>
             {cart?.length > 0 && (
               <div className="cartmini__widget">
-                {cart?.map((item) => (
-                  <div key={item.id} className="cartmini__widget-item">
-                    <div className="cartmini__thumb">
-                      <div
-                        onClick={() => {
-                          dispatch(closeCartMini());
-                          router.push(
-                            `/product-details/${item?.variant?.product?.id}`
-                          );
-                        }}
-                      >
-                        <Image
-                          src={
-                            item?.variant?.product?.thumbnail?.url ||
-                            item?.node?.thumbnail?.url
-                          }
-                          width={70}
-                          height={60}
-                          alt="product img"
-                        />
+                {cart?.map((item) => {
+console.log('✌️itemitem --->', item);
+                
+                return(
+                  <>
+                    {item.variant.quantityAvailable >= item.quantity ? (
+                      <div key={item.id} className="cartmini__widget-item">
+                        <div className="cartmini__thumb">
+                          <div
+                            onClick={() => {
+                              dispatch(closeCartMini());
+                              router.push(
+                                `/product-details/${item?.variant?.product?.id}`
+                              );
+                            }}
+                          >
+                            <Image
+                              src={
+                                item?.variant?.product?.thumbnail?.url ||
+                                item?.node?.thumbnail?.url
+                              }
+                              width={70}
+                              height={60}
+                              alt="product img"
+                            />
+                          </div>
+                        </div>
+                        <div className="cartmini__content">
+                          <h5 className="cartmini__title">
+                            <Link
+                              href={`/product-details/${item?.variant?.product?.id}`}
+                            >
+                              {item?.variant?.product?.name || item?.node?.name}
+                            </Link>
+                          </h5>
+                          <div className="cartmini__price-wrapper">
+                            {item?.discount > 0 ? (
+                              <span className="cartmini__price">
+                                &#8377;
+                                {(
+                                  Number(item?.price) -
+                                  (Number(item?.price) *
+                                    Number(item?.discount)) /
+                                    100
+                                )?.toFixed(2)}
+                              </span>
+                            ) : (
+                              <span className="cartmini__price">
+                                &#8377;
+                                {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                                  2
+                                ) ||
+                                  item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                    2
+                                  )}
+                              </span>
+                            )}
+                            <span className="cartmini__quantity">
+                              {" "}
+                              x {item?.quantity}
+                            </span>
+                          </div>
+                        </div>
+                        <a
+                          onClick={() => handleRemovePrd(item)}
+                          className="cartmini__del cursor-pointer"
+                        >
+                          <i className="fa-regular fa-xmark"></i>
+                        </a>
                       </div>
-                    </div>
-                    <div className="cartmini__content">
-                      <h5 className="cartmini__title">
-                        <Link href={`/product-details/${item?.variant?.product?.id}`}>
-                          {item?.variant?.product?.name || item?.node?.name}
-                        </Link>
-                      </h5>
-                      <div className="cartmini__price-wrapper">
-                        {item?.discount > 0 ? (
-                          <span className="cartmini__price">
-                            &#8377;
-                            {(
-                              Number(item?.price) -
-                              (Number(item?.price) * Number(item?.discount)) /
-                                100
-                            )?.toFixed(2)}
-                          </span>
-                        ) : (
-                          <span className="cartmini__price">
-                            &#8377;
-                            {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                              2
-                            ) ||
-                              item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                2
-                              )}
-                          </span>
-                        )}
-                        <span className="cartmini__quantity">
-                          {" "}
-                          x {item?.quantity}
-                        </span>
+                    ) : (
+                      <div key={item.id} className="cartmini__widget-item" style={{opacity: 0.5}} >
+                        <div className="cartmini__thumb">
+                          <div
+                            onClick={() => {
+                              dispatch(closeCartMini());
+                              router.push(
+                                `/product-details/${item?.variant?.product?.id}`
+                              );
+                            }}
+                          >
+                            <Image
+                              src={
+                                item?.variant?.product?.thumbnail?.url ||
+                                item?.node?.thumbnail?.url
+                              }
+                              width={70}
+                              height={60}
+                              alt="product img"
+                            />
+                          </div>
+                        </div>
+                        <div className="cartmini__content">
+                          <h5 className="cartmini__title">
+                            <Link
+                              href={`/product-details/${item?.variant?.product?.id}`}
+                            >
+                              {item?.variant?.product?.name || item?.node?.name}
+                            </Link>
+                          </h5>
+                          <div className="cartmini__price-wrapper">
+                            {item?.discount > 0 ? (
+                              <span className="cartmini__price">
+                                &#8377;
+                                {(
+                                  Number(item?.price) -
+                                  (Number(item?.price) *
+                                    Number(item?.discount)) /
+                                    100
+                                )?.toFixed(2)}
+                              </span>
+                            ) : (
+                              <span className="cartmini__price">
+                                &#8377;
+                                {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                                  2
+                                ) ||
+                                  item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                    2
+                                  )}
+                              </span>
+                            )}
+                            <span className="cartmini__quantity">
+                              {" "}
+                              x {item?.quantity}
+                            </span>
+                          </div>
+                        </div>
+                        <a
+                          onClick={() => handleRemovePrd(item)}
+                          className="cartmini__del cursor-pointer"
+                        >
+                          <i className="fa-regular fa-xmark"></i>
+                        </a>
                       </div>
-                    </div>
-                    <a
-                      onClick={() => handleRemovePrd(item)}
-                      className="cartmini__del cursor-pointer"
-                    >
-                      <i className="fa-regular fa-xmark"></i>
-                    </a>
-                  </div>
-                ))}
+                    )}
+                  </>
+                )})}
               </div>
             )}
             {/* if no item in cart */}
@@ -171,14 +254,23 @@ const CartMiniSidebar = () => {
                 {" "}
                 view cart
               </Link>
-              <Link
-                href="/checkout"
-                onClick={handleCloseCartMini}
-                className="tp-btn tp-btn-border w-100"
-              >
-                {" "}
-                checkout
-              </Link>
+
+              {quantityDisable === true ? (
+                <Link
+                  href="/checkout"
+                  onClick={handleCloseCartMini}
+                  className="tp-btn tp-btn-border w-100"
+                >
+                  checkout
+                </Link>
+              ) : (
+                <button
+                  style={{ cursor: "not-allowed" }}
+                  className="tp-btn tp-btn-border w-100"
+                >
+                  checkout
+                </button>
+              )}
             </div>
           </div>
         </div>
