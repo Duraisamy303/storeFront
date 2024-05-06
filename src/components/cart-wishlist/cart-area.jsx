@@ -15,7 +15,7 @@ import { notifySuccess } from "@/utils/toast";
 const CartArea = () => {
   const cart = useSelector((state) => state.cart.cart_list);
 
-  const { data: list } = useGetCartListQuery();
+  const { data: list, refetch } = useGetCartListQuery();
 
   const dispatch = useDispatch();
 
@@ -42,16 +42,18 @@ const CartArea = () => {
           const updateData =
             data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
           dispatch(cart_list(updateData));
+         
 
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })
       );
-          notifySuccess("Quantity update completed");
-
     }
+    refetch()
+    notifySuccess("Quantity update completed");
   };
 
   const incQuantity = (quantity, id) => {
+    console.log("quantity: ", quantity);
     const data = cartData.map((item) => {
       if (item.id == id) {
         // Increase quantity by 1
@@ -127,6 +129,10 @@ const CartArea = () => {
                             item?.variant?.pricing?.price?.gross?.amount ||
                             item?.node?.pricing?.priceRange?.start?.gross
                               ?.amount
+                          }
+                          quantityAvailable={
+                            item?.variant?.quantityAvailable ||
+                            item?.node?.quantityAvailable
                           }
                           incQuantity={(quantity) =>
                             incQuantity(quantity, item.id)
