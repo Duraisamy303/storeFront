@@ -20,6 +20,7 @@ const CartArea = () => {
   const dispatch = useDispatch();
 
   const [cartData, setCartData] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
 
   useEffect(() => {
     const data = cart?.map((item) => {
@@ -70,6 +71,11 @@ const CartArea = () => {
       return item;
     });
     setCartData(data);
+  };
+
+  const applyCoupon = (e) => {
+    e.preventDefault();
+    console.log("coupon: ", couponCode);
   };
 
   return (
@@ -142,8 +148,16 @@ const CartArea = () => {
                           <div className="tp-cart-coupon-input-box">
                             {/* <label>Coupon Code:</label> */}
                             <div className="tp-cart-coupon-input d-flex align-items-center">
-                              <input type="text" placeholder="Coupon Code" />
-                              <button type="submit">APPLY COUPON</button>
+                              <input
+                                type="text"
+                                placeholder="Coupon Code"
+                                value={couponCode}
+                                onChange={(e) => setCouponCode(e.target.value)}
+                                name="couponcode"
+                              />
+                              <button type="submit" onClick={applyCoupon}>
+                                APPLY COUPON
+                              </button>
                             </div>
                           </div>
                         </form>
