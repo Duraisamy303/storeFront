@@ -55,9 +55,9 @@ const CartMiniSidebar = () => {
     dispatch(closeCartMini());
   };
 
-  const quantityDisable = cart.some((item) => {
+  const quantityDisable = cart?.some((item) => {
     console.log("✌️item --->", item.quantity);
-    return item.variant.quantityAvailable >= 100;
+    return item.variant.quantityAvailable >= item.quantity;
   });
   console.log("quantityDisable: ", quantityDisable);
 
