@@ -30,10 +30,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const CountryList = countryList?.data?.shop?.countries;
 
-  const { data: stateList,refetch } = useStateListQuery({
-    code: "IN",
-  });
-  console.log("✌️stateList --->", stateList);
 
   console.log("CountryList --->", CountryList);
 
@@ -73,6 +69,15 @@ const CheckoutBillingArea = ({ register, errors }) => {
     selectedCountryList:""
   });
 
+
+  
+  const { data: stateList,refetch } = useStateListQuery({
+    code: state.selectedCountryList,
+  });
+const StateList = stateList?.data?.addressValidationRules?.countryAreaChoices
+
+  console.log("StateList --->", StateList);
+  
   const checkedCheckbox = state.paymentType.find(
     (checkbox) => checkbox.checked
   );
@@ -305,6 +310,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
     setState({ paymentType: updatedCheckboxes, pType: true });
   };
 
+const handleSelectChange = (e) => {
+  setState({ selectedCountryList: e.target.value });
+}
+console.log("selectedCountryList",state.selectedCountryList)
+
   return (
     <div className="row">
       <div className="col-lg-7">
@@ -374,14 +384,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <div className="col-md-6">
                   <div className="tp-checkout-input">
                     <label htmlFor="state">
-                      State <span>*</span>
+                      Country <span>*</span>
                     </label>
                     <select
                       name="country"
                       id="country"
                       value={state.state}
                       className="nice-select w-100"
-                      onChange={(e) => handleInputChange(e, "state")}
+                      onChange={(e) => handleSelectChange(e, "state")}
                     >
                       {CountryList?.map((item) => (
                         <option key={item.code} value={item.code}>
@@ -395,20 +405,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                 <div className="col-md-6">
                   <div className="tp-checkout-input">
-                    <label>
+                    <label htmlFor="state">
                       State <span>*</span>
                     </label>
-                    <input
-                      name="lastName"
-                      id="lastName"
-                      type="select"
-                      value={state.lastName}
-                      placeholder="Last Name"
-                      onChange={(e) => handleInputChange(e, "lastName")}
-                    />
-                    {state.errors.streetAddress1 && (
-                      <ErrorMsg msg={state.errors.streetAddress1} />
-                    )}
+                    <select
+                      name="state"
+                      id="state"
+                      value={state.state}
+                      className="nice-select w-100"
+                      onChange={(e) => handleInputChange(e, "state")}
+                    >
+                      {StateList?.map((item) => (
+                        <option key={item.raw} value={item.raw}>
+                          {item.raw}
+                        </option>
+                      ))}
+                    </select>
+                    {/* You can add validation error message rendering here if needed */}
                   </div>
                 </div>
                 {/* <div className="col-md-12">
