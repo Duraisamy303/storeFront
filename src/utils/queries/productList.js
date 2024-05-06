@@ -397,3 +397,18 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
     variables: { first, after, channel, collectionid },
   });
 };
+
+export const COUNTRY_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query CountryList {
+      shop {
+        countries {
+          code
+          country
+        }
+      }
+    }
+    `,
+  });
+};

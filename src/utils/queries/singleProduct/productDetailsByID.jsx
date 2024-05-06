@@ -46,6 +46,11 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
         images {
           url
         }
+        defaultVariant {
+          id
+          name
+          quantityAvailable
+        }
       }
     }
     `,

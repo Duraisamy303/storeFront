@@ -1,59 +1,58 @@
 export const ADDTOCART = ({ checkoutToken, variantId }) => {
   return {
     query: `
-      mutation ProductAddVariantToCart($checkoutToken: UUID!, $variantId: ID!) {
-        checkoutLinesAdd(
-          token: $checkoutToken
-          lines: [{ quantity: 1, variantId: $variantId }]
-        ) {
-          checkout {
+    mutation ProductAddVariantToCart($checkoutToken: UUID!, $variantId: ID!) {
+      checkoutLinesAdd(
+        token: $checkoutToken
+        lines: [{quantity: 1, variantId: $variantId}]
+      ) {
+        checkout {
+          id
+          email
+          lines {
             id
-            email
-            lines {
-              id
-              totalPrice {
-                gross {
-                  amount
-                  currency
-                }
-              }
-              variant {
-                product {
-                  id
-                  name
-                  slug
-                  thumbnail {
-                    url
-                    alt
-                  }
-                }
-                pricing {
-                  price {
-                    gross {
-                      amount
-                      currency
-                    }
-                  }
-                }
-                name
-                id
-              }
-              quantity
-            }
             totalPrice {
               gross {
                 amount
                 currency
               }
             }
+            variant {
+              product {
+                id
+                name
+                slug
+                thumbnail {
+                  url
+                  alt
+                }
+              }
+              pricing {
+                price {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+              name
+              id
+              quantityAvailable
+            }
+            quantity
           }
-          errors {
-            message
+          totalPrice {
+            gross {
+              amount
+              currency
+            }
           }
         }
+        errors {
+          message
+        }
       }
-      
-      
+    }
     
       `,
     variables: { checkoutToken, variantId },

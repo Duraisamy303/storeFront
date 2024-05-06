@@ -17,6 +17,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
+import { useGetCartListQuery } from "../../redux/features/card/cardApi";
 
 const CartItem = ({
   product,
@@ -33,6 +34,9 @@ const CartItem = ({
 }) => {
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
+  console.log("cart: ", cart);
+  const {data:list}=useGetCartListQuery()
+  console.log("list: ", list);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 

@@ -18,7 +18,11 @@ import {
   SINGLE_PRODUCT,
 } from "@/utils/queries/singleProduct/productDetailsByID";
 import { useSelector } from "react-redux";
-import { DESIGN_LIST, STONE_LIST } from "../../utils/queries/productList";
+import {
+  COUNTRY_LIST,
+  DESIGN_LIST,
+  STONE_LIST,
+} from "../../utils/queries/productList";
 
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -38,7 +42,7 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
     getProductType: builder.query({
-      query: ({  first }) => {
+      query: ({ first }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -207,6 +211,11 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    countryList: builder.query({
+      query: () => configuration(COUNTRY_LIST({})),
+      providesTags: ["Products"],
+    }),
+
     //filters
     priceFilter: builder.mutation({
       query: ({ filter }) => {
@@ -250,4 +259,5 @@ export const {
   useGetDesignListQuery,
   useGetStoneListQuery,
   useFeatureProductQuery,
+  useCountryListQuery, 
 } = productApi;

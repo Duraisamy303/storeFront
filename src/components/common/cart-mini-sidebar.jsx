@@ -90,143 +90,150 @@ const CartMiniSidebar = () => {
             {cart?.length > 0 && (
               <div className="cartmini__widget">
                 {cart?.map((item) => {
-console.log('✌️itemitem --->', item);
-                
-                return(
-                  <>
-                    {item.variant.quantityAvailable >= item.quantity ? (
-                      <div key={item.id} className="cartmini__widget-item">
-                        <div className="cartmini__thumb">
-                          <div
-                            onClick={() => {
-                              dispatch(closeCartMini());
-                              router.push(
-                                `/product-details/${item?.variant?.product?.id}`
-                              );
-                            }}
-                          >
-                            <Image
-                              src={
-                                item?.variant?.product?.thumbnail?.url ||
-                                item?.node?.thumbnail?.url
-                              }
-                              width={70}
-                              height={60}
-                              alt="product img"
-                            />
-                          </div>
-                        </div>
-                        <div className="cartmini__content">
-                          <h5 className="cartmini__title">
-                            <Link
-                              href={`/product-details/${item?.variant?.product?.id}`}
+                  console.log("✌️itemitem --->", item);
+
+                  return (
+                    <>
+                      {item.variant.quantityAvailable >= item.quantity ? (
+                        <div key={item.id} className="cartmini__widget-item">
+                          <div className="cartmini__thumb">
+                            <div
+                              onClick={() => {
+                                dispatch(closeCartMini());
+                                router.push(
+                                  `/product-details/${item?.variant?.product?.id}`
+                                );
+                              }}
                             >
-                              {item?.variant?.product?.name || item?.node?.name}
-                            </Link>
-                          </h5>
-                          <div className="cartmini__price-wrapper">
-                            {item?.discount > 0 ? (
-                              <span className="cartmini__price">
-                                &#8377;
-                                {(
-                                  Number(item?.price) -
-                                  (Number(item?.price) *
-                                    Number(item?.discount)) /
-                                    100
-                                )?.toFixed(2)}
-                              </span>
-                            ) : (
-                              <span className="cartmini__price">
-                                &#8377;
-                                {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                                  2
-                                ) ||
-                                  item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                    2
-                                  )}
-                              </span>
-                            )}
-                            <span className="cartmini__quantity">
-                              {" "}
-                              x {item?.quantity}
-                            </span>
+                              <Image
+                                src={
+                                  item?.variant?.product?.thumbnail?.url ||
+                                  item?.node?.thumbnail?.url
+                                }
+                                width={70}
+                                height={60}
+                                alt="product img"
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <a
-                          onClick={() => handleRemovePrd(item)}
-                          className="cartmini__del cursor-pointer"
-                        >
-                          <i className="fa-regular fa-xmark"></i>
-                        </a>
-                      </div>
-                    ) : (
-                      <div key={item.id} className="cartmini__widget-item" style={{opacity: 0.5}} >
-                        <div className="cartmini__thumb">
-                          <div
-                            onClick={() => {
-                              dispatch(closeCartMini());
-                              router.push(
-                                `/product-details/${item?.variant?.product?.id}`
-                              );
-                            }}
+                          <div className="cartmini__content">
+                            <h5 className="cartmini__title">
+                              <Link
+                                href={`/product-details/${item?.variant?.product?.id}`}
+                              >
+                                {item?.variant?.product?.name ||
+                                  item?.node?.name}
+                              </Link>
+                            </h5>
+                            <div className="cartmini__price-wrapper">
+                              {item?.discount > 0 ? (
+                                <span className="cartmini__price">
+                                  &#8377;
+                                  {(
+                                    Number(item?.price) -
+                                    (Number(item?.price) *
+                                      Number(item?.discount)) /
+                                      100
+                                  )?.toFixed(2)}
+                                </span>
+                              ) : (
+                                <span className="cartmini__price">
+                                  &#8377;
+                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                                    2
+                                  ) ||
+                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                      2
+                                    )}
+                                </span>
+                              )}
+                              <span className="cartmini__quantity">
+                                {" "}
+                                x {item?.quantity}
+                              </span>
+                            </div>
+                          </div>
+                          <a
+                            onClick={() => handleRemovePrd(item)}
+                            className="cartmini__del cursor-pointer"
                           >
-                            <Image
-                              src={
-                                item?.variant?.product?.thumbnail?.url ||
-                                item?.node?.thumbnail?.url
-                              }
-                              width={70}
-                              height={60}
-                              alt="product img"
-                            />
-                          </div>
+                            <i className="fa-regular fa-xmark"></i>
+                          </a>
                         </div>
-                        <div className="cartmini__content">
-                          <h5 className="cartmini__title">
-                            <Link
-                              href={`/product-details/${item?.variant?.product?.id}`}
-                            >
-                              {item?.variant?.product?.name || item?.node?.name}
-                            </Link>
-                          </h5>
-                          <div className="cartmini__price-wrapper">
-                            {item?.discount > 0 ? (
-                              <span className="cartmini__price">
-                                &#8377;
-                                {(
-                                  Number(item?.price) -
-                                  (Number(item?.price) *
-                                    Number(item?.discount)) /
-                                    100
-                                )?.toFixed(2)}
-                              </span>
-                            ) : (
-                              <span className="cartmini__price">
-                                &#8377;
-                                {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                                  2
-                                ) ||
-                                  item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                    2
-                                  )}
-                              </span>
-                            )}
-                            <span className="cartmini__quantity">
-                              {" "}
-                              x {item?.quantity}
-                            </span>
-                          </div>
-                        </div>
-                        <a
-                          onClick={() => handleRemovePrd(item)}
-                          className="cartmini__del cursor-pointer"
+                      ) : (
+                        <div
+                          key={item.id}
+                          className="cartmini__widget-item"
+                          style={{ opacity: 0.5 }}
                         >
-                          <i className="fa-regular fa-xmark"></i>
-                        </a>
-                      </div>
-                    )}
-                  </>
-                )})}
+                          <div className="cartmini__thumb">
+                            <div
+                              onClick={() => {
+                                dispatch(closeCartMini());
+                                router.push(
+                                  `/product-details/${item?.variant?.product?.id}`
+                                );
+                              }}
+                            >
+                              <Image
+                                src={
+                                  item?.variant?.product?.thumbnail?.url ||
+                                  item?.node?.thumbnail?.url
+                                }
+                                width={70}
+                                height={60}
+                                alt="product img"
+                              />
+                            </div>
+                          </div>
+                          <div className="cartmini__content">
+                            <h5 className="cartmini__title">
+                              <Link
+                                href={`/product-details/${item?.variant?.product?.id}`}
+                              >
+                                {item?.variant?.product?.name ||
+                                  item?.node?.name}
+                              </Link>
+                            </h5>
+                            <div className="cartmini__price-wrapper">
+                              {item?.discount > 0 ? (
+                                <span className="cartmini__price">
+                                  &#8377;
+                                  {(
+                                    Number(item?.price) -
+                                    (Number(item?.price) *
+                                      Number(item?.discount)) /
+                                      100
+                                  )?.toFixed(2)}
+                                </span>
+                              ) : (
+                                <span className="cartmini__price">
+                                  &#8377;
+                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                                    2
+                                  ) ||
+                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                      2
+                                    )}
+                                </span>
+                              )}
+                              <span className="cartmini__quantity">
+                                {" "}
+                                x {item?.quantity}
+                              </span>
+                            </div>
+                          </div>
+                          <a
+                            onClick={() => handleRemovePrd(item)}
+                            className="cartmini__del cursor-pointer"
+                          >
+                            <i className="fa-regular fa-xmark"></i>
+                          </a>
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
               </div>
             )}
             {/* if no item in cart */}
