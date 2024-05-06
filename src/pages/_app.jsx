@@ -47,6 +47,8 @@ const client = new ApolloClient({
 
 export default function App({ Component, pageProps }) {
   const [channel, setChannel] = useState("");
+  const [activeChannel, setActiveChannel] = useState("");
+
   useEffect(() => {
     const channel = localStorage.getItem("channel");
     if (!channel) {
@@ -64,25 +66,43 @@ export default function App({ Component, pageProps }) {
           {/* <Elements stripe={stripePromise}> */}
           <div id="root">
             <div
-              className=""
-              onClick={() => {
-                localStorage.setItem("channel", "default-channel");
-                setChannel("default-channel");
-                window.location.reload();
+              style={{
+                position: "fixed",
+                zIndex: 999,
+                top: "50%",
+                transform: "translateY(-50%)",
+                right: 0,
               }}
             >
-              default
-            </div>
+              <div
+                className={` p-2 mb-1 text-white`}
+                style={{
+                  backgroundColor:
+                    channel == "default-channel" ? "#c2882b" : "#000",
+                }}
+                onClick={() => {
+                  localStorage.setItem("channel", "default-channel");
+                  setChannel("default-channel");
+                  window.location.reload();
+                }}
+              >
+                USD
+              </div>
 
-            <div
-              className=""
-              onClick={() => {
-                localStorage.setItem("channel", "india-channel");
-                setChannel("india-channel");
-                window.location.reload();
-              }}
-            >
-              india
+              <div
+                style={{
+                  backgroundColor:
+                    channel == "india-channel" ? "#000" : "#c2882b",
+                }}
+                className=" p-2 text-white "
+                onClick={() => {
+                  localStorage.setItem("channel", "india-channel");
+                  setChannel("india-channel");
+                  window.location.reload();
+                }}
+              >
+                INR
+              </div>
             </div>
 
             <Component {...pageProps} />
