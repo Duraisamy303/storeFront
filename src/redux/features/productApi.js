@@ -218,7 +218,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     stateList: builder.query({
-      query: () => configuration(STATE_LIST({})),
+      query: ({code}) => configuration(STATE_LIST({code})),
       providesTags: ["Products"],
     }),
 

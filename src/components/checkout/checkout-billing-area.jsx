@@ -14,26 +14,28 @@ import { useRouter } from "next/router";
 import NiceSelect from "@/ui/nice-select";
 import HeaderSearchForm from "../forms/header-search-form";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-import { useCountryListQuery, useStateListQuery } from "@/redux/features/productApi";
+import {
+  useCountryListQuery,
+  useStateListQuery,
+} from "@/redux/features/productApi";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
-  const { data: list, refetch } = useGetCartListQuery();
+  const { data: list } = useGetCartListQuery();
   console.log("list: ", list);
-  const  { data: countryList } = useCountryListQuery();
+  const { data: countryList } = useCountryListQuery();
 
-const CountryList = countryList?.data?.shop?.countries
+  const CountryList = countryList?.data?.shop?.countries;
 
+  const { data: stateList,refetch } = useStateListQuery({
+    code: "IN",
+  });
+  console.log("✌️stateList --->", stateList);
 
-const  { data: stateList } = useStateListQuery("AF");
-console.log('✌️stateList --->', stateList);
-
-
-console.log('CountryList --->', CountryList);
-
+  console.log("CountryList --->", CountryList);
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
@@ -68,6 +70,7 @@ console.log('CountryList --->', CountryList);
       { id: 2, label: "Razorpay", checked: false },
     ],
     pType: false,
+    selectedCountryList:""
   });
 
   const checkedCheckbox = state.paymentType.find(
