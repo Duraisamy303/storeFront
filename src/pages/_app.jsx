@@ -47,17 +47,26 @@ const client = new ApolloClient({
 
 export default function App({ Component, pageProps }) {
   const [channel, setChannel] = useState("");
-  const [activeChannel, setActiveChannel] = useState("");
-
   useEffect(() => {
-    const channel = localStorage.getItem("channel");
-    if (!channel) {
+    const storedChannel = localStorage.getItem("channel");
+    if (!storedChannel) {
       localStorage.setItem("channel", "india-channel");
-      setChannel("default-channel");
-    } else {
       setChannel("india-channel");
+    } else {
+      setChannel(storedChannel);
     }
   }, []);
+
+  const channelList = [
+    { name: "india-channel", value: "INR" },
+    { name: "default-channel", value: "USD" },
+  ];
+
+  const handleChannelChange = (newChannel) => {
+    localStorage.setItem("channel", newChannel);
+    setChannel(newChannel);
+    window.location.reload();
+  };
 
   return (
     <ApolloProvider client={client}>
@@ -74,35 +83,20 @@ export default function App({ Component, pageProps }) {
                 right: 0,
               }}
             >
-              <div
-                className={` p-2 mb-1 text-white`}
-                style={{
-                  backgroundColor:
-                    channel == "default-channel" ? "#c2882b" : "#000",
-                }}
-                onClick={() => {
-                  localStorage.setItem("channel", "default-channel");
-                  setChannel("default-channel");
-                  window.location.reload();
-                }}
-              >
-                USD
-              </div>
-
-              <div
-                style={{
-                  backgroundColor:
-                    channel == "india-channel" ? "#000" : "#c2882b",
-                }}
-                className=" p-2 text-white "
-                onClick={() => {
-                  localStorage.setItem("channel", "india-channel");
-                  setChannel("india-channel");
-                  window.location.reload();
-                }}
-              >
-                INR
-              </div>
+              {channelList?.map((item) => (
+                <div
+                  className={` p-2 mb-1 text-white`}
+                  style={{
+                    backgroundColor: channel == item.name ? "#c2882b" : "#000",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    handleChannelChange(item.name);
+                  }}
+                >
+                  {item.value}
+                </div>
+              ))}
             </div>
 
             <Component {...pageProps} />
