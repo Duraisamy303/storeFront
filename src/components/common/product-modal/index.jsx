@@ -25,18 +25,20 @@ const ProductModal = () => {
   );
 
   const { img, imageURLs, status } = productItem || {};
-  const imageUrls=productItem?.images?.map((item)=>item?.url)
+  const imageUrls = productItem?.images?.map((item) => item?.url);
 
   const [activeImg, setActiveImg] = useState(img);
+  const [channel, setChannel] = useState("");
 
   const dispatch = useDispatch();
   // active image change when img change
   useEffect(() => {
     dispatch(initialOrderQuantity());
+    const channel = localStorage.getItem("channel");
+    setChannel(channel);
   }, [img, dispatch]);
 
   // handle image active
- 
 
   return (
     <div>
@@ -56,10 +58,7 @@ const ProductModal = () => {
               <i className="fa-regular fa-xmark"></i>
             </button>
             {/* product-details-thumb-wrapper start */}
-            <DetailsThumbWrapper
-              product={productItem}
-              status={status}
-            />
+            <DetailsThumbWrapper product={productItem} status={status} />
             {/* product-details-thumb-wrapper end */}
 
             {/* product-details-wrapper start */}

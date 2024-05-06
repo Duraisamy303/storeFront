@@ -153,6 +153,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   };
   const img = product?.node?.thumbnail?.url;
 
+  const openModal = () => {
+    const datas = { ...product?.node, images: product?.node?.media };
+    dispatch(handleProductModal(datas));
+  };
+
   return (
     <>
       <div className="tp-category-item-4 p-relative z-index-1 fix text-center">
@@ -197,7 +202,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
             <button
               type="button"
               className="tp-product-action-btn-3 tp-product-quick-view-btn"
-              onClick={() => dispatch(handleProductModal(product.node))}
+              onClick={() => openModal()}
             >
               <QuickView />
               <span className="tp-product-tooltip tp-product-tooltip-top">

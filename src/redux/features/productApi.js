@@ -24,16 +24,17 @@ export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ channel, first }) =>
-        configuration(PRODUCT_LIST({ channel, first })),
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log("result: ", result);
-        } catch (err) {
-          // do nothing
+      query: ({ first }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
         }
+        return configuration(PRODUCT_LIST({ channel, first }));
       },
+
       providesTags: ["Products"],
     }),
     getProductType: builder.query({
@@ -152,8 +153,10 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     featureProduct: builder.query({
-      query: (data) => {
-        return configuration(FEATURE_PRODUCT());
+      query: ({ first, after, channel, collectionid }) => {
+        return configuration(
+          FEATURE_PRODUCT({ first, after, channel, collectionid })
+        );
       },
       providesTags: ["Products"],
     }),
