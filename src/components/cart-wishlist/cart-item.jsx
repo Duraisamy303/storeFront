@@ -27,6 +27,7 @@ const CartItem = ({
   decQuantity,
   quantityCount,
   isQuantity,
+  quantityAvailable,
 }) => {
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
@@ -39,7 +40,7 @@ const CartItem = ({
 
   const dispatch = useDispatch();
 
-  const router=useRouter()
+  const router = useRouter();
 
   const handleRemovePrd = () => {
     const checkoutToken = localStorage.getItem("checkoutToken");
@@ -51,12 +52,17 @@ const CartItem = ({
       dispatch(cart_list(filter));
     });
   };
+  console.log("quantityAvailable", quantityAvailable);
 
   return (
     <tr>
       {/* img */}
       <td className="tp-cart-img">
-        <div onClick={()=>router.push(`/product-details/${product?.variant?.product?.id}`)}>
+        <div
+          onClick={() =>
+            router.push(`/product-details/${product?.variant?.product?.id}`)
+          }
+        >
           <Image src={img} alt="product img" width={70} height={100} />
         </div>
       </td>
@@ -74,12 +80,11 @@ const CartItem = ({
         <span>&#8377;{price?.toFixed(2)}</span>
       </td>
       {/* quantity */}
-      {isQuantity && (
+      {isQuantity && quantityAvailable >= quantity ? (
         <td className="tp-cart-quantity">
           <div className="tp-product-quantity mt-10 mb-10">
             <span
               onClick={() => {
-
                 if (quantity != 1) {
                   setQuantity(quantity - 1);
                   decQuantity(quantity - 1);
@@ -107,6 +112,40 @@ const CartItem = ({
               <Plus />
             </span>
           </div>
+        </td>
+      ) : (
+        <td className="tp-cart-quantity">
+          <div className="tp-product-quantity mt-10 mb-10">
+            <span
+              onClick={() => {
+                if (quantity != 1) {
+                  setQuantity(quantity - 1);
+                  decQuantity(quantity - 1);
+                }
+              }}
+              className="tp-cart-minus"
+            >
+              <Minus />
+            </span>
+            <input
+              className="tp-cart-input"
+              type="text"
+              value={quantity}
+              readOnly
+            />
+            <span
+              // onClick={() => {
+              //   if (quantity >= 1) {
+              //     setQuantity(quantity + 1);
+              //     incQuantity(quantity + 1);
+              //   }
+              // }}
+              className="tp-cart-plus"
+            >
+              <Plus />
+            </span>
+          </div>
+          <p className="text-danger">Only {quantityAvailable} left in stock</p>
         </td>
       )}
       {/* subtotal */}
