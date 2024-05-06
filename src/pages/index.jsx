@@ -48,20 +48,20 @@ const Index = () => {
     }
   };
 
-  const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (wishlistData) {
-      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-        const modify = wishlistData?.data?.wishlists.edges;
-        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
-      } else {
-        dispatch(get_wishlist_products([]));
-      }
-    } else {
-      dispatch(get_wishlist_products([]));
-    }
-  }, [wishlistData]);
+  // const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   if (wishlistData) {
+  //     if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+  //       const modify = wishlistData?.data?.wishlists.edges;
+  //       dispatch(get_wishlist_products(modify?.map((item) => item.node)));
+  //     } else {
+  //       dispatch(get_wishlist_products([]));
+  //     }
+  //   } else {
+  //     dispatch(get_wishlist_products([]));
+  //   }
+  // }, [wishlistData]);
 
   return (
     <Wrapper>

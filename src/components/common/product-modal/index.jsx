@@ -26,7 +26,6 @@ const ProductModal = () => {
 
   const { img, imageURLs, status } = productItem || {};
   const imageUrls=productItem?.images?.map((item)=>item?.url)
-  console.log("imageUrls: ", imageUrls);
 
   const [activeImg, setActiveImg] = useState(img);
 

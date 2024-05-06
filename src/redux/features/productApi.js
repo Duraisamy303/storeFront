@@ -4,6 +4,7 @@ import { configuration } from "@/utils/constant";
 import {
   ADD_WISHLIST,
   CATEGORY_LIST,
+  FEATURE_PRODUCT,
   FINISH_LIST,
   GET_PRODUCTLIST_BY_ID,
   ORDER_LIST,
@@ -94,7 +95,6 @@ export const productApi = apiSlice.injectEndpoints({
     getWishlist: builder.query({
       query: () => {
         const user = localStorage.getItem("userInfo");
-        console.log("user: ", user);
         let userEmail = "";
         if (user) {
           const users = JSON.parse(user);
@@ -106,10 +106,9 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getProductById: builder.query({
-      query: (data) => {
-        const ids = data?.map((item) => item.node.variant);
+      query: ({ ids }) => {
         return configuration(
-          GET_PRODUCTLIST_BY_ID({ ids, channel: "india-channel", first: 100 })
+          GET_PRODUCTLIST_BY_ID({ ids, channel: "india-channel" })
         );
       },
       providesTags: ["Products"],
@@ -152,6 +151,13 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    featureProduct: builder.query({
+      query: (data) => {
+        return configuration(FEATURE_PRODUCT());
+      },
+      providesTags: ["Products"],
+    }),
+
     //filters
     priceFilter: builder.mutation({
       query: ({ filter }) => {
@@ -164,7 +170,6 @@ export const productApi = apiSlice.injectEndpoints({
           })
         );
       },
-     
     }),
   }),
 });
@@ -188,7 +193,5 @@ export const {
   useGetStyleListQuery,
   useGetDesignListQuery,
   useGetStoneListQuery,
-
-
-
+  useFeatureProductQuery,
 } = productApi;

@@ -57,7 +57,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const checkedCheckbox = state.paymentType.find(
     (checkbox) => checkbox.checked
   );
-  console.log("checkedCheckbox: ", checkedCheckbox);
 
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
@@ -151,7 +150,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         countryArea1: "Tamil Nadu",
       };
 
-      console.log("sample: ", sample);
 
       if (Object.keys(errors).length === 0) {
         const createCheckoutResponse = await createCheckout({
@@ -183,7 +181,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           );
           return;
         }
-        console.log("createCheckoutResponse: ", createCheckoutResponse);
 
         const checkoutId =
           createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
@@ -198,7 +195,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           const paymentType = state.paymentType.find(
             (checkbox) => checkbox.checked
           );
-          console.log("checkedCheckbox: ", checkedCheckbox);
           // if (!state.pType) {
           //   notifyError("COD");
           // } else {
@@ -227,7 +223,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         // order_id: "ORD20156712",
         handler: async (res) => {
           notifySuccess("Payment Successful");
-          console.log(res);
           const completeResponse = await checkoutComplete({ id: checkoutId });
           console.log(
             "completeResponse: ",

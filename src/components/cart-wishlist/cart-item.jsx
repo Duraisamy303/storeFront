@@ -79,7 +79,6 @@ const CartItem = ({
           <div className="tp-product-quantity mt-10 mb-10">
             <span
               onClick={() => {
-                console.log("quantity: ", quantity);
 
                 if (quantity != 1) {
                   setQuantity(quantity - 1);

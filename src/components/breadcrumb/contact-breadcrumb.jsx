@@ -2,7 +2,6 @@ import React from "react";
 import banner from "@assets/img/shop-banner.jpg";
 
 const ContactBreadcrumb = () => {
-  console.log("banner", banner);
   return (
     <section
       className="breadcrumb__area include-bg text-center pt-95 pb-50"

@@ -9,11 +9,16 @@ import { CloseEye, OpenEye } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import { useLoginUserMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useCheckoutTokenMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useCheckoutTokenMutation,
+} from "@/redux/features/card/cardApi";
 import {
   useAddWishlistMutation,
   useWishlistMutation,
 } from "@/redux/features/productApi";
+import { useDispatch, useSelector } from "react-redux";
+import { cart_list } from "@/redux/features/cartSlice";
 
 // schema
 const schema = Yup.object().shape({
@@ -23,11 +28,18 @@ const schema = Yup.object().shape({
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
 
+  const cart = useSelector((state) => state.cart.cart_list);
+
+  const dispatch = useDispatch();
+
   const [loginUser, {}] = useLoginUserMutation();
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
   const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
+
+  const [addToCartMutation, { data: productsData, isError, isLoading }] =
+    useAddToCartMutation();
 
   const router = useRouter();
   const { redirect } = router.query;
@@ -42,7 +54,6 @@ const LoginForm = () => {
   });
   // onSubmit
   const onSubmit = (data) => {
-    console.log("data: ", data);
     loginUser({
       email: data.email,
       password: data.password,
@@ -53,13 +64,11 @@ const LoginForm = () => {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
         notifySuccess("Login successfully");
-        console.log("data?.data?.data: ", data?.data?.data);
 
         if (!whishlist) {
           whishlist = [];
         } else {
           whishlist = JSON.parse(whishlist);
-          console.log("wishlist: ", whishlist);
           if (whishlist?.length > 0) {
             whishlist.map((item) =>
               wishlistData(data?.data?.data?.tokenCreate, item.node)
@@ -75,7 +84,6 @@ const LoginForm = () => {
   };
 
   const wishlistData = async (user, data) => {
-    console.log("user,data: ", user, data);
     try {
       const input = {
         input: {
@@ -85,7 +93,6 @@ const LoginForm = () => {
       };
       const res = await addWishlist(input);
 
-      console.log("res: ", res);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -97,6 +104,38 @@ const LoginForm = () => {
         email,
       });
       console.log("data: ", data);
+      if (cart?.length > 0) {
+        cart?.map((item) =>
+          handleAddProduct(
+            data?.data?.data?.checkoutCreate?.checkout?.token,
+            item?.variant.id
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleAddProduct = async (checkoutToken, id) => {
+    try {
+      const response = await addToCartMutation({
+        checkoutToken: checkoutToken,
+        variantId: id,
+      });
+      console.log("response: ", response);
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
+      } else {
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
+        updateData();
+      }
     } catch (error) {
       console.error("Error:", error);
     }

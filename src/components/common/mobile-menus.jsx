@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { mobile_menu } from "@/data/menu-data";
+import { userLoggedOut } from "@/redux/features/auth/authSlice";
+import { closeUserSidebar } from "@/redux/features/cartSlice";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const MobileMenus = () => {
   const [isActiveMenu, setIsActiveMenu] = useState("");
+  const [token, setToken] = useState("");
+
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   // handleOpenSubMenu
   const handleOpenSubMenu = (title) => {
@@ -14,9 +22,21 @@ const MobileMenus = () => {
       setIsActiveMenu(title);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
+
+  const closeCart = () => {
+    dispatch(userLoggedOut());
+    dispatch(closeUserSidebar());
+    router.push("/login");
+  };
+
   return (
     <>
-      <ul >
+      <ul>
         {/* {menu_data.map((menu) =>
         menu.homes ? (
           <li key={menu.id} className="has-dropdown has-mega-menu">
@@ -121,22 +141,23 @@ const MobileMenus = () => {
         </li>
         <li>
           <Link href="/wishlist" style={{ fontWeight: "500" }}>
-           WISHLIST
+            WISHLIST
           </Link>
         </li>
 
         <li>
           <Link href="/compare" style={{ fontWeight: "500" }}>
-           COMPARE
+            COMPARE
           </Link>
         </li>
 
         <li>
-          <Link href="/LOGIN" style={{ fontWeight: "500" }}>
-          LOGIN / REGISTER
+          <Link href="/login" style={{ fontWeight: "500" }}>
+            <button style={{ fontWeight: "500" }} onClick={() => closeCart()}>
+              {token ? "LOGOUT" : `LOGIN / REGISTER`}
+            </button>
           </Link>
         </li>
-
       </ul>
     </>
   );

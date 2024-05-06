@@ -7,7 +7,11 @@ import Menus from "./header-com/menus";
 import logo from "@assets/img/logo/logo.svg";
 import useSticky from "@/hooks/use-sticky";
 import useCartInfo from "@/hooks/use-cart-info";
-import { compare_list, openCartMini, openUserSidebar } from "@/redux/features/cartSlice";
+import {
+  compare_list,
+  openCartMini,
+  openUserSidebar,
+} from "@/redux/features/cartSlice";
 import HeaderTopRight from "./header-com/header-top-right";
 import CartMiniSidebar from "@/components/common/cart-mini-sidebar";
 import {
@@ -38,6 +42,13 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
 
   return (
     <>
@@ -99,7 +110,12 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
                       <Link href="/">
-                        <Image src={pradeLogo} alt="logo" priority className="prade-navbar-logo"/>
+                        <Image
+                          src={pradeLogo}
+                          alt="logo"
+                          priority
+                          className="prade-navbar-logo"
+                        />
                       </Link>
                     </div>
                   </div>
@@ -168,15 +184,16 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <Menu />
                           </button>
                         </div>
+                        {/* {token &&
                         <div className="tp-header-action-item">
                           <button
                             onClick={() => dispatch(openUserSidebar())}
                             className="tp-header-action-btn cartmini-open-btn"
                           >
                             <UserThree />
-
                           </button>
                         </div>
+                        } */}
                       </div>
                     </div>
                   </div>
@@ -191,8 +208,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       <CartMiniSidebar />
       {/* cart mini sidebar end */}
 
-      <UserMiniSidebar />
-
+      {/* <UserMiniSidebar /> */}
 
       {/* off canvas start */}
       <OffCanvas

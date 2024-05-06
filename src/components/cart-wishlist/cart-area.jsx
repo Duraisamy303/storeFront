@@ -41,16 +41,16 @@ const CartArea = () => {
           const updateData =
             data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
           dispatch(cart_list(updateData));
-          notifySuccess("Quantity update completed");
 
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })
       );
+          notifySuccess("Quantity update completed");
+
     }
   };
 
   const incQuantity = (quantity, id) => {
-    console.log("quantity: ", quantity);
     const data = cartData.map((item) => {
       if (item.id == id) {
         // Increase quantity by 1

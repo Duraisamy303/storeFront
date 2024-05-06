@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper';
 // internal
-import { useGetProductTypeQuery } from '@/redux/features/productApi';
+import { useFeatureProductQuery, useGetProductTypeQuery } from '@/redux/features/productApi';
 import ProductSliderItem from './product-slider-item';
 import ErrorMsg from '@/components/common/error-msg';
 import { HomeTwoPopularPrdLoader } from '@/components/loader';
@@ -49,7 +49,12 @@ const PopularProducts = () => {
 
   const { data: productsData, isError, isLoading } =
     useGetProductTypeQuery({ channel:"india-channel",first:19 });
+
+    const { data: featureProduct,} =
+    useFeatureProductQuery({ channel:"india-channel",first:19 });
   // decide what to render
+  console.log("featureProduct: ", featureProduct);
+
   let content = null;
   const products = productsData?.data?.products?.edges;
 

@@ -52,6 +52,7 @@ const UserMiniSidebar = () => {
     dispatch(userLoggedOut());
     dispatch(closeUserSidebar());
     router.push("/login");
+    
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import WishlistItem from "./wishlist-item";
@@ -11,17 +11,35 @@ import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 
 const WishlistArea = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
-  console.log("wishlist: ", wishlist);
+  const [ids, setIds] = useState([]);
+
+  const { data: localData } = useGetProductByIdQuery({
+    ids: ids?.length > 0 ? ids : undefined,
+  });
+  console.log("querys: ", localData);
 
   const dispatch = useDispatch();
 
   const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
-  console.log("wishlistData: ", wishlistData);
+
+  // useEffect(() => {
+  //   if (wishlistData) {
+  //     if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+  //       const modify = wishlistData?.data?.wishlists.edges;
+  //       dispatch(get_wishlist_products(modify?.map((item) => item.node)));
+  //     } else {
+  //       dispatch(get_wishlist_products([]));
+  //     }
+  //   } else {
+  //     dispatch(get_wishlist_products([]));
+  //   }
+  // }, [wishlistData]);
 
   useEffect(() => {
-    if (wishlistData) {
-      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-        const modify = wishlistData?.data?.wishlists.edges;
+    if (localData) {
+      if (localData?.data?.products?.edges?.length > 0) {
+        const modify = localData?.data?.products?.edges;
+        console.log("modify: ", modify);
         dispatch(get_wishlist_products(modify?.map((item) => item.node)));
       } else {
         dispatch(get_wishlist_products([]));
@@ -29,7 +47,22 @@ const WishlistArea = () => {
     } else {
       dispatch(get_wishlist_products([]));
     }
-  }, [wishlistData]);
+  }, [localData]);
+
+  useEffect(() => {
+    datss();
+  }, []);
+  const datss = async () => {
+    try {
+      const data = localStorage.getItem("wishlist");
+      console.log("Stored wishlist: ", JSON.parse(data));
+      const parsedData = JSON.parse(data);
+      console.log("parsedData: ", parsedData);
+      setIds(parsedData);
+    } catch (error) {
+      console.error("Error fetching wishlist data:", error);
+    }
+  };
 
   return (
     <>

@@ -14,17 +14,20 @@ import {
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { capitalizeFLetter } from "@/utils/functions";
-import {
-  useAddToCartMutation,
-  useGetCartListQuery,
-} from "@/redux/features/card/cardApi";
-import { notifySuccess } from "@/utils/toast";
+import { notifyError, notifySuccess } from "@/utils/toast";
+import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import {
+  useAddWishlistMutation,
+  useGetProductByIdQuery,
+} from "../../../redux/features/productApi";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   let product = products.node;
   const router = useRouter();
+
+  const [ids, setIds] = useState([]);
 
   const [isAddWishlist, setWishlist] = useState(false);
 
@@ -44,6 +47,12 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+  const [addToWishlist] = useAddWishlistMutation();
+
+  const { data: querys, refetch } = useGetProductByIdQuery({
+    ids: ids.length > 0 ? ids : undefined,
+  });
+
   useEffect(() => {
     const whislist = checkWishlist(wishlist, product.id);
     setWishlist(whislist);
@@ -55,30 +64,81 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
-  const handleAddProduct = async (data) => {
+  const handleAddProduct = async () => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
       const response = await addToCartMutation({
-        variantId: data?.variants[0]?.id,
+        checkoutToken: checkoutToken,
+        variantId: product?.variants[0]?.id,
       });
-      console.log("response: ", response);
-
-      notifySuccess(`${data.name} added to cart successfully`);
-      // updateData();
-      dispatch(
-        cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-      );
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
+      } else {
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
+        updateData();
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const handleWishlist = async (prd) => {
-    if (isAddWishlist) {
-      router.push("/wishlist");
-    } else {
-      addWishlistProduct(prd);
-    }
+    console.log("prd: ", prd);
+    try {
+      const token = localStorage.getItem("token");
+      let wishlist = localStorage.getItem("wishlist");
+      console.log("wishlist: ", wishlist);
+      let arr = [];
+
+      if (token) {
+        // Handle the case where token is present
+      } else {
+        if (!wishlist) {
+          arr = [];
+        } else {
+          arr = JSON.parse(wishlist);
+        }
+
+        console.log("Initial arr: ", arr);
+
+        // Check if prd.id is not already in the wishlist
+        if (!arr.includes(prd.id)) {
+          arr.push(prd.id);
+        }
+
+        console.log("Updated arr: ", arr);
+
+        localStorage.setItem("wishlist", JSON.stringify(arr));
+        const data = localStorage.getItem("wishlist");
+        console.log("Stored wishlist: ", JSON.parse(data));
+      }
+      // const user = localStorage.getItem("userInfo");
+      // console.log("user: ", JSON.parse(user).user.id);
+      // const userId = JSON.parse(user).user.id;
+      // console.log("userId: ", userId);
+      // const input = {
+      //   input: {
+      //     user: userId,
+      //     variant: prd.id,
+      //   },
+      // };
+      // const data = await addToWishlist(input);
+      // console.log("data: ", data);
+      // const arr = [];
+      // arr.push(prd.id);
+      // setIds(["UHJvZHVjdDo0OA==", "UHJvZHVjdDo5Mw=="]);
+
+      // const datas = await refetch({
+      //   ids: ["UHJvZHVjdDo0OA==", "UHJvZHVjdDo5Mw=="],
+      // });
+      // console.log("datas: ", datas);
+    } catch (error) {}
   };
 
   const addWishlistProduct = async (prd) => {

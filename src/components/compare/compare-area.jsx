@@ -27,7 +27,6 @@ const CompareArea = () => {
   const { data: tokens } = useGetCartListQuery();
 
   const compareList = useSelector((state) => state.cart.compare_list);
-  console.log("compareList: ", compareList);
 
   const cart = useSelector((state) => state.cart.cart_list);
 
@@ -56,7 +55,6 @@ const CompareArea = () => {
         checkoutToken: checkoutToken,
         variantId: item?.variants[0]?.id,
       });
-      console.log("response: ", response);
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
@@ -74,9 +72,7 @@ const CompareArea = () => {
   };
   // handle add product
   const handleRemoveComparePrd = (prd) => {
-    console.log("prd: ", prd);
     const filter = compareList.filter((item) => item.id !== prd.id);
-    console.log("filter: ", filter);
     localStorage.setItem("compareList", JSON.stringify(filter));
     dispatch(compare_list(filter));
   };
@@ -88,8 +84,11 @@ const CompareArea = () => {
       return textValue;
     }
   };
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   setToken(token);
+  // }, []);
 
-  console.log("compareList: ", compareList);
 
   return (
     <>

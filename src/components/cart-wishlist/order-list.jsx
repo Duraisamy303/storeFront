@@ -18,7 +18,6 @@ const OrderList = () => {
   const { data: orderList, isError, isLoading } = useOrderListQuery();
 
   const cart = orderList?.data?.order?.lines;
-  console.log("cart: ", cart);
 
   const dispatch = useDispatch();
 

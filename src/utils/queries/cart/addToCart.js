@@ -95,6 +95,7 @@ export const CART_LIST = ({ checkoutToken }) => {
               }
               name
               id
+              quantityAvailable
             }
             quantity
           }

@@ -60,7 +60,6 @@ const CheckoutLoginForm = ({update}) => {
       const data = await checkoutTokens({
         email,
       });
-      console.log("data: ", data);
     } catch (error) {
       console.error("Error:", error);
     }

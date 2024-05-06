@@ -171,7 +171,6 @@ const DetailsWrapper = ({
         dispatch(
           cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
         );
-        updateData();
       }
     } catch (error) {
       console.error("Error:", error);

@@ -9,14 +9,18 @@ import {
   cart_list,
   quantityDecrement,
 } from "@/redux/features/cartSlice";
-import { remove_wishlist_product } from "@/redux/features/wishlist-slice";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
-
+import {
+  get_wishlist_products,
+  add_to_wishlist,
+  remove_wishlist_product,
+} from "../../redux/features/wishlist-slice";
 
 const WishlistItem = ({ product }) => {
   const { _id, img, title, price } = product || {};
+
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
@@ -27,44 +31,34 @@ const WishlistItem = ({ product }) => {
   const data = product?.product;
   const cart = useSelector((state) => state.cart.cart_list);
   const isAddToCart = cart?.some(
-    (item) => item?.variant?.product?.id === data?.id
+    (item) => item?.variant?.product?.id === product?.id || data?.id
   );
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
 
   // handle add product
 
-  const handleAddProduct = async (data) => {
+  const handleAddProduct = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const checkoutToken = localStorage.getItem("checkoutToken");
+      console.log("checkoutToken: ", checkoutToken);
+      const response = await addToCartMutation({
+        checkoutToken: checkoutToken,
+        variantId: product?.defaultVariant?.id,
+      });
+      console.log("response: ", response);
 
-      if (token) {
-        const checkoutToken = localStorage.getItem("checkoutToken");
-        console.log("data: ", data);
-
-        if (checkoutToken) {
-          const response = await addToCart({
-            variantId: data?.product.defaultVariant?.id,
-          });
-          console.log("response: ", response);
-
-          // notifySuccess(`${data.name} added to cart successfully`);
-          // updateData();
-        } else {
-          router.push("/login");
-        }
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+        dispatch(cart_list(cart));
       } else {
-        let cartList = localStorage.getItem("cartList");
-
-        if (!cartList) {
-          cartList = [];
-        } else {
-          cartList = JSON.parse(cartList);
-        }
-        cartList.push(data);
-        localStorage.setItem("cartList", JSON.stringify(cartList));
-        // dispatch(add_cart_product(cartList));
-        dispatch(cart_list(cartList));
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        // cart_list.push
+        dispatch(
+          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        );
+        updateData();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -79,11 +73,15 @@ const WishlistItem = ({ product }) => {
   // handle remove product
   const handleRemovePrd = () => {
     console.log("wishlist: ", wishlist);
-    console.log("data: ", data);
-    // const filter = wishlist?.filter((item) => item.id !== data.id);
-   
-    // localStorage.setItem("whishlist", JSON.stringify(filter));
-    // dispatch(remove_wishlist_product(filter));
+
+    const filter = wishlist?.filter(
+      (item) => item.id !== product?.id || data?.id
+    );
+    console.log("filter: ", filter);
+
+    localStorage.setItem("wishlist", JSON.stringify(filter));
+    dispatch(add_to_wishlist(filter));
+
     // notifyError(`${data.name} removed from wishlist`);
   };
   return (
@@ -91,7 +89,7 @@ const WishlistItem = ({ product }) => {
       <td className="tp-cart-img">
         <Link href={`/product-details/${_id}`}>
           <Image
-            src={data?.media[0]?.url}
+            src={product?.thumbnail?.url || data?.media[0]?.url}
             alt="product img"
             width={70}
             height={100}
@@ -99,13 +97,18 @@ const WishlistItem = ({ product }) => {
         </Link>
       </td>
       <td className="tp-cart-title">
-        <Link href={`/product-details/${_id}`}>{title}</Link>
+        <Link href={`/product-details/${product?.product?.id}`}>{title}</Link>
       </td>
       <td>
-        <span>{data?.name}</span>
+        <span>{product?.name || data?.name}</span>
       </td>
       <td className="tp-cart-price">
-        <span>&#8377;{parseFloat(data.indiaChannelPricing)?.toFixed(2)}</span>
+        <span>
+          &#8377;
+          {parseFloat(
+            product?.pricing?.priceRange?.start?.gross?.amount
+          )?.toFixed(2) || parseFloat(data?.indiaChannelPricing)?.toFixed(2)}
+        </span>
       </td>
 
       {/* <td className="tp-cart-quantity">

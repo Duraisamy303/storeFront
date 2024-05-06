@@ -112,15 +112,10 @@ export const WISHLIST_LIST = ({ userEmail }) => {
 };
 
 export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
-  console.log("input: ", ids, channel);
   return JSON.stringify({
     query: `
-    query MyQuery($ids: [ID!]!, $channel:String!) {
-      products(
-        filter: { ids: $ids }
-        channel: $channel
-        first: 10
-      ) {
+    query MyQuery($ids: [ID!]!, $channel: String!) {
+      products(filter: {ids: $ids}, channel: $channel, first: 10) {
         edges {
           node {
             id
@@ -141,6 +136,23 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
             category {
               id
               name
+            }
+            pricing {
+              priceRange {
+                start {
+                  gross {
+                    amount
+                  }
+                }
+                stop {
+                  gross {
+                    amount
+                  }
+                }
+              }
+            }
+            defaultVariant {
+              id
             }
           }
         }
@@ -296,6 +308,82 @@ export const DESIGN_LIST = () => {
           }
       }
   }
+    `,
+  });
+};
+
+export const FEATURE_PRODUCT = () => {
+  return JSON.stringify({
+    query: `
+    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
+      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
+        edges {
+          node {
+            id
+            name
+            products(first: $first, after: $after) {
+              totalCount
+              edges {
+                node {
+                  ...ProductListItem
+                  id
+                  name
+                }
+                cursor
+              }
+              pageInfo {
+                endCursor
+                hasNextPage
+                hasPreviousPage
+                startCursor
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+        }
+      }
+    }
+    
+    fragment ProductListItem on Product {
+      id
+      name
+      slug
+      pricing {
+        priceRange {
+          start {
+            gross {
+              amount
+              currency
+            }
+          }
+          stop {
+            gross {
+              amount
+              currency
+            }
+          }
+        }
+      }
+      category {
+        id
+        name
+        slug
+      }
+      thumbnail(size: 1024, format: WEBP) {
+        url
+        alt
+      }
+      variants {
+        id
+        name
+        sku
+        quantityAvailable
+      }
+    }
+    
     `,
   });
 };
