@@ -31,6 +31,7 @@ const ShopPage = () => {
     isError,
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
+  console.log("productsData: ", productsData);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -199,9 +200,11 @@ const ShopPage = () => {
 
       const listd = [...filter, body];
       dispatch(filterData(listd));
-      setPriceValue([priceValue[0],priceValue[1]])
-      console.log("[priceValue[0],priceValue[1]]: ", [priceValue[0],priceValue[1]]);
-
+      setPriceValue([priceValue[0], priceValue[1]]);
+      console.log("[priceValue[0],priceValue[1]]: ", [
+        priceValue[0],
+        priceValue[1],
+      ]);
 
       setFilterList([...filterList, body]);
       dispatch(handleFilterSidebarClose());
@@ -224,14 +227,13 @@ const ShopPage = () => {
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
         subtitle="Shop"
-        updateRange={(range)=>setPriceValue(range)}
+        updateRange={(range) => setPriceValue(range)}
       />
       <ShopFilterOffCanvas
         all_products={products}
         otherProps={otherProps}
         filterByPrice={() => filterByPrice()}
         finishFilterData={(data, type) => filterByPrice(data, type)}
-      
       />
       <FooterTwo primary_style={true} />
     </Wrapper>

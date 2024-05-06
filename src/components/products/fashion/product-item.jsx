@@ -24,6 +24,9 @@ import {
 } from "../../../redux/features/productApi";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
+  const [channel, setChannel] = useState("india-channel");
+  console.log("channel: ", channel);
+
   let product = products.node;
   const router = useRouter();
 
@@ -170,6 +173,12 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     dispatch(compare_list(arr));
   };
   const img = product?.thumbnail?.url;
+  useEffect(() => {
+    const channel = localStorage.getItem("channel");
+    if (channel) {
+      setChannel(channel);
+    }
+  }, []);
 
   return (
     <div className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}`}>
@@ -322,26 +331,21 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           {/* <div className="tp-product-rating-icon tp-product-rating-icon-2">
           <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
         </div> */}
-          <div className="tp-product-price-wrapper-2">
-            <span className="tp-product-price-2 new-price">
-              &#8377; {product?.pricing?.priceRange?.start?.gross?.amount}
-            </span>
-            {/* {discount > 0 ? (
-
-            <>
+          {channel == "india-channel" ? (
+            <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
-                ${price.toFixed(2)}{" "}
+                &#8377;
+                {product?.pricing?.priceRange?.start?.gross?.amount}
               </span>
-              <span className="tp-product-price-2 old-price">
-                {"&#8377;"}{(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
-              </span>
-            </>
+            </div>
           ) : (
-            <span className="tp-product-price-2 new-price">
-              ${price?.toFixed(2)}
-            </span>
-          )} */}
-          </div>
+            <div className="tp-product-price-wrapper-2">
+              <span className="tp-product-price-2 new-price">
+                {"$"}
+                {product?.pricing?.priceRange?.start?.gross?.amount}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

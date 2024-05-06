@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Scrollbar } from 'swiper';
+import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Scrollbar } from "swiper";
 // internal
-import { useFeatureProductQuery, useGetProductTypeQuery } from '@/redux/features/productApi';
-import ProductSliderItem from './product-slider-item';
-import ErrorMsg from '@/components/common/error-msg';
-import { HomeTwoPopularPrdLoader } from '@/components/loader';
-import LoginForm from '@/components/forms/login-form';
+import {
+  useFeatureProductQuery,
+  useGetProductTypeQuery,
+} from "@/redux/features/productApi";
+import ProductSliderItem from "./product-slider-item";
+import ErrorMsg from "@/components/common/error-msg";
+import { HomeTwoPopularPrdLoader } from "@/components/loader";
+import LoginForm from "@/components/forms/login-form";
 
-
-// slider setting 
+// slider setting
 const slider_setting = {
   slidesPerView: 5,
   spaceBetween: 25,
@@ -18,50 +20,85 @@ const slider_setting = {
     clickable: true,
   },
   scrollbar: {
-    el: '.tp-category-swiper-scrollbar',
+    el: ".tp-category-swiper-scrollbar",
     draggable: true,
-    dragClass: 'tp-swiper-scrollbar-drag',
+    dragClass: "tp-swiper-scrollbar-drag",
     snapOnRelease: true,
   },
   breakpoints: {
-    '1400': {
+    1400: {
       slidesPerView: 5,
     },
-    '1200': {
+    1200: {
       slidesPerView: 4,
     },
-    '992': {
+    992: {
       slidesPerView: 3,
     },
-    '768': {
+    768: {
       slidesPerView: 2,
     },
-    '576': {
+    576: {
       slidesPerView: 2,
     },
-    '0': {
+    0: {
       slidesPerView: 1,
     },
-  }
-}
+  },
+};
 
 const PopularProducts = () => {
+  const {
+    data: productsData,
+    isError,
+    isLoading,
+  } = useGetProductTypeQuery({ channel: "india-channel", first: 19 });
 
-  const { data: productsData, isError, isLoading } =
-    useGetProductTypeQuery({ channel:"india-channel",first:19 });
+  const { data: featureProduct } = useFeatureProductQuery({
+    first: 20,
+    after: null,
+    channel: "india-channel",
+    collectionid: ["Q29sbGVjdGlvbjoz"],
+  });
 
-    const { data: featureProduct,} =
-    useFeatureProductQuery({ channel:"india-channel",first:19 });
+  const [featureProducts, setFeatureProducts] = useState([]);
+  console.log("featureProducts: ", featureProducts);
   // decide what to render
-  console.log("featureProduct: ", featureProduct);
+
+  useEffect(() => {
+    featureProductData();
+  }, [featureProduct]);
+
+  const featureProductData = () => {
+    try {
+      if (featureProduct) {
+        if (
+          featureProduct?.data &&
+          featureProduct?.data?.collections &&
+          featureProduct?.data?.collections?.edges?.length > 0
+        ) {
+          if (featureProduct?.data?.collections?.edges[0]?.node) {
+            if (
+              featureProduct?.data?.collections?.edges[0]?.node?.products?.edges
+                ?.length > 0
+            ) {
+              const list =
+                featureProduct?.data?.collections?.edges[0]?.node?.products?.edges
+              setFeatureProducts(list);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   let content = null;
   const products = productsData?.data?.products?.edges;
 
   if (isLoading) {
-    content = (
-      <HomeTwoPopularPrdLoader loading={isLoading} />
-    );
+    content = <HomeTwoPopularPrdLoader loading={isLoading} />;
   }
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
@@ -72,25 +109,35 @@ const PopularProducts = () => {
   if (!isLoading && !isError && products?.length > 0) {
     // const product_items = products.slice(0, 8);
     content = (
-      <Swiper {...slider_setting} modules={[Scrollbar, Pagination]} className="tp-category-slider-active-4 swiper-container mb-70">
-        {products.map(item => (
+      <Swiper
+        {...slider_setting}
+        modules={[Scrollbar, Pagination]}
+        className="tp-category-slider-active-4 swiper-container mb-70"
+      >
+        {featureProducts?.map((item) => (
           <SwiperSlide key={item.id}>
-            <ProductSliderItem product={item}  />
+            <ProductSliderItem product={item} />
           </SwiperSlide>
         ))}
       </Swiper>
-    )
+    );
   }
   return (
     <>
-      <section className="tp-category-area pt-50 pb-105 tp-category-plr-85" style={{backgroundColor:`#EFF1F5`}}>
+      <section
+        className="tp-category-area pt-50 pb-105 tp-category-plr-85"
+        style={{ backgroundColor: `#EFF1F5` }}
+      >
         <div className="container-fluid">
           <div className="row">
-          <div className="col-xl-12">
+            <div className="col-xl-12">
               <div className="tp-section-title-wrapper-4 mb-60 text-center">
                 <h5 className="popular-adipisicing">Adipisicing elit</h5>
                 <h2 className="tp-section-title-4">FEATURED PRODUCTS</h2>
-                <p style={{color:"black"}}>There are many variations of passages of lorem ipsum available.</p>
+                <p style={{ color: "black" }}>
+                  There are many variations of passages of lorem ipsum
+                  available.
+                </p>
               </div>
             </div>
           </div>
@@ -104,7 +151,6 @@ const PopularProducts = () => {
           </div>
         </div>
       </section>
-    
     </>
   );
 };

@@ -312,7 +312,7 @@ export const DESIGN_LIST = () => {
   });
 };
 
-export const FEATURE_PRODUCT = () => {
+export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
@@ -382,8 +382,18 @@ export const FEATURE_PRODUCT = () => {
         sku
         quantityAvailable
       }
+      media {
+        id
+        url
+        alt
+      }
+      defaultVariant {
+        id
+        quantityAvailable
+      }
     }
     
     `,
+    variables: { first, after, channel, collectionid },
   });
 };
