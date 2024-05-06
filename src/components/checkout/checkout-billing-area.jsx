@@ -26,7 +26,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const { data: list } = useGetCartListQuery();
   console.log("list: ", list);
-  const { data: countryList } = useCountryListQuery();
+  const { data: countryList,refetchCountry } = useCountryListQuery();
 
   const CountryList = countryList?.data?.shop?.countries;
 
@@ -66,7 +66,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { id: 2, label: "Razorpay", checked: false },
     ],
     pType: false,
-    selectedCountryList:""
+    selectedCountryList: '',
+    selectedState: ''
   });
 
 
@@ -84,6 +85,11 @@ const StateList = stateList?.data?.addressValidationRules?.countryAreaChoices
 
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
+  };
+
+  const handleSelectChange = (e, field) => {
+    setState({ ...state, [field]: e.target.value });
+    refetch()
   };
 
   const [Razorpay] = useRazorpay();
@@ -310,10 +316,10 @@ const StateList = stateList?.data?.addressValidationRules?.countryAreaChoices
     setState({ paymentType: updatedCheckboxes, pType: true });
   };
 
-const handleSelectChange = (e) => {
-  setState({ selectedCountryList: e.target.value });
-}
-console.log("selectedCountryList",state.selectedCountryList)
+// const handleSelectChange = (e) => {
+//   setState({ selectedCountryList: e.target.value });
+// }
+// console.log("selectedCountryList",state.selectedCountryList)
 
   return (
     <div className="row">
@@ -381,49 +387,46 @@ console.log("selectedCountryList",state.selectedCountryList)
                     )}
                   </div>
                 </div>
+               
                 <div className="col-md-6">
-                  <div className="tp-checkout-input">
-                    <label htmlFor="state">
-                      Country <span>*</span>
-                    </label>
-                    <select
-                      name="country"
-                      id="country"
-                      value={state.state}
-                      className="nice-select w-100"
-                      onChange={(e) => handleSelectChange(e, "state")}
-                    >
-                      {CountryList?.map((item) => (
-                        <option key={item.code} value={item.code}>
-                          {item.country}
-                        </option>
-                      ))}
-                    </select>
-                    {/* You can add validation error message rendering here if needed */}
-                  </div>
-                </div>
+        <div className="tp-checkout-input">
+          <label htmlFor="country">Country <span>*</span></label>
+          <select
+            name="country"
+            id="country"
+            value={state.selectedCountryList}
+            className="nice-select w-100"
+            onChange={(e) => handleSelectChange(e, "selectedCountryList")}
+          >
+            <option value="">Select Country</option>
+            {CountryList?.map((item) => (
+              <option key={item.code} value={item.code}>
+                {item.country}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-                <div className="col-md-6">
-                  <div className="tp-checkout-input">
-                    <label htmlFor="state">
-                      State <span>*</span>
-                    </label>
-                    <select
-                      name="state"
-                      id="state"
-                      value={state.state}
-                      className="nice-select w-100"
-                      onChange={(e) => handleInputChange(e, "state")}
-                    >
-                      {StateList?.map((item) => (
-                        <option key={item.raw} value={item.raw}>
-                          {item.raw}
-                        </option>
-                      ))}
-                    </select>
-                    {/* You can add validation error message rendering here if needed */}
-                  </div>
-                </div>
+      <div className="col-md-6">
+        <div className="tp-checkout-input">
+          <label htmlFor="state">State <span>*</span></label>
+          <select
+            name="state"
+            id="state"
+            value={state.selectedState}
+            className="nice-select w-100"
+            onChange={(e) => handleSelectChange(e, "selectedState")}
+          >
+            <option value="">Select State</option>
+            {StateList?.map((item) => (
+              <option key={item.raw} value={item.raw}>
+                {item.raw}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
                 {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                   <label>
@@ -613,6 +616,9 @@ console.log("selectedCountryList",state.selectedCountryList)
                       )}
                     </div>
                   </div>
+
+
+
 
                   <div className="col-md-12">
                     <div className="tp-checkout-input">
