@@ -412,3 +412,19 @@ export const COUNTRY_LIST = () => {
     `,
   });
 };
+
+export const STATE_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query CountryArea($code: CountryCode!) {
+      addressValidationRules(countryCode: $code) {
+        countryAreaChoices {
+          raw
+          verbose
+        }
+      }
+    }
+    `,
+  });
+};
+

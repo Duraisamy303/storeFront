@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import NiceSelect from "@/ui/nice-select";
 import HeaderSearchForm from "../forms/header-search-form";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-
+import { useCountryListQuery, useStateListQuery } from "@/redux/features/productApi";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -23,6 +23,17 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const { data: list, refetch } = useGetCartListQuery();
   console.log("list: ", list);
+  const  { data: countryList } = useCountryListQuery();
+
+const CountryList = countryList?.data?.shop?.countries
+
+
+const  { data: stateList } = useStateListQuery("AF");
+console.log('✌️stateList --->', stateList);
+
+
+console.log('CountryList --->', CountryList);
+
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
@@ -154,7 +165,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         country1: "IN",
         countryArea1: "Tamil Nadu",
       };
-
 
       if (Object.keys(errors).length === 0) {
         const createCheckoutResponse = await createCheckout({
@@ -339,6 +349,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                   </div>
                 </div>
+
                 <div className="col-md-12">
                   <div className="tp-checkout-input">
                     <label>
@@ -357,7 +368,47 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                   </div>
                 </div>
-                <div className="col-md-12">
+                <div className="col-md-6">
+                  <div className="tp-checkout-input">
+                    <label htmlFor="state">
+                      State <span>*</span>
+                    </label>
+                    <select
+                      name="country"
+                      id="country"
+                      value={state.state}
+                      className="nice-select w-100"
+                      onChange={(e) => handleInputChange(e, "state")}
+                    >
+                      {CountryList?.map((item) => (
+                        <option key={item.code} value={item.code}>
+                          {item.country}
+                        </option>
+                      ))}
+                    </select>
+                    {/* You can add validation error message rendering here if needed */}
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+                  <div className="tp-checkout-input">
+                    <label>
+                      State <span>*</span>
+                    </label>
+                    <input
+                      name="lastName"
+                      id="lastName"
+                      type="select"
+                      value={state.lastName}
+                      placeholder="Last Name"
+                      onChange={(e) => handleInputChange(e, "lastName")}
+                    />
+                    {state.errors.streetAddress1 && (
+                      <ErrorMsg msg={state.errors.streetAddress1} />
+                    )}
+                  </div>
+                </div>
+                {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                   <label>
                       Country <span>*</span>
@@ -371,13 +422,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       <option value="">Select an address</option>
                       <option value="address1">Address 1</option>
                       <option value="address2">Address 2</option>
-                      {/* Add more options as needed */}
                     </select>
                     {state.errors.streetAddress1 && (
                       <ErrorMsg msg={state.errors.streetAddress1} />
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-12">
                   <div className="tp-checkout-input">
@@ -750,7 +800,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       setState({ COD: e.target.checked, pType: true })
                     }
                   />
-                  <label htmlFor="cash">Razorpay</label>
+                  <label htmlFor="cash" style={{ color: "black" }}>
+                    Razorpay
+                  </label>
                 </div>
               </li>
               {state.errors.paymentType && (
