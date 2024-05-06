@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 
-const CartCheckout = () => {
+const CartCheckout = ({ cartData }) => {
   const { total } = useCartInfo();
   const [shipCost, setShipCost] = useState(0);
   const [totals, setTotal] = useState(0);
@@ -43,8 +43,15 @@ const CartCheckout = () => {
     setTotal(total);
   }, [shipCost, dispatch, cart]);
 
-  useEffect(() => {},[])
+  useEffect(() => {}, []);
 
+  console.log("propscartData: ", cartData);
+
+  const quantityDisable = cartData.some((item) => {
+    console.log("✌️item --->", item.quantity);
+    return item.variant.quantityAvailable >= item.quantity;
+  });
+  console.log("quantityDisable: ", quantityDisable);
   return (
     <div className="tp-cart-checkout-wrapper">
       <div>
@@ -109,9 +116,20 @@ const CartCheckout = () => {
         </span>
       </div>
       <div className="tp-cart-checkout-proceed">
-        <Link href="/checkout" className="tp-cart-checkout-btn w-100">
-          PROCEED TO CHECKOUT
-        </Link>
+        {quantityDisable === true ? (
+          <Link href="/checkout" className="tp-cart-checkout-btn w-100">
+            PROCEED TO CHECKOUT
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className="tp-cart-checkout-btn w-100"
+            disabled
+            style={{ cursor: "not-allowed" }}
+          >
+            PROCEED TO CHECKOUT
+          </button>
+        )}
       </div>
     </div>
   );
