@@ -22,6 +22,7 @@ import {
   COUNTRY_LIST,
   DESIGN_LIST,
   STONE_LIST,
+  STATE_LIST
 } from "../../utils/queries/productList";
 
 export const productApi = apiSlice.injectEndpoints({
@@ -216,6 +217,11 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    stateList: builder.query({
+      query: () => configuration(STATE_LIST({})),
+      providesTags: ["Products"],
+    }),
+
     //filters
     priceFilter: builder.mutation({
       query: ({ filter }) => {
@@ -260,4 +266,5 @@ export const {
   useGetStoneListQuery,
   useFeatureProductQuery,
   useCountryListQuery, 
+  useStateListQuery
 } = productApi;
