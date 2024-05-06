@@ -45,9 +45,11 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
-  console.log("productItem: ", productItem);
+
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
+  const [channel, setChannel] = useState("india-channel");
+
   const [visibility, setVisibility] = useState({
     description: false,
     additionalInfo: false,
@@ -199,6 +201,13 @@ const DetailsWrapper = ({
     dispatch(compare_list(arr));
   };
 
+  useEffect(() => {
+    const channel = localStorage.getItem("channel");
+    if (channel) {
+      setChannel(channel);
+    }
+  }, []);
+
   return (
     <div className="tp-product-details-wrapper">
       <ProductDetailsBreadcrumb
@@ -217,14 +226,30 @@ const DetailsWrapper = ({
       </h3>
       {/* price */}
       <div className="tp-product-details-price-wrapper mb-20">
-        {discount > 0 ? (
+        {channel == "india-channel" ? (
+          <div className="tp-product-price-wrapper-2">
+            <span className="tp-product-price-2 new-price">
+              &#8377;
+              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+            </span>
+          </div>
+        ) : (
+          <div className="tp-product-price-wrapper-2">
+            <span className="tp-product-price-2 new-price">
+              {"$"}
+              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+            </span>
+          </div>
+        )}
+        {/* {discount > 0 ? (
           <>
             <span className="tp-product-details-price old-price">${price}</span>
             <span className="tp-product-details-price new-price">
               &#8377;{" "}
               {productItem?.pricing?.priceRange?.start?.gross?.amount ||
                 productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-              {/* {" "}${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)} */}
             </span>
           </>
         ) : (
@@ -232,11 +257,8 @@ const DetailsWrapper = ({
             &#8377;{" "}
             {productItem?.pricing?.priceRange?.start?.gross?.amount ||
               productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-            {/* &#8377; {productItem?.pricing?.priceRange?.start?.gross?.amount} */}
           </span>
-
-          // <span className="tp-product-details-price new-price">${price?.toFixed(2)}</span>
-        )}
+        )} */}
       </div>
 
       {/* inventory details */}

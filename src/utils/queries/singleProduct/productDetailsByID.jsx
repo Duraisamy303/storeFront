@@ -1,8 +1,8 @@
-export const SINGLE_PRODUCT = ({ productId }) => {
+export const SINGLE_PRODUCT = ({ productId, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($productId: ID!) {
-        product(id: $productId, channel: "india-channel") {
+    query MyQuery($productId: ID!,$channel: String!) {
+        product(id: $productId, channel: $channel) {
           id
           name
           slug
@@ -48,7 +48,7 @@ export const SINGLE_PRODUCT = ({ productId }) => {
         }
       }
     `,
-    variables: { productId },
+    variables: { productId, channel },
   });
 };
 

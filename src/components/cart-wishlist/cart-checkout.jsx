@@ -3,6 +3,7 @@ import Link from "next/link";
 import useCartInfo from "@/hooks/use-cart-info";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 
 const CartCheckout = () => {
   const { total } = useCartInfo();
@@ -13,10 +14,14 @@ const CartCheckout = () => {
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
+  const { data: list, refetch } = useGetCartListQuery();
+  console.log("list: ", list);
+
   const totalAmount = cart?.reduce(
     (acc, curr) =>
       acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity ||
-      acc + curr?.node?.pricing?.priceRange?.start?.gross?.amount * curr?.quantity,
+      acc +
+        curr?.node?.pricing?.priceRange?.start?.gross?.amount * curr?.quantity,
     0
   );
   // handle shipping cost
@@ -38,14 +43,20 @@ const CartCheckout = () => {
     setTotal(total);
   }, [shipCost, dispatch, cart]);
 
+  useEffect(() => {},[])
+
   return (
     <div className="tp-cart-checkout-wrapper">
       <div>
-        <h5 style={{fontWeight:"500", paddingBottom:"20px"}}>CART TOTALS</h5>
+        <h5 style={{ fontWeight: "500", paddingBottom: "20px" }}>
+          CART TOTALS
+        </h5>
       </div>
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>
-        <span className="tp-cart-checkout-top-price">&#8377;{totalAmount}</span>
+        <span className="tp-cart-checkout-top-price">
+          &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount}
+        </span>
       </div>
 
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
@@ -92,8 +103,9 @@ const CartCheckout = () => {
       <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
         <span>Total</span>
         <span>
-          &#8377;{totals.toFixed(2)}
-          <br/><span style={{fontSize:"14px"}}>(includes ₹1,012.14 VAT)</span>
+          &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+          <br />
+          <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span>
         </span>
       </div>
       <div className="tp-cart-checkout-proceed">

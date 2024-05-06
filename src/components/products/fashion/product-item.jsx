@@ -25,7 +25,6 @@ import {
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
-  console.log("channel: ", channel);
 
   let product = products.node;
   const router = useRouter();

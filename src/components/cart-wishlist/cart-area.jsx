@@ -42,7 +42,7 @@ const CartArea = () => {
           const updateData =
             data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
           dispatch(cart_list(updateData));
-         
+
 
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })

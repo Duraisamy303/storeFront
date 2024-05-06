@@ -38,8 +38,17 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
     getProductType: builder.query({
-      query: ({ channel, first }) =>
-        configuration(PRODUCT_LIST({ channel, first })),
+      query: ({  first }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+
+        return configuration(PRODUCT_LIST({ channel, first }));
+      },
 
       providesTags: ["ProductType"],
     }),
@@ -58,7 +67,18 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     // get single product
     getProduct: builder.query({
-      query: ({ productId }) => configuration(SINGLE_PRODUCT({ productId })),
+      query: ({ productId }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        console.log("channel: ", channel);
+
+        return configuration(SINGLE_PRODUCT({ productId, channel }));
+      },
 
       providesTags: (result, error, arg) => [{ type: "Product", id: arg }],
       invalidatesTags: (result, error, arg) => [
@@ -67,7 +87,16 @@ export const productApi = apiSlice.injectEndpoints({
     }),
     // get related products
     getRelatedProducts: builder.query({
-      query: ({ id }) => configuration(RELATED_PRODUCT({ id })),
+      query: ({ id }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(RELATED_PRODUCT({ id, channel }));
+      },
       providesTags: (result, error, arg) => [
         { type: "RelatedProducts", id: arg },
       ],
@@ -108,18 +137,28 @@ export const productApi = apiSlice.injectEndpoints({
 
     getProductById: builder.query({
       query: ({ ids }) => {
-        return configuration(
-          GET_PRODUCTLIST_BY_ID({ ids, channel: "india-channel" })
-        );
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(GET_PRODUCTLIST_BY_ID({ ids, channel }));
       },
       providesTags: ["Products"],
     }),
 
     getCategoryList: builder.query({
       query: (data) => {
-        return configuration(
-          CATEGORY_LIST({ channel: "india-channel", first: 100 })
-        );
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(CATEGORY_LIST({ channel, first: 100 }));
       },
       providesTags: ["Products"],
     }),
@@ -153,7 +192,14 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     featureProduct: builder.query({
-      query: ({ first, after, channel, collectionid }) => {
+      query: ({ first, after, collectionid }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
         return configuration(
           FEATURE_PRODUCT({ first, after, channel, collectionid })
         );
@@ -164,9 +210,16 @@ export const productApi = apiSlice.injectEndpoints({
     //filters
     priceFilter: builder.mutation({
       query: ({ filter }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
         return configuration(
           PRODUCT_FILTER({
-            channel: "india-channel",
+            channel,
             first: 100,
             after: null,
             filter,
