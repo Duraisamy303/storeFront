@@ -39,6 +39,7 @@ const CompareArea = () => {
 
   useEffect(() => {
     const compareList = localStorage.getItem("compareList");
+    console.log("✌️compareList --->", compareList);
     const arr = JSON.parse(compareList);
     dispatch(compare_list(arr));
   }, []);
@@ -89,7 +90,6 @@ const CompareArea = () => {
   //   setToken(token);
   // }, []);
 
-
   return (
     <>
       <section className="tp-compare-area pb-50 pt-50">
@@ -110,62 +110,84 @@ const CompareArea = () => {
                     <tbody>
                       <tr>
                         <th>Product</th>
-                        {compareList?.map((item) => (
-                          <td key={item?.id} className="">
-                            <div className="tp-compare-thumb">
-                              <Image
-                                src={item?.thumbnail?.url}
-                                alt="compare"
-                                width={500}
-                                height={500}
-                              />
-                              <h4 className="tp-compare-product-title">
-                                <Link href={`/product-details/${item?.id}`}>
-                                  {item?.name}
-                                </Link>
-                              </h4>
-                              <div
-                                className="tp-compare-add-to-cart"
-                                style={{ paddingBottom: "10px" }}
-                              >
-                                &#8377;
-                                {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                  2
-                                )}
-                              </div>
+                        {compareList?.map((item) => {
+                          console.log("✌️itemcompare --->", item);
+                          return (
+                            <td key={item?.id} className="">
+                              <div className="tp-compare-thumb p-relative z-index-1">
+                                <Image
+                                  src={item?.thumbnail?.url}
+                                  alt="compare"
+                                  width={500}
+                                  height={500}
+                                  className=""
+                                />
+                                <div className="tp-product-badge-2">
+                                  {item?.defaultVariant?.quantityAvailable ==
+                                    0 && (
+                                    <span
+                                      className="product-hot text-center"
+                                      style={{ padding: "15px 12px " }}
+                                    >
+                                      SOLD
+                                      <br /> OUT
+                                    </span>
+                                  )}
+                                </div>
 
-                              <div className="tp-compare-add-to-cart">
-                                {cart?.some(
-                                  (prd) =>
-                                    prd?.variant?.product?.id === item?.id
-                                ) ? (
-                                  <button
-                                    onClick={() => router.push("/cart")}
-                                    className="tp-btn"
-                                    type="button"
-                                  >
-                                    View Cart
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={() => handleAddProduct(item)}
-                                    type="button"
-                                    className="tp-btn"
-                                  >
-                                    Add to Cart
-                                  </button>
-                                )}
-                                {/* <button
+                                <h4 className="tp-compare-product-title">
+                                  <Link href={`/product-details/${item?.id}`}>
+                                    {item?.name}
+                                  </Link>
+                                </h4>
+                                <div
+                                  className="tp-compare-add-to-cart"
+                                  style={{ paddingBottom: "10px" }}
+                                >
+                                  &#8377;
+                                  {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                    2
+                                  )}
+                                </div>
+{
+  item?.defaultVariant?.quantityAvailable != 0 &&(
+<div className="tp-compare-add-to-cart">
+                                  {cart?.some(
+                                    (prd) =>
+                                      prd?.variant?.product?.id === item?.id
+                                  ) ? (
+                                    <button
+                                      onClick={() => router.push("/cart")}
+                                      className="tp-btn"
+                                      type="button"
+                                    >
+                                      View Cart
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => handleAddProduct(item)}
+                                      type="button"
+                                      className="tp-btn"
+                                    >
+                                      Add to Cart
+                                    </button>
+                                  )}
+                                  {/* <button
                                 onClick={() => handleAddProduct(item)}
                                 type="button"
                                 className="tp-btn"
                               >
                                 Add to Cart
                               </button> */}
+                                </div>
+  )
+}
+                                
+
                               </div>
-                            </div>
-                          </td>
-                        ))}
+                            </td>
+                          );
+                        })}
                       </tr>
 
                       {/* Price */}
