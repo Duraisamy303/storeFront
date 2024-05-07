@@ -26,31 +26,86 @@ export const PRODUCT_LIST = ({ channel, first }) => {
   });
 };
 
-export const ORDER_LIST = ({ orderid }) => {
+export const ORDER_LIST = ({ orderId }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($orderid:ID!) {
-      order(id: $orderid) {
+    query getOrderDetails($orderId: ID!) {
+      order(id: $orderId) {
+        id
+        billingAddress {
+          firstName
+          lastName
+          streetAddress1
+          city
+          country {
+            code
+            country
+          }
+          postalCode
+          phone
+        }
+        shippingAddress {
+          firstName
+          lastName
+          streetAddress1
+          city
+          country {
+            code
+            country
+          }
+          postalCode
+          phone
+        }
+        courierPartner {
+          name
+          trackingUrl
+          id
+        }
         lines {
           id
           productName
           productSku
-          quantity
-          thumbnail {
-            url
-          }
+          taxRate
           totalPrice {
-            currency
             gross {
               amount
               currency
             }
           }
+          quantity
         }
+        events {
+          message
+          id
+          date
+          type
+        }
+        number
+        statusDisplay
+        subtotal {
+          gross {
+            amount
+            currency
+          }
+        }
+        total {
+          gross {
+            amount
+            currency
+          }
+        }
+        shippingMethods {
+          id
+          price {
+            amount
+            currency
+          }
+        }
+        isPaid
       }
     }
     `,
-    variables: { orderid },
+    variables: { orderId },
   });
 };
 
