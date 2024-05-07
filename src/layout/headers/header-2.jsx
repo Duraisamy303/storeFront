@@ -30,12 +30,18 @@ import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
 import UserMiniSidebar from "@/components/common/user-sidebar";
+import {
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
+
+  const {data:cartList, refetch:cartRefetch} = useGetCartListQuery();
+console.log("✌️cartList --->", cartList);
 
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
@@ -166,7 +172,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                         </div>
                         <div className="tp-header-action-item">
                           <button
-                            onClick={() => dispatch(openCartMini())}
+                             onClick={() => {
+                              dispatch(openCartMini());
+                              cartRefetch();
+                            }}                  
                             className="tp-header-action-btn cartmini-open-btn"
                           >
                             <CartTwo />

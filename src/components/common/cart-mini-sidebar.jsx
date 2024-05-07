@@ -276,7 +276,7 @@ const CartMiniSidebar = () => {
                 view cart
               </Link>
 
-              {quantityDisable.some((item) => item === false) ? (
+              {quantityDisable?.some((item) => item === false) ? (
                 <button
                   style={{ cursor: "not-allowed" }}
                   className="tp-btn tp-btn-border w-100"
