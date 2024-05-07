@@ -7,6 +7,7 @@ import {
   FEATURE_PRODUCT,
   FINISH_LIST,
   GET_PRODUCTLIST_BY_ID,
+  MY_ORDER_LIST,
   ORDER_LIST,
   PRODUCT_FILTER,
   PRODUCT_LIST,
@@ -110,6 +111,14 @@ export const productApi = apiSlice.injectEndpoints({
       query: () => {
         const orderid = localStorage.getItem("orderId");
         return configuration(ORDER_LIST({ orderid }));
+      },
+      providesTags: ["Products"],
+    }),
+
+    myOrderList: builder.query({
+      query: () => {
+        const orderid = localStorage.getItem("orderId");
+        return configuration(MY_ORDER_LIST({ first:100 }));
       },
       providesTags: ["Products"],
     }),
@@ -254,6 +263,7 @@ export const {
   useGetProductQuery,
   useGetRelatedProductsQuery,
   useOrderListQuery,
+  useMyOrderListQuery,
   useAddWishlistMutation,
   useGetWishlistQuery,
   useGetProductByIdQuery,

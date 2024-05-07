@@ -129,7 +129,7 @@ const MobileMenus = () => {
         </li>
 
         <li>
-          <Link href="/my-orders" style={{ fontWeight: "500" }}>
+          <Link href="/myOrders" style={{ fontWeight: "500" }}>
             SALE
           </Link>
         </li>

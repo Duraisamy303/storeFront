@@ -24,13 +24,10 @@ const CartMiniSidebar = () => {
 
   const cartData = useSelector((state) => state.cart?.cart_list);
   const cart = cartData?.node || cartData;
-  console.log("✌️cart --->", cart);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
-  console.log("✌️cartList --->", cartList);
 
   const CartList = cartList?.data?.checkout?.lines;
-  console.log("✌️CartList --->", CartList);
 
   useEffect(() => {
     cartRefetch();
@@ -67,13 +64,9 @@ const CartMiniSidebar = () => {
   };
 
   const quantityDisable = CartList?.map((item) => {
-    console.log(
-      "✌️itemquantityAvailablechecking --->",
-      item?.variant?.quantityAvailable
-    );
+   
     return item.variant.quantityAvailable >= item.quantity;
   });
-  console.log("quantityDisable: ", quantityDisable);
 
   return (
     <>
@@ -104,8 +97,6 @@ const CartMiniSidebar = () => {
             {CartList?.length > 0 && (
               <div className="cartmini__widget">
                 {CartList?.map((item) => {
-                  console.log("✌️itemitem --->", item);
-
                   return (
                     <>
                       {item.variant.quantityAvailable >= item.quantity ? (

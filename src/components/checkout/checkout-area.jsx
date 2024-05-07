@@ -9,9 +9,12 @@ import CheckoutOrderArea from "./checkout-order-area";
 import useCheckoutSubmit from "@/hooks/use-checkout-submit";
 import useRazorpay from "react-razorpay";
 import {
+  useApplyCoupenCodeMutation,
   useCheckoutCompleteMutation,
   useCheckoutUpdateMutation,
+  useCreateCheckoutIdMutation,
   useCreateCheckoutTokenMutation,
+  useCreateNewTokenMutation,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
@@ -24,6 +27,9 @@ const CheckoutArea = () => {
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
+  const [createCheckoutId] = useCreateCheckoutIdMutation();
+
+  const [applyCoupenCode] = useApplyCoupenCodeMutation();
 
   const [Razorpay] = useRazorpay();
 
@@ -43,9 +49,14 @@ const CheckoutArea = () => {
 
   const router = useRouter();
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const [cartTotals, setCartTotal] = useState(0);
+  const [coupenCode, setCoupenCode] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  console.log("coupenCode: ", coupenCode);
 
   const [token, setToken] = useState("");
 
@@ -66,6 +77,56 @@ const CheckoutArea = () => {
     });
   }
 
+  const applyCoupen = async () => {
+    try {
+      console.log("cart: ", cart);
+      const lines = cart?.map((item) => {
+        return { quantity: 1, variantId: item?.variant?.id };
+      });
+      console.log("lines: ", lines);
+
+      const data = await createCheckoutId({
+        lines,
+      });
+      if (data?.data?.data?.checkoutCreate?.errors?.length > 0) {
+        notifyError(data?.data?.data?.checkoutCreate?.errors[0]?.message);
+      } else {
+        const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
+        console.log("checkoutId: ", checkoutId);
+        localStorage.setItem("checkoutId", checkoutId);
+        verifyCoupenCode(checkoutId);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const verifyCoupenCode = async (checkoutId) => {
+    try {
+      const data = await applyCoupenCode({
+        checkoutId,
+        languageCode: "EN_US",
+        promoCode: "E87B-D067-5527",
+      });
+      console.log("verifyCoupenCode: ", data);
+
+      if (data?.data?.data?.checkoutAddPromoCode?.errors?.length > 0) {
+        notifyError(data?.data?.data?.checkoutAddPromoCode?.errors[0]?.message);
+        console.log(
+          "data?.data?.checkoutAddPromoCode?.errors[0]?.message: ",
+          data?.data?.data?.checkoutAddPromoCode?.errors[0]?.message
+        );
+        setIsVerified(false);
+      } else {
+        setIsVerified(true);
+
+        const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
+        console.log("checkoutId: ", checkoutId);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   return (
     <>
@@ -87,11 +148,63 @@ const CheckoutArea = () => {
               <div className="col-xl-7 col-lg-7">
                 <div className="tp-checkout-verify">
                   {!token && <CheckoutLogin />}
-                  <CheckoutCoupon
+                  <div className="tp-checkout-verify-item">
+                    <p className="tp-checkout-verify-reveal">
+                      Have a coupon?{" "}
+                      <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        type="button"
+                        className="tp-checkout-coupon-form-reveal-btn"
+                      >
+                        Click here to enter your code
+                      </button>
+                    </p>
+
+                    {isOpen && (
+                      <div
+                        id="tpCheckoutCouponForm"
+                        className="tp-return-customer"
+                      >
+                        <div className="tp-return-customer-input">
+                          <label>Coupon Code :</label>
+                          <input
+                            value={coupenCode}
+                            onChange={(e) => setCoupenCode(e.target.value)}
+                            type="text"
+                            placeholder="Coupon"
+                            disabled={isVerified}
+                          />
+                        </div>
+                        {isVerified ? (
+                          <div
+                            className="text-green"
+                            style={{ color: "green" }}
+                            placeholder=""
+                          >
+                            Verified
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            className="tp-return-customer-btn tp-checkout-btn"
+                            onClick={() => applyCoupen()}
+                          >
+                            Apply
+                          </button>
+                        )}
+                        {couponApplyMsg && (
+                          <p className="p-2" style={{ color: "green" }}>
+                            {couponApplyMsg}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {/* <CheckoutCoupon
                     handleCouponCode={handleCouponCode}
                     couponRef={couponRef}
                     couponApplyMsg={couponApplyMsg}
-                  />
+                  /> */}
                 </div>
               </div>
               {/* <form onSubmit={handleSubmit(submitHandler)}> */}

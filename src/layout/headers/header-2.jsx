@@ -193,16 +193,16 @@ console.log("✌️cartList --->", cartList);
                             <Menu />
                           </button>
                         </div>
-                        {/* {token &&
-                        <div className="tp-header-action-item">
-                          <button
-                            onClick={() => dispatch(openUserSidebar())}
-                            className="tp-header-action-btn cartmini-open-btn"
-                          >
-                            <UserThree />
-                          </button>
-                        </div>
-                        } */}
+                        {token && (
+                          <div className="tp-header-action-item">
+                            <button
+                              onClick={() => dispatch(openUserSidebar())}
+                              className="tp-header-action-btn cartmini-open-btn"
+                            >
+                              <UserThree />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -217,7 +217,7 @@ console.log("✌️cartList --->", cartList);
       <CartMiniSidebar />
       {/* cart mini sidebar end */}
 
-      {/* <UserMiniSidebar /> */}
+      <UserMiniSidebar />
 
       {/* off canvas start */}
       <OffCanvas

@@ -7,13 +7,17 @@ import cardSlice from "./cardSlice";
 import { apiSlice } from "@/redux/api/apiSlice";
 import {
   ADDTOCART,
+  APPLY_COUPEN_CODE,
   CART_LIST,
   CHECKOUT_COMPLETE,
   CHECKOUT_DELIVERY_METHOD,
   CHECKOUT_TOKEN,
   CHECKOUT_TOKEN_WITHOUT_EMAIL,
   CHECKOUT_UPDATE_SHIPPING_ADDRESS,
+  CREATE_CHECKOUT_ID,
+  CREATE_CHECKOUT_TOKEN,
   REMOVETOCART,
+  UPDATE_BILLING_ADDRESS,
   UPDATE_CART_QUANTITY,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
@@ -217,6 +221,54 @@ export const cardApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    createCheckoutId: builder.mutation({
+      query: ({ lines }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(CREATE_CHECKOUT_ID({ channel, lines }));
+      },
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
+
+    applyCoupenCode: builder.mutation({
+      query: ({ checkoutId, languageCode, promoCode }) => {
+        return configuration(
+          APPLY_COUPEN_CODE({
+            checkoutId,
+            languageCode,
+            promoCode,
+          })
+        );
+      },
+    }),
+
+    updateBillingAddress: builder.mutation({
+      query: ({ checkoutId, billingAddress }) => {
+        return configuration(
+          UPDATE_BILLING_ADDRESS({
+            checkoutId,
+            billingAddress,
+            validationRules: {
+              checkRequiredFields: false,
+            },
+            languageCode: "EN_US",
+          })
+        );
+      },
+    }),
   }),
 });
 
@@ -230,4 +282,7 @@ export const {
   useCheckoutUpdateMutation,
   useCheckoutCompleteMutation,
   useUpdateCartQuantityMutation,
+  useCreateCheckoutIdMutation,
+  useApplyCoupenCodeMutation,
+  useUpdateBillingAddressMutation
 } = cardApi;

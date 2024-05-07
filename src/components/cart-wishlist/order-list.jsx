@@ -8,6 +8,7 @@ import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
 import {
   useGetAllProductsQuery,
+  useMyOrderListQuery,
   useOrderListQuery,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
@@ -15,17 +16,28 @@ import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 const OrderList = () => {
   const { data: data } = useGetCartListQuery();
 
-  const { data: orderList, isError, isLoading } = useOrderListQuery();
+  const { data: orders, isError, isLoading } = useMyOrderListQuery();
 
-  const cart = orderList?.data?.order?.lines;
+  const [orderList, setOrderList] = useState([]);
+  console.log("orderList: ", orderList);
+
+  const cart = orders?.data?.order?.lines;
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (orders?.data?.me?.orders?.edges?.length > 0) {
+      const edges = orders?.data?.me?.orders?.edges;
+      const list = edges?.map((item) => item.node);
+      setOrderList(list);
+    }
+  }, [orders]);
 
   return (
     <>
       <section className="tp-cart-area pb-50">
         <div className="container-fluid">
-          {cart?.length === 0 && (
+          {orderList?.length > 0 && (
             <div className="text-center pt-50">
               <h3>No Items Found</h3>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">
