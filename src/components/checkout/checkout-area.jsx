@@ -145,7 +145,7 @@ const CheckoutArea = () => {
           )}
           {cart?.length > 0 && (
             <div className="row">
-              <div className="col-xl-7 col-lg-7">
+              {/* <div className="col-xl-7 col-lg-7">
                 <div className="tp-checkout-verify">
                   {!token && <CheckoutLogin />}
                   <div className="tp-checkout-verify-item">
@@ -200,13 +200,8 @@ const CheckoutArea = () => {
                       </div>
                     )}
                   </div>
-                  {/* <CheckoutCoupon
-                    handleCouponCode={handleCouponCode}
-                    couponRef={couponRef}
-                    couponApplyMsg={couponApplyMsg}
-                  /> */}
                 </div>
-              </div>
+              </div> */}
               {/* <form onSubmit={handleSubmit(submitHandler)}> */}
               <div className="row">
                 {/* <div className="col-lg-7"> */}
