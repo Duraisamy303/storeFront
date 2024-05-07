@@ -12,6 +12,7 @@ import PrdDetailsLoader from '@/components/loader/prd-details-loader';
 import FooterTwo from '@/layout/footers/footer-2';
 
 const ProductDetailsPage = ({ query }) => {
+  console.log("query: ", query);
   const { data: productData, isLoading, isError } = useGetProductQuery({productId:query.id});
  
   const product=productData?.data?.product

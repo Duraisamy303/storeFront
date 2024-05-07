@@ -84,6 +84,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handleSelectChange = (e) => {
+    console.log("e: ", e.target.value);
     setState({ selectedCountryList: e.target.value, selectedState: "" });
     stateRefetch();
   };

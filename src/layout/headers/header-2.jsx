@@ -41,7 +41,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const {data:cartList, refetch:cartRefetch} = useGetCartListQuery();
-console.log("✌️cartList --->", cartList);
 
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();

@@ -16,10 +16,8 @@ const CartArea = () => {
   const cart = useSelector((state) => state.cart.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
-  console.log("list: ", list);
 
   const CartList = list?.data?.checkout?.lines;
-  console.log("✌️CartList --->", CartList);
 
   const dispatch = useDispatch();
 
@@ -119,7 +117,6 @@ const CartArea = () => {
                     </thead>
                     <tbody>
                       {CartList?.map((item, i) => {
-                        console.log("✌️itemcartItem --->", item);
                         return (
                           <CartItem
                             isQuantity={true}
