@@ -330,20 +330,22 @@ const DetailsWrapper = ({
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">
-          <button
-            onClick={() => {
-              if (isAddedToCart) {
-                dispatch(handleModalClose());
-                router.push("/cart");
-              } else {
-                handleAddProduct(productItem);
-              }
-            }}
-            disabled={status === "out-of-stock"}
-            className="tp-btn tp-btn-border"
-          >
-            {isAddedToCart ? "View Cart" : "Add To Cart"}
-          </button>
+          {productItem?.defaultVariant?.quantityAvailable != 0 && (
+            <button
+              onClick={() => {
+                if (isAddedToCart) {
+                  dispatch(handleModalClose());
+                  router.push("/cart");
+                } else {
+                  handleAddProduct(productItem);
+                }
+              }}
+              disabled={status === "out-of-stock"}
+              className="tp-btn tp-btn-border"
+            >
+              {isAddedToCart ? "View Cart" : "Add To Cart"}
+            </button>
+          )}
         </div>
       </div>
 

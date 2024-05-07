@@ -206,7 +206,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         </Link>
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (
-            <span className="product-hot">
+            <span className="product-hot text-center" style={{padding:"15px 12px"}}>
               SOLD
               <br /> OUT
             </span>
@@ -223,7 +223,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
         <div className="tp-product-badge-2">
           {product?.defaultVariant?.quantityAvailable == 0 && (
-            <span className="product-hot">
+            <span className="product-hot text-center" style={{padding:'15px 12px '}}>
               SOLD
               <br /> OUT
             </span>
