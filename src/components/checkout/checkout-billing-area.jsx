@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ErrorMsg from "../common/error-msg";
 import { useSelector } from "react-redux";
 import { useSetState } from "@/utils/functions";
@@ -24,18 +24,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
-  const { data: list } = useGetCartListQuery();
-  console.log("list: ", list);
-  const { data: countryList } = useCountryListQuery();
+  const { data: countryList, refetchCountry } = useCountryListQuery();
 
   const CountryList = countryList?.data?.shop?.countries;
-
-  const { data: stateList,refetch } = useStateListQuery({
-    code: "IN",
-  });
-  console.log("✌️stateList --->", stateList);
-
-  console.log("CountryList --->", CountryList);
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
@@ -70,7 +61,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { id: 2, label: "Razorpay", checked: false },
     ],
     pType: false,
-    selectedCountryList:""
+    selectedCountryList: "",
+    selectedState: "",
+    stateList: [],
+  });
+
+  const { data: stateList, refetch: stateRefetch } = useStateListQuery({
+    code: state.selectedCountryList,
   });
 
   const checkedCheckbox = state.paymentType.find(
@@ -80,6 +77,19 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
   };
+
+  const handleSelectChange = (e) => {
+    setState({ selectedCountryList: e.target.value, selectedState: "" });
+    stateRefetch();
+  };
+
+  useEffect(() => {
+    if (stateList?.data?.addressValidationRules?.countryAreaChoices) {
+      setState({
+        stateList: stateList?.data?.addressValidationRules?.countryAreaChoices,
+      });
+    }
+  }, [stateList]);
 
   const [Razorpay] = useRazorpay();
 
@@ -305,6 +315,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
     setState({ paymentType: updatedCheckboxes, pType: true });
   };
 
+  // const handleSelectChange = (e) => {
+  //   setState({ selectedCountryList: e.target.value });
+  // }
+  // console.log("selectedCountryList",state.selectedCountryList)
+
   return (
     <div className="row">
       <div className="col-lg-7">
@@ -371,44 +386,48 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                   </div>
                 </div>
+
                 <div className="col-md-6">
                   <div className="tp-checkout-input">
-                    <label htmlFor="state">
-                      State <span>*</span>
+                    <label htmlFor="country">
+                      Country <span>*</span>
                     </label>
                     <select
                       name="country"
                       id="country"
-                      value={state.state}
+                      value={state.selectedCountryList}
                       className="nice-select w-100"
-                      onChange={(e) => handleInputChange(e, "state")}
+                      onChange={(e) => handleSelectChange(e)}
                     >
+                      <option value="">Select Country</option>
                       {CountryList?.map((item) => (
                         <option key={item.code} value={item.code}>
                           {item.country}
                         </option>
                       ))}
                     </select>
-                    {/* You can add validation error message rendering here if needed */}
                   </div>
                 </div>
 
                 <div className="col-md-6">
                   <div className="tp-checkout-input">
-                    <label>
+                    <label htmlFor="state">
                       State <span>*</span>
                     </label>
-                    <input
-                      name="lastName"
-                      id="lastName"
-                      type="select"
-                      value={state.lastName}
-                      placeholder="Last Name"
-                      onChange={(e) => handleInputChange(e, "lastName")}
-                    />
-                    {state.errors.streetAddress1 && (
-                      <ErrorMsg msg={state.errors.streetAddress1} />
-                    )}
+                    <select
+                      name="state"
+                      id="state"
+                      value={state.selectedState}
+                      className="nice-select w-100"
+                      onChange={(e) => handleSelectChange(e, "selectedState")}
+                    >
+                      <option value="">Select State</option>
+                      {state.stateList?.map((item) => (
+                        <option key={item.raw} value={item.raw}>
+                          {item.raw}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 {/* <div className="col-md-12">
