@@ -10,7 +10,7 @@ const DetailsThumbWrapper = ({
   status,
   product,
 }) => {
-
+console.log("product", product)
   const imageUrls = product?.images?.map((item) => item?.url);
 
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -63,6 +63,15 @@ const DetailsThumbWrapper = ({
                   <span className="product-hot">out-stock</span>
                 )}
               </div>
+
+              <div className="tp-product-badge-2">
+          {product?.defaultVariant?.quantityAvailable == 0 && (
+            <span className="product-hot text-center" style={{padding:"15px 12px"}}>
+              SOLD
+              <br /> OUT
+            </span>
+          )}
+        </div>
               {videoId && (
                 <div
                   onClick={() => setIsVideoOpen(true)}

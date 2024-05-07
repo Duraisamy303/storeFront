@@ -47,7 +47,7 @@ const CartCheckout = ({ cartData }) => {
 
   console.log("propscartData: ", cartData);
 
-  const quantityDisable = cartData.some((item) => {
+  const quantityDisable = cartData.map((item) => {
     console.log("✌️item --->", item.quantity);
     return item.variant.quantityAvailable >= item.quantity;
   });
@@ -116,11 +116,7 @@ const CartCheckout = ({ cartData }) => {
         </span>
       </div>
       <div className="tp-cart-checkout-proceed">
-        {quantityDisable === true ? (
-          <Link href="/checkout" className="tp-cart-checkout-btn w-100">
-            PROCEED TO CHECKOUT
-          </Link>
-        ) : (
+        {quantityDisable?.some((item) => item === false) ? (
           <button
             type="button"
             className="tp-cart-checkout-btn w-100"
@@ -129,6 +125,10 @@ const CartCheckout = ({ cartData }) => {
           >
             PROCEED TO CHECKOUT
           </button>
+        ) : (
+          <Link href="/checkout" className="tp-cart-checkout-btn w-100">
+            PROCEED TO CHECKOUT
+          </Link>
         )}
       </div>
     </div>
