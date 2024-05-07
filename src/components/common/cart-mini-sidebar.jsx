@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,14 @@ const CartMiniSidebar = () => {
 
   const cartData = useSelector((state) => state.cart?.cart_list);
   const cart = cartData?.node || cartData;
-  console.log("✌️cart --->", cart);
+
+  const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
+
+  const CartList = cartList?.data?.checkout?.lines;
+
+  useEffect(() => {
+    cartRefetch();
+  }, []);
 
   const router = useRouter();
 
@@ -48,6 +55,7 @@ const CartMiniSidebar = () => {
       const filter = cart.filter((item) => item.id != val.id);
       dispatch(cart_list(filter));
     });
+    cartRefetch();
   };
 
   // handle close cart mini
@@ -55,11 +63,10 @@ const CartMiniSidebar = () => {
     dispatch(closeCartMini());
   };
 
-  const quantityDisable = cart?.some((item) => {
-    console.log("✌️item --->", item.quantity);
+  const quantityDisable = CartList?.map((item) => {
+   
     return item.variant.quantityAvailable >= item.quantity;
   });
-  console.log("quantityDisable: ", quantityDisable);
 
   return (
     <>
@@ -87,11 +94,9 @@ const CartMiniSidebar = () => {
             <div className="cartmini__shipping">
               <RenderCartProgress />
             </div>
-            {cart?.length > 0 && (
+            {CartList?.length > 0 && (
               <div className="cartmini__widget">
-                {cart?.map((item) => {
-                  console.log("✌️itemitem --->", item);
-
+                {CartList?.map((item) => {
                   return (
                     <>
                       {item.variant.quantityAvailable >= item.quantity ? (
@@ -262,21 +267,21 @@ const CartMiniSidebar = () => {
                 view cart
               </Link>
 
-              {quantityDisable === true ? (
+              {quantityDisable?.some((item) => item === false) ? (
+                <button
+                  style={{ cursor: "not-allowed" }}
+                  className="tp-btn tp-btn-border w-100"
+                >
+                  Checkout
+                </button>
+              ) : (
                 <Link
                   href="/checkout"
                   onClick={handleCloseCartMini}
                   className="tp-btn tp-btn-border w-100"
                 >
-                  checkout
+                  Checkout
                 </Link>
-              ) : (
-                <button
-                  style={{ cursor: "not-allowed" }}
-                  className="tp-btn tp-btn-border w-100"
-                >
-                  checkout
-                </button>
               )}
             </div>
           </div>
