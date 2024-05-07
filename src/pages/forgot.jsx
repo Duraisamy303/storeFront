@@ -4,7 +4,7 @@ import Wrapper from '@/layout/wrapper';
 import HeaderTwo from '@/layout/headers/header-2';
 import CommonBreadcrumb from '@/components/breadcrumb/common-breadcrumb';
 import ForgotArea from '@/components/login-register/forgot-area';
-import Footer from '@/layout/footers/footer';
+import FooterTwo from '@/layout/footers/footer-2';
 
 const ForgotPage = () => {
   return (
@@ -13,7 +13,7 @@ const ForgotPage = () => {
       <HeaderTwo style_2={true} />
       <CommonBreadcrumb title="Forgot Password" subtitle="Reset Password" center={true} />
       <ForgotArea />
-      <Footer primary_style={true} />
+      <FooterTwo primary_style={true} />
     </Wrapper>
   );
 };
