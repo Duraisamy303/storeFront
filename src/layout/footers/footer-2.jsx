@@ -115,7 +115,7 @@ const FooterTwo = () => {
                               </span>
                             </div>
                             <div className="tp-footer-contact-content">
-                              <p><a href="mailto:shofy@support.com">supprot@prade.in</a></p>
+                              <p><a href="mailto:prade@support.com">supprot@prade.in</a></p>
                             </div>
                           </div>
                           <div style={{display:"flex", paddingTop:"15px"}}>

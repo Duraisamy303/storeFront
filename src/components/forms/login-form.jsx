@@ -151,7 +151,7 @@ const LoginForm = () => {
               name="email"
               id="email"
               type="email"
-              placeholder="shofy@mail.com"
+              placeholder="prade@mail.com"
             />
           </div>
           <div className="tp-login-input-title">
