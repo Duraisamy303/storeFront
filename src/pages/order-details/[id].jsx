@@ -1,31 +1,36 @@
-import CommonBreadcrumb from '@/components/breadcrumb/common-breadcrumb'
-import ShopBreadcrumb from '@/components/breadcrumb/shop-breadcrumb'
-import CartArea from '@/components/cart-wishlist/cart-area'
-import OrderList from '@/components/cart-wishlist/order-list'
-import SEO from '@/components/seo'
-import ShopArea from '@/components/shop/shop-area'
-import FooterTwo from '@/layout/footers/footer-2'
-import HeaderTwo from '@/layout/headers/header-2'
-import Wrapper from '@/layout/wrapper'
-import React from 'react';
+import CommonBreadcrumb from "@/components/breadcrumb/common-breadcrumb";
+import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
+import CartArea from "@/components/cart-wishlist/cart-area";
+import OrderList from "@/components/cart-wishlist/order-list";
+import SEO from "@/components/seo";
+import ShopArea from "@/components/shop/shop-area";
+import FooterTwo from "@/layout/footers/footer-2";
+import HeaderTwo from "@/layout/headers/header-2";
+import Wrapper from "@/layout/wrapper";
+import React from "react";
 import OrderBanner from "@assets/img/shop-banner.jpg";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+import { useOrderListQuery } from "@/redux/features/productApi";
 
- const OrderDetails = ({ query }) => {
-  console.log("query: ", query?.id);
-
-  const router=useRouter();
-  const orderId= router?.query?.id
+const OrderDetails = () => {
+  const router = useRouter();
+  const orderId = router?.query?.id;
   console.log("orderId: ", orderId);
+  const { data } = useOrderListQuery({ orderId: orderId });
+  console.log("data: ", data);
+
   return (
-    
     <Wrapper>
       <SEO pageTitle="Cart" />
       <HeaderTwo style_2={true} />
-      <CommonBreadcrumb title="Order List" subtitle="Order List" BgImage={OrderBanner} />
-     
+      <CommonBreadcrumb
+        title="Order Details"
+        subtitle="Order / Order Details"
+        BgImage={OrderBanner}
+      />
+
       <FooterTwo primary_style={true} />
     </Wrapper>
-  )
-}
-export default OrderDetails
+  );
+};
+export default OrderDetails;

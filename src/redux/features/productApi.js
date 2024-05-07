@@ -23,7 +23,7 @@ import {
   COUNTRY_LIST,
   DESIGN_LIST,
   STONE_LIST,
-  STATE_LIST
+  STATE_LIST,
 } from "../../utils/queries/productList";
 
 export const productApi = apiSlice.injectEndpoints({
@@ -108,9 +108,8 @@ export const productApi = apiSlice.injectEndpoints({
       ],
     }),
     orderList: builder.query({
-      query: () => {
-        const orderid = localStorage.getItem("orderId");
-        return configuration(ORDER_LIST({ orderid }));
+      query: ({ orderId }) => {
+        return configuration(ORDER_LIST({ orderId }));
       },
       providesTags: ["Products"],
     }),
@@ -118,7 +117,7 @@ export const productApi = apiSlice.injectEndpoints({
     myOrderList: builder.query({
       query: () => {
         const orderid = localStorage.getItem("orderId");
-        return configuration(MY_ORDER_LIST({ first:100 }));
+        return configuration(MY_ORDER_LIST({ first: 100 }));
       },
       providesTags: ["Products"],
     }),
@@ -227,7 +226,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     stateList: builder.query({
-      query: ({code}) => configuration(STATE_LIST({code})),
+      query: ({ code }) => configuration(STATE_LIST({ code })),
       providesTags: ["Products"],
     }),
 
@@ -275,6 +274,6 @@ export const {
   useGetDesignListQuery,
   useGetStoneListQuery,
   useFeatureProductQuery,
-  useCountryListQuery, 
-  useStateListQuery
+  useCountryListQuery,
+  useStateListQuery,
 } = productApi;
