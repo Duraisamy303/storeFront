@@ -2,7 +2,6 @@ import React from 'react';
 // internal
 import SEO from '@/components/seo';
 import HeaderTwo from '@/layout/headers/header-2';
-import Footer from '@/layout/footers/footer';
 import Wrapper from '@/layout/wrapper';
 import ErrorMsg from '@/components/common/error-msg';
 import { useGetProductQuery, useGetRelatedProductsQuery } from '@/redux/features/productApi';

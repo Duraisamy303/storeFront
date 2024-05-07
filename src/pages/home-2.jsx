@@ -13,7 +13,8 @@ import FashionTestimonial from '@/components/testimonial/fashion-testimonial';
 import BlogArea from '@/components/blog/fashion/blog-area';
 import FeatureAreaTwo from '@/components/features/feature-area-2';
 import InstagramAreaTwo from '@/components/instagram/instagram-area-2';
-import Footer from '@/layout/footers/footer';
+import FooterTwo from "@/layout/footers/footer-2"
+
 
 const HomeTwo = () => {
   return (
@@ -31,7 +32,7 @@ const HomeTwo = () => {
       <BlogArea/>
       <FeatureAreaTwo/>
       <InstagramAreaTwo/>
-      <Footer style_2={true} />
+      <FooterTwo style_2={true} />
     </Wrapper>
   );
 };

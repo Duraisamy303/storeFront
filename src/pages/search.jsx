@@ -4,7 +4,8 @@ import SearchPrdLoader from "@/components/loader/search-prd-loader";
 import ProductItem from "@/components/products/fashion/product-item";
 import SEO from "@/components/seo";
 import ShopTopLeft from "@/components/shop/shop-top-left";
-import Footer from "@/layout/footers/footer";
+import FooterTwo from "@/layout/footers/footer-2"
+
 import HeaderTwo from "@/layout/headers/header-2";
 import Wrapper from "@/layout/wrapper";
 import { useGetAllProductsQuery } from "@/redux/features/productApi";
@@ -156,7 +157,7 @@ export default function SearchPage({ query }) {
       <HeaderTwo style_2={true} />
       <CommonBreadcrumb title="Search Products" subtitle="Search Products" />
       {content}
-      <Footer primary_style={true} />
+      <FooterTwo primary_style={true} />
     </Wrapper>
   );
 }

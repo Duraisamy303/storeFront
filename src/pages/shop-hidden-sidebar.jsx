@@ -7,7 +7,6 @@ import { useGetAllProductsQuery } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopHiddenSidebarArea from "@/components/shop/shop-hidden-sidebar-area";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
-import Footer from "@/layout/footers/footer";
 import ShopHiddenLoader from "@/components/loader/shop/shop-hidden-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 

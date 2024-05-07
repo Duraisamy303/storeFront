@@ -12,7 +12,8 @@ import TrendingSpecialPrd from '@/components/products/beauty/trending-special-pr
 import BeautyTestimonial from '@/components/testimonial/beauty-testimonial';
 import FeatureAreaTwo from '@/components/features/feature-area-2';
 import InstagramAreaThree from '@/components/instagram/instagram-area-3';
-import Footer from '@/layout/footers/footer';
+import FooterTwo from "@/layout/footers/footer-2"
+
 
 const HomeThree = () => {
   return (
@@ -29,7 +30,7 @@ const HomeThree = () => {
       <BeautyTestimonial/>
       <FeatureAreaTwo/>
       <InstagramAreaThree/>
-      <Footer style_3={true} />
+      <FooterTwo style_3={true} />
     </Wrapper>
   );
 };
