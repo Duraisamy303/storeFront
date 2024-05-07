@@ -17,10 +17,18 @@ const CartArea = () => {
 
   const { data: list, refetch } = useGetCartListQuery();
 
+  const CartList = list?.data?.checkout?.lines;
+  console.log("✌️CartList --->", CartList);
+
   const dispatch = useDispatch();
 
   const [cartData, setCartData] = useState([]);
   const [couponCode, setCouponCode] = useState("");
+
+  
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     const data = cart?.map((item) => {
@@ -42,13 +50,12 @@ const CartArea = () => {
           const updateData =
             data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
           // dispatch(cart_list(updateData));
-         
 
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })
       );
     }
-    refetch()
+    refetch();
     notifySuccess("Quantity update completed");
   };
 
@@ -85,7 +92,7 @@ const CartArea = () => {
     <>
       <section className="tp-cart-area pb-50 mt-50">
         <div className="container-fluid">
-          {cart?.length === 0 && (
+          {CartList?.length === 0 && (
             <div className="text-center pt-50">
               <h3>No Cart Items Found</h3>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">
@@ -93,7 +100,7 @@ const CartArea = () => {
               </Link>
             </div>
           )}
-          {cart?.length > 0 && (
+          {CartList?.length > 0 && (
             <div className="row">
               <div className="col-xl-9 col-lg-8">
                 <div className="tp-cart-list mb-25 mr-30">
@@ -114,37 +121,40 @@ const CartArea = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {cartData?.map((item, i) => (
-                        <CartItem
-                          isQuantity={true}
-                          key={i}
-                          product={item}
-                          title={
-                            item?.variant?.product?.name || item?.node?.name
-                          }
-                          img={
-                            item?.variant?.product?.thumbnail?.url ||
-                            item?.node?.thumbnail?.url
-                          }
-                          price={
-                            item?.variant?.pricing?.price?.gross?.amount ||
-                            item?.node?.pricing?.priceRange?.start?.gross
-                              ?.amount
-                          }
-                          quantityAvailable={
-                            item?.variant?.quantityAvailable ||
-                            item?.node?.quantityAvailable
-                          }
-                          incQuantity={(quantity) =>
-                            incQuantity(quantity, item.id)
-                          }
-                          decQuantity={(quantity) =>
-                            decQuantity(quantity, item.id)
-                          }
-                          quantityCount={item.quantity}
-                          refetch={()=>refetch()}
-                        />
-                      ))}
+                      {CartList?.map((item, i) => {
+                        console.log("✌️itemcartItem --->", item);
+                        return (
+                          <CartItem
+                            isQuantity={true}
+                            key={i}
+                            product={item}
+                            title={
+                              item?.variant?.product?.name || item?.node?.name
+                            }
+                            img={
+                              item?.variant?.product?.thumbnail?.url ||
+                              item?.node?.thumbnail?.url
+                            }
+                            price={
+                              item?.variant?.pricing?.price?.gross?.amount ||
+                              item?.node?.pricing?.priceRange?.start?.gross
+                                ?.amount
+                            }
+                            quantityAvailable={
+                              item?.variant?.quantityAvailable ||
+                              item?.node?.quantityAvailable
+                            }
+                            incQuantity={(quantity) =>
+                              incQuantity(quantity, item.id)
+                            }
+                            decQuantity={(quantity) =>
+                              decQuantity(quantity, item.id)
+                            }
+                            quantityCount={item.quantity}
+                            refetch={() => refetch()}
+                          />
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -186,7 +196,7 @@ const CartArea = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6">
-                <CartCheckout  cartData={cartData}/>
+                <CartCheckout cartData={cartData} />
               </div>
             </div>
           )}

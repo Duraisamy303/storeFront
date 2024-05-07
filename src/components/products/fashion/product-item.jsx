@@ -18,6 +18,7 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import {
   useAddWishlistMutation,
   useGetProductByIdQuery,
@@ -37,6 +38,11 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     product || {};
 
   const cart = useSelector((state) => state.cart?.cart_list);
+
+  const { data: datacartList, refetch:cartRefetch } = useGetCartListQuery();
+  // useEffect(() => {
+  //   datacartList()
+  // },[])
 
   const compareList = useSelector((state) => state.cart.compare_list);
 
@@ -73,6 +79,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         checkoutToken: checkoutToken,
         variantId: product?.defaultVariant?.id,
       });
+      cartRefetch() 
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
@@ -84,7 +91,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
         );
         updateData();
+       
       }
+     
     } catch (error) {
       console.error("Error:", error);
     }

@@ -35,8 +35,8 @@ const CartItem = ({
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
   console.log("cart: ", cart);
-  const {data:list}=useGetCartListQuery()
-  console.log("list: ", list);
+  // const {data:list}=useGetCartListQuery()
+  // console.log("list: ", list);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 
