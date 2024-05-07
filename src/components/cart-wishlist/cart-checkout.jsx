@@ -48,7 +48,6 @@ const CartCheckout = ({ cartData }) => {
   console.log("propscartData: ", cartData);
 
   const quantityDisable = cartData.some((item) => {
-    console.log("✌️item --->", item.quantity);
     return item.variant.quantityAvailable >= item.quantity;
   });
   console.log("quantityDisable: ", quantityDisable);

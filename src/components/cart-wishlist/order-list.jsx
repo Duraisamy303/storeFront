@@ -12,6 +12,8 @@ import {
   useOrderListQuery,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import moment from "moment";
+import { useRouter } from "next/router";
 
 const OrderList = () => {
   const { data: data } = useGetCartListQuery();
@@ -23,7 +25,7 @@ const OrderList = () => {
 
   const cart = orders?.data?.order?.lines;
 
-  const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (orders?.data?.me?.orders?.edges?.length > 0) {
@@ -37,7 +39,7 @@ const OrderList = () => {
     <>
       <section className="tp-cart-area pb-50">
         <div className="container-fluid">
-          {orderList?.length > 0 && (
+          {orderList?.length < 0 && (
             <div className="text-center pt-50">
               <h3>No Items Found</h3>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">
@@ -45,73 +47,123 @@ const OrderList = () => {
               </Link>
             </div>
           )}
-          {cart?.length > 0 && (
+          {orderList?.length > 0 && (
             <div className="row">
-              <div className="col-xl-9 col-lg-8">
-                <div className="tp-cart-list  mr-30">
-                  <div className="cartmini__shipping">
-                    {/* <RenderCartProgress /> */}
-                  </div>
+              <div className="col-xl-12">
+                <div className="tp-cart-list mb-45 ">
                   <table className="table">
                     <thead>
                       <tr>
                         <th colSpan="2" className="tp-cart-header-product">
-                          Product
+                          ODRER
                         </th>
-                        {/* <th className="tp-cart-header-quantity">Product name</th> */}
+                        <th className="tp-cart-header-quantity">DATE</th>
+                        <th className="tp-cart-header-price">STATUS</th>
+                        <th className="tp-cart-header-price">TOTAL</th>
 
-                        <th className="tp-cart-header-price">Price</th>
+                        <th>ACTION</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {cart?.map((item, i) => (
-                        <CartItem
-                          isQuantity={false}
-                          key={i}
-                          product={item}
-                          title={item.productName}
-                          img={item?.thumbnail?.url}
-                          price={item?.totalPrice?.gross?.amount}
-                          isRemove={true}
-                        />
+                      {orderList?.map((item) => (
+                        <tr>
+                          <td className="tp-cart-product">
+                            <span>{item?.number}</span>
+                          </td>
+                          <td className="tp-cart-quantity">
+                            <span>
+                              {moment(item?.created).format("MMMM D, YYYY")}
+                            </span>
+                          </td>
+                          <td className="tp-cart-price">
+                            <span>{item?.status}</span>
+                          </td>
+                          <td className="tp-cart-price">
+                            <span>{`${item?.total?.gross?.amount} for  ${item?.lines?.length} item`}</span>
+                          </td>
+                          <td className="tp-cart-price">
+                            <Link
+                              href={`/order-details/${item?.id}`}
+                              className="tp-return-customer-btn tp-checkout-btn"
+                            >
+                              <span> View</span>
+                            </Link>
+                          </td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div className="tp-cart-bottom">
-                  <div className="row align-items-end">
-                    <div className="col-xl-6 col-md-8">
-                      {/* <div className="tp-cart-coupon">
-                        <form action="#">
-                          <div className="tp-cart-coupon-input-box">
-                            <label>Coupon Code:</label>
-                            <div className="tp-cart-coupon-input d-flex align-items-center">
-                              <input type="text" placeholder="Enter Coupon Code" />
-                              <button type="submit">Apply</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div> */}
-                    </div>
-                    {/* <div className="col-xl-6 col-md-4">
-                      <div className="tp-cart-update text-md-end mr-30">
-                        <button
-                          onClick={() => dispatch(clearCart())}
-                          type="button"
-                          className="tp-cart-update-btn"
-                        >
-                          Clear Cart
-                        </button>
-                      </div>
-                    </div> */}
-                  </div>
-                </div>
               </div>
-              {/* <div className="col-xl-3 col-lg-4 col-md-6">
-                <CartCheckout />
-              </div> */}
             </div>
+
+            // <div className="row">
+            //   <div className="col-xl-9 col-lg-8">
+            //     <div className="tp-cart-list  mr-30">
+            //       <div className="cartmini__shipping">
+            //         {/* <RenderCartProgress /> */}
+            //       </div>
+            //       <table className="table">
+            //         <thead>
+            //           <tr>
+            //             <th colSpan="2" className="tp-cart-header-product">
+            //               Product
+            //             </th>
+            //             {/* <th className="tp-cart-header-quantity">Product name</th> */}
+
+            //             <th className="tp-cart-header-price">Price</th>
+            //             <th></th>
+            //           </tr>
+            //         </thead>
+            //         <tbody>
+            //           {cart?.map((item, i) => (
+            //             <CartItem
+            //               isQuantity={false}
+            //               key={i}
+            //               product={item}
+            //               title={item.productName}
+            //               img={item?.thumbnail?.url}
+            //               price={item?.totalPrice?.gross?.amount}
+            //               isRemove={true}
+            //             />
+            //           ))}
+            //         </tbody>
+            //       </table>
+            //     </div>
+            //     <div className="tp-cart-bottom">
+            //       <div className="row align-items-end">
+            //         <div className="col-xl-6 col-md-8">
+            //           {/* <div className="tp-cart-coupon">
+            //             <form action="#">
+            //               <div className="tp-cart-coupon-input-box">
+            //                 <label>Coupon Code:</label>
+            //                 <div className="tp-cart-coupon-input d-flex align-items-center">
+            //                   <input type="text" placeholder="Enter Coupon Code" />
+            //                   <button type="submit">Apply</button>
+            //                 </div>
+            //               </div>
+            //             </form>
+            //           </div> */}
+            //         </div>
+            //         {/* <div className="col-xl-6 col-md-4">
+            //           <div className="tp-cart-update text-md-end mr-30">
+            //             <button
+            //               onClick={() => dispatch(clearCart())}
+            //               type="button"
+            //               className="tp-cart-update-btn"
+            //             >
+            //               Clear Cart
+            //             </button>
+            //           </div>
+            //         </div> */}
+            //       </div>
+            //     </div>
+            //   </div>
+            //   {/* <div className="col-xl-3 col-lg-4 col-md-6">
+            //     <CartCheckout />
+            //   </div> */}
+            // </div>
           )}
         </div>
       </section>
