@@ -54,6 +54,44 @@ export const ORDER_LIST = ({ orderid }) => {
   });
 };
 
+export const MY_ORDER_LIST = ({ first }) => {
+  return JSON.stringify({
+    query: `
+    query Myorders($first:Int!) {
+      me {
+        email
+        orders(first: $first) {
+          edges {
+            node {
+              id
+              number
+              status
+              total {
+                gross {
+                  amount
+                  currency
+                }
+              }
+              lines {
+                productName
+                quantity
+                totalPrice {
+                  gross {
+                    amount
+                    currency
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { first },
+  });
+};
+
 export const ADD_WISHLIST = ({ input }) => {
   console.log("input: ", input);
   return JSON.stringify({
@@ -413,7 +451,7 @@ export const COUNTRY_LIST = () => {
   });
 };
 
-export const STATE_LIST = ({code}) => {
+export const STATE_LIST = ({ code }) => {
   console.log("code: ", code);
   return JSON.stringify({
     query: `
@@ -427,7 +465,5 @@ export const STATE_LIST = ({code}) => {
     }
     `,
     variables: { code },
-
   });
 };
-

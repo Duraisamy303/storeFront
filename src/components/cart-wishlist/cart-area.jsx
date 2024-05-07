@@ -16,6 +16,7 @@ const CartArea = () => {
   const cart = useSelector((state) => state.cart.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
+  console.log("list: ", list);
 
   const dispatch = useDispatch();
 
@@ -76,10 +77,6 @@ const CartArea = () => {
     setCartData(data);
   };
 
-  const applyCoupon = (e) => {
-    e.preventDefault();
-    console.log("coupon: ", couponCode);
-  };
 
   return (
     <>
@@ -150,28 +147,8 @@ const CartArea = () => {
                 </div>
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
-                    <div className="col-xl-6 col-md-8">
-                      <div className="tp-cart-coupon">
-                        <form action="#">
-                          <div className="tp-cart-coupon-input-box">
-                            {/* <label>Coupon Code:</label> */}
-                            <div className="tp-cart-coupon-input d-flex align-items-center">
-                              <input
-                                type="text"
-                                placeholder="Coupon Code"
-                                value={couponCode}
-                                onChange={(e) => setCouponCode(e.target.value)}
-                                name="couponcode"
-                              />
-                              <button type="submit" onClick={applyCoupon}>
-                                APPLY COUPON
-                              </button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div className="col-xl-6 col-md-4">
+                    
+                    <div className="col-xl-12 col-md-12">
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
                           onClick={() => updateCart()}

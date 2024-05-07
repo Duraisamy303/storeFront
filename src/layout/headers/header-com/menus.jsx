@@ -631,7 +631,7 @@ const Menus = () => {
       </li>
       {token && (
         <li>
-          <Link href="/shop" style={{ fontWeight: "500" }}>
+          <Link href="/myOrders" style={{ fontWeight: "500" }}>
             MY-ORDERS
           </Link>
         </li>

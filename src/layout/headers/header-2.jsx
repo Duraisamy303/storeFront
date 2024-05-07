@@ -184,16 +184,16 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <Menu />
                           </button>
                         </div>
-                        {/* {token &&
-                        <div className="tp-header-action-item">
-                          <button
-                            onClick={() => dispatch(openUserSidebar())}
-                            className="tp-header-action-btn cartmini-open-btn"
-                          >
-                            <UserThree />
-                          </button>
-                        </div>
-                        } */}
+                        {token && (
+                          <div className="tp-header-action-item">
+                            <button
+                              onClick={() => dispatch(openUserSidebar())}
+                              className="tp-header-action-btn cartmini-open-btn"
+                            >
+                              <UserThree />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -208,7 +208,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       <CartMiniSidebar />
       {/* cart mini sidebar end */}
 
-      {/* <UserMiniSidebar /> */}
+      <UserMiniSidebar />
 
       {/* off canvas start */}
       <OffCanvas

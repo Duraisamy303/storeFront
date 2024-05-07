@@ -7,6 +7,7 @@ import {
   useCheckoutCompleteMutation,
   useCheckoutUpdateMutation,
   useCreateCheckoutTokenMutation,
+  useUpdateBillingAddressMutation,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import useRazorpay from "react-razorpay";
@@ -18,6 +19,7 @@ import {
   useCountryListQuery,
   useStateListQuery,
 } from "@/redux/features/productApi";
+import { Filter } from "@/svg";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -33,6 +35,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
+  const [updateBillingAddress] = useUpdateBillingAddressMutation();
 
   const [state, setState] = useSetState({
     firstName: "",
@@ -56,6 +59,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     errors: {},
     COD: "",
     razorpay: "",
+    companyName: "",
     paymentType: [
       { id: 1, label: "COD", checked: false },
       { id: 2, label: "Razorpay", checked: false },
@@ -64,6 +68,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     selectedCountryList: "",
     selectedState: "",
     stateList: [],
+    coupenCode: "",
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
@@ -155,85 +160,103 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handleSubmit = async (data) => {
     try {
-      const errors = validateInputs();
-
+      // const errors = validateInputs();
       const sample = {
-        channel: "india-channel",
+        // channel: "india-channel",
         email: state.email,
-        lines,
         firstName: state.firstName,
         lastName: state.lastName,
         streetAddress1: state.streetAddress1,
         city: state.city,
-        postalCode: state.postalCode,
-        country: "IN",
-        countryArea: "Tamil Nadu",
-        firstName1: state.diffAddress ? state.firstName1 : state.firstName,
-        lastName1: state.diffAddress ? state.lastName1 : state.lastName,
+        // postalCode: state.postalCode,
+        // country: state.selectedCountryList,
+        // countryArea: state.selectedState,
+        // firstName1: state.diffAddress ? state.firstName1 : state.firstName,
+        // lastName1: state.diffAddress ? state.lastName1 : state.lastName,
         streetAddress2: state.diffAddress
           ? state.streetAddress2
           : state.streetAddress1,
-        city1: state.diffAddress ? state.city1 : state.city,
-        postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
-        country1: "IN",
-        countryArea1: "Tamil Nadu",
+        // city1: state.diffAddress ? state.city1 : state.city,
+        // postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
+        // country1: state.selectedCountryList,
+        // countryArea1: state.selectedState,
+
+        cityArea: "",
+        companyName: state.companyName,
+        country: state.selectedCountryList,
+        countryArea: state.selectedState,
+        phone: state.phone,
+        postalCode: state.postalCode,
+        // streetAddress1: "",
+        // streetAddress2: "",
       };
+      console.log("sample: ", sample);
 
-      if (Object.keys(errors).length === 0) {
-        const createCheckoutResponse = await createCheckout({
-          channel: "india-channel",
-          email: state.email,
-          lines,
-          firstName: state.firstName,
-          lastName: state.lastName,
-          streetAddress1: state.streetAddress1,
-          city: state.city,
-          postalCode: state.postalCode,
-          country: "IN",
-          countryArea: "Tamil Nadu",
-          firstName1: state.diffAddress ? state.firstName1 : state.firstName,
-          lastName1: state.diffAddress ? state.lastName1 : state.lastName,
-          streetAddress2: state.diffAddress
-            ? state.streetAddress2
-            : state.streetAddress1,
-          city1: state.diffAddress ? state.city1 : state.city,
-          postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
-          country1: "IN",
-          countryArea1: "Tamil Nadu",
+      const checkoutId = localStorage.getItem("checkoutId");
+      console.log("checkoutId: ", checkoutId);
+      if (checkoutId) {
+        const data = await updateBillingAddress({
+          checkoutId,
+          billingAddress: sample,
         });
-        if (
-          createCheckoutResponse?.data?.data?.checkoutCreate?.errors?.length > 0
-        ) {
-          notifyError(
-            `${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.code} ${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.field}`
-          );
-          return;
-        }
-
-        const checkoutId =
-          createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
-        const amount =
-          createCheckoutResponse?.data?.data?.checkoutCreate?.checkout
-            ?.totalPrice?.gross?.amount;
-        if (checkoutId) {
-          await createDeliveryUpdate({
-            id: checkoutId,
-          });
-
-          const paymentType = state.paymentType.find(
-            (checkbox) => checkbox.checked
-          );
-          // if (!state.pType) {
-          //   notifyError("COD");
-          // } else {
-          handlePayment(checkoutId, amount);
-          // }
-        }
-      } else {
-        console.log("Form contains errors!");
+        console.log("data: ", data);
       }
-      setState({ errors: errors });
+
+      // if (Object.keys(errors).length === 0) {
+      //   const createCheckoutResponse = await createCheckout({
+      //     channel: "india-channel",
+      //     email: state.email,
+      //     lines,
+      //     firstName: state.firstName,
+      //     lastName: state.lastName,
+      //     streetAddress1: state.streetAddress1,
+      //     city: state.city,
+      //     postalCode: state.postalCode,
+      //     country: state.selectedCountryList,
+      //     countryArea: state.selectedState,
+      //     firstName1: state.diffAddress ? state.firstName1 : state.firstName,
+      //     lastName1: state.diffAddress ? state.lastName1 : state.lastName,
+      //     streetAddress2: state.diffAddress
+      //       ? state.streetAddress2
+      //       : state.streetAddress1,
+      //     city1: state.diffAddress ? state.city1 : state.city,
+      //     postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
+      //     country1: state.selectedCountryList,
+      //     countryArea1: state.selectedState,
+      //   });
+      //   if (
+      //     createCheckoutResponse?.data?.data?.checkoutCreate?.errors?.length > 0
+      //   ) {
+      //     notifyError(
+      //       `${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.code} ${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.field}`
+      //     );
+      //     return;
+      //   }
+
+      //   const checkoutId =
+      //     createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
+      //   const amount =
+      //     createCheckoutResponse?.data?.data?.checkoutCreate?.checkout
+      //       ?.totalPrice?.gross?.amount;
+      //   if (checkoutId) {
+      //     await createDeliveryUpdate({
+      //       id: checkoutId,
+      //     });
+
+      //     const paymentType = state.paymentType.find(
+      //       (checkbox) => checkbox.checked
+      //     );
+      // if (!state.pType) {
+      //   notifyError("COD");
+      // } else {
+      // handlePayment(checkoutId, amount);
+      // }
     } catch (error) {
+      // } else {
+      //   console.log("Form contains errors!");
+      // }
+      // setState({ errors: errors });
+      // }
       console.error("Error:", error);
     }
   };
@@ -315,10 +338,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
     setState({ paymentType: updatedCheckboxes, pType: true });
   };
 
-  // const handleSelectChange = (e) => {
-  //   setState({ selectedCountryList: e.target.value });
-  // }
-  // console.log("selectedCountryList",state.selectedCountryList)
+  const verifyCoupen = () => {
+    try {
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   return (
     <div className="row">
@@ -367,8 +392,24 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                   </div>
                 </div>
-
                 <div className="col-md-12">
+                  <div className="tp-checkout-input">
+                    <label>Company name (optional)</label>
+                    <input
+                      name="address"
+                      id="address"
+                      type="text"
+                      placeholder="Company name "
+                      value={state.companyName}
+                      onChange={(e) => handleInputChange(e, "companyName")}
+                    />
+                    {state.errors.streetAddress1 && (
+                      <ErrorMsg msg={state.errors.streetAddress1} />
+                    )}
+                  </div>
+                </div>
+
+                {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                     <label>
                       Country <span>*</span>
@@ -385,7 +426,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       <ErrorMsg msg={state.errors.country} />
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-6">
                   <div className="tp-checkout-input">
@@ -830,6 +871,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
               {state.errors.paymentType && (
                 <ErrorMsg msg={state.errors.paymentType} />
               )}
+
               {/* {state.paymentType.map((checkbox) => {
                 return (
                   <li>

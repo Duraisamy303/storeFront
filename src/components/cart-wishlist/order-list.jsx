@@ -8,6 +8,7 @@ import CartItem from "./cart-item";
 import RenderCartProgress from "../common/render-cart-progress";
 import {
   useGetAllProductsQuery,
+  useMyOrderListQuery,
   useOrderListQuery,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
@@ -15,7 +16,8 @@ import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 const OrderList = () => {
   const { data: data } = useGetCartListQuery();
 
-  const { data: orderList, isError, isLoading } = useOrderListQuery();
+  const { data: orderList, isError, isLoading } = useMyOrderListQuery();
+  console.log("orderList: ", orderList);
 
   const cart = orderList?.data?.order?.lines;
 
