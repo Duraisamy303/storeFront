@@ -29,6 +29,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
 
   const router = useRouter();
 
+  const RelatedProduct = product.node;
+  console.log("✌️RelatedProduct --->", RelatedProduct);
+
   const [addWishlist, {}] = useAddWishlistMutation();
 
   const [isAddWishlist, setWishlist] = useState(false);
@@ -170,35 +173,51 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               backgroundPosition: "0px -80px",
             }}
           ></div>
+          <div className="tp-product-badge-2">
+            {RelatedProduct?.defaultVariant?.quantityAvailable == 0 && (
+              <span
+                className="product-hot text-center"
+                style={{ padding: "15px 12px " }}
+              >
+                SOLD
+                <br /> OUT
+              </span>
+            )}
+          </div>
         </Link>
         <div className="tp-product-action-3 tp-product-action-4 tp-product-action-blackStyle tp-product-action-brownStyle">
           <div className="tp-product-action-item-3 d-flex">
-            {isAddedToCart ? (
-              <Link
-                href="/cart"
-                className={`tp-product-action-btn-3 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn`}
-              >
-                <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View Cart
-                </span>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleAddProduct(product)}
-                className={`tp-product-action-btn-3 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn`}
-              >
-                <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  Add to Cart
-                </span>
-              </button>
+            {RelatedProduct?.defaultVariant?.quantityAvailable != 0 && (
+              <>
+                {isAddedToCart ? (
+                  <Link
+                    href="/cart"
+                    className={`tp-product-action-btn-3 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn`}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      View Cart
+                    </span>
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleAddProduct(product)}
+                    className={`tp-product-action-btn-3 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn`}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      Add to Cart
+                    </span>
+                  </button>
+                )}
+              </>
             )}
+
             <button
               type="button"
               className="tp-product-action-btn-3 tp-product-quick-view-btn"
