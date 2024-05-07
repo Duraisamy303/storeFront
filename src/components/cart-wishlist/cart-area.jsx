@@ -51,12 +51,12 @@ const CartArea = () => {
           const updateData =
             data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
           // dispatch(cart_list(updateData));
-
+          refetch();
           // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
         })
       );
     }
-    refetch();
+ 
     notifySuccess("Quantity update completed");
   };
 
