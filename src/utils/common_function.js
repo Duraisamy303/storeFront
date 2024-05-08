@@ -1,3 +1,4 @@
+import { useAddWishlistMutation } from "@/redux/features/productApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { useDispatch } from "react-redux";
 
@@ -27,5 +28,6 @@ export const handleWishlistProduct = (prd) => {
     const isAddedToWishlist = list?.some((prd) => prd?.node?.id === id);
     return isAddedToWishlist
   };
+
 
 

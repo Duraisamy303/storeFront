@@ -508,7 +508,6 @@ export const COUNTRY_LIST = () => {
 };
 
 export const STATE_LIST = ({ code }) => {
-  console.log("code: ", code);
   return JSON.stringify({
     query: `
     query CountryArea($code: CountryCode!) {

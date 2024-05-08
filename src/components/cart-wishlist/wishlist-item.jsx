@@ -9,7 +9,10 @@ import {
   cart_list,
   quantityDecrement,
 } from "@/redux/features/cartSlice";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useDeleteWishlistMutation,
+} from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import {
@@ -19,6 +22,7 @@ import {
 } from "../../redux/features/wishlist-slice";
 
 const WishlistItem = ({ product }) => {
+  console.log("product: ", product);
   const { _id, img, title, price } = product || {};
 
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -35,6 +39,7 @@ const WishlistItem = ({ product }) => {
   );
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
+  const [removeWishlist, {}] = useDeleteWishlistMutation();
 
   // handle add product
 
@@ -71,18 +76,13 @@ const WishlistItem = ({ product }) => {
   };
 
   // handle remove product
-  const handleRemovePrd = () => {
-    console.log("wishlist: ", wishlist);
-
-    const filter = wishlist?.filter(
-      (item) => item.id !== product?.id || data?.id
-    );
-    console.log("filter: ", filter);
-
-    localStorage.setItem("wishlist", JSON.stringify(filter));
-    dispatch(add_to_wishlist(filter));
-
-    // notifyError(`${data.name} removed from wishlist`);
+  const handleRemovePrd = async () => {
+    try {
+      const data = await removeWishlist({
+        variant: product?.variant,
+      });
+      console.log("data: ", data);
+    } catch (error) {}
   };
   return (
     <tr>

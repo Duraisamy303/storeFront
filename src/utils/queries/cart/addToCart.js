@@ -316,13 +316,13 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
   };
 };
 
-export const CHECKOUT_DELIVERY_METHOD = ({ id }) => {
+export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
   return {
     query: `
-    mutation CheckoutUpdateDeliveryMethod($id: ID!) {
+    mutation CheckoutUpdateDeliveryMethod($checkoutid:ID!,$deliveryMethodId: ID! ) {
       checkoutDeliveryMethodUpdate(
-        deliveryMethodId: "U2hpcHBpbmdNZXRob2Q6MQ=="
-        id: $id
+        deliveryMethodId: $deliveryMethodId
+        id: $checkoutid
       ) {
         checkout {
           id
@@ -336,7 +336,7 @@ export const CHECKOUT_DELIVERY_METHOD = ({ id }) => {
     }
     
       `,
-    variables: { id },
+    variables: { checkoutid, deliveryMethodId },
   };
 };
 
@@ -630,7 +630,6 @@ export const UPDATE_BILLING_ADDRESS = ({
   checkoutId,
   billingAddress,
   validationRules,
-  languageCode,
 }) => {
   return {
     query: `
@@ -659,7 +658,92 @@ export const UPDATE_BILLING_ADDRESS = ({
       checkoutId,
       billingAddress,
       validationRules,
-      languageCode,
     },
+  };
+};
+
+export const UPDATE_SHIPPING_ADDRESS = ({
+  checkoutId,
+  shippingAddress,
+  validationRules,
+}) => {
+  return {
+    query: `
+    mutation checkoutShippingAddressUpdate($checkoutId: ID!, $shippingAddress: AddressInput!, $validationRules: CheckoutAddressValidationRules) {
+      checkoutShippingAddressUpdate(
+        id: $checkoutId
+        shippingAddress: $shippingAddress
+        validationRules: $validationRules
+      ) {
+        errors {
+          ...CheckoutErrorFragment
+          __typename
+        }
+      
+        __typename
+      }
+    }
+    fragment CheckoutErrorFragment on CheckoutError {
+      message
+      field
+      code
+      __typename
+    }
+    
+      `,
+    variables: {
+      checkoutId,
+      shippingAddress,
+      validationRules,
+    },
+  };
+};
+
+export const DELETE_WISHLIST = ({ user, variant }) => {
+  return {
+    query: `
+    mutation DeleteWishList($user:String!,$variant:String!) {
+      deleteWishlistItem(variant: $variant, user: $user) {
+        success
+      }
+    }
+      `,
+    variables: { user, variant },
+  };
+};
+
+export const GET_WISHLIST_LIST = ({ channel, lines }) => {
+  return {
+    query: `
+    query GetWishListQuery($userEmail: String!) {
+      wishlists(first: 100, filter: {user: $userEmail}) {
+        edges {
+          node {
+            user {
+              firstName
+              email
+            }
+            product {
+              name
+              slug
+              variants {
+                id
+                name
+              }
+              images {
+                url
+                alt
+              }
+              defaultVariant {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+      `,
+    variables: { channel, lines },
   };
 };

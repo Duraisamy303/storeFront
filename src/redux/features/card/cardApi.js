@@ -16,11 +16,14 @@ import {
   CHECKOUT_UPDATE_SHIPPING_ADDRESS,
   CREATE_CHECKOUT_ID,
   CREATE_CHECKOUT_TOKEN,
+  DELETE_WISHLIST,
+  GET_WISHLIST_LIST,
   REMOVETOCART,
   UPDATE_BILLING_ADDRESS,
   UPDATE_CART_QUANTITY,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
+import { UPDATE_SHIPPING_ADDRESS } from "../../../utils/queries/cart/addToCart";
 
 export const cardApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -167,10 +170,17 @@ export const cardApi = apiSlice.injectEndpoints({
     }),
 
     checkoutUpdate: builder.mutation({
-      query: ({ id }) => {
+      query: ({ checkoutid, country }) => {
+        let deliveryMethodId = "";
+        if (country == "IN") {
+          deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
+        } else {
+          deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mg==";
+        }
         return configuration(
           CHECKOUT_DELIVERY_METHOD({
-            id,
+            checkoutid,
+            deliveryMethodId,
           })
         );
       },
@@ -224,13 +234,15 @@ export const cardApi = apiSlice.injectEndpoints({
 
     createCheckoutId: builder.mutation({
       query: ({ lines }) => {
-        let channel = "";
-        const channels = localStorage.getItem("channel");
-        if (!channels) {
-          channel = "india-channel";
-        } else {
-          channel = channels;
-        }
+        console.log("query: ", lines);
+
+        let channel = "india-channel";
+        // const channels = localStorage.getItem("channel");
+        // if (!channels) {
+        //   channel = "india-channel";
+        // } else {
+        //   channel = channels;
+        // }
         return configuration(CREATE_CHECKOUT_ID({ channel, lines }));
       },
 
@@ -264,7 +276,53 @@ export const cardApi = apiSlice.injectEndpoints({
             validationRules: {
               checkRequiredFields: false,
             },
-            languageCode: "EN_US",
+            // languageCode: "EN_US",
+          })
+        );
+      },
+    }),
+
+    updateShippingAddress: builder.mutation({
+      query: ({ checkoutId, shippingAddress }) => {
+        console.log(
+          "checkoutId, shippingAddress: ",
+          checkoutId,
+          shippingAddress
+        );
+        return configuration(
+          UPDATE_SHIPPING_ADDRESS({
+            checkoutId,
+            shippingAddress,
+            validationRules: {
+              checkRequiredFields: false,
+            },
+            // languageCode: "EN_US",
+          })
+        );
+      },
+    }),
+
+    getWishList: builder.query({
+      query: () => {
+        const user = localStorage.getItem("userInfo");
+        const users = JSON.parse(user);
+        console.log("users: ", users);
+        return configuration(GET_WISHLIST_LIST({ userEmail: users.user?.email }));
+      },
+
+      providesTags: ["Products"],
+    }),
+
+    deleteWishlist: builder.mutation({
+      query: ({ variant }) => {
+        console.log("variant: ", variant);
+        const user = localStorage.getItem("userInfo");
+        const users = JSON.parse(user);
+        console.log("users: ", users);
+        return configuration(
+          DELETE_WISHLIST({
+            user: users?.user?.email,
+            variant,
           })
         );
       },
@@ -284,5 +342,8 @@ export const {
   useUpdateCartQuantityMutation,
   useCreateCheckoutIdMutation,
   useApplyCoupenCodeMutation,
-  useUpdateBillingAddressMutation
+  useUpdateBillingAddressMutation,
+  useUpdateShippingAddressMutation,
+  useGetWishListQuery,
+  useDeleteWishlistMutation,
 } = cardApi;

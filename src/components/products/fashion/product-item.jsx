@@ -17,49 +17,55 @@ import { capitalizeFLetter } from "@/utils/functions";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
-import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
+import { checkWishlist } from "@/utils/common_function";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import {
   useAddWishlistMutation,
   useGetProductByIdQuery,
+  useGetWishlistQuery,
 } from "../../../redux/features/productApi";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
 
   let product = products.node;
+
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const [ids, setIds] = useState([]);
 
   const [isAddWishlist, setWishlist] = useState(false);
+
+  const [addWishlist, {}] = useAddWishlistMutation();
 
   const { _id, category, title, reviews, price, discount, tags, status } =
     product || {};
 
   const cart = useSelector((state) => state.cart?.cart_list);
 
-  const { data: datacartList, refetch:cartRefetch } = useGetCartListQuery();
-  // useEffect(() => {
-  //   datacartList()
-  // },[])
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
+
+  const { data: wishlistData, refetch: wishlistRefetch } =
+    useGetWishlistQuery();
+
+  useEffect(() => {
+    getWishlistList();
+  }, [wishlistData]);
 
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
+
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id === product?.id
   );
-  const dispatch = useDispatch();
+
+
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
-
-  const [addToWishlist] = useAddWishlistMutation();
-
-  const { data: querys, refetch } = useGetProductByIdQuery({
-    ids: ids.length > 0 ? ids : undefined,
-  });
 
   useEffect(() => {
     const whislist = checkWishlist(wishlist, product.id);
@@ -79,7 +85,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         checkoutToken: checkoutToken,
         variantId: product?.defaultVariant?.id,
       });
-      cartRefetch() 
+      cartRefetch();
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
@@ -91,74 +97,51 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
         );
         updateData();
-       
       }
-     
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const handleWishlist = async (prd) => {
-    console.log("prd: ", prd);
+  const handleWishlist = async () => {
     try {
       const token = localStorage.getItem("token");
-      let wishlist = localStorage.getItem("wishlist");
-      console.log("wishlist: ", wishlist);
-      let arr = [];
+      const user = localStorage.getItem("userInfo");
 
       if (token) {
-        // Handle the case where token is present
+        const users = JSON.parse(user);
+        const input = {
+          input: {
+            user: users.user.id,
+            variant: product?.defaultVariant?.id,
+          },
+        };
+
+        const res = await addWishlist(input);
+        notifySuccess("Product added to wishlist");
+        wishlistRefetch();
       } else {
-        if (!wishlist) {
-          arr = [];
-        } else {
-          arr = JSON.parse(wishlist);
-        }
-
-        console.log("Initial arr: ", arr);
-
-        // Check if prd.id is not already in the wishlist
-        if (!arr.includes(prd.id)) {
-          arr.push(prd.id);
-        }
-
-        console.log("Updated arr: ", arr);
-
-        localStorage.setItem("wishlist", JSON.stringify(arr));
-        const data = localStorage.getItem("wishlist");
-        console.log("Stored wishlist: ", JSON.parse(data));
+        // const addedWishlist = handleWishlistProduct(prd);
+        // dispatch(add_to_wishlist(addedWishlist));
       }
-      // const user = localStorage.getItem("userInfo");
-      // console.log("user: ", JSON.parse(user).user.id);
-      // const userId = JSON.parse(user).user.id;
-      // console.log("userId: ", userId);
-      // const input = {
-      //   input: {
-      //     user: userId,
-      //     variant: prd.id,
-      //   },
-      // };
-      // const data = await addToWishlist(input);
-      // console.log("data: ", data);
-      // const arr = [];
-      // arr.push(prd.id);
-      // setIds(["UHJvZHVjdDo0OA==", "UHJvZHVjdDo5Mw=="]);
-
-      // const datas = await refetch({
-      //   ids: ["UHJvZHVjdDo0OA==", "UHJvZHVjdDo5Mw=="],
-      // });
-      // console.log("datas: ", datas);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  const addWishlistProduct = async (prd) => {
+  const getWishlistList = async (prd) => {
     try {
-      const modify = {
-        node: prd,
-      };
-      const addedWishlist = handleWishlistProduct(modify);
-      dispatch(add_to_wishlist(addedWishlist));
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const isAddWishlist = wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)?.some((node) => node?.id === product?.id);
+
+        console.log("isAddWishlist: ", isAddWishlist);
+
+        dispatch(
+          add_to_wishlist(
+            wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+          )
+        );
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -166,7 +149,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   // handle compare product
   const handleCompareProduct = (prd) => {
-    console.log("prd: ", prd);
     const compare = localStorage.getItem("compareList");
 
     let arr = [];
@@ -206,7 +188,10 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         </Link>
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (
-            <span className="product-hot text-center" style={{padding:"15px 12px"}}>
+            <span
+              className="product-hot text-center"
+              style={{ padding: "15px 12px" }}
+            >
               SOLD
               <br /> OUT
             </span>
@@ -223,7 +208,10 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
         <div className="tp-product-badge-2">
           {product?.defaultVariant?.quantityAvailable == 0 && (
-            <span className="product-hot text-center" style={{padding:'15px 12px '}}>
+            <span
+              className="product-hot text-center"
+              style={{ padding: "15px 12px " }}
+            >
               SOLD
               <br /> OUT
             </span>

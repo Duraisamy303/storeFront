@@ -10,22 +10,47 @@ import {
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 
 const WishlistArea = () => {
-  const { wishlist } = useSelector((state) => state.wishlist);
   const [ids, setIds] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
 
-  const { data: localData } = useGetProductByIdQuery({
-    ids: ids?.length > 0 ? ids : undefined,
-  });
-  console.log("querys: ", localData);
+
+  // const { data: localData } = useGetProductByIdQuery({
+  //   ids: ids?.length > 0 ? ids : undefined,
+  // });
+
 
   const dispatch = useDispatch();
 
-  const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
+  // const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
+
+  const { data: wishlistData, refetch: wishlistRefetch } =
+    useGetWishlistQuery();
+
+  useEffect(() => {
+    getWishlistList();
+  }, [wishlistData]);
+
+  const getWishlistList = async (prd) => {
+    try {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        console.log("wishlistData?.data?.wishlists?.edges: ", wishlistData?.data?.wishlists?.edges);
+        setWishlist(wishlistData?.data?.wishlists?.edges?.map((item) => item?.node))
+        // dispatch(
+        //   add_to_wishlist(
+        //     wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+        //   )
+        // );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   // useEffect(() => {
-  //   if (wishlistData) {
-  //     if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-  //       const modify = wishlistData?.data?.wishlists.edges;
+  //   if (localData) {
+  //     if (localData?.data?.products?.edges?.length > 0) {
+  //       const modify = localData?.data?.products?.edges;
+  //       console.log("modify: ", modify);
   //       dispatch(get_wishlist_products(modify?.map((item) => item.node)));
   //     } else {
   //       dispatch(get_wishlist_products([]));
@@ -33,36 +58,22 @@ const WishlistArea = () => {
   //   } else {
   //     dispatch(get_wishlist_products([]));
   //   }
-  // }, [wishlistData]);
+  // }, [localData]);
 
-  useEffect(() => {
-    if (localData) {
-      if (localData?.data?.products?.edges?.length > 0) {
-        const modify = localData?.data?.products?.edges;
-        console.log("modify: ", modify);
-        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
-      } else {
-        dispatch(get_wishlist_products([]));
-      }
-    } else {
-      dispatch(get_wishlist_products([]));
-    }
-  }, [localData]);
-
-  useEffect(() => {
-    datss();
-  }, []);
-  const datss = async () => {
-    try {
-      const data = localStorage.getItem("wishlist");
-      console.log("Stored wishlist: ", JSON.parse(data));
-      const parsedData = JSON.parse(data);
-      console.log("parsedData: ", parsedData);
-      setIds(parsedData);
-    } catch (error) {
-      console.error("Error fetching wishlist data:", error);
-    }
-  };
+  // useEffect(() => {
+  //   datss();
+  // }, []);
+  // const datss = async () => {
+  //   try {
+  //     const data = localStorage.getItem("wishlist");
+  //     console.log("Stored wishlist: ", JSON.parse(data));
+  //     const parsedData = JSON.parse(data);
+  //     console.log("parsedData: ", parsedData);
+  //     setIds(parsedData);
+  //   } catch (error) {
+  //     console.error("Error fetching wishlist data:", error);
+  //   }
+  // };
 
   return (
     <>

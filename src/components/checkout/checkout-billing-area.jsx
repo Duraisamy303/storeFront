@@ -14,12 +14,16 @@ import useRazorpay from "react-razorpay";
 import { useRouter } from "next/router";
 import NiceSelect from "@/ui/nice-select";
 import HeaderSearchForm from "../forms/header-search-form";
-import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import {
+  useGetCartListQuery,
+  useCreateCheckoutIdMutation,
+} from "@/redux/features/card/cardApi";
 import {
   useCountryListQuery,
   useStateListQuery,
 } from "@/redux/features/productApi";
 import { Filter } from "@/svg";
+import { useUpdateShippingAddressMutation } from "../../redux/features/card/cardApi";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -36,6 +40,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
+  const [updateShippingAddress] = useUpdateShippingAddressMutation();
 
   const [state, setState] = useSetState({
     firstName: "",
@@ -49,6 +54,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
     postalCode: "",
     postalCode1: "",
     phone: "",
+    phone1: "",
+
     email: "",
     phone1: "",
     email1: "",
@@ -65,19 +72,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { id: 2, label: "Razorpay", checked: false },
     ],
     pType: false,
-    selectedCountryList: "",
+    selectedCountry: "",
     selectedState: "",
+    selectedCountry1: "",
+    selectedState1: "",
+    companyName1: "",
     stateList: [],
     coupenCode: "",
+    orderData: [],
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
-    code: state.selectedCountryList,
+    code: state.selectedCountry,
   });
 
-  const checkedCheckbox = state.paymentType.find(
-    (checkbox) => checkbox.checked
-  );
+  const { data: linelist } = useGetCartListQuery();
+  const [createCheckoutId] = useCreateCheckoutIdMutation();
+  const [updateDeliveryMethod] = useCheckoutUpdateMutation();
 
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
@@ -85,7 +96,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handleSelectChange = (e) => {
     console.log("e: ", e.target.value);
-    setState({ selectedCountryList: e.target.value, selectedState: "" });
+    setState({ selectedCountry: e.target.value, selectedState: "" });
     stateRefetch();
   };
 
@@ -96,6 +107,48 @@ const CheckoutBillingArea = ({ register, errors }) => {
       });
     }
   }, [stateList]);
+
+  // useEffect(() => {
+  //   applyCoupen();
+  // }, []);
+
+  useEffect(() => {
+    orderData();
+  }, [linelist]);
+
+  const orderData = async () => {
+    try {
+      if (linelist?.data?.checkout) {
+        const orderData = linelist?.data?.checkout;
+        setState({ orderData });
+        createCheckoutIds(orderData?.lines);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const createCheckoutIds = async (lines) => {
+    try {
+      const update = lines?.map((item) => ({
+        quantity: item.quantity,
+        variantId: item?.variant?.id,
+      }));
+      const data = await createCheckoutId({
+        lines: update,
+      });
+      if (data?.data?.data?.checkoutCreate?.errors?.length > 0) {
+        notifyError(data?.data?.data?.checkoutCreate?.errors[0]?.message);
+      } else {
+        const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
+        console.log("checkoutId: ", checkoutId);
+        localStorage.setItem("checkoutId", checkoutId);
+        // verifyCoupenCode(checkoutId);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const [Razorpay] = useRazorpay();
 
@@ -163,44 +216,78 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       // const errors = validateInputs();
       const sample = {
-        // channel: "india-channel",
-        email: state.email,
+        // email: state.email,
         firstName: state.firstName,
         lastName: state.lastName,
         streetAddress1: state.streetAddress1,
         city: state.city,
-        // postalCode: state.postalCode,
-        // country: state.selectedCountryList,
-        // countryArea: state.selectedState,
-        // firstName1: state.diffAddress ? state.firstName1 : state.firstName,
-        // lastName1: state.diffAddress ? state.lastName1 : state.lastName,
-        streetAddress2: state.diffAddress
-          ? state.streetAddress2
-          : state.streetAddress1,
-        // city1: state.diffAddress ? state.city1 : state.city,
-        // postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
-        // country1: state.selectedCountryList,
-        // countryArea1: state.selectedState,
-
+        streetAddress2: state.streetAddress1,
         cityArea: "",
         companyName: state.companyName,
-        country: state.selectedCountryList,
+        country: state.selectedCountry,
         countryArea: state.selectedState,
         phone: state.phone,
         postalCode: state.postalCode,
-        // streetAddress1: "",
-        // streetAddress2: "",
       };
+
       console.log("sample: ", sample);
+      let shippingAddress = {};
+      if (state.diffAddress) {
+        shippingAddress = {
+          // email: state.email,
+          firstName: state.firstName1,
+          lastName: state.lastName1,
+          streetAddress1: state.streetAddress2,
+          city: state.city1,
+          streetAddress2: state.streetAddress2,
+          cityArea: "",
+          companyName: state.companyName1,
+          country: state.selectedCountry1,
+          countryArea: state.selectedState1,
+          phone: state.phone1,
+          postalCode: state.postalCode1,
+        };
+      } else {
+        shippingAddress = sample;
+      }
+      console.log("shippingAddress: ", shippingAddress);
 
       const checkoutId = localStorage.getItem("checkoutId");
       console.log("checkoutId: ", checkoutId);
       if (checkoutId) {
-        const data = await updateBillingAddress({
+        const res = await updateBillingAddress({
           checkoutId,
           billingAddress: sample,
         });
-        console.log("data: ", data);
+        console.log("billingAddress: ", res);
+
+        if (res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0) {
+          console.log("if: ");
+          notifyError(
+            res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
+          );
+        } else {
+          console.log("else: ");
+
+          const response = await updateShippingAddress({
+            checkoutId,
+            shippingAddress,
+          });
+          console.log("shippingAddress: ", shippingAddress);
+
+          if (
+            response.data?.data?.checkoutShippingAddressUpdate?.errors?.length >
+            0
+          ) {
+            notifyError(
+              response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
+                ?.message
+            );
+          } else {
+            updateDelivertMethod(shippingAddress?.country);
+          }
+          console.log("updateShippingAddress: ", shippingAddress);
+        }
       }
 
       // if (Object.keys(errors).length === 0) {
@@ -213,7 +300,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       //     streetAddress1: state.streetAddress1,
       //     city: state.city,
       //     postalCode: state.postalCode,
-      //     country: state.selectedCountryList,
+      //     country: state.selectedCountry,
       //     countryArea: state.selectedState,
       //     firstName1: state.diffAddress ? state.firstName1 : state.firstName,
       //     lastName1: state.diffAddress ? state.lastName1 : state.lastName,
@@ -222,7 +309,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       //       : state.streetAddress1,
       //     city1: state.diffAddress ? state.city1 : state.city,
       //     postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
-      //     country1: state.selectedCountryList,
+      //     country1: state.selectedCountry,
       //     countryArea1: state.selectedState,
       //   });
       //   if (
@@ -259,6 +346,25 @@ const CheckoutBillingArea = ({ register, errors }) => {
       // setState({ errors: errors });
       // }
       console.error("Error:", error);
+    }
+  };
+
+  const updateDelivertMethod = async (country) => {
+    try {
+      const checkoutId = localStorage.getItem("checkoutId");
+      if (checkoutId) {
+        const res = await updateDeliveryMethod({
+          checkoutid: checkoutId,
+          country,
+        });
+        console.log("delivery: ", res?.data?.data?.checkoutDeliveryMethodUpdate);
+        if(res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length>0){
+          notifyError(res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message)
+        }
+
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
@@ -437,7 +543,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     <select
                       name="country"
                       id="country"
-                      value={state.selectedCountryList}
+                      value={state.selectedCountry}
                       className="nice-select w-100"
                       onChange={(e) => handleSelectChange(e)}
                     >
@@ -461,7 +567,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       id="state"
                       value={state.selectedState}
                       className="nice-select w-100"
-                      onChange={(e) => handleSelectChange(e, "selectedState")}
+                      onChange={(e) =>
+                        setState({ selectedState: e.target.value })
+                      }
                     >
                       <option value="">Select State</option>
                       {state.stateList?.map((item) => (
@@ -645,37 +753,70 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </div>
                   <div className="col-md-12">
                     <div className="tp-checkout-input">
-                      <label>
-                        Country <span>*</span>
-                      </label>
+                      <label>Company name (optional)</label>
                       <input
-                        name="country"
-                        id="country1"
+                        name="address"
+                        id="address"
                         type="text"
-                        value={state.country1}
-                        placeholder="United States (US)"
-                        onChange={(e) => handleInputChange(e, "country1")}
+                        placeholder="Company name"
+                        value={state.companyName1}
+                        onChange={(e) => handleInputChange(e, "companyName1")}
                       />
-                      {state.errors.country1 && (
-                        <ErrorMsg msg={state.errors.country1} />
+                      {state.errors.streetAddress1 && (
+                        <ErrorMsg msg={state.errors.streetAddress1} />
                       )}
                     </div>
                   </div>
-
-                  <div className="col-md-12">
+                  <div className="col-md-6">
                     <div className="tp-checkout-input">
-                      <label>Street address</label>
-                      <input
-                        name="address"
-                        id="address1"
-                        type="text"
-                        placeholder="House number and street name"
-                        value={state.streetAddress2}
-                        onChange={(e) => handleInputChange(e, "streetAddress2")}
-                      />
-                      {state.errors.streetAddress2 && (
-                        <ErrorMsg msg={state.errors.streetAddress2} />
-                      )}
+                      <label htmlFor="country">
+                        Country <span>*</span>
+                      </label>
+                      <select
+                        name="country"
+                        id="country"
+                        value={state.selectedCountry1}
+                        className="nice-select w-100"
+                        onChange={(e) => {
+                          console.log("e: ", e.target.value);
+                          setState({
+                            selectedCountry1: e.target.value,
+                            selectedState1: "",
+                          });
+                          stateRefetch();
+                        }}
+                      >
+                        <option value="">Select Country</option>
+                        {CountryList?.map((item) => (
+                          <option key={item.code} value={item.code}>
+                            {item.country}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="tp-checkout-input">
+                      <label htmlFor="state">
+                        State <span>*</span>
+                      </label>
+                      <select
+                        name="state"
+                        id="state"
+                        value={state.selectedState1}
+                        className="nice-select w-100"
+                        onChange={(e) =>
+                          setState({ selectedState1: e.target.value })
+                        }
+                      >
+                        <option value="">Select State</option>
+                        {state.stateList?.map((item) => (
+                          <option key={item.raw} value={item.raw}>
+                            {item.raw}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -767,16 +908,15 @@ const CheckoutBillingArea = ({ register, errors }) => {
               </li>
 
               {/*  item list */}
-              {cart?.map((item) => (
-                <li key={item._id} className="tp-order-info-list-desc">
+              {state.orderData?.lines?.map((item) => (
+                <li key={item.id} className="tp-order-info-list-desc">
                   <p className="para">
                     {item?.variant?.product?.name}{" "}
                     <span> x {item?.quantity}</span>
                   </p>
                   <span>
                     &#8377;
-                    {item?.variant?.pricing?.price?.gross?.amount.toFixed(2) *
-                      item?.quantity}
+                    {item?.totalPrice?.gross?.amount?.toFixed(2)}
                   </span>
                 </li>
               ))}
@@ -846,7 +986,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <span>Total</span>
 
                 <span>
-                  &#8377; {totalAmount.toFixed(2)}
+                  &#8377;
+                  {state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
                   {/* {totalAmount.toString() === "0"
                     ? shippingCost.toFixed(2)
                     : parseFloat(cartTotals).toFixed(2)} */}

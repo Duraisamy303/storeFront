@@ -16,7 +16,6 @@ import { useCountryListQuery } from '../redux/features/productApi';
 const CheckoutPage = () => {
   const  { data: tokens } = useGetCartListQuery();
   const  { data: list } = useCountryListQuery();
-  console.log("list: ", list);
 
 
 

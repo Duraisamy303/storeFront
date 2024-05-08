@@ -27,6 +27,7 @@ const CheckoutArea = () => {
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
+  
   const [createCheckoutId] = useCreateCheckoutIdMutation();
 
   const [applyCoupenCode] = useApplyCoupenCodeMutation();
@@ -51,12 +52,7 @@ const CheckoutArea = () => {
 
   const dispatch = useDispatch();
 
-  const [cartTotals, setCartTotal] = useState(0);
-  const [coupenCode, setCoupenCode] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-
-  console.log("coupenCode: ", coupenCode);
 
   const [token, setToken] = useState("");
 
@@ -64,11 +60,6 @@ const CheckoutArea = () => {
     const token = localStorage.getItem("token");
     setToken(token);
   }, []);
-
-  const totalAmount = cart?.reduce(
-    (acc, curr) => acc + curr?.variant?.pricing?.price?.gross?.amount,
-    0
-  );
 
   let lines = [];
   if (cart?.length > 0) {

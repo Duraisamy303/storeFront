@@ -30,17 +30,18 @@ import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
 import UserMiniSidebar from "@/components/common/user-sidebar";
-import {
-  useGetCartListQuery,
-} from "@/redux/features/card/cardApi";
+import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import { useGetWishListQuery } from "../../redux/features/card/cardApi";
+import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
+  console.log("wishlist: ", wishlist);
 
-  const {data:cartList, refetch:cartRefetch} = useGetCartListQuery();
+  const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
 
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
@@ -50,10 +51,35 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   const [token, setToken] = useState("");
 
+  const { data: wishlistData, refetch: wishlistRefetch } =
+    useGetWishListQuery();
+
+  useEffect(() => {
+    getWishlistList();
+  }, [wishlistData]);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setToken(token);
   }, []);
+
+  const getWishlistList = async (prd) => {
+    try {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const isAddWishlist = wishlistData?.data?.wishlists?.edges
+          ?.map((item) => item?.node)
+          ?.some((node) => node?.id === product?.id);
+
+        dispatch(
+          add_to_wishlist(
+            wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -171,10 +197,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                         </div>
                         <div className="tp-header-action-item">
                           <button
-                             onClick={() => {
+                            onClick={() => {
                               dispatch(openCartMini());
                               cartRefetch();
-                            }}                  
+                            }}
                             className="tp-header-action-btn cartmini-open-btn"
                           >
                             <CartTwo />
