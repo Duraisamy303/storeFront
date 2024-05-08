@@ -130,11 +130,12 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         const input = {
           input: {
             user: users.user.id,
-            variant: product?.defaultVariant?.id,
+            variant: product?.id,
           },
         };
 
         const res = await addWishlist(input);
+        console.log("res: ", res);
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {

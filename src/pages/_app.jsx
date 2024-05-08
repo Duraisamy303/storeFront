@@ -46,11 +46,7 @@ const client = new ApolloClient({
 
 export default function App({ Component, pageProps }) {
   const [channel, setChannel] = useState("");
-  
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  // console.log("token: ", token);
-
     const storedChannel = localStorage.getItem("channel");
     if (!storedChannel) {
       localStorage.setItem("channel", "india-channel");

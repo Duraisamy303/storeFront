@@ -22,7 +22,6 @@ import {
 } from "../../redux/features/wishlist-slice";
 
 const WishlistItem = ({ product }) => {
-  console.log("product: ", product);
   const { _id, img, title, price } = product || {};
 
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -43,32 +42,32 @@ const WishlistItem = ({ product }) => {
 
   // handle add product
 
-  const handleAddProduct = async () => {
-    try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
-      console.log("checkoutToken: ", checkoutToken);
-      const response = await addToCartMutation({
-        checkoutToken: checkoutToken,
-        variantId: product?.defaultVariant?.id,
-      });
-      console.log("response: ", response);
+  // const handleAddProduct = async () => {
+  //   try {
+  //     const checkoutToken = localStorage.getItem("checkoutToken");
+  //     console.log("checkoutToken: ", checkoutToken);
+  //     const response = await addToCartMutation({
+  //       checkoutToken: checkoutToken,
+  //       variantId: product?.defaultVariant?.id,
+  //     });
+  //     console.log("response: ", response);
 
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
-        dispatch(cart_list(cart));
-      } else {
-        notifySuccess(`${product.node.name} added to cart successfully`);
-        // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
-        updateData();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  //     if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+  //       const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+  //       notifyError(err);
+  //       dispatch(cart_list(cart));
+  //     } else {
+  //       notifySuccess(`${product.node.name} added to cart successfully`);
+  //       // cart_list.push
+  //       dispatch(
+  //         cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+  //       );
+  //       updateData();
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   // handle decrement product
   const handleDecrement = (prd) => {
@@ -84,6 +83,46 @@ const WishlistItem = ({ product }) => {
       console.log("data: ", data);
     } catch (error) {}
   };
+
+  const addToCartProductINR = async () => {
+    try {
+      console.log("product: ", product);
+
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenINR,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        notifySuccess(`Product added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <tr>
       <td className="tp-cart-img">
@@ -140,7 +179,8 @@ const WishlistItem = ({ product }) => {
             if (isAddToCart) {
               router.push("/cart");
             } else {
-              handleAddProduct(product);
+              addToCartProductINR();
+              // addToCartProductUSD();
             }
           }}
           type="button"

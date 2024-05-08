@@ -26,6 +26,8 @@ const WishlistArea = () => {
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
+  console.log("wishlistData: ", wishlistData);
+
   useEffect(() => {
     getWishlistList();
   }, [wishlistData]);
