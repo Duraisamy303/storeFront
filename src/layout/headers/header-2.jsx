@@ -33,6 +33,7 @@ import UserMiniSidebar from "@/components/common/user-sidebar";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { useGetCartAllListQuery, useGetWishListQuery } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { useGetWishlistQuery } from "../../redux/features/productApi";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
@@ -41,6 +42,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
+
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
   useGetCartAllListQuery({});
 

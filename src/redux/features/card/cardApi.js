@@ -172,6 +172,7 @@ export const cardApi = apiSlice.injectEndpoints({
 
     checkoutUpdate: builder.mutation({
       query: ({ checkoutid, country }) => {
+        console.log("checkoutid, country: ", checkoutid, country);
         let deliveryMethodId = "";
         if (country == "IN") {
           deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
@@ -238,12 +239,19 @@ export const cardApi = apiSlice.injectEndpoints({
         console.log("query: ", lines);
 
         let channel = "india-channel";
-        // const channels = localStorage.getItem("channel");
-        // if (!channels) {
-        //   channel = "india-channel";
-        // } else {
-        //   channel = channels;
-        // }
+
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = channel;
+        } else {
+          if (channels == "india-channel") {
+            channel = channel;
+          } else {
+            channel = "default-channel";
+          }
+        }
+        console.log("channel: ", channel);
+
         return configuration(CREATE_CHECKOUT_ID({ channel, lines }));
       },
 

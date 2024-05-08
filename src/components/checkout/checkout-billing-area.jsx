@@ -273,7 +273,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
             checkoutId,
             shippingAddress,
           });
-          console.log("shippingAddress: ", shippingAddress);
+          console.log("shippingAddress: ", response);
 
           if (
             response.data?.data?.checkoutShippingAddressUpdate?.errors?.length >
@@ -286,7 +286,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           } else {
             updateDelivertMethod(shippingAddress?.country);
           }
-          console.log("updateShippingAddress: ", shippingAddress);
         }
       }
 
@@ -357,11 +356,15 @@ const CheckoutBillingArea = ({ register, errors }) => {
           checkoutid: checkoutId,
           country,
         });
-        console.log("delivery: ", res?.data?.data?.checkoutDeliveryMethodUpdate);
-        if(res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length>0){
-          notifyError(res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message)
+        console.log(
+          "delivery: ",
+          res?.data?.data?.checkoutDeliveryMethodUpdate
+        );
+        if (res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length > 0) {
+          notifyError(
+            res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message
+          );
         }
-
       }
     } catch (error) {
       console.log("error: ", error);

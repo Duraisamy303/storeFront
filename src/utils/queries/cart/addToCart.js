@@ -779,3 +779,225 @@ export const CHECKOUT_TOKEN_EMAIL = ({ checkoutToken, email }) => {
     variables: { checkoutToken, email },
   };
 };
+
+export const GET_CHECKOUT_DETAILS = ({ id, languageCode }) => {
+  return {
+    query: `
+    query checkout($id: ID!, $languageCode: LanguageCodeEnum!) {
+      checkout(id: $id) {
+        ...CheckoutFragment
+        __typename
+      }
+    }
+    fragment CheckoutFragment on Checkout {
+      id
+      email
+      discount {
+        ...Money
+        __typename
+      }
+      voucherCode
+      discountName
+      translatedDiscountName
+      giftCards {
+        ...GiftCardFragment
+        __typename
+      }
+      channel {
+        id
+        slug
+        __typename
+      }
+      shippingAddress {
+        ...AddressFragment
+        __typename
+      }
+      billingAddress {
+        ...AddressFragment
+        __typename
+      }
+      authorizeStatus
+      chargeStatus
+      isShippingRequired
+      user {
+        id
+        email
+        __typename
+      }
+      availablePaymentGateways {
+        ...PaymentGatewayFragment
+        __typename
+      }
+      deliveryMethod {
+        ... on ShippingMethod {
+          id
+          __typename
+        }
+        ... on Warehouse {
+          id
+          __typename
+        }
+        __typename
+      }
+      shippingMethods {
+        id
+        name
+        price {
+          ...Money
+          __typename
+        }
+        maximumDeliveryDays
+        minimumDeliveryDays
+        __typename
+      }
+      totalPrice {
+        gross {
+          ...Money
+          __typename
+        }
+        tax {
+          ...Money
+          __typename
+        }
+        __typename
+      }
+      shippingPrice {
+        gross {
+          ...Money
+          __typename
+        }
+        __typename
+      }
+      subtotalPrice {
+        gross {
+          ...Money
+          __typename
+        }
+        __typename
+      }
+      lines {
+        ...CheckoutLineFragment
+        __typename
+      }
+      __typename
+    }
+    fragment Money on Money {
+      currency
+      amount
+      __typename
+    }
+    fragment GiftCardFragment on GiftCard {
+      displayCode
+      id
+      currentBalance {
+        ...Money
+        __typename
+      }
+      __typename
+    }
+    fragment AddressFragment on Address {
+      id
+      city
+      phone
+      postalCode
+      companyName
+      cityArea
+      streetAddress1
+      streetAddress2
+      countryArea
+      country {
+        country
+        code
+        __typename
+      }
+      firstName
+      lastName
+      __typename
+    }
+    fragment PaymentGatewayFragment on PaymentGateway {
+      id
+      name
+      currencies
+      config {
+        field
+        value
+        __typename
+      }
+      __typename
+    }
+    fragment CheckoutLineFragment on CheckoutLine {
+      id
+      quantity
+      totalPrice {
+        gross {
+          currency
+          amount
+          __typename
+        }
+        __typename
+      }
+      unitPrice {
+        gross {
+          ...Money
+          __typename
+        }
+        __typename
+      }
+      undiscountedUnitPrice {
+        ...Money
+        __typename
+      }
+      variant {
+        attributes(variantSelection: ALL) {
+          values {
+            name
+            dateTime
+            boolean
+            translation(languageCode: $languageCode) {
+              name
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        id
+        name
+        translation(languageCode: $languageCode) {
+          name
+          __typename
+        }
+        product {
+          name
+          translation(languageCode: $languageCode) {
+            language {
+              code
+              __typename
+            }
+            id
+            name
+            __typename
+          }
+          media {
+            alt
+            type
+            url(size: 72)
+            __typename
+          }
+          __typename
+        }
+        media {
+          alt
+          type
+          url(size: 72)
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    
+      `,
+    variables: { id, languageCode },
+  };
+};
