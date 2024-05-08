@@ -24,6 +24,7 @@ import {
   useGetWishlistQuery,
   useWishlistMutation,
 } from "@/redux/features/productApi";
+import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
   const { _id, title, price, status } = product || {};
@@ -31,7 +32,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const router = useRouter();
 
   const RelatedProduct = product.node;
-  console.log("✌️RelatedProduct --->", RelatedProduct);
 
   const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
     {}
@@ -82,43 +82,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
-  const [addToCartMutation, { data: productsData, isError, isLoading }] =
-    useAddToCartMutation();
+  const [addToCartMutation] = useAddToCartMutation();
 
-  // handle add product
-  // const handleAddProduct = () => {
-  //     const checkoutToken = localStorage.getItem("checkoutToken");
-  //     if (checkoutToken) {
-  //       addProduct();
-  //     } else {
-  //       router.push("/login");
-  //     }
-  // };
-
-  const handleAddProduct = async () => {
-    try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
-      const response = await addToCartMutation({
-        checkoutToken: checkoutToken,
-        variantId: product?.node?.variants[0]?.id,
-      });
-      console.log("response: ", response);
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
-        dispatch(cart_list(cart));
-      } else {
-        notifySuccess(`${product.node.name} added to cart successfully`);
-        // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
-        updateData();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
   // handle wishlist product
   // const handleWishlist = async (prd) => {
@@ -166,7 +132,6 @@ console.log('✌️productvariantcheck --->', product);
       arr = JSON.parse(compare);
     }
     arr.push(prd.node);
-    console.log("compare: ", arr);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
   };
@@ -175,6 +140,43 @@ console.log('✌️productvariantcheck --->', product);
   const openModal = () => {
     const datas = { ...product?.node, images: product?.node?.media };
     dispatch(handleProductModal(datas));
+  };
+
+  const addToCartProductINR = async () => {
+    try {
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenINR,
+        variantId: product?.node?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.node?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -220,7 +222,10 @@ console.log('✌️productvariantcheck --->', product);
                 ) : (
                   <button
                     type="button"
-                    onClick={() => handleAddProduct(product)}
+                    onClick={() => {
+                      addToCartProductINR();
+                      addToCartProductUSD();
+                    }}
                     className={`tp-product-action-btn-3 ${
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}

@@ -15,7 +15,6 @@ const CartCheckout = ({ cartData }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
-  console.log("list: ", list);
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>
@@ -45,13 +44,11 @@ const CartCheckout = ({ cartData }) => {
 
   useEffect(() => {}, []);
 
-  console.log("propscartData: ", cartData);
 
   const quantityDisable = cartData.map((item) => {
-    console.log("✌️item --->", item.quantity);
     return item.variant.quantityAvailable >= item.quantity;
   });
-  console.log("quantityDisable: ", quantityDisable);
+
   return (
     <div className="tp-cart-checkout-wrapper">
       <div>

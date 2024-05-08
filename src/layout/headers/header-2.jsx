@@ -31,7 +31,7 @@ import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
 import UserMiniSidebar from "@/components/common/user-sidebar";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-import { useGetWishListQuery } from "../../redux/features/card/cardApi";
+import { useGetCartAllListQuery, useGetWishListQuery } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
@@ -39,9 +39,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const { wishlist } = useSelector((state) => state.wishlist);
-  console.log("wishlist: ", wishlist);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  useGetCartAllListQuery({});
 
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
@@ -200,6 +201,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             onClick={() => {
                               dispatch(openCartMini());
                               cartRefetch();
+                              AllListChannelREfresh()
                             }}
                             className="tp-header-action-btn cartmini-open-btn"
                           >

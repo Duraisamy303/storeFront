@@ -35,8 +35,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const dispatch = useDispatch();
 
-  const [ids, setIds] = useState([]);
-
   const [isAddWishlist, setWishlist] = useState(false);
 
   const [addWishlist, {}] = useAddWishlistMutation();
@@ -85,25 +83,37 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
-  const handleAddProduct = async () => {
+  const addToCartProductINR = async () => {
     try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
-        checkoutToken: checkoutToken,
+        checkoutToken: checkoutTokenINR,
         variantId: product?.defaultVariant?.id,
       });
-      cartRefetch();
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
-        dispatch(cart_list(cart));
       } else {
-        notifySuccess(`${product.node.name} added to cart successfully`);
-        // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
-        updateData();
+        notifySuccess(`Product added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -248,7 +258,10 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   <button
                     type="button"
                     style={{ marginRight: "5px" }}
-                    onClick={() => handleAddProduct(product)}
+                    onClick={() => {
+                      addToCartProductINR();
+                      addToCartProductUSD();
+                    }}
                     className={`tp-product-action-btn-2 ${
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}

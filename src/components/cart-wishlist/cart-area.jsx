@@ -59,7 +59,6 @@ const CartArea = () => {
   };
 
   const incQuantity = (quantity, id) => {
-    console.log("quantity: ", quantity);
     const data = cartData.map((item) => {
       if (item.id == id) {
         // Increase quantity by 1
@@ -70,7 +69,6 @@ const CartArea = () => {
     setCartData(data);
   };
 
-  console.log("data: ", cartData);
   const decQuantity = (quantity, id) => {
     const data = cartData.map((item) => {
       if (item.id === id) {

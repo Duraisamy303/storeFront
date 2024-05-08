@@ -16,6 +16,7 @@ import {
   useRemoveToCartMutation,
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
+import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
@@ -23,9 +24,12 @@ const CartMiniSidebar = () => {
   const [removeToCart, {}] = useRemoveToCartMutation();
 
   const cartData = useSelector((state) => state.cart?.cart_list);
-  const cart = cartData?.node || cartData;
+  // const cart = cartData?.node || cartData;
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
+
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const CartList = cartList?.data?.checkout?.lines;
 
@@ -33,29 +37,37 @@ const CartMiniSidebar = () => {
     cartRefetch();
   }, []);
 
-  const router = useRouter();
+  useEffect(() => {
+    AllListChannelREfresh();
+  }, []);
 
-  const totalAmount = cart?.reduce(
-    (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount * curr.quantity ||
-      acc +
-        curr?.node?.pricing?.priceRange?.start?.gross?.amount * curr.quantity,
-    0
-  );
+  const router = useRouter();
 
   const { total } = useCartInfo();
   const dispatch = useDispatch();
 
-  const handleRemovePrd = (val) => {
-    const checkoutToken = localStorage.getItem("checkoutToken");
-    removeToCart({
-      checkoutToken,
-      lineId: val.id,
-    }).then((data) => {
-      const filter = cart.filter((item) => item.id != val.id);
-      dispatch(cart_list(filter));
-    });
-    cartRefetch();
+  const handleRemovePrd = async (val) => {
+    try {
+      const productId = val?.variant?.product?.id;
+      const allListData = AllListChannel?.data?.checkout?.lines;
+      const fine = allListData?.find(
+        (item) => item?.variant?.product?.id === productId
+      );
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      let checkoutToken =
+        localStorage.getItem("channel") === "india-channel"
+          ? checkoutTokenUSD
+          : checkoutTokenINR;
+
+      await removeToCart({ checkoutToken: checkoutTokenINR, lineId: val.id });
+      await removeToCart({ checkoutToken: checkoutToken, lineId: fine?.id });
+
+      cartRefetch();
+      AllListChannelREfresh();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // handle close cart mini
@@ -64,8 +76,7 @@ const CartMiniSidebar = () => {
   };
 
   const quantityDisable = CartList?.map((item) => {
-   
-    return item.variant.quantityAvailable >= item.quantity;
+    return item?.variant?.quantityAvailable >= item.quantity;
   });
 
   return (
@@ -144,12 +155,7 @@ const CartMiniSidebar = () => {
                               ) : (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                                    2
-                                  ) ||
-                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                      2
-                                    )}
+                                  {item?.totalPrice?.gross?.amount?.toFixed(2)}
                                 </span>
                               )}
                               <span className="cartmini__quantity">
@@ -242,7 +248,7 @@ const CartMiniSidebar = () => {
               </div>
             )}
             {/* if no item in cart */}
-            {cart?.length === 0 && (
+            {CartList?.length === 0 && (
               <div className="cartmini__empty text-center">
                 <Image src={empty_cart_img} alt="empty-cart-img" />
                 <p>Your Cart is empty</p>
@@ -255,7 +261,12 @@ const CartMiniSidebar = () => {
           <div className="cartmini__checkout">
             <div className="cartmini__checkout-title mb-30">
               <h4>Subtotal:</h4>
-              <span>&#8377;{totalAmount?.toFixed(2)}</span>
+              <span>
+                &#8377;
+                {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                  2
+                )}
+              </span>
             </div>
             <div className="cartmini__checkout-btn">
               <Link

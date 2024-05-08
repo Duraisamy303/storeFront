@@ -100,7 +100,6 @@ const UserMiniSidebar = () => {
                
               </>
             )}
-            {token && (
               <>
                <div>
                <button
@@ -118,7 +117,6 @@ const UserMiniSidebar = () => {
                 </button>
               </div>
               </>
-            )}
           </div>
         </div>
       </div>

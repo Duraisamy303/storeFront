@@ -19,6 +19,7 @@ import {
 } from "@/redux/features/productApi";
 import { useDispatch, useSelector } from "react-redux";
 import { cart_list } from "@/redux/features/cartSlice";
+import { useCheckoutTokenEmailUpdatesMutation } from "../../redux/features/card/cardApi";
 
 // schema
 const schema = Yup.object().shape({
@@ -37,6 +38,7 @@ const LoginForm = () => {
   const [addWishlist, {}] = useAddWishlistMutation();
 
   const [checkoutTokens, { data: tokens }] = useCheckoutTokenMutation();
+  const [checkoutTokenEmailUpdate] = useCheckoutTokenEmailUpdatesMutation();
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -57,61 +59,94 @@ const LoginForm = () => {
     loginUser({
       email: data.email,
       password: data.password,
-    }).then((data) => {
-      let whishlist = localStorage.getItem("whishlist");
+    }).then(async (data) => {
+      // let whishlist = localStorage.getItem("whishlist");
 
       if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
         notifySuccess("Login successfully");
-
-        if (!whishlist) {
-          whishlist = [];
+        // if (!whishlist) {
+        //   whishlist = [];
+        // } else {
+        //   whishlist = JSON.parse(whishlist);
+        //   if (whishlist?.length > 0) {
+        //     whishlist.map((item) =>
+        //       wishlistData(data?.data?.data?.tokenCreate, item.node)
+        //     );
+        //   }
+        // }
+        //For india channel
+        const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+        if (!checkoutTokenINR) {
+          createCheckoutTokenINR(data?.data?.data?.tokenCreate?.user?.email);
         } else {
-          whishlist = JSON.parse(whishlist);
-          if (whishlist?.length > 0) {
-            whishlist.map((item) =>
-              wishlistData(data?.data?.data?.tokenCreate, item.node)
-            );
-          }
+          await checkoutTokenEmailUpdate({
+            email: data?.data?.data?.tokenCreate?.user?.email,
+            checkoutToken: checkoutTokenINR,
+          });
         }
-        getCheckoutToken(data?.data?.data?.tokenCreate?.user?.email);
 
+        //For default channel
+        const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+        if (!checkoutTokenUSD) {
+          createCheckoutTokenUSD(data?.data?.data?.tokenCreate?.user?.email);
+        } else {
+          await checkoutTokenEmailUpdate({
+            email: data?.data?.data?.tokenCreate?.user?.email,
+            checkoutToken: checkoutTokenUSD,
+          });
+          // if (cart?.length > 0) {
+          //   cart?.map((item) =>
+          //     handleAddProduct(checkoutTokenUSD, item?.variant.id)
+          //   );
+          // }
+        }
         router.push(redirect || "/");
       }
     });
     reset();
   };
 
-  const wishlistData = async (user, data) => {
-    try {
-      const input = {
-        input: {
-          user: user.user.id,
-          variant: data.id,
-        },
-      };
-      const res = await addWishlist(input);
+  // const wishlistData = async (user, data) => {
+  //   try {
+  //     const input = {
+  //       input: {
+  //         user: user.user.id,
+  //         variant: data.id,
+  //       },
+  //     };
+  //     const res = await addWishlist(input);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
+  const createCheckoutTokenINR = async (email) => {
+    try {
+      const data = await checkoutTokens({
+        email,
+        channel: "india-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenINR",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const getCheckoutToken = async (email) => {
+  const createCheckoutTokenUSD = async (email) => {
     try {
       const data = await checkoutTokens({
         email,
+        channel: "default-channel",
       });
-      console.log("data: ", data);
-      if (cart?.length > 0) {
-        cart?.map((item) =>
-          handleAddProduct(
-            data?.data?.data?.checkoutCreate?.checkout?.token,
-            item?.variant.id
-          )
-        );
-      }
+      localStorage.setItem(
+        "checkoutTokenUSD",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
     } catch (error) {
       console.error("Error:", error);
     }
@@ -123,18 +158,17 @@ const LoginForm = () => {
         checkoutToken: checkoutToken,
         variantId: id,
       });
-      console.log("response: ", response);
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
-        dispatch(cart_list(cart));
+        // dispatch(cart_list(cart));
       } else {
-        notifySuccess(`${product.node.name} added to cart successfully`);
+        // notifySuccess(`${product.node.name} added to cart successfully`);
         // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
-        updateData();
+        // dispatch(
+        //   cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
+        // );
+        // updateData();
       }
     } catch (error) {
       console.error("Error:", error);
