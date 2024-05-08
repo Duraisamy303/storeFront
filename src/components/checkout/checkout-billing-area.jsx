@@ -23,7 +23,7 @@ import {
   useStateListQuery,
 } from "@/redux/features/productApi";
 import { Filter } from "@/svg";
-import { useUpdateShippingAddressMutation } from "../../redux/features/card/cardApi";
+import { useGetCheckoutDetailsQuery, useUpdateShippingAddressMutation } from "../../redux/features/card/cardApi";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -37,6 +37,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
+
+  const {data:checkoutDetails,refetch:checkoutDetailsRefetch}=useGetCheckoutDetailsQuery()
+  console.log("checkoutDetails: ", checkoutDetails);
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
@@ -98,6 +101,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     console.log("e: ", e.target.value);
     setState({ selectedCountry: e.target.value, selectedState: "" });
     stateRefetch();
+    checkoutDetailsRefetch();
   };
 
   useEffect(() => {
@@ -120,6 +124,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       if (linelist?.data?.checkout) {
         const orderData = linelist?.data?.checkout;
+        console.log("orderData: ", orderData);
         setState({ orderData });
         createCheckoutIds(orderData?.lines);
       }
@@ -906,8 +911,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
             <ul>
               {/*  header */}
               <li className="tp-order-info-list-header">
-                <h4>Product</h4>
-                <h4>Total</h4>
+                <h4>PRODUCT</h4>
+                <h4>SUBTOTAL</h4>
               </li>
 
               {/*  item list */}

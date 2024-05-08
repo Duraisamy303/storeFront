@@ -24,7 +24,10 @@ import {
   UPDATE_CART_QUANTITY,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
-import { UPDATE_SHIPPING_ADDRESS } from "../../../utils/queries/cart/addToCart";
+import {
+  GET_CHECKOUT_DETAILS,
+  UPDATE_SHIPPING_ADDRESS,
+} from "../../../utils/queries/cart/addToCart";
 
 export const cardApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -323,6 +326,18 @@ export const cardApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    getCheckoutDetails: builder.query({
+      query: () => {
+        const id = localStorage.getItem("checkoutId");
+        console.log("id: ", id);
+        return configuration(
+          GET_CHECKOUT_DETAILS({ id, languageCode: "EN_US" })
+        );
+      },
+
+      providesTags: ["Products"],
+    }),
+
     deleteWishlist: builder.mutation({
       query: ({ variant }) => {
         const user = localStorage.getItem("userInfo");
@@ -367,4 +382,5 @@ export const {
   useDeleteWishlistMutation,
   useCheckoutTokenEmailUpdatesMutation,
   useGetCartAllListQuery,
+  useGetCheckoutDetailsQuery,
 } = cardApi;
