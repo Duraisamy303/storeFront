@@ -60,7 +60,7 @@ console.log("related",  product)
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
-      return prd?.node?.variant === product?.defaultVariant?.id;
+      return prd?.node?.variant === product?.id;
     }
   );
 
@@ -106,7 +106,7 @@ console.log("related",  product)
         const input = {
           input: {
             user: users.user.id,
-            variant: product?.defaultVariant?.id,
+            variant: product?.id,
           },
         };
 

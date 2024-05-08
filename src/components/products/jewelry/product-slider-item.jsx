@@ -39,7 +39,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
-      return prd?.node?.variant === product?.node?.defaultVariant?.id;
+      return prd?.node?.variant === product?.node?.id;
     }
   );
 

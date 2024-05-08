@@ -48,6 +48,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
+    console.log('✌️wishlistData --->', wishlistData);
 
   useEffect(() => {
     getWishlistList();
@@ -63,7 +64,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
-      return prd?.node?.variant === product?.defaultVariant?.id;
+      return prd?.node?.variant === product?.id;
     }
   );
 

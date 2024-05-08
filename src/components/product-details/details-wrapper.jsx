@@ -92,7 +92,7 @@ const DetailsWrapper = ({
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
-      return prd?.node?.variant === productItem?.defaultVariant?.id;
+      return prd?.node?.variant === productItem?.id;
     }
   );
 
