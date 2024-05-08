@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -40,7 +40,20 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
   const [removeWishlist, {}] = useDeleteWishlistMutation();
+  const [channelSelect, setChannelSelect] = useState();
 
+  useEffect(() => {
+    let channel = "";
+    const channels = localStorage.getItem("channel");
+    if (!channels) {
+      channel = "india-channel";
+    } else {
+      channel = channels;
+    }
+    setChannelSelect(channel);
+  }, []);
+
+  console.log("channelSelect", channelSelect);
   // handle add product
 
   // const handleAddProduct = async () => {
@@ -81,7 +94,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       const data = await removeWishlist({
         variant: product?.variant,
       });
-      refetchWishlist()
+      refetchWishlist();
       console.log("data: ", data);
     } catch (error) {}
   };
@@ -145,8 +158,19 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       </td>
       <td className="tp-cart-price">
         <span>
-          {parseFloat(data?.indiaChannelPricing)?.toFixed(2) ||
-            parseFloat(data?.defaultChannelPricing)?.toFixed(2)}
+          {channelSelect == "india-channel" ? (
+            <>
+              ₹
+              {parseFloat(data?.indiaChannelPricing)?.toFixed(2) ||
+                parseFloat(data?.defaultChannelPricing)?.toFixed(2)}
+            </>
+          ) : (
+            <>
+              $
+              {parseFloat(data?.indiaChannelPricing)?.toFixed(2) ||
+                parseFloat(data?.defaultChannelPricing)?.toFixed(2)}
+            </>
+          )}
         </span>
       </td>
 
