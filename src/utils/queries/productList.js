@@ -102,6 +102,7 @@ export const ORDER_LIST = ({ orderId }) => {
           }
         }
         isPaid
+        created
       }
     }
     `,

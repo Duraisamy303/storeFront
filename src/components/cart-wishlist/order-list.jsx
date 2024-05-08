@@ -19,6 +19,7 @@ const OrderList = () => {
   const { data: data } = useGetCartListQuery();
 
   const { data: orders, isError, isLoading } = useMyOrderListQuery();
+  console.log("✌️orders --->", orders);
 
   const [orderList, setOrderList] = useState([]);
   console.log("orderList: ", orderList);
@@ -35,69 +36,86 @@ const OrderList = () => {
     }
   }, [orders]);
 
+  console.log("orderList", orderList);
   return (
     <>
-      <section className="tp-cart-area pb-50">
-        <div className="container-fluid">
+      <section className="tp-cart-area pt-50 pb-50">
+        <h3 className="mb-30 text-center">My Orders</h3>
+        <div className="profile__ticket table-responsive">
           {orderList?.length < 0 && (
-            <div className="text-center pt-50">
-              <h3>No Items Found</h3>
-              <Link href="/shop" className="tp-cart-checkout-btn mt-20">
-                Continue Shipping
-              </Link>
+            <div
+              style={{ height: "210px" }}
+              className="d-flex align-items-center justify-content-center"
+            >
+              <div className="text-center">
+                <i
+                  style={{ fontSize: "30px" }}
+                  className="fa-solid fa-cart-circle-xmark"
+                ></i>
+                <p style={{ fontSize: "20px", color: "black" }}>
+                  You have no order Yet!
+                </p>
+              </div>
             </div>
           )}
           {orderList?.length > 0 && (
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="tp-cart-list mb-45 ">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th colSpan="2" className="tp-cart-header-product">
-                          ODRER
-                        </th>
-                        <th className="tp-cart-header-quantity">DATE</th>
-                        <th className="tp-cart-header-price">STATUS</th>
-                        <th className="tp-cart-header-price">TOTAL</th>
-
-                        <th>ACTION</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orderList?.map((item) => (
-                        <tr>
-                          <td className="tp-cart-product">
-                            <span>{item?.number}</span>
-                          </td>
-                          <td className="tp-cart-quantity">
-                            <span>
-                              {moment(item?.created).format("MMMM D, YYYY")}
-                            </span>
-                          </td>
-                          <td className="tp-cart-price">
-                            <span>{item?.status}</span>
-                          </td>
-                          <td className="tp-cart-price">
-                            <span>{`${item?.total?.gross?.amount} for  ${item?.lines?.length} item`}</span>
-                          </td>
-                          <td className="tp-cart-price">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">ODRER</th>
+                  <th scope="col">DATE</th>
+                  <th scope="col">STATUS</th>
+                  <th scope="col">TOTAL</th>
+                  <th scope="col">ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orderList.map((item, i) => (
+                  <tr key={i}>
+                    <th scope="row">#{item.number}</th>
+                    <td data-info="title">
+                      {moment(item.created).format("MMMM D, YYYY")}
+                    </td>
+                    <td
+                      data-info={`status ${
+                        item.status === "Pending" ? "pending" : ""
+                      }  ${item.status === "Processing" ? "hold" : ""}  ${
+                        item.status === "Delivered" ? "done" : ""
+                      }`}
+                      className={`status ${
+                        item.status === "Pending" ? "pending" : ""
+                      } ${item.status === "Processing" ? "hold" : ""}  ${
+                        item.status === "Delivered" ? "done" : ""
+                      }`}
+                    >
+                      {item.status}
+                    </td>
+                    <td>
+                      {`${item?.total?.gross?.amount} for  ${item?.lines?.length} item`}
+                    </td>
+                    {/* <td >
                             <Link
                               href={`/order-details/${item?.id}`}
-                              className="tp-return-customer-btn tp-checkout-btn"
+                              className="tp-btn tp-btn-border"
                             >
                               <span> View</span>
                             </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
+                          </td> */}
+                    <td>
+                      <button
+                        type="button"
+                        className="order-view-btn"
+                        onClick={() =>
+                          router.push(`/order-details/${item?.id}`)
+                        }
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </section>
