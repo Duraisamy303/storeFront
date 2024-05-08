@@ -747,3 +747,35 @@ export const GET_WISHLIST_LIST = ({ channel, lines }) => {
     variables: { channel, lines },
   };
 };
+
+export const CHECKOUT_TOKEN_EMAIL = ({ checkoutToken, email }) => {
+  return {
+    query: `
+    mutation checkoutEmailUpdate($checkoutToken:UUID!,$email:String!) {
+      checkoutEmailUpdate(
+        email: $email,
+        token: $checkoutToken
+      ) {
+        errors {
+          message
+        }
+        checkout {
+          email
+          id
+          token
+          lines {
+            id
+            quantity
+            variant {
+              name
+              sku
+            }
+          }
+        }
+      }
+    }
+    
+      `,
+    variables: { checkoutToken, email },
+  };
+};

@@ -17,7 +17,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
-import { useGetCartListQuery } from "../../redux/features/card/cardApi";
+import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 
 const CartItem = ({
   product,
@@ -30,15 +30,15 @@ const CartItem = ({
   quantityCount,
   isQuantity,
   quantityAvailable,
-  refetch
+  refetch,
 }) => {
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
-  console.log("cart: ", cart);
-  // const {data:list}=useGetCartListQuery()
-  // console.log("list: ", list);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
+
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const [quantity, setQuantity] = useState(quantityCount);
 
@@ -48,18 +48,49 @@ const CartItem = ({
 
   const router = useRouter();
 
-  const handleRemovePrd = () => {
-    const checkoutToken = localStorage.getItem("checkoutToken");
-    removeToCart({
-      checkoutToken,
-      lineId: product.id,
-    }).then((data) => {
-      const filter = cart.filter((item) => item.id != product.id);
-      dispatch(cart_list(filter));
-      refetch()
-    });
+  // const handleRemovePrd = () => {
+  //   const checkoutToken = localStorage.getItem("checkoutToken");
+  //   removeToCart({
+  //     checkoutToken,
+  //     lineId: product.id,
+  //   }).then((data) => {
+  //     const filter = cart.filter((item) => item.id != product.id);
+  //     dispatch(cart_list(filter));
+  //     refetch()
+  //   });
+  // };
+
+  useEffect(() => {
+    AllListChannelREfresh();
+  }, []);
+
+  const handleRemovePrd = async (val) => {
+    try {
+      const productId = product?.variant?.product?.id;
+      const allListData = AllListChannel?.data?.checkout?.lines;
+      const fine = allListData?.find(
+        (item) => item?.variant?.product?.id === productId
+      );
+
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      let checkoutToken =
+        localStorage.getItem("channel") === "india-channel"
+          ? checkoutTokenUSD
+          : checkoutTokenINR;
+
+      await removeToCart({
+        checkoutToken: checkoutTokenINR,
+        lineId: product.id,
+      });
+      await removeToCart({ checkoutToken: checkoutToken, lineId: fine?.id });
+
+      refetch();
+      AllListChannelREfresh();
+    } catch (error) {
+      console.log(error);
+    }
   };
-  console.log("quantityAvailable", quantityAvailable);
 
   return (
     <>
@@ -126,7 +157,7 @@ const CartItem = ({
                 </span>
               </div>
             </td>
-          ) }
+          )}
           {/* subtotal */}
           <td className="tp-cart-quantity">
             <div className="tp-product-quantity mt-10 mb-10">

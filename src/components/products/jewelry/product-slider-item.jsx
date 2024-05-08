@@ -23,6 +23,7 @@ import {
   useAddWishlistMutation,
   useWishlistMutation,
 } from "@/redux/features/productApi";
+import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
   const { _id, title, price, status } = product || {};
@@ -30,7 +31,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const router = useRouter();
 
   const RelatedProduct = product.node;
-  console.log("✌️RelatedProduct --->", RelatedProduct);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -65,43 +65,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
-  const [addToCartMutation, { data: productsData, isError, isLoading }] =
-    useAddToCartMutation();
+  const [addToCartMutation] = useAddToCartMutation();
 
-  // handle add product
-  // const handleAddProduct = () => {
-  //     const checkoutToken = localStorage.getItem("checkoutToken");
-  //     if (checkoutToken) {
-  //       addProduct();
-  //     } else {
-  //       router.push("/login");
-  //     }
-  // };
-
-  const handleAddProduct = async () => {
-    try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
-      const response = await addToCartMutation({
-        checkoutToken: checkoutToken,
-        variantId: product?.node?.variants[0]?.id,
-      });
-      console.log("response: ", response);
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
-        dispatch(cart_list(cart));
-      } else {
-        notifySuccess(`${product.node.name} added to cart successfully`);
-        // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
-        updateData();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
   // handle wishlist product
   const handleWishlist = async (prd) => {
@@ -113,24 +79,19 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   };
 
   const addWishlistProduct = async (prd) => {
-    console.log("prd: ", prd);
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
 
       if (token) {
         const users = JSON.parse(user);
-        console.log("users: ", users);
         const input = {
           input: {
             user: users.user.id,
             variant: prd.node.id,
           },
         };
-        console.log("input: ", input);
-
         const res = await addWishlist(input);
-        console.log("res: ", res);
       } else {
         const addedWishlist = handleWishlistProduct(prd);
         dispatch(add_to_wishlist(addedWishlist));
@@ -150,7 +111,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
       arr = JSON.parse(compare);
     }
     arr.push(prd.node);
-    console.log("compare: ", arr);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
   };
@@ -159,6 +119,43 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const openModal = () => {
     const datas = { ...product?.node, images: product?.node?.media };
     dispatch(handleProductModal(datas));
+  };
+
+  const addToCartProductINR = async () => {
+    try {
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenINR,
+        variantId: product?.node?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        notifySuccess(`${product.node.name} added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.node?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -204,7 +201,10 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => handleAddProduct(product)}
+                    onClick={() => {
+                      addToCartProductINR();
+                      addToCartProductUSD();
+                    }}
                     className={`tp-product-action-btn-3 ${
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}

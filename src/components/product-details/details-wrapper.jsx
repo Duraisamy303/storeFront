@@ -76,8 +76,6 @@ const DetailsWrapper = ({
     });
   };
 
-  const { data: tokens } = useGetCartListQuery();
-
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const compareList = useSelector((state) => state.cart.compare_list);
@@ -91,9 +89,12 @@ const DetailsWrapper = ({
   const [isAddWishlist, setWishlist] = useState(false);
 
   const cart = useSelector((state) => state.cart?.cart_list);
+
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
+
   let isAddedToCart = false;
-  if (cart?.length > 0) {
-    isAddedToCart = cart.some(
+  if (datacartList?.data?.checkout?.lines?.length > 0) {
+    isAddedToCart = datacartList?.data?.checkout?.lines?.some(
       (prd) => prd.variant.product.id === productItem.id
     );
   }
@@ -155,24 +156,37 @@ const DetailsWrapper = ({
 
   // handle add product
 
-  const handleAddProduct = async () => {
+  const addToCartProductINR = async () => {
     try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
-        checkoutToken: checkoutToken,
-        variantId: productItem?.variants[0]?.id,
+        checkoutToken: checkoutTokenINR,
+        variantId: productItem?.defaultVariant?.id,
       });
-      console.log("response: ", response);
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
-        dispatch(cart_list(cart));
       } else {
-        notifySuccess(`${productItem.name} added to cart successfsully`);
-        // cart_list.push
-        dispatch(
-          cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-        );
+        notifySuccess(`Product added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: productItem?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -337,7 +351,8 @@ const DetailsWrapper = ({
                   dispatch(handleModalClose());
                   router.push("/cart");
                 } else {
-                  handleAddProduct(productItem);
+                  addToCartProductINR();
+                  addToCartProductUSD();
                 }
               }}
               disabled={status === "out-of-stock"}

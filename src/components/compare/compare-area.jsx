@@ -24,11 +24,11 @@ const CompareArea = () => {
 
   const { compareItems } = useSelector((state) => state.compare);
 
-  const { data: tokens } = useGetCartListQuery();
-
   const compareList = useSelector((state) => state.cart.compare_list);
 
   const cart = useSelector((state) => state.cart.cart_list);
+
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -39,7 +39,6 @@ const CompareArea = () => {
 
   useEffect(() => {
     const compareList = localStorage.getItem("compareList");
-    console.log("✌️compareList --->", compareList);
     const arr = JSON.parse(compareList);
     dispatch(compare_list(arr));
   }, []);
@@ -85,10 +84,43 @@ const CompareArea = () => {
       return textValue;
     }
   };
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   setToken(token);
-  // }, []);
+
+  const addToCartProductINR = async (product) => {
+    try {
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenINR,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        notifySuccess(`Product added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async (product) => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -111,7 +143,6 @@ const CompareArea = () => {
                       <tr>
                         <th>Product</th>
                         {compareList?.map((item) => {
-                          console.log("✌️itemcompare --->", item);
                           return (
                             <td key={item?.id} className="">
                               <div className="tp-compare-thumb p-relative z-index-1">
@@ -149,41 +180,41 @@ const CompareArea = () => {
                                     2
                                   )}
                                 </div>
-{
-  item?.defaultVariant?.quantityAvailable != 0 &&(
-<div className="tp-compare-add-to-cart">
-                                  {cart?.some(
-                                    (prd) =>
-                                      prd?.variant?.product?.id === item?.id
-                                  ) ? (
-                                    <button
-                                      onClick={() => router.push("/cart")}
-                                      className="tp-btn"
-                                      type="button"
-                                    >
-                                      View Cart
-                                    </button>
-                                  ) : (
-                                    <button
-                                      onClick={() => handleAddProduct(item)}
-                                      type="button"
-                                      className="tp-btn"
-                                    >
-                                      Add to Cart
-                                    </button>
-                                  )}
-                                  {/* <button
+                                {item?.defaultVariant?.quantityAvailable !=
+                                  0 && (
+                                  <div className="tp-compare-add-to-cart">
+                                    {datacartList?.data?.checkout?.lines?.some(
+                                      (prd) =>
+                                        prd?.variant?.product?.id === item?.id
+                                    ) ? (
+                                      <button
+                                        onClick={() => router.push("/cart")}
+                                        className="tp-btn"
+                                        type="button"
+                                      >
+                                        View Cart
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={() => {
+                                          addToCartProductINR(item);
+                                          addToCartProductUSD(item);
+                                        }}
+                                        type="button"
+                                        className="tp-btn "
+                                      >
+                                        Add to Cart
+                                      </button>
+                                    )}
+                                    {/* <button
                                 onClick={() => handleAddProduct(item)}
                                 type="button"
                                 className="tp-btn"
                               >
                                 Add to Cart
                               </button> */}
-                                </div>
-  )
-}
-                                
-
+                                  </div>
+                                )}
                               </div>
                             </td>
                           );

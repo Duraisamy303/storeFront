@@ -12,6 +12,7 @@ import {
   CHECKOUT_COMPLETE,
   CHECKOUT_DELIVERY_METHOD,
   CHECKOUT_TOKEN,
+  CHECKOUT_TOKEN_EMAIL,
   CHECKOUT_TOKEN_WITHOUT_EMAIL,
   CHECKOUT_UPDATE_SHIPPING_ADDRESS,
   CREATE_CHECKOUT_ID,
@@ -29,49 +30,20 @@ export const cardApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     addToCart: builder.mutation({
-      query: ({ variantId }) => {
-        const checkoutToken = localStorage.getItem("checkoutToken");
+      query: ({ variantId, checkoutToken }) => {
         return configuration(ADDTOCART({ checkoutToken, variantId }));
-      },
-
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          console.log("result: ", result);
-          dispatch(
-            cart_list(result?.data.data?.checkoutLinesAdd?.checkout?.lines)
-          );
-        } catch (err) {
-          // do nothing
-        }
       },
     }),
 
     checkoutToken: builder.mutation({
-      query: ({ email }) => {
-        return configuration(
-          CHECKOUT_TOKEN({ channel: "india-channel", email })
-        );
-      },
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          const checkoutToken =
-            result?.data.data?.checkoutCreate?.checkout?.token;
-          dispatch(checkout_token(checkoutToken));
-          localStorage.setItem("checkoutToken", checkoutToken);
-          // Handle the result as needed
-        } catch (err) {
-          // Handle any errors
-        }
+      query: ({ channel, email }) => {
+        return configuration(CHECKOUT_TOKEN({ channel, email }));
       },
     }),
 
     createCheckoutTokenWithoutEmail: builder.mutation({
-      query: () => {
-        return configuration(
-          CHECKOUT_TOKEN_WITHOUT_EMAIL({ channel: "india-channel" })
-        );
+      query: ({ channel }) => {
+        return configuration(CHECKOUT_TOKEN_WITHOUT_EMAIL({ channel }));
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -88,9 +60,20 @@ export const cardApi = apiSlice.injectEndpoints({
 
     getCartList: builder.query({
       query: () => {
-        const checkoutToken = localStorage.getItem("checkoutToken");
+        let checkoutToken = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          checkoutToken = localStorage.getItem("checkoutTokenINR");
+        } else {
+          if (channels == "india-channel") {
+            checkoutToken = localStorage.getItem("checkoutTokenINR");
+          } else {
+            checkoutToken = localStorage.getItem("checkoutTokenUSD");
+          }
+        }
         return configuration(CART_LIST({ checkoutToken }));
       },
+
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -98,6 +81,24 @@ export const cardApi = apiSlice.injectEndpoints({
         } catch (err) {
           // do nothing
         }
+      },
+      providesTags: ["Products"],
+    }),
+
+    getCartAllList: builder.query({
+      query: () => {
+        let checkoutToken = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          checkoutToken = localStorage.getItem("checkoutTokenUSD");
+        } else {
+          if (channels == "india-channel") {
+            checkoutToken = localStorage.getItem("checkoutTokenUSD");
+          } else {
+            checkoutToken = localStorage.getItem("checkoutTokenINR");
+          }
+        }
+        return configuration(CART_LIST({ checkoutToken }));
       },
       providesTags: ["Products"],
     }),
@@ -306,8 +307,9 @@ export const cardApi = apiSlice.injectEndpoints({
       query: () => {
         const user = localStorage.getItem("userInfo");
         const users = JSON.parse(user);
-        console.log("users: ", users);
-        return configuration(GET_WISHLIST_LIST({ userEmail: users.user?.email }));
+        return configuration(
+          GET_WISHLIST_LIST({ userEmail: users.user?.email })
+        );
       },
 
       providesTags: ["Products"],
@@ -315,14 +317,23 @@ export const cardApi = apiSlice.injectEndpoints({
 
     deleteWishlist: builder.mutation({
       query: ({ variant }) => {
-        console.log("variant: ", variant);
         const user = localStorage.getItem("userInfo");
         const users = JSON.parse(user);
-        console.log("users: ", users);
         return configuration(
           DELETE_WISHLIST({
             user: users?.user?.email,
             variant,
+          })
+        );
+      },
+    }),
+
+    checkoutTokenEmailUpdates: builder.mutation({
+      query: ({ checkoutToken, email }) => {
+        return configuration(
+          CHECKOUT_TOKEN_EMAIL({
+            email,
+            checkoutToken,
           })
         );
       },
@@ -346,4 +357,6 @@ export const {
   useUpdateShippingAddressMutation,
   useGetWishListQuery,
   useDeleteWishlistMutation,
+  useCheckoutTokenEmailUpdatesMutation,
+  useGetCartAllListQuery,
 } = cardApi;

@@ -24,7 +24,6 @@ import { cart_list, checkout_token } from "@/redux/features/cartSlice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 
-
 const Index = () => {
   // const dispatch = useDispatch();
 
@@ -34,34 +33,44 @@ const Index = () => {
     useCreateCheckoutTokenWithoutEmailMutation();
 
   useEffect(() => {
-    const token = localStorage.getItem("checkoutToken");
-    if (!token) {
-      getCheckoutToken();
+    const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+    const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+
+    if (!checkoutTokenINR) {
+      createCheckoutTokenINR();
+    }
+    if (!checkoutTokenUSD) {
+      createCheckoutTokenUSD();
     }
   }, []);
 
-  const getCheckoutToken = async () => {
+  const createCheckoutTokenINR = async () => {
     try {
-      await createCheckoutTokenWithoutEmail({});
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "india-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenINR",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  // const { data: wishlistData, isError, isLoading } = useGetWishlistQuery();
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (wishlistData) {
-  //     if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-  //       const modify = wishlistData?.data?.wishlists.edges;
-  //       dispatch(get_wishlist_products(modify?.map((item) => item.node)));
-  //     } else {
-  //       dispatch(get_wishlist_products([]));
-  //     }
-  //   } else {
-  //     dispatch(get_wishlist_products([]));
-  //   }
-  // }, [wishlistData]);
+  const createCheckoutTokenUSD = async () => {
+    try {
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "default-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenUSD",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <Wrapper>
