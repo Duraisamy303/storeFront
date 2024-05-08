@@ -102,6 +102,12 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                 }
               }
               description
+
+              defaultVariant {
+                id
+                quantityAvailable
+              }
+              
             }
           }
         }

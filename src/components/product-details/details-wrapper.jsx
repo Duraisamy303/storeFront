@@ -24,6 +24,10 @@ import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
+import {
+  useAddWishlistMutation,
+  useGetWishlistQuery,
+} from "@/redux/features/productApi";
 
 const DetailsWrapper = ({
   productItem,
@@ -45,6 +49,7 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
+  console.log("✌️productItem --->", productItem);
 
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
@@ -77,6 +82,23 @@ const DetailsWrapper = ({
   };
 
   const { data: tokens } = useGetCartListQuery();
+  const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
+    {}
+  );
+
+  console.log("wishlistData", wishlistData);
+  const WishListData = wishlistData?.data?.wishlists?.edges;
+  console.log("✌️WishListData --->", WishListData);
+
+  const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
+    (prd) => {
+      return prd?.node?.variant === productItem?.defaultVariant?.id;
+    }
+  );
+
+  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
+
+  const [addWishlist, {}] = useAddWishlistMutation();
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
@@ -133,25 +155,76 @@ const DetailsWrapper = ({
     setWishlist(whislist);
   }, [wishlist]);
 
-  const handleWishlist = async (prd) => {
-    if (isAddWishlist) {
-      router.push("/wishlist");
-    } else {
-      addWishlistProduct(prd);
-    }
-  };
+  useEffect(() => {
+    getWishlistList();
+  }, [wishlistData]);
 
-  const addWishlistProduct = async (prd) => {
+  const getWishlistList = async (prd) => {
     try {
-      const modify = {
-        node: prd,
-      };
-      const addedWishlist = handleWishlistProduct(modify);
-      dispatch(add_to_wishlist(addedWishlist));
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const isAddWishlist = wishlistData?.data?.wishlists?.edges
+          ?.map((item) => item?.node)
+          ?.some((node) => {
+console.log('✌️node --->', node);
+            return node?.id === productItem?.id;
+          });
+
+        console.log("isAddWishlist: ", isAddWishlist);
+
+        dispatch(
+          add_to_wishlist(
+            wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+          )
+        );
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  const handleWishlist = async (prd) => {
+    // if (isAddWishlist) {
+    //   router.push("/wishlist");
+    // } else {
+    //   addWishlistProduct(prd);
+    // }
+
+    try {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("userInfo");
+
+      if (token) {
+        const users = JSON.parse(user);
+        const input = {
+          input: {
+            user: users.user.id,
+            variant: prd?.defaultVariant?.id,
+          },
+        };
+
+        const res = await addWishlist(input);
+        notifySuccess("Product added to wishlist");
+        wishlistRefetch();
+      } else {
+        // const addedWishlist = handleWishlistProduct(prd);
+        // dispatch(add_to_wishlist(addedWishlist));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // const addWishlistProduct = async (prd) => {
+  //   try {
+  //     const modify = {
+  //       node: prd,
+  //     };
+  //     const addedWishlist = handleWishlistProduct(modify);
+  //     dispatch(add_to_wishlist(addedWishlist));
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   // handle add product
 
@@ -375,16 +448,31 @@ const DetailsWrapper = ({
             ? " View Compare"
             : " Add  Compare"}
         </button>
-        <button
-          disabled={status === "out-of-stock"}
-          onClick={() => handleWishlist(productItem)}
-          // onClick={() => handleWishlistProduct(productItem)}
-          type="button"
-          className="tp-product-details-action-sm-btn"
-        >
-          <WishlistTwo />
-          {isAddWishlist ? " View" : " Add"} To Wishlist
-        </button>
+
+        {isAddedToWishlist === true ? (
+          <button
+            disabled={status === "out-of-stock"}
+            onClick={() => router.push("/wishlist")}
+            // onClick={() => handleWishlistProduct(productItem)}
+            type="button"
+            className="tp-product-details-action-sm-btn"
+          >
+            <WishlistTwo />
+            View To Wishlist
+          </button>
+        ) : (
+          <button
+            disabled={status === "out-of-stock"}
+            onClick={() => handleWishlist(productItem)}
+            // onClick={() => handleWishlistProduct(productItem)}
+            type="button"
+            className="tp-product-details-action-sm-btn"
+          >
+            <WishlistTwo />
+            Add To Wishlist
+          </button>
+        )}
+
         {/* <button type="button" className="tp-product-details-action-sm-btn">
           <AskQuestion />
           Ask a question

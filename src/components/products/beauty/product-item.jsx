@@ -12,19 +12,28 @@ import { notifySuccess } from "@/utils/toast";
 import { compare_list } from "@/redux/features/cartSlice";
 import { handleWishlistProduct } from "@/utils/common_function";
 import { useRouter } from "next/router";
+import {
+  useAddWishlistMutation,
+  useGetWishlistQuery,
+} from "@/redux/features/productApi";
 
-const ProductItem = ({ product, prdCenter = false, primary_style = false,data }) => {
+const ProductItem = ({
+  product,
+  prdCenter = false,
+  primary_style = false,
+  data,
+}) => {
   const [addToCart, {}] = useAddToCartMutation();
 
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
 
   const cart = useSelector((state) => state.cart?.cart_list);
-
+console.log("related",  product)
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
-    const router=useRouter()
+  const router = useRouter();
 
   const { cart_products } = useSelector((state) => state.cart);
 
@@ -37,8 +46,27 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false,data })
   );
 
   // const isAddedToCart = cart_products.some((prd) => prd.id === id);
-  const isAddedToWishlist = data?.some((prd) => prd.id === id);
-  const dispatch = useDispatch();
+  // const isAddedToWishlist = data?.some((prd) => prd.id === id);
+  // const dispatch = useDispatch();
+
+  // wishlist added and show
+  const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
+    {}
+  );
+
+  console.log("wishlistData", wishlistData);
+  const WishListData = wishlistData?.data?.wishlists?.edges;
+  console.log("✌️WishListData --->", WishListData);
+
+  const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
+    (prd) => {
+      return prd?.node?.variant === product?.defaultVariant?.id;
+    }
+  );
+
+  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
+
+  const [addWishlist, {}] = useAddWishlistMutation();
 
   const handleAddProduct = async (data) => {
     try {
@@ -66,25 +94,49 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false,data })
   };
 
   // handle wishlist product
- 
 
- 
-
-  const addWishlistProduct = async () => {
+  const addWishlistProduct = async (product) => {
+    console.log("✌️relatedproduct --->", product);
     try {
-      const modify = {
-        node: product,
-      };
-      const addedWishlist = handleWishlistProduct(modify);
-      dispatch(add_to_wishlist(addedWishlist));
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("userInfo");
+
+      if (token) {
+        const users = JSON.parse(user);
+        const input = {
+          input: {
+            user: users.user.id,
+            variant: product?.defaultVariant?.id,
+          },
+        };
+
+        const res = await addWishlist(input);
+        notifySuccess("Product added to wishlist");
+        wishlistRefetch();
+      } else {
+        // const addedWishlist = handleWishlistProduct(prd);
+        // dispatch(add_to_wishlist(addedWishlist));
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  // const addWishlistProduct = async () => {
+  //   try {
+  //     const modify = {
+  //       node: product,
+  //     };
+  //     const addedWishlist = handleWishlistProduct(modify);
+  //     dispatch(add_to_wishlist(addedWishlist));
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
   const handleCompareProduct = (prd) => {
     console.log("prd: ", prd);
-    const products=product || product.node
+    const products = product || product.node;
     const compare = localStorage.getItem("compareList");
 
     let arr = [];
@@ -133,80 +185,112 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false,data })
         </div>
 
         <div className="tp-product-badge-2">
-          <span className="product-hot">HOT</span>
+          {product?.defaultVariant?.quantityAvailable == 0 && (
+            <span
+              className="product-hot text-center"
+              style={{ padding: "15px 12px " }}
+            >
+              SOLD
+              <br /> OUT
+            </span>
+          )}
         </div>
+
+        {/* <div className="tp-product-badge-2">
+          <span className="product-hot">HOT</span>
+        </div> */}
 
         {/* product action */}
         <div className="tp-product-action-3 tp-product-action-blackStyle">
           <div className="tp-product-action-item-3 d-flex ">
-            {isAddedToCart ? (
-              <Link
-                href="/cart"
-                className={`tp-product-action-btn-3 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn text-center`}
-              >
-                <Cart />
-                <span className="tp-product-tooltip  tp-product-tooltip-top">View Cart</span>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleAddProduct(product)}
-                className={`tp-product-action-btn-3 ${
-                  isAddedToCart ? "active" : ""
-                } tp-product-add-cart-btn`}
-                disabled={status === "out-of-stock"}
-              >
-                <Cart />
-                <span className="tp-product-tooltip tp-product-tooltip-top">Add to Cart</span>
-              </button>
+            {product?.defaultVariant?.quantityAvailable != 0 && (
+              <>
+                {isAddedToCart ? (
+                  <Link
+                    href="/cart"
+                    className={`tp-product-action-btn-3 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn text-center`}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip  tp-product-tooltip-top">
+                      View Cart
+                    </span>
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleAddProduct(product)}
+                    className={`tp-product-action-btn-3 ${
+                      isAddedToCart ? "active" : ""
+                    } tp-product-add-cart-btn`}
+                    disabled={status === "out-of-stock"}
+                  >
+                    <Cart />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      Add to Cart
+                    </span>
+                  </button>
+                )}
+              </>
             )}
             <button
               onClick={() => dispatch(handleProductModal(product))}
               className="tp-product-action-btn-3 tp-product-quick-view-btn"
             >
               <QuickView />
-              <span className="tp-product-tooltip tp-product-tooltip-top">Quick View</span>
+              <span className="tp-product-tooltip tp-product-tooltip-top">
+                Quick View
+              </span>
             </button>
 
+            {isAddedToWishlist === true ? (
+              <button
+                disabled={status === "out-of-stock"}
+                onClick={() => router.push("/wishlist")}
+                className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  View To Wishlist
+                </span>
+              </button>
+            ) : (
+              <button
+                disabled={status === "out-of-stock"}
+                onClick={() => addWishlistProduct(product)}
+                className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  Add To Wishlist
+                </span>
+              </button>
+            )}
+
             <button
-              disabled={status === "out-of-stock"}
-              onClick={() => addWishlistProduct(product)}
-              className={`tp-product-action-btn-3 
-            ${
-              isAddedToWishlist ? "active" : ""
-            } tp-product-add-to-wishlist-btn`}
+              type="button"
+              className={`tp-product-action-btn-3 ${
+                isAddedToWishlist ? "active" : ""
+              } tp-product-add-to-wishlist-btn`}
+              onClick={() => {
+                if (compareList?.some((prd) => prd?.id === product?.node?.id)) {
+                  router.push("/compare");
+                } else {
+                  handleCompareProduct(product);
+                }
+              }}
+              // onClick={() => handleCompare()}
             >
-              <Wishlist />
-              <span className="tp-product-tooltip tp-product-tooltip-top">Add To Wishlist</span>
+              <CompareThree />
+              <span className="tp-product-tooltip tp-product-tooltip-top">
+                {compareList?.some((prd) => prd?.id === product?.node?.id)
+                  ? "View To Compare"
+                  : "Add To Compare"}
+              </span>
             </button>
-            <button
-          type="button"
-          className={`tp-product-action-btn-3 ${
-            isAddedToWishlist ? "active" : ""
-          } tp-product-add-to-wishlist-btn`}
-          onClick={() => {
-            if (compareList?.some((prd) => prd?.id === product?.node?.id)) {
-              router.push("/compare");
-            } else {
-              handleCompareProduct(product);
-            }
-          }}
-          // onClick={() => handleCompare()}
-        >
-          <CompareThree />
-          <span className="tp-product-tooltip ">
-            {compareList?.some((prd) => prd?.id === product?.node?.id)
-              ? "View To Compare"
-              : "Add To Compare"}
-          </span>
-        </button>
           </div>
-
         </div>
-
-     
 
         {/* <div className="tp-product-add-cart-btn-large-wrapper">
           {isAddedToCart ? (

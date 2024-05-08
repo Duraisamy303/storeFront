@@ -29,6 +29,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
 
   let product = products.node;
+  console.log("✌️product --->", product);
 
   const router = useRouter();
 
@@ -62,7 +63,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     (prd) => prd?.variant?.product?.id === product?.id
   );
 
+  const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
+    (prd) => {
+      return prd?.node?.variant === product?.defaultVariant?.id;
+    }
+  );
 
+  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -132,7 +139,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const getWishlistList = async (prd) => {
     try {
       if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-        const isAddWishlist = wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)?.some((node) => node?.id === product?.id);
+        const isAddWishlist = wishlistData?.data?.wishlists?.edges
+          ?.map((item) => item?.node)
+          ?.some((node) => node?.id === product?.id);
 
         console.log("isAddWishlist: ", isAddWishlist);
 
@@ -284,20 +293,36 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 Quick View
               </span>
             </button>
-            <button
-              style={{ marginRight: "5px" }}
-              disabled={status === "out-of-stock"}
-              onClick={() => handleWishlist(product)}
-              // onClick={() => addWishlistProduct(product)}
-              className={`tp-product-action-btn-2 ${
-                isAddWishlist ? "active" : ""
-              } tp-product-add-to-wishlist-btn`}
-            >
-              <Wishlist />
-              <span className="tp-product-tooltip tp-product-tooltip-top">
-                {isAddWishlist ? "View" : "Add"} To Wishlist
-              </span>
-            </button>
+
+            {isAddedToWishlist == true ? (
+              <button
+                style={{ marginRight: "5px" }}
+                disabled={status === "out-of-stock"}
+                onClick={() => router.push("/wishlist")}
+                // onClick={() => addWishlistProduct(product)}
+                className={`tp-product-action-btn-2 active tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  View To Wishlist
+                </span>
+              </button>
+            ) : (
+              <button
+                style={{ marginRight: "5px" }}
+                disabled={status === "out-of-stock"}
+                onClick={() => handleWishlist(product)}
+                // onClick={() => addWishlistProduct(product)}
+                className={`tp-product-action-btn-2 
+                tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  Add To Wishlist
+                </span>
+              </button>
+            )}
+
             <button
               style={{ marginRight: "5px" }}
               disabled={status === "out-of-stock"}

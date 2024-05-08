@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 import {
   useAddWishlistMutation,
+  useGetWishlistQuery,
   useWishlistMutation,
 } from "@/redux/features/productApi";
 
@@ -31,6 +32,22 @@ const ProductSliderItem = ({ product, loginPopup }) => {
 
   const RelatedProduct = product.node;
   console.log("✌️RelatedProduct --->", RelatedProduct);
+
+  const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
+    {}
+  );
+
+  console.log("wishlistData", wishlistData);
+  const WishListData = wishlistData?.data?.wishlists?.edges;
+  console.log("✌️WishListData --->", WishListData);
+
+  const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
+    (prd) => {
+      return prd?.node?.variant === product?.node?.defaultVariant?.id;
+    }
+  );
+
+  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -104,36 +121,35 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   };
 
   // handle wishlist product
-  const handleWishlist = async (prd) => {
-    if (isAddWishlist) {
-      router.push("/wishlist");
-    } else {
-      addWishlistProduct(prd);
-    }
-  };
+  // const handleWishlist = async (prd) => {
+  //   if (isAddWishlist) {
+  //     router.push("/wishlist");
+  //   } else {
+  //     addWishlistProduct(prd);
+  //   }
+  // };
 
-  const addWishlistProduct = async (prd) => {
-    console.log("prd: ", prd);
+  const handleWishlist = async (product) => {
+console.log('✌️productvariantcheck --->', product);
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
 
       if (token) {
         const users = JSON.parse(user);
-        console.log("users: ", users);
         const input = {
           input: {
             user: users.user.id,
-            variant: prd.node.id,
+            variant: product?.node?.defaultVariant?.id,
           },
         };
-        console.log("input: ", input);
 
         const res = await addWishlist(input);
-        console.log("res: ", res);
+        notifySuccess("Product added to wishlist");
+        wishlistRefetch();
       } else {
-        const addedWishlist = handleWishlistProduct(prd);
-        dispatch(add_to_wishlist(addedWishlist));
+        // const addedWishlist = handleWishlistProduct(prd);
+        // dispatch(add_to_wishlist(addedWishlist));
       }
     } catch (error) {
       console.error("Error:", error);
@@ -228,18 +244,29 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 Quick View
               </span>
             </button>
-            <button
-              type="button"
-              onClick={() => handleWishlist(product)}
-              className={`tp-product-action-btn-3 ${
-                isAddWishlist ? "active" : ""
-              } tp-product-add-to-wishlist-btn`}
-            >
-              <Wishlist />
-              <span className="tp-product-tooltip tp-product-tooltip-top">
-                {isAddWishlist ? "View" : "Add"} To Wishlist
-              </span>
-            </button>
+            {isAddedToWishlist === true ? (
+              <button
+                type="button"
+                onClick={() => router.push("/wishlist")}
+                className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  View To Wishlist
+                </span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleWishlist(product)}
+                className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
+              >
+                <Wishlist />
+                <span className="tp-product-tooltip tp-product-tooltip-top">
+                  Add To Wishlist
+                </span>
+              </button>
+            )}
 
             <button
               type="button"

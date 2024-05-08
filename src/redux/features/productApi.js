@@ -143,7 +143,9 @@ export const productApi = apiSlice.injectEndpoints({
           const users = JSON.parse(user);
           userEmail = users.user.email;
         }
-        return configuration(WISHLIST_LIST({ userEmail }));
+        console.log('✌️userEmail --->', userEmail);
+
+        return configuration(WISHLIST_LIST({ userEmail:userEmail }));
       },
       providesTags: ["Products"],
     }),
