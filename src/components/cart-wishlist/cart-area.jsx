@@ -11,72 +11,77 @@ import {
   useUpdateCartQuantityMutation,
 } from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
+import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 
 const CartArea = () => {
   const cart = useSelector((state) => state.cart.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
+  const { data: allList, refetch: cartAllList } = useGetCartAllListQuery();
 
   const CartList = list?.data?.checkout?.lines;
 
   const dispatch = useDispatch();
 
   const [cartData, setCartData] = useState([]);
+  const [allcartData, setAllCartData] = useState([]);
+
   const [couponCode, setCouponCode] = useState("");
 
-  
   useEffect(() => {
-    refetch();
-  }, []);
-
-  useEffect(() => {
-    const data = cart?.map((item) => {
+    const data = list?.data?.checkout?.lines?.map((item) => {
       return { ...item, quantity: item.quantity ? item.quantity : 1 };
     });
     setCartData(data);
-  }, [cart]);
+  }, [list]);
+
+  useEffect(() => {
+    const data = allList?.data?.checkout?.lines?.map((item) => {
+      return { ...item, quantity: item.quantity ? item.quantity : 1 };
+    });
+    setAllCartData(data);
+  }, [allList]);
 
   const [updateCartQuantity, {}] = useUpdateCartQuantityMutation();
 
   const updateCart = () => {
-    if (cartData?.length > 0) {
-      cartData?.map((item) =>
-        updateCartQuantity({
-          checkoutId: list?.data?.checkout?.id,
-          lineId: item.id,
-          quantity: item.quantity,
-        }).then((data) => {
-          const updateData =
-            data?.data?.data?.checkoutLinesUpdate?.checkout?.lines;
-          // dispatch(cart_list(updateData));
-          refetch();
-          // console.log("data: ", data.data.data.checkoutLinesUpdate.checkout.lines);
-        })
-      );
-    }
- 
+    cartData?.map((item) =>
+      updateCartQuantity({
+        checkoutId: list?.data?.checkout?.id,
+        lineId: item.id,
+        quantity: item.quantity,
+      }).then((data) => {
+        allcartData?.map((item) =>
+          updateCartQuantity({
+            checkoutId: allList?.data?.checkout?.id,
+            lineId: item.id,
+            quantity: item.quantity,
+          }).then((data) => {})
+        );
+        refetch();
+        cartAllList();
+      })
+    );
     notifySuccess("Quantity update completed");
   };
 
-  const incQuantity = (quantity, id) => {
+
+  const Quantity = (quantity, val) => {
     const data = cartData.map((item) => {
-      if (item.id == id) {
-        // Increase quantity by 1
+      if (item.variant?.product?.id == val?.variant?.product?.id) {
         return { ...item, quantity: quantity };
       }
       return item;
     });
-    setCartData(data);
-  };
 
-  const decQuantity = (quantity, id) => {
-    const data = cartData.map((item) => {
-      if (item.id === id) {
-        // Decrease quantity by 1
-        return { ...item, quantity };
+    const allListData = allcartData.map((item) => {
+      if (item.variant?.product?.id == val?.variant?.product?.id) {
+        return { ...item, quantity: quantity };
       }
       return item;
     });
+
+    setAllCartData(allListData);
     setCartData(data);
   };
 
@@ -137,10 +142,10 @@ const CartArea = () => {
                               item?.node?.quantityAvailable
                             }
                             incQuantity={(quantity) =>
-                              incQuantity(quantity, item.id)
+                             Quantity(quantity, item)
                             }
                             decQuantity={(quantity) =>
-                              decQuantity(quantity, item.id)
+                             Quantity(quantity, item)
                             }
                             quantityCount={item.quantity}
                             refetch={() => refetch()}
@@ -152,7 +157,6 @@ const CartArea = () => {
                 </div>
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
-                    
                     <div className="col-xl-12 col-md-12">
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
