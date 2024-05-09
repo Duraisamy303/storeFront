@@ -15,6 +15,7 @@ const CartCheckout = ({ cartData }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
+  console.log("list: ", list);
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>
@@ -45,7 +46,7 @@ const CartCheckout = ({ cartData }) => {
   useEffect(() => {}, []);
 
 
-  const quantityDisable = cartData.map((item) => {
+  const quantityDisable = cartData?.map((item) => {
     return item.variant.quantityAvailable >= item.quantity;
   });
 

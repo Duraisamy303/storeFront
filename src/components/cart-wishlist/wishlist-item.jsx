@@ -15,15 +15,15 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
+
 import {
-  get_wishlist_products,
-  add_to_wishlist,
-  remove_wishlist_product,
-} from "../../redux/features/wishlist-slice";
+  useGetWishlistQuery,
+} from "@/redux/features/productApi";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
   const { _id, img, title, price } = product || {};
-  console.log("✌️product --->", product);
+  const { data: wishlistData, refetch: wishlistRefetch } =
+  useGetWishlistQuery();
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
@@ -53,7 +53,6 @@ const WishlistItem = ({ product, refetchWishlist }) => {
     setChannelSelect(channel);
   }, []);
 
-  console.log("channelSelect", channelSelect);
   // handle add product
 
   // const handleAddProduct = async () => {

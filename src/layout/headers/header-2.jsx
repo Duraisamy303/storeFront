@@ -60,9 +60,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
-  console.log("✌️wishlistData --->", wishlistData);
   const WishListLength = wishlistData?.data?.wishlists?.edges;
-  console.log("✌️constWishListLength --->", WishListLength?.length.toString());
 
   useEffect(() => {
     wishlistRefetch();
