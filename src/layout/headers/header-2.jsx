@@ -339,30 +339,30 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               )}
 
                               <div className="d-flex flex-column">
-                                <a
+                                <Link
                                   href="/profile"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   Order
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                   href="/wishlist"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   WishList
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                   href="/compare"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   Compare
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                   href="/coupon"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   Gift Cards
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           )}
