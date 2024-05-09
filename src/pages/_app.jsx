@@ -26,7 +26,7 @@ if (typeof window !== "undefined") {
 }
 
 const httpLink = createHttpLink({
-  uri: "http://file.prade.in/graphql/",
+  uri: process.env.NEXT_PUBLIC_API_BASE_URL
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -341,6 +341,7 @@ export const cardApi = apiSlice.injectEndpoints({
 
     deleteWishlist: builder.mutation({
       query: ({ variant }) => {
+        console.log("variant: ", variant);
         const user = localStorage.getItem("userInfo");
         const users = JSON.parse(user);
         return configuration(

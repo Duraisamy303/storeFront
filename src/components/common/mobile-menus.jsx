@@ -29,6 +29,7 @@ const MobileMenus = () => {
   }, []);
 
   const closeCart = () => {
+    console.log("closeCart");
     dispatch(userLoggedOut());
     dispatch(closeUserSidebar());
     router.push("/login");
