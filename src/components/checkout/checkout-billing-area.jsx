@@ -44,10 +44,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const { data: checkoutDetails, refetch: checkoutDetailsRefetch } =
     useGetCheckoutDetailsQuery();
-  console.log("checkoutDetails: ", checkoutDetails);
+  // console.log("checkoutDetails: ", checkoutDetails);
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
+
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
+
   const [updateShippingAddress] = useUpdateShippingAddressMutation();
 
   const [state, setState] = useSetState({
@@ -89,13 +91,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
     orderData: [],
     channel: "",
   });
+  console.log('state',state.errors)
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
     code: state.selectedCountry,
   });
 
   const { data: linelist } = useGetCartListQuery();
+
   const [createCheckoutId] = useCreateCheckoutIdMutation();
+
   const [updateDeliveryMethod] = useCheckoutUpdateMutation();
 
   const handleInputChange = (e, fieldName) => {
@@ -180,7 +185,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     const fieldsToValidate = [
       { name: "firstName", label: "First name" },
       { name: "lastName", label: "Last name" },
-      { name: "country", label: "Country" },
+      // { name: "country", label: "Country" },
       { name: "streetAddress1", label: "Street address" },
       { name: "city", label: "City" },
       { name: "postalCode", label: "PostalCode" },
@@ -203,7 +208,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const fieldsToValidate2 = [
         { name: "firstName1", label: "First name" },
         { name: "lastName1", label: "Last name" },
-        { name: "country1", label: "Country" },
+        // { name: "country1", label: "Country" },
         { name: "streetAddress2", label: "Street address" },
         { name: "city1", label: "City" },
         { name: "postalCode1", label: "PostalCode" },
@@ -405,15 +410,11 @@ setState({errors})
         handler: async (res) => {
           notifySuccess("Payment Successful");
           const completeResponse = await checkoutComplete({ id: checkoutId });
-          console.log(
-            "completeResponse: ",
-            completeResponse.data.data.checkoutComplete.order.id
-          );
-          localStorage.setItem(
-            "orderId",
-            completeResponse.data.data.checkoutComplete.order.id
-          );
-          router.push("/myOrders");
+          // localStorage.setItem(
+          //   "orderId",
+          //   completeResponse?.data?.data?.checkoutComplete?.order.id
+          // );
+          router.push("/profile");
           setState({
             firstName: "",
             firstName1: "",
@@ -843,6 +844,22 @@ setState({errors})
                       </select>
                     </div>
                   </div>
+                  <div className="col-md-12">
+                  <div className="tp-checkout-input">
+                    <label>Street address</label>
+                    <input
+                      name="address"
+                      id="address"
+                      type="text"
+                      placeholder="House number and street name"
+                      value={state.streetAddress2}
+                      onChange={(e) => handleInputChange(e, "streetAddress2")}
+                    />
+                    {state.errors.streetAddress1 && (
+                      <ErrorMsg msg={state.errors.streetAddress1} />
+                    )}
+                  </div>
+                </div>
                   <div className="col-md-6">
                     <div className="tp-checkout-input">
                       <label>Town / City</label>

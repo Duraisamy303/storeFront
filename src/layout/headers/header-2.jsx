@@ -119,7 +119,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   const handleLogout = () => {
     dispatch(userLoggedOut());
-    router.push("/");
+    router.push("/login");
   };
 
   return (

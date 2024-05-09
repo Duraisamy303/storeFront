@@ -49,9 +49,9 @@ const UserMiniSidebar = () => {
   // handle close cart mini
 
   const closeCart = () => {
+    router.push("/login");
     dispatch(userLoggedOut());
     dispatch(closeUserSidebar());
-    router.push("/login");
     
   };
 
