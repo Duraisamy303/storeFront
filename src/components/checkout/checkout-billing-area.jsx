@@ -23,7 +23,11 @@ import {
   useStateListQuery,
 } from "@/redux/features/productApi";
 import { Filter } from "@/svg";
-import { useUpdateShippingAddressMutation } from "../../redux/features/card/cardApi";
+import {
+  useGetCheckoutDetailsQuery,
+  useUpdateShippingAddressMutation,
+} from "../../redux/features/card/cardApi";
+import { checkChannel } from "../../utils/functions";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -37,6 +41,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
+
+  const { data: checkoutDetails, refetch: checkoutDetailsRefetch } =
+    useGetCheckoutDetailsQuery();
+  console.log("checkoutDetails: ", checkoutDetails);
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
@@ -55,7 +63,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     postalCode1: "",
     phone: "",
     phone1: "",
-
     email: "",
     phone1: "",
     email1: "",
@@ -80,6 +87,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     stateList: [],
     coupenCode: "",
     orderData: [],
+    channel: "",
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
@@ -95,9 +103,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handleSelectChange = (e) => {
-    console.log("e: ", e.target.value);
     setState({ selectedCountry: e.target.value, selectedState: "" });
     stateRefetch();
+    if (!state.diffAddress) {
+      checkoutDetailsRefetch();
+    }
   };
 
   useEffect(() => {
@@ -141,7 +151,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         notifyError(data?.data?.data?.checkoutCreate?.errors[0]?.message);
       } else {
         const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
-        console.log("checkoutId: ", checkoutId);
         localStorage.setItem("checkoutId", checkoutId);
         // verifyCoupenCode(checkoutId);
       }
@@ -211,6 +220,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
     return errors;
   };
+
+  useEffect(() => {
+    const channels = checkChannel();
+    setState({ channel: channels });
+  }, []);
 
   const handleSubmit = async (data) => {
     try {
@@ -364,6 +378,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
           notifyError(
             res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message
           );
+        } else {
+          handlePayment(checkoutId);
         }
       }
     } catch (error) {
@@ -376,10 +392,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount: parseInt(totalAmount) * 100,
-        currency: "INR",
+        amount:
+          parseInt(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount) *
+          100,
+        currency: state.channel == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
-        description: "Test Transaction",
+        description: state.notes,
         image: "https://example.com/your_logo",
         // order_id: "ORD20156712",
         handler: async (res) => {
@@ -787,6 +805,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             selectedState1: "",
                           });
                           stateRefetch();
+                          checkoutDetailsRefetch();
                         }}
                       >
                         <option value="">Select Country</option>
@@ -906,8 +925,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
             <ul>
               {/*  header */}
               <li className="tp-order-info-list-header">
-                <h4>Product</h4>
-                <h4>Total</h4>
+                <h4>PRODUCT</h4>
+                <h4>SUBTOTAL</h4>
               </li>
 
               {/*  item list */}
@@ -917,10 +936,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     {item?.variant?.product?.name}{" "}
                     <span> x {item?.quantity}</span>
                   </p>
-                  <span>
-                    &#8377;
-                    {item?.totalPrice?.gross?.amount?.toFixed(2)}
-                  </span>
+                  {state.channel == "india-channel" ? (
+                    <span>
+                      &#8377;
+                      {item?.totalPrice?.gross?.amount?.toFixed(2)}
+                    </span>
+                  ) : (
+                    <span>${item?.totalPrice?.gross?.amount?.toFixed(2)}</span>
+                  )}
                 </li>
               ))}
 
@@ -984,17 +1007,43 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
+              <li className="tp-order-info-list-total">
+                <span>Shipping</span>
+                {state.channel == "india-channel" ? (
+                  <span>
+                    &#8377;
+                    {checkoutDetails?.data?.checkout?.shippingPrice?.gross?.amount?.toFixed(
+                      2
+                    )}
+                  </span>
+                ) : (
+                  <span>
+                    $
+                    {checkoutDetails?.data?.checkout?.shippingPrice?.gross?.amount?.toFixed(
+                      2
+                    )}
+                  </span>
+                )}
+              </li>
 
               <li className="tp-order-info-list-total">
                 <span>Total</span>
-
-                <span>
-                  &#8377;
-                  {state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
-                  {/* {totalAmount.toString() === "0"
+                {state.channel == "india-channel" ? (
+                  <span>
+                    &#8377;
+                    {state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
+                    {/* {totalAmount.toString() === "0"
                     ? shippingCost.toFixed(2)
                     : parseFloat(cartTotals).toFixed(2)} */}
-                </span>
+                  </span>
+                ) : (
+                  <span>
+                    ${state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
+                    {/* {totalAmount.toString() === "0"
+                    ? shippingCost.toFixed(2)
+                    : parseFloat(cartTotals).toFixed(2)} */}
+                  </span>
+                )}
 
                 {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
               </li>

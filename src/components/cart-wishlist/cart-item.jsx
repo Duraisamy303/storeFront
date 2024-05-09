@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
+import { checkChannel } from "../../utils/functions";
 
 const CartItem = ({
   product,
@@ -39,6 +40,8 @@ const CartItem = ({
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
+
+  const [channel, setChannel] = useState("");
 
   const [quantity, setQuantity] = useState(quantityCount);
 
@@ -92,11 +95,15 @@ const CartItem = ({
     }
   };
 
+  useEffect(() => {
+    const channels = checkChannel();
+    setChannel(channels);
+  }, []);
+
   return (
     <>
       {quantityAvailable >= quantity ? (
         <tr>
-          {/* img */}
           <td className="tp-cart-img">
             <div
               onClick={() =>
@@ -106,18 +113,16 @@ const CartItem = ({
               <Image src={img} alt="product img" width={70} height={100} />
             </div>
           </td>
-          {/* title */}
           <td className="tp-cart-title">
             <Link href={`/product-details/${_id}`}>{title}</Link>
           </td>
 
-          {/* <td className="tp-cart-price">
-         <span>{product?.quantity}</span>
-       </td> */}
-          {/* price */}
           <td className="tp-cart-price">
-            {/* <span>${(price * orderQuantity).toFixed(2)}</span> */}
-            <span>&#8377;{price?.toFixed(2)}</span>
+            {channel == "india-channel" ? (
+              <span>&#8377;{price?.toFixed(2)}</span>
+            ) : (
+              <span>${price?.toFixed(2)}</span>
+            )}
           </td>
           {/* quantity */}
           {isQuantity && (

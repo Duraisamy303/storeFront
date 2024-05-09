@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +17,14 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
+import { channel, checkChannel } from "../../utils/functions";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
+
+  const [channel, setChannel] = useState("");
 
   const cartData = useSelector((state) => state.cart?.cart_list);
   // const cart = cartData?.node || cartData;
@@ -39,6 +42,11 @@ const CartMiniSidebar = () => {
 
   useEffect(() => {
     AllListChannelREfresh();
+  }, []);
+
+  useEffect(() => {
+    const channels = checkChannel();
+    setChannel(channels);
   }, []);
 
   const router = useRouter();
@@ -142,7 +150,7 @@ const CartMiniSidebar = () => {
                               </Link>
                             </h5>
                             <div className="cartmini__price-wrapper">
-                              {item?.discount > 0 ? (
+                              {/* {item?.discount > 0 ? (
                                 <span className="cartmini__price">
                                   &#8377;
                                   {(
@@ -152,12 +160,18 @@ const CartMiniSidebar = () => {
                                       100
                                   )?.toFixed(2)}
                                 </span>
-                              ) : (
+                              ) : ( */}
+                              {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
                                   {item?.totalPrice?.gross?.amount?.toFixed(2)}
                                 </span>
+                              ) : (
+                                <span className="cartmini__price">
+                                  ${item?.totalPrice?.gross?.amount?.toFixed(2)}
+                                </span>
                               )}
+                              {/* )} */}
                               <span className="cartmini__quantity">
                                 {" "}
                                 x {item?.quantity}
@@ -207,7 +221,7 @@ const CartMiniSidebar = () => {
                               </Link>
                             </h5>
                             <div className="cartmini__price-wrapper">
-                              {item?.discount > 0 ? (
+                              {/* {item?.discount > 0 ? (
                                 <span className="cartmini__price">
                                   &#8377;
                                   {(
@@ -217,7 +231,8 @@ const CartMiniSidebar = () => {
                                       100
                                   )?.toFixed(2)}
                                 </span>
-                              ) : (
+                              ) : ( */}
+                              {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
                                   {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
@@ -227,7 +242,18 @@ const CartMiniSidebar = () => {
                                       2
                                     )}
                                 </span>
+                              ) : (
+                                <span className="cartmini__price">
+                                  $
+                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
+                                    2
+                                  ) ||
+                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                      2
+                                    )}
+                                </span>
                               )}
+                              {/* )} */}
                               <span className="cartmini__quantity">
                                 {" "}
                                 x {item?.quantity}
@@ -261,12 +287,21 @@ const CartMiniSidebar = () => {
           <div className="cartmini__checkout">
             <div className="cartmini__checkout-title mb-30">
               <h4>Subtotal:</h4>
-              <span>
-                &#8377;
-                {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                  2
-                )}
-              </span>
+              {channel == "india-channel" ? (
+                <span>
+                  &#8377;
+                  {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                    2
+                  )}
+                </span>
+              ) : (
+                <span>
+                  $
+                  {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                    2
+                  )}
+                </span>
+              )}
             </div>
             <div className="cartmini__checkout-btn">
               <Link
