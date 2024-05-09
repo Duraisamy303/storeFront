@@ -629,13 +629,13 @@ const Menus = () => {
           GIFT CARD
         </Link>
       </li>
-      {token && (
+      {/* {token && (
         <li>
           <Link href="/myOrders" style={{ fontWeight: "500" }}>
             MY-ORDERS
           </Link>
         </li>
-      )}
+      )} */}
 
       <li>
         <Link href="/shop" style={{ fontWeight: "500" }}>
