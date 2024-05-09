@@ -15,7 +15,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/router";
 import { setContext } from "@apollo/client/link/context";
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
@@ -45,7 +45,10 @@ const client = new ApolloClient({
 });
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+
   const [channel, setChannel] = useState("");
+
   useEffect(() => {
     const storedChannel = localStorage.getItem("channel");
     if (!storedChannel) {
@@ -73,31 +76,33 @@ export default function App({ Component, pageProps }) {
         <Provider store={store}>
           {/* <Elements stripe={stripePromise}> */}
           <div id="root">
-            <div
-              style={{
-                position: "fixed",
-                zIndex: 999,
-                top: "50%",
-                transform: "translateY(-50%)",
-                right: 0,
-              }}
-            >
-              {channelList?.map((item) => (
-                <div
-                  className={` p-2 mb-1 text-white`}
-                  style={{
-                    backgroundColor: channel == item.name ? "#c2882b" : "#000",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    handleChannelChange(item.name);
-                  }}
-                >
-                  {item.value}
-                </div>
-              ))}
-            </div>
-
+            {router.pathname !== "/checkout" && router.pathname !== "/cart" && (
+              <div
+                style={{
+                  position: "fixed",
+                  zIndex: 999,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  right: 0,
+                }}
+              >
+                {channelList?.map((item) => (
+                  <div
+                    className={` p-2 mb-1 text-white`}
+                    style={{
+                      backgroundColor:
+                        channel == item.name ? "#c2882b" : "#000",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      handleChannelChange(item.name);
+                    }}
+                  >
+                    {item.value}
+                  </div>
+                ))}
+              </div>
+            )}
             <Component {...pageProps} />
           </div>
           {/* </Elements> */}

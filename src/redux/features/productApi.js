@@ -81,8 +81,6 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        console.log("channel: ", channel);
-
         return configuration(SINGLE_PRODUCT({ productId, channel }));
       },
 

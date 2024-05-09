@@ -51,7 +51,18 @@ export const shortData = (selectValue, products) => {
     });
   } else if (selectValue === "On Sale") {
     product_items = products.filter((p) => p.node.pricing.discount > 0);
-  } 
+  }
 
   return product_items;
+};
+
+export const checkChannel = () => {
+  let channel = "";
+  const channels = localStorage.getItem("channel");
+  if (!channels) {
+    channel = "india-channel";
+  } else {
+    channel = channels;
+  }
+  return channel;
 };
