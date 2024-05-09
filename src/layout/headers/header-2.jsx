@@ -31,9 +31,9 @@ import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
 import UserMiniSidebar from "@/components/common/user-sidebar";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-import { useGetCartAllListQuery, useGetWishListQuery } from "../../redux/features/card/cardApi";
+import { useGetCartAllListQuery,  } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { useGetWishlistQuery } from "../../redux/features/productApi";
+import { useGetWishlistQuery } from "@/redux/features/productApi";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
@@ -55,10 +55,20 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const [token, setToken] = useState("");
 
   const { data: wishlistData, refetch: wishlistRefetch } =
-    useGetWishListQuery();
+  useGetWishlistQuery();
+
+
+  console.log('✌️wishlistData --->', wishlistData);
+const WishListLength = wishlistData?.data?.wishlists?.edges
+console.log('✌️constWishListLength --->',  WishListLength?.length.toString());
+
+useEffect(() => {
+  wishlistRefetch()
+},[])
 
   useEffect(() => {
     getWishlistList();
+
   }, [wishlistData]);
 
   useEffect(() => {
@@ -194,7 +204,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                           >
                             <Wishlist />
                             <span className="tp-header-action-badge">
-                              {wishlist?.length || 0}
+                              {WishListLength?.length || 0}
                             </span>
                           </Link>
                         </div>

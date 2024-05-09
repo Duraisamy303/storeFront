@@ -37,17 +37,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
     {}
   );
 
-  console.log("wishlistData", wishlistData);
-  const WishListData = wishlistData?.data?.wishlists?.edges;
-  console.log("✌️WishListData --->", WishListData);
-
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
-      return prd?.node?.variant === product?.node?.defaultVariant?.id;
+      return prd?.node?.variant === product?.node?.id;
     }
   );
-
-  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -96,7 +90,6 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   // };
 
   const handleWishlist = async (product) => {
-console.log('✌️productvariantcheck --->', product);
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
@@ -136,6 +129,9 @@ console.log('✌️productvariantcheck --->', product);
     dispatch(compare_list(arr));
   };
   const img = product?.node?.thumbnail?.url;
+  const Product_name = product?.node?.name
+  const Category_Name = product?.node?.category?.name
+  const Price = product?.node?.pricing?.priceRange?.start?.gross?.amount
 
   const openModal = () => {
     const datas = { ...product?.node, images: product?.node?.media };
@@ -322,6 +318,11 @@ console.log('✌️productvariantcheck --->', product);
             </div>
           </div> */}
         </div>
+      </div>
+      <div className="text-center mt-5">
+        <p style={{ color: "black", fontWeight: "400", margin:"0px" }}>{Product_name}</p>
+        <p style={{color:"gray",  margin:"0px"}}>{Category_Name}</p>
+        <p  style={{color:"gray",  margin:"0px"}}>₹{Price}</p>
       </div>
     </>
   );

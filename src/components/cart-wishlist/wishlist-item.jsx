@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -21,8 +21,9 @@ import {
   remove_wishlist_product,
 } from "../../redux/features/wishlist-slice";
 
-const WishlistItem = ({ product }) => {
+const WishlistItem = ({ product, refetchWishlist }) => {
   const { _id, img, title, price } = product || {};
+  console.log("✌️product --->", product);
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
@@ -39,7 +40,20 @@ const WishlistItem = ({ product }) => {
   const dispatch = useDispatch();
   const [addToCart, {}] = useAddToCartMutation();
   const [removeWishlist, {}] = useDeleteWishlistMutation();
+  const [channelSelect, setChannelSelect] = useState();
 
+  useEffect(() => {
+    let channel = "";
+    const channels = localStorage.getItem("channel");
+    if (!channels) {
+      channel = "india-channel";
+    } else {
+      channel = channels;
+    }
+    setChannelSelect(channel);
+  }, []);
+
+  console.log("channelSelect", channelSelect);
   // handle add product
 
   // const handleAddProduct = async () => {
@@ -80,6 +94,7 @@ const WishlistItem = ({ product }) => {
       const data = await removeWishlist({
         variant: product?.variant,
       });
+      refetchWishlist();
       console.log("data: ", data);
     } catch (error) {}
   };
@@ -139,14 +154,23 @@ const WishlistItem = ({ product }) => {
         <Link href={`/product-details/${product?.product?.id}`}>{title}</Link>
       </td>
       <td>
-        <span>{product?.name || data?.name}</span>
+        <span>{product?.product?.name || data?.name}</span>
       </td>
       <td className="tp-cart-price">
         <span>
-          &#8377;
-          {parseFloat(
-            product?.pricing?.priceRange?.start?.gross?.amount
-          )?.toFixed(2) || parseFloat(data?.indiaChannelPricing)?.toFixed(2)}
+          {channelSelect == "india-channel" ? (
+            <>
+              ₹
+              {parseFloat(data?.indiaChannelPricing)?.toFixed(2) ||
+                parseFloat(data?.defaultChannelPricing)?.toFixed(2)}
+            </>
+          ) : (
+            <>
+              $
+              {parseFloat(data?.indiaChannelPricing)?.toFixed(2) ||
+                parseFloat(data?.defaultChannelPricing)?.toFixed(2)}
+            </>
+          )}
         </span>
       </td>
 

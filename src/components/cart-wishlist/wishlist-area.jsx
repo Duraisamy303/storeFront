@@ -109,13 +109,13 @@ const WishlistArea = () => {
                           Product name
                         </th>
                         <th className="tp-cart-header-price">Price</th>
+                        <th>Add to Cart</th>
                         <th>Action</th>
-                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       {wishlist?.map((item, i) => (
-                        <WishlistItem key={i} product={item} />
+                        <WishlistItem key={i} product={item} refetchWishlist={wishlistRefetch} />
                       ))}
                     </tbody>
                   </table>
