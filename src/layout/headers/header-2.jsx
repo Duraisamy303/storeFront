@@ -34,8 +34,11 @@ import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
+import { userLoggedOut } from "@/redux/features/auth/authSlice";
+import { useRouter } from "next/router";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
+  const router = useRouter();
   const cart = useSelector((state) => state.cart?.cart_list);
   const compareList = useSelector((state) => state.cart.compare_list);
 
@@ -115,6 +118,11 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
+
+  const handleLogout = () => {
+    dispatch(userLoggedOut());
+    router.push("/");
+  };
 
   return (
     <>
@@ -274,6 +282,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                 background: "white",
                                 padding: "30px 20px",
                                 right: "-10px",
+                                zIndex: "2",
                                 width: "250px",
                                 boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
                               }}
@@ -291,29 +300,69 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                 >
                                   Welcome
                                 </p>
-                                <p style={{ color: "gray",margin:"0px" }}>
+                                <p style={{ color: "gray", margin: "0px" }}>
                                   To access account and manage orders
                                 </p>
                               </div>
-                              <div className="pb-20">
-                                <button
-                                  className="tp-login-btn "
-                                  style={{
-                                    padding: "5px 10px",
-                                    background: "none",
-                                    border: "1px solid gray",
-                                    color: "gray",
-                                    fontSize: "14px",
-                                  }}
+                              {!token ? (
+                                <div className="pb-20">
+                                  <button
+                                    className="tp-login-btn "
+                                    style={{
+                                      padding: "5px 10px",
+                                      background: "none",
+                                      border: "1px solid gray",
+                                      color: "gray",
+                                      fontSize: "14px",
+                                    }}
+                                    onClick={() => router.push("/login")}
+                                  >
+                                    LOGIN / SIGNUP
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="pb-20">
+                                  <button
+                                    className="tp-login-btn "
+                                    style={{
+                                      padding: "5px 10px",
+                                      background: "none",
+                                      border: "1px solid gray",
+                                      color: "gray",
+                                      fontSize: "14px",
+                                    }}
+                                    onClick={handleLogout}
+                                  >
+                                    LOGOUT
+                                  </button>
+                                </div>
+                              )}
+
+                              <div className="d-flex flex-column">
+                                <a
+                                  href="/profile"
+                                  style={{ paddingBottom: "5px" }}
                                 >
-                                  LOGIN / SIGNUP
-                                </button>
-                              </div>
-                              <div className="d-flex flex-column" >
-                                <a href="/profile" style={{paddingBottom:"5px"}}>Order</a>
-                                <a href="/wishlist" style={{paddingBottom:"5px"}}>WishList</a>
-                                <a href="/compare" style={{paddingBottom:"5px"}}>Compare</a>
-                                <a href="/coupon" style={{paddingBottom:"5px"}}>Gift Cards</a>
+                                  Order
+                                </a>
+                                <a
+                                  href="/wishlist"
+                                  style={{ paddingBottom: "5px" }}
+                                >
+                                  WishList
+                                </a>
+                                <a
+                                  href="/compare"
+                                  style={{ paddingBottom: "5px" }}
+                                >
+                                  Compare
+                                </a>
+                                <a
+                                  href="/coupon"
+                                  style={{ paddingBottom: "5px" }}
+                                >
+                                  Gift Cards
+                                </a>
                               </div>
                             </div>
                           )}
