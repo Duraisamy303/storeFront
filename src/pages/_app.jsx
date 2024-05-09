@@ -86,8 +86,8 @@ export default function App({ Component, pageProps }) {
                   right: 0,
                 }}
               >
-                {channelList?.map((item) => (
-                  <div
+                {channelList?.map((item,index) => (
+                  <div  key={index}
                     className={` p-2 mb-1 text-white`}
                     style={{
                       backgroundColor:

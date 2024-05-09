@@ -9,7 +9,7 @@ import GoogleSignUp from "./google-sign-up";
 const RegisterArea = () => {
   return (
     <>
-      <section className="tp-login-area pb-140 p-relative z-index-1 fix">
+      <section className="tp-login-area pb-140 pt-120 p-relative z-index-1 fix">
         <LoginShapes />
         <div className="container">
           <div className="row justify-content-center">

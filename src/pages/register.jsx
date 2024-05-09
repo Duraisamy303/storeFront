@@ -11,7 +11,7 @@ const RegisterPage = () => {
     <Wrapper>
       <SEO pageTitle="Login" />
       <HeaderTwo style_2={true} />
-      <CommonBreadcrumb title="Register" subtitle="Register" center={true} />
+      {/* <CommonBreadcrumb title="Register" subtitle="Register" center={true} /> */}
       <RegisterArea />
       <FooterTwo primary_style={true} />
     </Wrapper>

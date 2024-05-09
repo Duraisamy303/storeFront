@@ -20,8 +20,8 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
                 </div> */}
                 <ul className="container shop-banner-categoryList">
                   {catList?.length > 0 &&
-                    catList?.map((item) => (
-                      <li>
+                    catList?.map((item, index) => (
+                      <li key={index}>
                         <h5 className="shop-banner-categoryList-title">
                           {item?.node?.name?.toUpperCase()}
                         </h5>

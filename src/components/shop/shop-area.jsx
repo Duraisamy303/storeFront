@@ -186,7 +186,7 @@ const ShopArea = ({
                             )}
                           </>
                         ) : (
-                          <div onClick={() => removeFilter(item)}>
+                          <div key={index} onClick={() => removeFilter(item)}>
                             <span>{item.name}</span>
                           </div>
                         )
