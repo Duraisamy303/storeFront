@@ -31,7 +31,7 @@ import OffCanvas from "@/components/common/off-canvas";
 import pradeLogo from "@assets/img/prade-logo.png";
 import UserMiniSidebar from "@/components/common/user-sidebar";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-import { useGetCartAllListQuery,  } from "../../redux/features/card/cardApi";
+import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 
@@ -44,7 +44,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
-  useGetCartAllListQuery({});
+    useGetCartAllListQuery({});
 
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
@@ -55,20 +55,18 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const [token, setToken] = useState("");
 
   const { data: wishlistData, refetch: wishlistRefetch } =
-  useGetWishlistQuery();
+    useGetWishlistQuery();
 
+  console.log("✌️wishlistData --->", wishlistData);
+  const WishListLength = wishlistData?.data?.wishlists?.edges;
+  console.log("✌️constWishListLength --->", WishListLength?.length.toString());
 
-  console.log('✌️wishlistData --->', wishlistData);
-const WishListLength = wishlistData?.data?.wishlists?.edges
-console.log('✌️constWishListLength --->',  WishListLength?.length.toString());
-
-useEffect(() => {
-  wishlistRefetch()
-},[])
+  useEffect(() => {
+    wishlistRefetch();
+  }, []);
 
   useEffect(() => {
     getWishlistList();
-
   }, [wishlistData]);
 
   useEffect(() => {
@@ -93,6 +91,30 @@ useEffect(() => {
       console.error("Error:", error);
     }
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Function to toggle the dropdown
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Close the dropdown if the user clicks outside of it
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest(".tp-header-action-item")) {
+      setIsOpen(false);
+    }
+  };
+
+  // Attach event listener for clicks outside the dropdown
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+
+    // Cleanup function to remove the event listener when component unmounts
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   return (
     <>
@@ -213,7 +235,7 @@ useEffect(() => {
                             onClick={() => {
                               dispatch(openCartMini());
                               cartRefetch();
-                              AllListChannelREfresh()
+                              AllListChannelREfresh();
                             }}
                             className="tp-header-action-btn cartmini-open-btn"
                           >
@@ -232,16 +254,71 @@ useEffect(() => {
                             <Menu />
                           </button>
                         </div>
-                        {token && (
-                          <div className="tp-header-action-item">
-                            <button
-                              onClick={() => dispatch(openUserSidebar())}
-                              className="tp-header-action-btn cartmini-open-btn"
+                        {/* {token && ( */}
+                        <div
+                          className="tp-header-action-item "
+                          style={{ position: "relative" }}
+                        >
+                          <button
+                            onClick={toggleDropdown}
+                            className="tp-header-action-btn cartmini-open-btn"
+                          >
+                            <UserThree />
+                          </button>
+                          {isOpen && (
+                            <div
+                              className="dropdown-content  d-flex flex-column"
+                              style={{
+                                position: "absolute",
+                                top: "35px",
+                                background: "white",
+                                padding: "30px 20px",
+                                right: "-10px",
+                                width: "250px",
+                                boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
+                              }}
                             >
-                              <UserThree />
-                            </button>
-                          </div>
-                        )}
+                              {/* Content of the dropdown menu goes here */}
+                              {/* For example: */}
+                              <div className="pb-20">
+                                <p
+                                  style={{
+                                    color: "black",
+                                    fontWeight: "500",
+                                    color: "gray",
+                                    margin: "0px",
+                                  }}
+                                >
+                                  Welcome
+                                </p>
+                                <p style={{ color: "gray",margin:"0px" }}>
+                                  To access account and manage orders
+                                </p>
+                              </div>
+                              <div className="pb-20">
+                                <button
+                                  className="tp-login-btn "
+                                  style={{
+                                    padding: "5px 10px",
+                                    background: "none",
+                                    border: "1px solid gray",
+                                    color: "gray",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  LOGIN / SIGNUP
+                                </button>
+                              </div>
+                              <div className="d-flex flex-column" >
+                                <a href="/profile" style={{paddingBottom:"5px"}}>Order</a>
+                                <a href="/wishlist" style={{paddingBottom:"5px"}}>WishList</a>
+                                <a href="/compare" style={{paddingBottom:"5px"}}>Compare</a>
+                                <a href="/coupon" style={{paddingBottom:"5px"}}>Gift Cards</a>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        {/* )} */}
                       </div>
                     </div>
                   </div>
