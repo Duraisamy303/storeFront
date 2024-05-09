@@ -54,10 +54,6 @@ console.log("related",  product)
     {}
   );
 
-  console.log("wishlistData", wishlistData);
-  const WishListData = wishlistData?.data?.wishlists?.edges;
-  console.log("✌️WishListData --->", WishListData);
-
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
       return prd?.node?.variant === product?.id;

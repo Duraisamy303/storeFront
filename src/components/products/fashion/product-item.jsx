@@ -48,7 +48,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
-    console.log('✌️wishlistData --->', wishlistData);
 
   useEffect(() => {
     getWishlistList();

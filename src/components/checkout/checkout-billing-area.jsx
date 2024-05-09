@@ -217,7 +217,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         }
       });
     }
-
+setState({errors})
     return errors;
   };
 
@@ -228,77 +228,80 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handleSubmit = async (data) => {
     try {
-      // const errors = validateInputs();
-      const sample = {
-        // email: state.email,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        streetAddress1: state.streetAddress1,
-        city: state.city,
-        streetAddress2: state.streetAddress1,
-        cityArea: "",
-        companyName: state.companyName,
-        country: state.selectedCountry,
-        countryArea: state.selectedState,
-        phone: state.phone,
-        postalCode: state.postalCode,
-      };
-
-      console.log("sample: ", sample);
-      let shippingAddress = {};
-      if (state.diffAddress) {
-        shippingAddress = {
+      const errors = validateInputs();
+      if (Object.keys(errors).length === 0) {
+        const sample = {
           // email: state.email,
-          firstName: state.firstName1,
-          lastName: state.lastName1,
-          streetAddress1: state.streetAddress2,
-          city: state.city1,
-          streetAddress2: state.streetAddress2,
+          firstName: state.firstName,
+          lastName: state.lastName,
+          streetAddress1: state.streetAddress1,
+          city: state.city,
+          streetAddress2: state.streetAddress1,
           cityArea: "",
-          companyName: state.companyName1,
-          country: state.selectedCountry1,
-          countryArea: state.selectedState1,
-          phone: state.phone1,
-          postalCode: state.postalCode1,
+          companyName: state.companyName,
+          country: state.selectedCountry,
+          countryArea: state.selectedState,
+          phone: state.phone,
+          postalCode: state.postalCode,
         };
-      } else {
-        shippingAddress = sample;
-      }
-      console.log("shippingAddress: ", shippingAddress);
 
-      const checkoutId = localStorage.getItem("checkoutId");
-      console.log("checkoutId: ", checkoutId);
-      if (checkoutId) {
-        const res = await updateBillingAddress({
-          checkoutId,
-          billingAddress: sample,
-        });
-        console.log("billingAddress: ", res);
-
-        if (res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0) {
-          console.log("if: ");
-          notifyError(
-            res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
-          );
+        console.log("sample: ", sample);
+        let shippingAddress = {};
+        if (state.diffAddress) {
+          shippingAddress = {
+            // email: state.email,
+            firstName: state.firstName1,
+            lastName: state.lastName1,
+            streetAddress1: state.streetAddress2,
+            city: state.city1,
+            streetAddress2: state.streetAddress2,
+            cityArea: "",
+            companyName: state.companyName1,
+            country: state.selectedCountry1,
+            countryArea: state.selectedState1,
+            phone: state.phone1,
+            postalCode: state.postalCode1,
+          };
         } else {
-          console.log("else: ");
+          shippingAddress = sample;
+        }
+        console.log("shippingAddress: ", shippingAddress);
 
-          const response = await updateShippingAddress({
+        const checkoutId = localStorage.getItem("checkoutId");
+        if (checkoutId) {
+          const res = await updateBillingAddress({
             checkoutId,
-            shippingAddress,
+            billingAddress: sample,
           });
-          console.log("shippingAddress: ", response);
+          console.log("billingAddress: ", res);
 
           if (
-            response.data?.data?.checkoutShippingAddressUpdate?.errors?.length >
-            0
+            res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0
           ) {
+            console.log("if: ");
             notifyError(
-              response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
-                ?.message
+              res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
             );
           } else {
-            updateDelivertMethod(shippingAddress?.country);
+            console.log("else: ");
+
+            const response = await updateShippingAddress({
+              checkoutId,
+              shippingAddress,
+            });
+            console.log("shippingAddress: ", response);
+
+            if (
+              response.data?.data?.checkoutShippingAddressUpdate?.errors
+                ?.length > 0
+            ) {
+              notifyError(
+                response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
+                  ?.message
+              );
+            } else {
+              updateDelivertMethod(shippingAddress?.country);
+            }
           }
         }
       }
@@ -393,9 +396,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount:
-          parseInt(totalAmount) *
-          100,
+        amount: parseInt(totalAmount) * 100,
         currency: state.channel == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
         description: state.notes,
@@ -525,16 +526,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   <div className="tp-checkout-input">
                     <label>Company name (optional)</label>
                     <input
-                      name="address"
-                      id="address"
+                      name="companyName"
+                      id="companyName"
                       type="text"
                       placeholder="Company name "
                       value={state.companyName}
                       onChange={(e) => handleInputChange(e, "companyName")}
                     />
-                    {state.errors.streetAddress1 && (
+                    {/* {state.errors.streetAddress1 && (
                       <ErrorMsg msg={state.errors.streetAddress1} />
-                    )}
+                    )} */}
                   </div>
                 </div>
 
@@ -577,6 +578,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       ))}
                     </select>
                   </div>
+                  {state.errors.selectedCountry && (
+                    <ErrorMsg msg={state.errors.country} />
+                  )}
                 </div>
 
                 <div className="col-md-6">
@@ -777,16 +781,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     <div className="tp-checkout-input">
                       <label>Company name (optional)</label>
                       <input
-                        name="address"
-                        id="address"
+                        name="companyName"
+                        id="companyName"
                         type="text"
                         placeholder="Company name"
                         value={state.companyName1}
                         onChange={(e) => handleInputChange(e, "companyName1")}
                       />
-                      {state.errors.streetAddress1 && (
-                        <ErrorMsg msg={state.errors.streetAddress1} />
-                      )}
                     </div>
                   </div>
                   <div className="col-md-6">

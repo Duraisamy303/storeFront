@@ -1,4 +1,5 @@
 export const ADDTOCART = ({ checkoutToken, variantId }) => {
+  console.log("checkoutToken, variantId: ", checkoutToken, variantId);
   return {
     query: `
     mutation ProductAddVariantToCart($checkoutToken: UUID!, $variantId: ID!) {

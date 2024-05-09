@@ -34,6 +34,7 @@ export const cardApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addToCart: builder.mutation({
       query: ({ variantId, checkoutToken }) => {
+        console.log("variantId, checkoutToken: ", variantId, checkoutToken);
         return configuration(ADDTOCART({ checkoutToken, variantId }));
       },
     }),

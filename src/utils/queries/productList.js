@@ -167,35 +167,36 @@ export const ADD_WISHLIST = ({ input }) => {
 };
 
 export const WISHLIST_LIST = ({ userEmail }) => {
-  console.log("input: ", userEmail);
   return JSON.stringify({
     query: `
     query GetWishListQuery($userEmail: String!) {
       wishlists(first: 100, filter: {user: $userEmail}) {
         edges {
           node {
-            variant
             user {
               firstName
               email
             }
             product {
-              id
               name
               slug
-              media {
-                alt
-                url
-              }
-              category {
+              variants {
                 id
                 name
               }
-              indiaChannelPricing
+              images {
+                url
+                alt
+              }
               defaultVariant {
                 id
                 name
               }
+              media {
+                url
+              }
+              defaultChannelPricing
+              indiaChannelPricing
             }
           }
         }
