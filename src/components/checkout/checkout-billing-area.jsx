@@ -386,6 +386,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("error: ", error);
     }
   };
+  console.log(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount);
 
   const handlePayment = useCallback(
     async (checkoutId, amount) => {
@@ -393,7 +394,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
         amount:
-          parseInt(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount) *
+          parseInt(totalAmount) *
           100,
         currency: state.channel == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
