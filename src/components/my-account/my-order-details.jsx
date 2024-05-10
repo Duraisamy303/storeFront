@@ -3,6 +3,10 @@ import React from "react";
 
 const MyOrderDetails = ({ data }) => {
   const Data = data?.data?.order;
+  const SubTotal = data?.data?.order?.subtotal.gross.amount;
+  const Total = data?.data?.order?.total.gross.amount;
+  const ShippingAmount = data?.data?.order?.shippingMethods[0].price.amount;
+
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -36,20 +40,67 @@ const MyOrderDetails = ({ data }) => {
                   <td scope="row">
                     {item.productName} ({item?.quantity})
                   </td>
-
-                  <td>{`${item?.totalPrice?.gross?.amount} `}</td>
+                  {localStorage.getItem("channel") === "india-channel" ? (
+                    <>
+                      <td>&#8377;{item?.totalPrice?.gross?.amount}</td>
+                    </>
+                  ) : (
+                    <>
+                      <td>${item?.totalPrice?.gross?.amount}</td>
+                    </>
+                  )}
                 </tr>
               ))}
+
+              <tr>
+                <td>Subtotal</td>
+                {localStorage.getItem("channel") === "india-channel" ? (
+                  <>
+                    <td>&#8377;{SubTotal}</td>
+                  </>
+                ) : (
+                  <>
+                    <td>${SubTotal}</td>
+                  </>
+                )}
+              </tr>
+
+              <tr>
+                    <td>Shipping</td>
+                    {localStorage.getItem("channel") === "india-channel" ? (
+                      <>
+                        <td>&#8377;{ShippingAmount}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td>${ShippingAmount}</td>
+                      </>
+                    )}
+                  </tr>
+
+
               <tr>
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>
-                <td style={{ fontSize: "20px" }}>{Data?.total.gross.amount}</td>
+                {localStorage.getItem("channel") === "india-channel" ? (
+                  <>
+                    <td style={{ fontSize: "20px" }}>
+                      &#8377;{Total}
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td style={{ fontSize: "20px" }}>
+                      ${Total}
+                    </td>
+                  </>
+                )}
               </tr>
             </tbody>
           </table>
         </div>
         <div className="row pt-50">
           <div className="col-md-6">
-            <h4  style={{ fontWeight: "300" }}>BILLING ADDRESS</h4>
+            <h4 style={{ fontWeight: "300" }}>BILLING ADDRESS</h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.billingAddress?.firstName} {Data?.billingAddress?.lastName}
             </p>
@@ -72,7 +123,7 @@ const MyOrderDetails = ({ data }) => {
             <p></p>
           </div>
           <div className="col-md-6">
-            <h4  style={{ fontWeight: "300" }}>SHIPPING ADDRESS</h4>
+            <h4 style={{ fontWeight: "300" }}>SHIPPING ADDRESS</h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.shippingAddress?.firstName}{" "}
               {Data?.shippingAddress?.lastName}
