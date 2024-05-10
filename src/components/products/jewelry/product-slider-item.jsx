@@ -25,6 +25,7 @@ import {
   useWishlistMutation,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
+import { checkChannel } from "../../../utils/functions";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
   const { _id, title, price, status } = product || {};
@@ -325,7 +326,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
           {Product_name}
         </p>
         <p style={{ color: "gray", margin: "0px" }}>{Category_Name}</p>
-        <p style={{ color: "gray", margin: "0px" }}>₹{Price}</p>
+        {checkChannel() === "india-channel" ? (
+          <p style={{ color: "gray", margin: "0px" }}>₹{Price}</p>
+        ) : (
+          <p style={{ color: "gray", margin: "0px" }}>${Price}</p>
+        )}
       </div>
     </>
   );

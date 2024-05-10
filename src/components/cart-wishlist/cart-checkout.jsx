@@ -4,6 +4,7 @@ import useCartInfo from "@/hooks/use-cart-info";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import { checkChannel } from "@/utils/functions";
 
 const CartCheckout = ({ cartData }) => {
   const { total } = useCartInfo();
@@ -44,7 +45,6 @@ const CartCheckout = ({ cartData }) => {
 
   useEffect(() => {}, []);
 
-
   const quantityDisable = cartData?.map((item) => {
     return item.variant.quantityAvailable >= item.quantity;
   });
@@ -58,9 +58,16 @@ const CartCheckout = ({ cartData }) => {
       </div>
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>
-        <span className="tp-cart-checkout-top-price">
-          &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount}
-        </span>
+
+        {checkChannel()=== "india-channel" ? (
+          <span className="tp-cart-checkout-top-price">
+            &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount}
+          </span>
+        ) : (
+          <span className="tp-cart-checkout-top-price">
+            ${list?.data?.checkout?.totalPrice?.gross?.amount}
+          </span>
+        )}
       </div>
 
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
@@ -72,7 +79,7 @@ const CartCheckout = ({ cartData }) => {
           Free shipping
           <br />
           Shipping to <b>Tamil Nadu</b>.<br />
-          <span style={{ color: "#c3935b" }}>Change address</span>
+          {/* <span style={{ color: "#c3935b" }}>Change address</span> */}
         </span>
       </div>
       {/* <div className="tp-cart-checkout-shipping">
@@ -106,11 +113,22 @@ const CartCheckout = ({ cartData }) => {
       </div> */}
       <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
         <span>Total</span>
-        <span>
-          &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
-          <br />
-          <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span>
-        </span>
+        {checkChannel() === "india-channel" ? (
+          <>
+            <span>
+              &#8377;
+              {list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+              <br />
+              {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
+            </span>
+          </>
+        ) : (
+          <span>
+            ${list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+            <br />
+            {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
+          </span>
+        )}
       </div>
       <div className="tp-cart-checkout-proceed">
         {quantityDisable?.some((item) => item === false) ? (

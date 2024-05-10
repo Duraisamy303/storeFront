@@ -64,7 +64,7 @@ const CartMiniSidebar = () => {
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       let checkoutToken =
-        localStorage.getItem("channel") === "india-channel"
+        checkChannel() === "india-channel"
           ? checkoutTokenUSD
           : checkoutTokenINR;
 

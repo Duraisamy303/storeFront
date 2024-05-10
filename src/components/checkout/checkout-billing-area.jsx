@@ -113,10 +113,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   }, [stateList]);
 
-  // useEffect(() => {
-  //   applyCoupen();
-  // }, []);
-
   useEffect(() => {
     orderData();
   }, [linelist]);
@@ -332,10 +328,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount:
-          parseInt(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount) *
-          100,
-        currency: state.channel == "india-channel" ? "INR" : "USD",
+        amount: parseInt(totalAmount) * 100,
+        currency: checkChannel() == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
         description: state.notes,
         image: "https://example.com/your_logo",
@@ -347,9 +341,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           //   "orderId",
           //   completeResponse?.data?.data?.checkoutComplete?.order.id
           // );
-          router.push(
-            `/order-details/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
-          );
+          router.push(`/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`)
           setState({
             firstName: "",
             firstName1: "",
