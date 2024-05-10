@@ -107,7 +107,7 @@ const ShopArea = ({
 
           <div className="row">
             {/*  */}
-            <div className="col-xl-12 col-lg-8">
+            <div className="col-xl-12 col-lg-12">
               <div className="tp-shop-main-wrapper">
                 <div className="tp-shop-top mb-45">
                   <div className="row">

@@ -150,7 +150,7 @@ const CompareArea = () => {
                         <th>Product</th>
                         {compareList?.map((item,index) => {
                           return (
-                            <td key={item?.id} className="">
+                            <td key={item?.id} className="" style={{minWidth:"300px"}}>
                               <div className="tp-compare-thumb p-relative z-index-1">
                                 <Image
                                   src={item?.thumbnail?.url}

@@ -98,7 +98,7 @@ const success = ({ data }) => {
             <div
               style={{
                 padding: "20px 30px",
-                background: "#f1f1f1",
+                background: "rgb(255 248 236)",
                 boxShadow: "3px 3px 5px #f1f1f1",
               }}
             >
