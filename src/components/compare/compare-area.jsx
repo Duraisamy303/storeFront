@@ -76,6 +76,12 @@ const CompareArea = () => {
     localStorage.setItem("compareList", JSON.stringify(filter));
     dispatch(compare_list(filter));
   };
+  
+  const IndiaChannel = compareList.map((item) => {
+    return item?.pricing?.priceRange?.start?.gross?.currency === "INR"
+      ? true
+      : false;
+  });
 
   const description = (item) => {
     if (item) {
@@ -142,7 +148,7 @@ const CompareArea = () => {
                     <tbody>
                       <tr>
                         <th>Product</th>
-                        {compareList?.map((item) => {
+                        {compareList?.map((item,index) => {
                           return (
                             <td key={item?.id} className="">
                               <div className="tp-compare-thumb p-relative z-index-1">
@@ -171,13 +177,25 @@ const CompareArea = () => {
                                     {item?.name}
                                   </Link>
                                 </h4>
+
                                 <div
                                   className="tp-compare-add-to-cart"
                                   style={{ paddingBottom: "10px" }}
                                 >
-                                  &#8377;
-                                  {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                    2
+                                  {IndiaChannel[index] ? (
+                                    <>
+                                      ₹
+                                      {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                        2
+                                      )}
+                                    </>
+                                  ) : (
+                                    <>
+                                      $
+                                      {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                                        2
+                                      )}
+                                    </>
                                   )}
                                 </div>
                                 {item?.defaultVariant?.quantityAvailable !=
