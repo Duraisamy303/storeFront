@@ -29,7 +29,7 @@ const success = ({ data }) => {
                 <tbody>
                   {OrderDetails?.map((order) => {
                     return (
-                      <tr>
+                      <tr key={order.id}>
                         <td>{order.productName}</td>
                         {checkChannel() === "india-channel" ? (
                           <>
