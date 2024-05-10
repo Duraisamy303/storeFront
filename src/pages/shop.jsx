@@ -16,7 +16,7 @@ import FooterTwo from "@/layout/footers/footer-2";
 import shopBanner from "../../public/assets/img/shop-banner.jpg";
 import { shortData } from "@/utils/functions";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import { useCreateCheckoutTokenWithoutEmailMutation, useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { cart_list } from "@/redux/features/cartSlice";
 import {
   filterData,
@@ -35,6 +35,54 @@ const ShopPage = () => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { data: wishlistData } = useGetWishlistQuery();
+
+
+  const { data: tokens } = useGetCartListQuery();
+
+  const [createCheckoutTokenWithoutEmail] =
+    useCreateCheckoutTokenWithoutEmailMutation();
+
+  useEffect(() => {
+    const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+    const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+
+    if (!checkoutTokenINR) {
+      createCheckoutTokenINR();
+    }
+    if (!checkoutTokenUSD) {
+      createCheckoutTokenUSD();
+    }
+  }, []);
+
+  const createCheckoutTokenINR = async () => {
+    try {
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "india-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenINR",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const createCheckoutTokenUSD = async () => {
+    try {
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "default-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenUSD",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+
 
   useEffect(() => {
     if (wishlistData) {

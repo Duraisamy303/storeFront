@@ -33,9 +33,8 @@ const ProductSliderItem = ({ product, loginPopup }) => {
 
   const RelatedProduct = product.node;
 
-  const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
-    {}
-  );
+  const { data: wishlistData, refetch: wishlistRefetch } =
+    useGetWishlistQuery();
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
@@ -99,7 +98,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         const input = {
           input: {
             user: users.user.id,
-            variant: product?.node?.defaultVariant?.id,
+            variant: product?.node?.id,
           },
         };
 
@@ -107,6 +106,8 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
+        router.push('/login')
+
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
@@ -129,9 +130,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
     dispatch(compare_list(arr));
   };
   const img = product?.node?.thumbnail?.url;
-  const Product_name = product?.node?.name
-  const Category_Name = product?.node?.category?.name
-  const Price = product?.node?.pricing?.priceRange?.start?.gross?.amount
+  const Product_name = product?.node?.name;
+  const Category_Name = product?.node?.category?.name;
+  const Price = product?.node?.pricing?.priceRange?.start?.gross?.amount;
 
   const openModal = () => {
     const datas = { ...product?.node, images: product?.node?.media };
@@ -320,9 +321,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         </div>
       </div>
       <div className="text-center mt-5">
-        <p style={{ color: "black", fontWeight: "400", margin:"0px" }}>{Product_name}</p>
-        <p style={{color:"gray",  margin:"0px"}}>{Category_Name}</p>
-        <p  style={{color:"gray",  margin:"0px"}}>₹{Price}</p>
+        <p style={{ color: "black", fontWeight: "400", margin: "0px" }}>
+          {Product_name}
+        </p>
+        <p style={{ color: "gray", margin: "0px" }}>{Category_Name}</p>
+        <p style={{ color: "gray", margin: "0px" }}>₹{Price}</p>
       </div>
     </>
   );

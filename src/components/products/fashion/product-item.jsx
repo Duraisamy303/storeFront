@@ -136,6 +136,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
+        router.push('/login')
+
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }

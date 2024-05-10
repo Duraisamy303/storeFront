@@ -25,6 +25,7 @@ import {
   STONE_LIST,
   STATE_LIST,
 } from "../../utils/queries/productList";
+import { GET_WISHLIST_LIST } from "@/utils/queries/cart/addToCart";
 
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -140,7 +141,7 @@ export const productApi = apiSlice.injectEndpoints({
           const users = JSON.parse(user);
           userEmail = users.user.email;
         }
-        return configuration(WISHLIST_LIST({ userEmail:userEmail }));
+        return configuration(GET_WISHLIST_LIST({ userEmail: userEmail }));
       },
       providesTags: ["Products"],
     }),

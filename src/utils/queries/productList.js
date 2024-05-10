@@ -176,6 +176,7 @@ export const WISHLIST_LIST = ({ userEmail }) => {
               firstName
               email
             }
+            variant
             product {
               name
               slug

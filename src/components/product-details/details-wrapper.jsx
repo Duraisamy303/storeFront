@@ -81,9 +81,8 @@ const DetailsWrapper = ({
   };
 
   const { data: tokens } = useGetCartListQuery();
-  const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
-    {}
-  );
+  const { data: wishlistData, refetch: wishlistRefetch } =
+    useGetWishlistQuery();
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
@@ -176,12 +175,6 @@ const DetailsWrapper = ({
   };
 
   const handleWishlist = async (prd) => {
-    // if (isAddWishlist) {
-    //   router.push("/wishlist");
-    // } else {
-    //   addWishlistProduct(prd);
-    // }
-
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
@@ -191,7 +184,7 @@ const DetailsWrapper = ({
         const input = {
           input: {
             user: users.user.id,
-            variant: prd?.defaultVariant?.id,
+            variant: prd?.id,
           },
         };
 
@@ -199,6 +192,7 @@ const DetailsWrapper = ({
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
+        router.push('/login')
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
@@ -206,18 +200,6 @@ const DetailsWrapper = ({
       console.error("Error:", error);
     }
   };
-
-  // const addWishlistProduct = async (prd) => {
-  //   try {
-  //     const modify = {
-  //       node: prd,
-  //     };
-  //     const addedWishlist = handleWishlistProduct(modify);
-  //     dispatch(add_to_wishlist(addedWishlist));
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   // handle add product
 

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { useGetCartListQuery } from "@/redux/features/card/cardApi";
+import {
+  useDeleteWishlistMutation,
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
 
 // internal
 import { Close, Minus, Plus } from "@/svg";
@@ -12,8 +15,8 @@ import {
   quantityDecrement,
 } from "@/redux/features/cartSlice";
 import {
+  useWishlistDeleteMutation,
   useAddToCartMutation,
-  useDeleteWishlistMutation,
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -23,6 +26,9 @@ import { checkChannel } from "../../utils/functions";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
   const { _id, img, title, price } = product || {};
+
+  const dispatch = useDispatch();
+
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
@@ -35,49 +41,21 @@ const WishlistItem = ({ product, refetchWishlist }) => {
 
   const data = product?.product;
   const cart = useSelector((state) => state.cart.cart_list);
-  const isAddToCart = cart?.some(
-    (item) => item?.variant?.product?.id === product?.id || data?.id
-  );
-  const dispatch = useDispatch();
-  const [addToCart, {}] = useAddToCartMutation();
-  const [removeWishlist, {}] = useDeleteWishlistMutation();
+
+  const [wishlistDelete] = useDeleteWishlistMutation();
   const [channelSelect, setChannelSelect] = useState();
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
+
+  const isAddToCart = datacartList?.data?.checkout?.lines?.some(
+    (item) => item?.variant?.product?.id === product?.variant || data?.id
+  );
 
   useEffect(() => {
     const channels = checkChannel();
     setChannelSelect(channels);
   }, []);
 
-  // handle add product
-
-  // const handleAddProduct = async () => {
-  //   try {
-  //     const checkoutToken = localStorage.getItem("checkoutToken");
-  //     console.log("checkoutToken: ", checkoutToken);
-  //     const response = await addToCartMutation({
-  //       checkoutToken: checkoutToken,
-  //       variantId: product?.defaultVariant?.id,
-  //     });
-  //     console.log("response: ", response);
-
-  //     if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-  //       const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-  //       notifyError(err);
-  //       dispatch(cart_list(cart));
-  //     } else {
-  //       notifySuccess(`${product.node.name} added to cart successfully`);
-  //       // cart_list.push
-  //       dispatch(
-  //         cart_list(response?.data?.data?.checkoutLinesAdd?.checkout?.lines)
-  //       );
-  //       updateData();
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   // handle decrement product
   const handleDecrement = (prd) => {
@@ -87,8 +65,8 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   // handle remove product
   const handleRemovePrd = async () => {
     try {
-      const data = await removeWishlist({
-        variant: product?.variants[0]?.id,
+      await wishlistDelete({
+        variant: product?.variant,
       });
       refetchWishlist();
     } catch (error) {}
@@ -100,7 +78,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
-        variantId: product?.variants[0]?.id,
+        variantId: product?.product?.variants[0]?.id,
       });
 
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
@@ -120,8 +98,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: product?.variants[0]?.id,
-
+        variantId: product?.product?.variants[0]?.id,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -188,13 +165,12 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       <td className="tp-cart-add-to-cart">
         <button
           onClick={() => {
-            console.log('click')
-            // if (isAddToCart) {
-            //   router.push("/cart");
-            // } else {
+            if (isAddToCart) {
+              router.push("/cart");
+            } else {
             addToCartProductINR();
             addToCartProductUSD();
-            // }
+            }
           }}
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"

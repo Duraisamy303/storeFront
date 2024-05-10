@@ -225,6 +225,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             </span>
                           </Link>
                         </div>
+                        {token &&
                         <div className="tp-header-action-item d-none d-lg-block">
                           <Link
                             href="/wishlist"
@@ -236,6 +237,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             </span>
                           </Link>
                         </div>
+                        }
                         <div className="tp-header-action-item">
                           <button
                             onClick={() => {

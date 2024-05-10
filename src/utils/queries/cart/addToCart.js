@@ -711,7 +711,7 @@ export const DELETE_WISHLIST = ({ user, variant }) => {
   };
 };
 
-export const GET_WISHLIST_LIST = ({ channel, lines }) => {
+export const GET_WISHLIST_LIST = ({ userEmail }) => {
   return {
     query: `
     query GetWishListQuery($userEmail: String!) {
@@ -722,6 +722,7 @@ export const GET_WISHLIST_LIST = ({ channel, lines }) => {
               firstName
               email
             }
+            variant
             product {
               name
               slug
@@ -737,13 +738,18 @@ export const GET_WISHLIST_LIST = ({ channel, lines }) => {
                 id
                 name
               }
+              media {
+                url
+              }
+              defaultChannelPricing
+              indiaChannelPricing
             }
           }
         }
       }
     }
       `,
-    variables: { channel, lines },
+    variables: { userEmail },
   };
 };
 

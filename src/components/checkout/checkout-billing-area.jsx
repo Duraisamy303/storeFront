@@ -44,7 +44,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const { data: checkoutDetails, refetch: checkoutDetailsRefetch } =
     useGetCheckoutDetailsQuery();
-  // console.log("checkoutDetails: ", checkoutDetails);
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
@@ -91,7 +90,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     orderData: [],
     channel: "",
   });
-  console.log('state',state.errors)
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
     code: state.selectedCountry,
@@ -105,14 +103,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
-  };
-
-  const handleSelectChange = (e) => {
-    setState({ selectedCountry: e.target.value, selectedState: "" });
-    stateRefetch();
-    if (!state.diffAddress) {
-      checkoutDetailsRefetch();
-    }
   };
 
   useEffect(() => {
@@ -222,7 +212,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         }
       });
     }
-setState({errors})
+    setState({ errors });
     return errors;
   };
 
@@ -284,7 +274,6 @@ setState({errors})
               res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
             );
           } else {
-
             const response = await updateShippingAddress({
               checkoutId,
               shippingAddress,
@@ -299,67 +288,14 @@ setState({errors})
                   ?.message
               );
             } else {
-              updateDelivertMethod(shippingAddress?.country);
+              handlePayment(checkoutId);
+
+              // updateDelivertMethod(shippingAddress?.country);
             }
           }
         }
       }
-
-      // if (Object.keys(errors).length === 0) {
-      //   const createCheckoutResponse = await createCheckout({
-      //     channel: "india-channel",
-      //     email: state.email,
-      //     lines,
-      //     firstName: state.firstName,
-      //     lastName: state.lastName,
-      //     streetAddress1: state.streetAddress1,
-      //     city: state.city,
-      //     postalCode: state.postalCode,
-      //     country: state.selectedCountry,
-      //     countryArea: state.selectedState,
-      //     firstName1: state.diffAddress ? state.firstName1 : state.firstName,
-      //     lastName1: state.diffAddress ? state.lastName1 : state.lastName,
-      //     streetAddress2: state.diffAddress
-      //       ? state.streetAddress2
-      //       : state.streetAddress1,
-      //     city1: state.diffAddress ? state.city1 : state.city,
-      //     postalCode1: state.diffAddress ? state.postalCode1 : state.postalCode,
-      //     country1: state.selectedCountry,
-      //     countryArea1: state.selectedState,
-      //   });
-      //   if (
-      //     createCheckoutResponse?.data?.data?.checkoutCreate?.errors?.length > 0
-      //   ) {
-      //     notifyError(
-      //       `${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.code} ${createCheckoutResponse?.data?.data?.checkoutCreate?.errors[0]?.field}`
-      //     );
-      //     return;
-      //   }
-
-      //   const checkoutId =
-      //     createCheckoutResponse?.data?.data?.checkoutCreate?.checkout?.id;
-      //   const amount =
-      //     createCheckoutResponse?.data?.data?.checkoutCreate?.checkout
-      //       ?.totalPrice?.gross?.amount;
-      //   if (checkoutId) {
-      //     await createDeliveryUpdate({
-      //       id: checkoutId,
-      //     });
-
-      //     const paymentType = state.paymentType.find(
-      //       (checkbox) => checkbox.checked
-      //     );
-      // if (!state.pType) {
-      //   notifyError("COD");
-      // } else {
-      // handlePayment(checkoutId, amount);
-      // }
     } catch (error) {
-      // } else {
-      //   console.log("Form contains errors!");
-      // }
-      // setState({ errors: errors });
-      // }
       console.error("Error:", error);
     }
   };
@@ -381,21 +317,24 @@ setState({errors})
             res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message
           );
         } else {
-          handlePayment(checkoutId);
+          // handlePayment(checkoutId);
         }
       }
     } catch (error) {
       console.log("error: ", error);
     }
   };
-  console.log(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount);
 
   const handlePayment = useCallback(
     async (checkoutId, amount) => {
+      console.log("checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount: ", checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount);
+
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount: parseInt(totalAmount) * 100,
+        amount:
+          parseInt(checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount) *
+          100,
         currency: state.channel == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
         description: state.notes,
@@ -408,7 +347,9 @@ setState({errors})
           //   "orderId",
           //   completeResponse?.data?.data?.checkoutComplete?.order.id
           // );
-          router.push(`/order-details/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`)
+          router.push(
+            `/order-details/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
+          );
           setState({
             firstName: "",
             firstName1: "",
@@ -467,6 +408,44 @@ setState({errors})
     try {
     } catch (error) {
       console.log("error: ", error);
+    }
+  };
+
+  const handleSelectChange = async (e) => {
+    setState({ selectedCountry: e.target.value, selectedState: "" });
+    stateRefetch();
+    if (!state.diffAddress) {
+      const checkoutId = localStorage.getItem("checkoutId");
+      await updateShippingAddress({
+        checkoutId,
+        shippingAddress: {
+          country: e.target.value,
+        },
+      });
+      updateDelivertMethod(e.target.value);
+      checkoutDetailsRefetch();
+    }
+  };
+
+  const shippingCoutryChange = async (e) => {
+    try {
+      console.log("e: ", e.target.value);
+      setState({
+        selectedCountry1: e.target.value,
+        selectedState1: "",
+      });
+      stateRefetch();
+      const checkoutId = localStorage.getItem("checkoutId");
+      await updateShippingAddress({
+        checkoutId,
+        shippingAddress: {
+          country: e.target.value,
+        },
+      });
+      updateDelivertMethod(e.target.value);
+      checkoutDetailsRefetch();
+    } catch (e) {
+      console.log("e: ", e);
     }
   };
 
@@ -795,15 +774,7 @@ setState({errors})
                         id="country"
                         value={state.selectedCountry1}
                         className="nice-select w-100"
-                        onChange={(e) => {
-                          console.log("e: ", e.target.value);
-                          setState({
-                            selectedCountry1: e.target.value,
-                            selectedState1: "",
-                          });
-                          stateRefetch();
-                          checkoutDetailsRefetch();
-                        }}
+                        onChange={(e) => shippingCoutryChange(e)}
                       >
                         <option value="">Select Country</option>
                         {CountryList?.map((item) => (
@@ -839,21 +810,21 @@ setState({errors})
                     </div>
                   </div>
                   <div className="col-md-12">
-                  <div className="tp-checkout-input">
-                    <label>Street address</label>
-                    <input
-                      name="address"
-                      id="address"
-                      type="text"
-                      placeholder="House number and street name"
-                      value={state.streetAddress2}
-                      onChange={(e) => handleInputChange(e, "streetAddress2")}
-                    />
-                    {state.errors.streetAddress1 && (
-                      <ErrorMsg msg={state.errors.streetAddress1} />
-                    )}
+                    <div className="tp-checkout-input">
+                      <label>Street address</label>
+                      <input
+                        name="address"
+                        id="address"
+                        type="text"
+                        placeholder="House number and street name"
+                        value={state.streetAddress2}
+                        onChange={(e) => handleInputChange(e, "streetAddress2")}
+                      />
+                      {state.errors.streetAddress1 && (
+                        <ErrorMsg msg={state.errors.streetAddress1} />
+                      )}
+                    </div>
                   </div>
-                </div>
                   <div className="col-md-6">
                     <div className="tp-checkout-input">
                       <label>Town / City</label>
@@ -1044,14 +1015,19 @@ setState({errors})
                 {state.channel == "india-channel" ? (
                   <span>
                     &#8377;
-                    {state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
+                    {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                      2
+                    )}
                     {/* {totalAmount.toString() === "0"
                     ? shippingCost.toFixed(2)
                     : parseFloat(cartTotals).toFixed(2)} */}
                   </span>
                 ) : (
                   <span>
-                    ${state.orderData?.totalPrice?.gross?.amount?.toFixed(2)}
+                    $
+                    {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                      2
+                    )}
                     {/* {totalAmount.toString() === "0"
                     ? shippingCost.toFixed(2)
                     : parseFloat(cartTotals).toFixed(2)} */}

@@ -139,11 +139,13 @@ const MobileMenus = () => {
             CONTACT US
           </Link>
         </li>
+        {token &&
         <li>
           <Link href="/wishlist" style={{ fontWeight: "500" }}>
             WISHLIST
           </Link>
         </li>
+        }
 
         <li>
           <Link href="/compare" style={{ fontWeight: "500" }}>
