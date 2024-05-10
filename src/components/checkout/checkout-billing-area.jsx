@@ -375,10 +375,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
         theme: {
           color: "#3399cc",
         },
-        // retry: {
-        //   enabled: true,
-        //   max_count: true,
-        // },
+        retry: {
+          enabled: false,
+          max_count: true,
+        },
       };
 
       const rzpay = new Razorpay(options);
