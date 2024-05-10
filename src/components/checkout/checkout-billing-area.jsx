@@ -250,7 +250,6 @@ setState({errors})
           postalCode: state.postalCode,
         };
 
-        console.log("sample: ", sample);
         let shippingAddress = {};
         if (state.diffAddress) {
           shippingAddress = {
@@ -270,7 +269,6 @@ setState({errors})
         } else {
           shippingAddress = sample;
         }
-        console.log("shippingAddress: ", shippingAddress);
 
         const checkoutId = localStorage.getItem("checkoutId");
         if (checkoutId) {
@@ -278,23 +276,19 @@ setState({errors})
             checkoutId,
             billingAddress: sample,
           });
-          console.log("billingAddress: ", res);
 
           if (
             res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0
           ) {
-            console.log("if: ");
             notifyError(
               res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
             );
           } else {
-            console.log("else: ");
 
             const response = await updateShippingAddress({
               checkoutId,
               shippingAddress,
             });
-            console.log("shippingAddress: ", response);
 
             if (
               response.data?.data?.checkoutShippingAddressUpdate?.errors
@@ -414,7 +408,7 @@ setState({errors})
           //   "orderId",
           //   completeResponse?.data?.data?.checkoutComplete?.order.id
           // );
-          router.push("/profile");
+          router.push(`/order-details/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`)
           setState({
             firstName: "",
             firstName1: "",

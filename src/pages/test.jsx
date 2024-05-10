@@ -3,7 +3,6 @@ import InputRange from "@/ui/input-range";
 
 const App = () => {
   const [priceValue, setPriceValue] = useState([0, 200000]);
-  console.log("priceValue: ", priceValue);
 
   const handlePriceChange = (values) => {
     setPriceValue(values);

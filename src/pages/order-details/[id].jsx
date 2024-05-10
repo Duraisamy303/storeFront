@@ -16,9 +16,7 @@ import MyOrderDetails from "../../components/my-account/my-order-details";
 const OrderDetails = () => {
   const router = useRouter();
   const orderId = router?.query?.id;
-  console.log("orderId: ", orderId);
   const { data } = useOrderListQuery({ orderId: orderId });
-  console.log("data: ", data);
 
   return (
     <Wrapper>

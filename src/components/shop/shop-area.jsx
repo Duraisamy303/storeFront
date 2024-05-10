@@ -65,7 +65,6 @@ const ShopArea = ({
             range[(0, removemin.max)];
           } else {
             range = [removemin.min, maxPrice];
-            console.log("max", [removemin.min, maxPrice]);
           }
           updateRange(range);
           // updateRange([price === "min" && 0, price === "max" && maxPrice]);
@@ -76,7 +75,6 @@ const ShopArea = ({
         updatedFilter = filter.filter((data) => data.id !== item.id);
       }
 
-      console.log("updated filter: ", updatedFilter);
       dispatch(filterData(updatedFilter));
     }
   };

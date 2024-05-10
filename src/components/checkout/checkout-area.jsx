@@ -70,11 +70,9 @@ const CheckoutArea = () => {
 
   const applyCoupen = async () => {
     try {
-      console.log("cart: ", cart);
       const lines = cart?.map((item) => {
         return { quantity: 1, variantId: item?.variant?.id };
       });
-      console.log("lines: ", lines);
 
       const data = await createCheckoutId({
         lines,
@@ -83,7 +81,6 @@ const CheckoutArea = () => {
         notifyError(data?.data?.data?.checkoutCreate?.errors[0]?.message);
       } else {
         const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
-        console.log("checkoutId: ", checkoutId);
         localStorage.setItem("checkoutId", checkoutId);
         verifyCoupenCode(checkoutId);
       }
@@ -99,20 +96,14 @@ const CheckoutArea = () => {
         languageCode: "EN_US",
         promoCode: "E87B-D067-5527",
       });
-      console.log("verifyCoupenCode: ", data);
 
       if (data?.data?.data?.checkoutAddPromoCode?.errors?.length > 0) {
         notifyError(data?.data?.data?.checkoutAddPromoCode?.errors[0]?.message);
-        console.log(
-          "data?.data?.checkoutAddPromoCode?.errors[0]?.message: ",
-          data?.data?.data?.checkoutAddPromoCode?.errors[0]?.message
-        );
         setIsVerified(false);
       } else {
         setIsVerified(true);
 
         const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
-        console.log("checkoutId: ", checkoutId);
       }
     } catch (error) {
       console.log("error: ", error);

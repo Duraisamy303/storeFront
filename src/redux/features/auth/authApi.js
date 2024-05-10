@@ -77,7 +77,6 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
           localStorage.setItem("token", result.data.data.tokenCreate.token);
           localStorage.setItem(
             "userInfo",
@@ -177,7 +176,6 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }
@@ -222,13 +220,11 @@ export const authApi = apiSlice.injectEndpoints({
         const user = localStorage.getItem("userInfo");
 
         const email=JSON.parse(user).user.email
-        console.log("email: ", email);
         return configuration(GET_ORDER_LIST_BY_EMAIL({email}));
       },
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }

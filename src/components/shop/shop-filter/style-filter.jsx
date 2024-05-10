@@ -10,7 +10,6 @@ import { useGetStyleListQuery } from "@/redux/features/productApi";
 const StyleFilter = ({ setCurrPage, shop_right = false, finishFilterData }) => {
   const { data: finishData, isError, isLoading } = useGetStyleListQuery();
   const filter = useSelector((state) => state.shopFilter.filterData);
-  console.log("style: ", filter);
   const [finishList, setFinishList] = useState([]);
   const [checkedItem, setCheckedItem] = useState([]);
 
@@ -58,7 +57,6 @@ const StyleFilter = ({ setCurrPage, shop_right = false, finishFilterData }) => {
     } else {
       arr = [{ ...item, type }];
     }
-    console.log("arr: ", arr);
 
     setCheckedItem(arr);
   };

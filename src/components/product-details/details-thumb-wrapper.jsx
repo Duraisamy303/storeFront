@@ -10,7 +10,6 @@ const DetailsThumbWrapper = ({
   status,
   product,
 }) => {
-console.log("product", product)
   const imageUrls = product?.images?.map((item) => item?.url);
 
   const [isVideoOpen, setIsVideoOpen] = useState(false);

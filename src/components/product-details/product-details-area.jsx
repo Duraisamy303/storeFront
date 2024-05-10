@@ -6,7 +6,7 @@ import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
 
 const ProductDetailsArea = ({ productItem }) => {
-  const {  images, imageURLs, videoId, status } = productItem || {};
+  const { images, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(images[0]);
   const dispatch = useDispatch();
   // active image change when img change
@@ -19,10 +19,13 @@ const ProductDetailsArea = ({ productItem }) => {
     setActiveImg(item);
   };
 
-  const imageUrls=productItem?.images?.map((item)=>item?.url)
+  const imageUrls = productItem?.images?.map((item) => item?.url);
 
   return (
-    <section className="tp-product-details-area pt-50" style={{backgroundColor:"#f4f4f4"}}>
+    <section
+      className="tp-product-details-area pt-50"
+      style={{ backgroundColor: "#f4f4f4" }}
+    >
       <div className="tp-product-details-top">
         <div className="container-fluid">
           <div className="row">
@@ -44,7 +47,7 @@ const ProductDetailsArea = ({ productItem }) => {
                 handleImageActive={handleImageActive}
                 activeImg={productItem?.images[0]?.url}
                 detailsBottom={false}
-              /> 
+              />
               {/* product-details-wrapper end */}
             </div>
           </div>
@@ -64,19 +67,22 @@ const ProductDetailsArea = ({ productItem }) => {
       {/* product details description */}
 
       {/* related products start */}
-     <section className="tp-related-product pt-50 pb-50">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="tp-section-title-wrapper-6 mb-40">
-              {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
-              <h3 className="tp-section-title-6">Related Products</h3>
+      {productItem?.category?.id && (
+        <section className="tp-related-product pt-50 pb-50">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="tp-section-title-wrapper-6 mb-40">
+                {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
+                <h3 className="tp-section-title-6">Related Products</h3>
+              </div>
+            </div>
+            <div className="row">
+              <RelatedProducts id={productItem?.category?.id} />
             </div>
           </div>
-          <div className="row">
-            <RelatedProducts id={productItem?.category?.id} />
-          </div>
-        </div>
-      </section> 
+        </section>
+      )}
+
       {/* related products end */}
     </section>
   );

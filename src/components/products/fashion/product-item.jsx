@@ -29,7 +29,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
 
   let product = products.node;
-  console.log("✌️product --->", product);
 
   const router = useRouter();
 
@@ -67,7 +66,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     }
   );
 
-  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -135,7 +133,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         };
 
         const res = await addWishlist(input);
-        console.log("res: ", res);
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
@@ -154,7 +151,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           ?.map((item) => item?.node)
           ?.some((node) => node?.id === product?.id);
 
-        console.log("isAddWishlist: ", isAddWishlist);
 
         dispatch(
           add_to_wishlist(

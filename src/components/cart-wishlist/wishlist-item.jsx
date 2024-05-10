@@ -86,27 +86,22 @@ const WishlistItem = ({ product, refetchWishlist }) => {
 
   // handle remove product
   const handleRemovePrd = async () => {
-    console.log("handleRemovePrd: ");
     try {
       const data = await removeWishlist({
         variant: product?.variants[0]?.id,
       });
       refetchWishlist();
-      console.log("data: ", data);
     } catch (error) {}
   };
 
   const addToCartProductINR = async () => {
     try {
-      console.log("product: ", product);
 
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
-      console.log("checkoutTokenINR: ", checkoutTokenINR);
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
         variantId: product?.variants[0]?.id,
       });
-      console.log("response: ", response);
 
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;

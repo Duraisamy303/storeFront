@@ -1,5 +1,4 @@
 export const ADDTOCART = ({ checkoutToken, variantId }) => {
-  console.log("checkoutToken, variantId: ", checkoutToken, variantId);
   return {
     query: `
     mutation ProductAddVariantToCart($checkoutToken: UUID!, $variantId: ID!) {
@@ -249,7 +248,6 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
   country1,
   countryArea1,
 }) => {
-  console.log("first", lastName1);
   return {
     query: `
     mutation CreateCheckout($channel: String!, $email: String!, $lines: [CheckoutLineInput!]!, $firstName: String!, $lastName: String!, $streetAddress1: String!, $city: String!, $postalCode: String!, $country: CountryCode!, $countryArea: String!,$firstName1: String!, $lastName1: String!, $streetAddress2: String!, $city1: String!, $postalCode1: String!, $country1: CountryCode!, $countryArea1: String!) {

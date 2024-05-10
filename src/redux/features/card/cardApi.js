@@ -34,7 +34,6 @@ export const cardApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addToCart: builder.mutation({
       query: ({ variantId, checkoutToken }) => {
-        console.log("variantId, checkoutToken: ", variantId, checkoutToken);
         return configuration(ADDTOCART({ checkoutToken, variantId }));
       },
     }),
@@ -167,7 +166,6 @@ export const cardApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }
@@ -176,7 +174,6 @@ export const cardApi = apiSlice.injectEndpoints({
 
     checkoutUpdate: builder.mutation({
       query: ({ checkoutid, country }) => {
-        console.log("checkoutid, country: ", checkoutid, country);
         let deliveryMethodId = "";
         if (country == "IN") {
           deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
@@ -240,7 +237,6 @@ export const cardApi = apiSlice.injectEndpoints({
 
     createCheckoutId: builder.mutation({
       query: ({ lines }) => {
-        console.log("query: ", lines);
 
         let channel = "india-channel";
 
@@ -254,7 +250,6 @@ export const cardApi = apiSlice.injectEndpoints({
             channel = "default-channel";
           }
         }
-        console.log("channel: ", channel);
 
         return configuration(CREATE_CHECKOUT_ID({ channel, lines }));
       },
@@ -330,7 +325,6 @@ export const cardApi = apiSlice.injectEndpoints({
     getCheckoutDetails: builder.query({
       query: () => {
         const id = localStorage.getItem("checkoutId");
-        console.log("id: ", id);
         return configuration(
           GET_CHECKOUT_DETAILS({ id, languageCode: "EN_US" })
         );
@@ -341,7 +335,6 @@ export const cardApi = apiSlice.injectEndpoints({
 
     deleteWishlist: builder.mutation({
       query: ({ variant }) => {
-        console.log("variant: ", variant);
         const user = localStorage.getItem("userInfo");
         const users = JSON.parse(user);
         return configuration(

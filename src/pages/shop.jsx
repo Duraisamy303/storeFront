@@ -31,7 +31,6 @@ const ShopPage = () => {
     isError,
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
-  console.log("productsData: ", productsData);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -201,11 +200,6 @@ const ShopPage = () => {
       const listd = [...filter, body];
       dispatch(filterData(listd));
       setPriceValue([priceValue[0], priceValue[1]]);
-      console.log("[priceValue[0],priceValue[1]]: ", [
-        priceValue[0],
-        priceValue[1],
-      ]);
-
       setFilterList([...filterList, body]);
       dispatch(handleFilterSidebarClose());
     });

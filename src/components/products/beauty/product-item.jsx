@@ -29,7 +29,6 @@ const ProductItem = ({
     product || {};
 
   const cart = useSelector((state) => state.cart?.cart_list);
-console.log("related",  product)
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
@@ -60,7 +59,6 @@ console.log("related",  product)
     }
   );
 
-  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -92,7 +90,6 @@ console.log("related",  product)
   // handle wishlist product
 
   const addWishlistProduct = async (product) => {
-    console.log("✌️relatedproduct --->", product);
     try {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
@@ -131,7 +128,6 @@ console.log("related",  product)
   // };
 
   const handleCompareProduct = (prd) => {
-    console.log("prd: ", prd);
     const products = product || product.node;
     const compare = localStorage.getItem("compareList");
 
@@ -142,7 +138,6 @@ console.log("related",  product)
       arr = JSON.parse(compare);
     }
     arr.push(products);
-    console.log("compare: ", arr);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
   };

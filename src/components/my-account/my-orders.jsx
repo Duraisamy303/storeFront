@@ -12,10 +12,8 @@ const OrderList = () => {
 
   // const orderId = id
   const { data: orders, isError, isLoading } = useMyOrderListQuery();
-  console.log("✌️orders --->", orders);
 
   const [orderList, setOrderList] = useState([]);
-  console.log("orderList: ", orderList);
 
   const router = useRouter();
 
@@ -27,7 +25,6 @@ const OrderList = () => {
     }
   }, [orders]);
 
-  console.log("orderList", orderList);
   return (
     <>
       <section className="tp-cart-area ">

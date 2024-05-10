@@ -62,7 +62,6 @@ const PopularProducts = () => {
   });
 
   const [featureProducts, setFeatureProducts] = useState([]);
-  console.log("featureProducts: ", featureProducts);
   // decide what to render
 
   useEffect(() => {

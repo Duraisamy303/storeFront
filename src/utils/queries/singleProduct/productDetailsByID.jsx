@@ -107,6 +107,10 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                 id
                 quantityAvailable
               }
+              category {
+                id
+                name
+              }
               
             }
           }

@@ -15,7 +15,6 @@ const CartCheckout = ({ cartData }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
-  console.log("list: ", list);
 
   const totalAmount = cart?.reduce(
     (acc, curr) =>

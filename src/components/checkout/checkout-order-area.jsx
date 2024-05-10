@@ -97,7 +97,6 @@ const CheckoutOrderArea = () => {
           notifySuccess("Payment Successful");
           console.log(res);
           const completeResponse = await checkoutComplete({ id: checkoutId });
-          console.log("Checkout Complete Response:", completeResponse);
         },
         prefill: {
           name: "Piyush Garg",
@@ -135,7 +134,6 @@ const CheckoutOrderArea = () => {
       const seconds = padZero(now.getSeconds());
 
       const orderId = `ORD_${year}${month}${day}_${hours}${minutes}${seconds}`;
-      console.log("orderId: ", orderId);
 
       // Your logic to create and return an order object
       return { id: orderId };
@@ -167,7 +165,6 @@ const CheckoutOrderArea = () => {
         const deliveryUpdateResponse = await createDeliveryUpdate({
           id: checkoutId,
         });
-        console.log("Delivery Update Response:", deliveryUpdateResponse);
         // handlePayment(checkoutId);
       }
     } catch (error) {

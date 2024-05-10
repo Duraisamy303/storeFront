@@ -150,7 +150,6 @@ export const MY_ORDER_LIST = ({ first }) => {
 };
 
 export const ADD_WISHLIST = ({ input }) => {
-  console.log("input: ", input);
   return JSON.stringify({
     query: `
     mutation CreateWishList($input: WishListCreateInput!) {

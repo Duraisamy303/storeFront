@@ -10,7 +10,6 @@ const HeaderSearchForm = () => {
   // selectHandle
   const selectCategoryHandle = (e) => {
     setCategory(e.value);
-    console.log("e.value: ", e.value);
   };
 
   return (

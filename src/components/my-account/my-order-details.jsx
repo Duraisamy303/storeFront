@@ -2,9 +2,7 @@ import moment from "moment/moment";
 import React from "react";
 
 const MyOrderDetails = ({ data }) => {
-  console.log("data --->", data);
   const Data = data?.data?.order;
-  console.log("✌️Data --->", Data);
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (

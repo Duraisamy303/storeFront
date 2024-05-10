@@ -21,7 +21,6 @@ const WishlistArea = () => {
   }, [wishlistData]);
 
   const list =wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
-  console.log("list: ", list);
 
   const getWishlistList = async (prd) => {
     try {

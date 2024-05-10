@@ -49,7 +49,6 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
-  console.log("✌️productItem --->", productItem);
 
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
@@ -86,14 +85,11 @@ const DetailsWrapper = ({
     {}
   );
 
-
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
       return prd?.node?.variant === productItem?.id;
     }
   );
-
-  console.log("✌️isAddedToWishlist --->", isAddedToWishlist);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -165,11 +161,8 @@ const DetailsWrapper = ({
         const isAddWishlist = wishlistData?.data?.wishlists?.edges
           ?.map((item) => item?.node)
           ?.some((node) => {
-console.log('✌️node --->', node);
             return node?.id === productItem?.id;
           });
-
-        console.log("isAddWishlist: ", isAddWishlist);
 
         dispatch(
           add_to_wishlist(
@@ -282,7 +275,6 @@ console.log('✌️node --->', node);
       arr = JSON.parse(compare);
     }
     arr.push(prd);
-    console.log("compare: ", arr);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
   };

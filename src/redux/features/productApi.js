@@ -126,7 +126,6 @@ export const productApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log("result: ", result);
         } catch (err) {
           // do nothing
         }
@@ -141,8 +140,6 @@ export const productApi = apiSlice.injectEndpoints({
           const users = JSON.parse(user);
           userEmail = users.user.email;
         }
-        console.log('✌️userEmail --->', userEmail);
-
         return configuration(WISHLIST_LIST({ userEmail:userEmail }));
       },
       providesTags: ["Products"],

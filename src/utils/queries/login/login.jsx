@@ -23,7 +23,6 @@ export const LOGIN = ({ email, password }) => {
 
 
 export const CHANGE_PASSWORD = ({ old_password, new_password }) => {
-  console.log("CHANGE_PASSWORD: ",  old_password, new_password);
   return {
     query: `
     mutation PasswordChange($old_password: String!, $new_password: String!) {
