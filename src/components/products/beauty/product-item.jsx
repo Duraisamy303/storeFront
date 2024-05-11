@@ -16,6 +16,7 @@ import {
   useAddWishlistMutation,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
+import { checkChannel } from "@/utils/functions";
 
 const ProductItem = ({
   product,
@@ -308,11 +309,17 @@ const ProductItem = ({
         <h3 className="tp-product-title-3">
           <Link href={`/product-details/${id}`}>{name}</Link>
         </h3>
-        <p style={{ color: "gray", marginBottom: "0px" }}>Neckless</p>
+        <p style={{ color: "gray", marginBottom: "0px" }}>{product?.category?.name}</p>
         <div className="tp-product-price-wrapper-3">
-          <span className="tp-product-price-3">
-            ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
-          </span>
+          {checkChannel() === "india-channel" ? (
+            <span className="tp-product-price-3">
+              &#8377;{pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
+            </span>
+          ) : (
+            <span className="tp-product-price-3">
+              ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
+            </span>
+          )}
         </div>
       </div>
     </div>
