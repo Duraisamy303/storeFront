@@ -77,7 +77,7 @@ const CompareArea = () => {
     dispatch(compare_list(filter));
   };
   
-  const IndiaChannel = compareList.map((item) => {
+  const IndiaChannel = compareList?.map((item) => {
     return item?.pricing?.priceRange?.start?.gross?.currency === "INR"
       ? true
       : false;

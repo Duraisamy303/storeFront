@@ -17,7 +17,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { channel, checkChannel } from "../../utils/functions";
+import {  checkChannel } from "../../utils/functions";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);

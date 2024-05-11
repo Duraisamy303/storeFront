@@ -53,6 +53,9 @@ const CheckoutArea = () => {
   const dispatch = useDispatch();
 
   const [isVerified, setIsVerified] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  
 
   const [token, setToken] = useState("");
 
@@ -127,10 +130,10 @@ const CheckoutArea = () => {
           )}
           {cart?.length > 0 && (
             <div className="row">
-              {/* <div className="col-xl-7 col-lg-7">
+            <div className="col-xl-7 col-lg-7">
                 <div className="tp-checkout-verify">
                   {!token && <CheckoutLogin />}
-                  <div className="tp-checkout-verify-item">
+                  {/* <div className="tp-checkout-verify-item">
                     <p className="tp-checkout-verify-reveal">
                       Have a coupon?{" "}
                       <button
@@ -181,9 +184,9 @@ const CheckoutArea = () => {
                         )}
                       </div>
                     )}
-                  </div>
+                  </div> */}
                 </div>
-              </div> */}
+              </div> 
               {/* <form onSubmit={handleSubmit(submitHandler)}> */}
               <div className="row">
                 {/* <div className="col-lg-7"> */}

@@ -21,6 +21,7 @@ import {
 import {
   useCountryListQuery,
   useStateListQuery,
+  useUpdateEmailMutation,
 } from "@/redux/features/productApi";
 import { Filter } from "@/svg";
 import {
@@ -35,6 +36,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: countryList, refetchCountry } = useCountryListQuery();
+  const { data: cartList } = useGetCartListQuery();
 
   const CountryList = countryList?.data?.shop?.countries;
 
@@ -45,11 +47,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const { data: checkoutDetails, refetch: checkoutDetailsRefetch } =
     useGetCheckoutDetailsQuery();
 
+  useEffect(() => {
+    checkoutDetailsRefetch();
+  }, []);
+
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
 
   const [updateShippingAddress] = useUpdateShippingAddressMutation();
+  const [emailUpdate] = useUpdateEmailMutation();
 
   const [state, setState] = useSetState({
     firstName: "",
@@ -154,7 +161,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const router = useRouter();
 
-  const totalAmount = cart?.reduce(
+  const totalAmount = cartList?.data?.checkout?.lines?.reduce(
     (acc, curr) =>
       acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
     0
@@ -284,7 +291,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   ?.message
               );
             } else {
-              handlePayment(checkoutId);
+              // ;
+              updateEmail(checkoutId);
 
               // updateDelivertMethod(shippingAddress?.country);
             }
@@ -321,27 +329,52 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  const handlePayment = useCallback(
-    async (checkoutId, amount) => {
-      console.log("checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount: ", checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount);
+  const amount = () => {
+    const checkoutAmt =
+      checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
+    let amount = 0;
+    if (checkoutAmt > 0) {
+      amount = parseInt(checkoutAmt) * 100;
+    } else {
+      amount = parseInt(totalAmount) * 100;
+    }
+    console.log("amount: ", amount);
 
+    return amount;
+  };
+
+  const handlePayment = useCallback(
+    async (checkoutId) => {
       const options = {
         key: "rzp_test_tEMCtcfElFdYts",
         key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount: parseInt(totalAmount) * 100,
+        amount: amount(),
         currency: checkChannel() == "india-channel" ? "INR" : "USD",
         name: state.firstName + " " + state.lastName,
         description: state.notes,
         image: "https://example.com/your_logo",
         // order_id: "ORD20156712",
         handler: async (res) => {
+          console.log("res: ", res);
           notifySuccess("Payment Successful");
+
           const completeResponse = await checkoutComplete({ id: checkoutId });
+          console.log("completeResponse: ", completeResponse);
+          if (
+            completeResponse?.data?.data?.checkoutComplete?.errors?.length > 0
+          ) {
+            notifyError(res?.data?.data?.checkoutComplete?.errors[0]?.message);
+          } else {
+            router.push(
+              `/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
+            );
+          }
+
           // localStorage.setItem(
           //   "orderId",
           //   completeResponse?.data?.data?.checkoutComplete?.order.id
           // );
-          router.push(`/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`)
+
           setState({
             firstName: "",
             firstName1: "",
@@ -375,10 +408,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
         theme: {
           color: "#3399cc",
         },
-        // retry: {
-        //   enabled: true,
-        //   max_count: true,
-        // },
+        retry: {
+          enabled: false,
+          max_count: true,
+        },
       };
 
       const rzpay = new Razorpay(options);
@@ -386,6 +419,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
     },
     [Razorpay]
   );
+
+  const updateEmail = async (checkoutId) => {
+    try {
+      const res = await emailUpdate({
+        checkoutId,
+        email: state.diffAddress ? state.email1 : state.email,
+      });
+      if (res?.data?.data?.checkoutEmailUpdate?.errors?.length > 0) {
+        notifyError(res?.data?.data?.checkoutEmailUpdate?.errors[0]?.message);
+      } else {
+        handlePayment(checkoutId);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const handleCheckboxChange = (id) => {
     const updatedCheckboxes = state.paymentType.map((checkbox) =>
@@ -696,6 +745,80 @@ const CheckoutBillingArea = ({ register, errors }) => {
             <input
               id="remeber"
               type="checkbox"
+              checked={state.createAccount}
+              onChange={(e) => setState({ createAccount: e.target.checked })}
+            />
+            <label htmlFor="remeber">Create an account?</label>
+          </div>
+          {state.createAccount && (
+            <div className="tp-checkout-bill-form">
+              <div className="tp-checkout-bill-inner">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="tp-checkout-input">
+                      <label>
+                        Account username <span>*</span>
+                      </label>
+                      <input
+                        name="accountUsername"
+                        id="accountUsername"
+                        type="text"
+                        placeholder="Username "
+                        value={state.accountUsername}
+                        onChange={(e) =>
+                          handleInputChange(e, "accountUsername")
+                        }
+
+                        // defaultValue={user?.firstName}
+                      />
+                      {state.errors.firstName1 && (
+                        <ErrorMsg msg={state.errors.firstName1} />
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="tp-checkout-input">
+                      <label>
+                        Create account password <span>*</span>
+                      </label>
+                      <input
+                        name="password"
+                        id="password"
+                        type="text"
+                        value={state.password}
+                        placeholder="Last Name"
+                        onChange={(e) => handleInputChange(e, "password")}
+                      />
+                      {state.errors.lastName1 && (
+                        <ErrorMsg msg={state.errors.lastName1} />
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="tp-checkout-input">
+                      <label>
+                        Password confirmation <span>*</span>
+                      </label>
+                      <input
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        type="text"
+                        placeholder="Company name"
+                        value={state.confirmPassword}
+                        onChange={(e) =>
+                          handleInputChange(e, "confirmPassword")
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="tp-login-remeber">
+            <input
+              id="remeber"
+              type="checkbox"
               checked={state.diffAddress}
               onChange={(e) => setState({ diffAddress: e.target.checked })}
             />
@@ -983,47 +1106,54 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
-              <li className="tp-order-info-list-total">
-                <span>Shipping</span>
-                {state.channel == "india-channel" ? (
-                  <span>
-                    &#8377;
-                    {checkoutDetails?.data?.checkout?.shippingPrice?.gross?.amount?.toFixed(
-                      2
-                    )}
-                  </span>
-                ) : (
-                  <span>
-                    $
-                    {checkoutDetails?.data?.checkout?.shippingPrice?.gross?.amount?.toFixed(
-                      2
-                    )}
-                  </span>
-                )}
-              </li>
+              {checkoutDetails?.data?.checkout?.shippingMethods?.length > 0 && (
+                <li className="tp-order-info-list-total">
+                  <span>Shipping</span>
+                  {checkChannel() == "india-channel" ? (
+                    <span>
+                      &#8377;
+                      {checkoutDetails?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
+                        2
+                      )}
+                    </span>
+                  ) : (
+                    <span>
+                      $
+                      {checkoutDetails?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
+                        2
+                      )}
+                    </span>
+                  )}
+                </li>
+              )}
 
               <li className="tp-order-info-list-total">
                 <span>Total</span>
-                {state.channel == "india-channel" ? (
-                  <span>
-                    &#8377;
-                    {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                      2
-                    )}
-                    {/* {totalAmount.toString() === "0"
-                    ? shippingCost.toFixed(2)
-                    : parseFloat(cartTotals).toFixed(2)} */}
-                  </span>
-                ) : (
+                {checkChannel() == "india-channel" ? (
+                  checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount >
+                  0 ? (
+                    <span>
+                      &#8377;
+                      {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                        2
+                      )}
+                    </span>
+                  ) : (
+                    <span>
+                      &#8377;
+                      {totalAmount?.toFixed(2)}
+                    </span>
+                  )
+                ) : checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount >
+                  0 ? (
                   <span>
                     $
                     {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
                       2
                     )}
-                    {/* {totalAmount.toString() === "0"
-                    ? shippingCost.toFixed(2)
-                    : parseFloat(cartTotals).toFixed(2)} */}
                   </span>
+                ) : (
+                  <span>${totalAmount?.toFixed(2)}</span>
                 )}
 
                 {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
