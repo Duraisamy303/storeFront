@@ -28,7 +28,10 @@ import {
   useGetCheckoutDetailsQuery,
   useUpdateShippingAddressMutation,
 } from "../../redux/features/card/cardApi";
-import { checkChannel } from "../../utils/functions";
+import { checkChannel, validLoginAndReg } from "../../utils/functions";
+import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
+import { useLoginUserMutation } from "@/redux/features/auth/authApi";
+
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -96,6 +99,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
     coupenCode: "",
     orderData: [],
     channel: "",
+    createAccount: false,
+    loginLastName: "",
+    loginFirstName: "",
+    password: "",
+    confirmPassword: "",
+    loginEmail: "",
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
@@ -103,6 +112,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
   });
 
   const { data: linelist } = useGetCartListQuery();
+
+  const [loginUser, {}] = useLoginUserMutation();
+
+  const [registerUser, {}] = useRegisterUserMutation();
 
   const [createCheckoutId] = useCreateCheckoutIdMutation();
 
@@ -490,6 +503,51 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
+  const createAccount = async () => {
+    try {
+      const body = {
+        firstName: state.loginFirstName,
+        lastName: state.loginLastName,
+        email: state.loginEmail,
+        password: state.password,
+      };
+
+      const res = await registerUser(body);
+      if (res?.data?.data?.accountRegister?.errors?.length > 0) {
+        notifyError(res?.data?.data?.accountRegister?.errors[0].message);
+      } else {
+        const user = res?.data?.data?.accountRegister?.user;
+        localStorage.setItem("userInfo", JSON.stringify(user));
+        login(user.email, state.password);
+      }
+
+      console.log("body: ", body);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const login = async (email, password) => {
+    try {
+      const body = {
+        email,
+        password,
+      };
+
+      const res = await loginUser(body);
+      console.log("res: ", res);
+      // if (res?.data?.data?.accountRegister?.errors?.length > 0) {
+      //   notifyError(res?.data?.data?.accountRegister?.errors[0].message);
+      // } else {
+      //   const user = res?.data?.data?.accountRegister?.user;
+      //   localStorage.setItem("token", JSON.stringify(user));
+      // }
+      console.log("body: ", body);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <div className="row">
       <div className="col-lg-7">
@@ -741,81 +799,113 @@ const CheckoutBillingArea = ({ register, errors }) => {
               </div>
             </div>
           </div>
-          <div className="tp-login-remeber">
-            <input
-              id="remeber"
-              type="checkbox"
-              checked={state.createAccount}
-              onChange={(e) => setState({ createAccount: e.target.checked })}
-            />
-            <label htmlFor="remeber">Create an account?</label>
-          </div>
-          {state.createAccount && (
-            <div className="tp-checkout-bill-form">
-              <div className="tp-checkout-bill-inner">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Account username <span>*</span>
-                      </label>
-                      <input
-                        name="accountUsername"
-                        id="accountUsername"
-                        type="text"
-                        placeholder="Username "
-                        value={state.accountUsername}
-                        onChange={(e) =>
-                          handleInputChange(e, "accountUsername")
-                        }
-
-                        // defaultValue={user?.firstName}
-                      />
-                      {state.errors.firstName1 && (
-                        <ErrorMsg msg={state.errors.firstName1} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Create account password <span>*</span>
-                      </label>
-                      <input
-                        name="password"
-                        id="password"
-                        type="text"
-                        value={state.password}
-                        placeholder="Last Name"
-                        onChange={(e) => handleInputChange(e, "password")}
-                      />
-                      {state.errors.lastName1 && (
-                        <ErrorMsg msg={state.errors.lastName1} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Password confirmation <span>*</span>
-                      </label>
-                      <input
-                        name="confirmPassword"
-                        id="confirmPassword"
-                        type="text"
-                        placeholder="Company name"
-                        value={state.confirmPassword}
-                        onChange={(e) =>
-                          handleInputChange(e, "confirmPassword")
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
+          {!validLoginAndReg() && (
+            <>
+              <div className="tp-login-remeber">
+                <input
+                  id="remeber1"
+                  type="checkbox"
+                  checked={state.createAccount}
+                  onChange={(e) =>
+                    setState({ createAccount: e.target.checked })
+                  }
+                />
+                <label htmlFor="remeber1">Create an account?</label>
               </div>
-            </div>
+              <>
+                {state.createAccount && (
+                  <div className="tp-checkout-bill-form">
+                    <div className="tp-checkout-bill-inner">
+                      <div className="row pt-2">
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label>
+                              First Name <span>*</span>
+                            </label>
+                            <input
+                              name="loginFirstName"
+                              id="loginFirstName"
+                              type="text"
+                              placeholder="First Name "
+                              value={state.loginFirstName}
+                              onChange={(e) =>
+                                handleInputChange(e, "loginFirstName")
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label>
+                              Last Name <span>*</span>
+                            </label>
+                            <input
+                              name="loginLastName"
+                              id="loginLastName"
+                              type="text"
+                              placeholder="Last Name "
+                              value={state.loginLastName}
+                              onChange={(e) =>
+                                handleInputChange(e, "loginLastName")
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label>
+                              Email address <span>*</span>
+                            </label>
+                            <input
+                              name="email"
+                              id="email"
+                              type="email"
+                              placeholder="Email"
+                              value={state.loginEmail}
+                              onChange={(e) =>
+                                handleInputChange(e, "loginEmail")
+                              }
+
+                              // defaultValue={user?.email}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label>
+                              Password <span>*</span>
+                            </label>
+                            <input
+                              name="password"
+                              id="password"
+                              type="text"
+                              value={state.password}
+                              placeholder="Password"
+                              onChange={(e) => handleInputChange(e, "password")}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="tp-login-bottom">
+                      <button
+                        type="button"
+                        className="tp-login-btn w-100"
+                        onClick={() => createAccount()}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            </>
           )}
-          <div className="tp-login-remeber">
+          <div
+            className={`tp-login-remeber ${
+              state.createAccount ? "pt-3" : "pt-2"
+            } `}
+          >
             <input
               id="remeber"
               type="checkbox"

@@ -66,3 +66,16 @@ export const checkChannel = () => {
   }
   return channel;
 };
+
+export const validLoginAndReg = () => {
+  let valid = false;
+  const user = localStorage.getItem("userInfo");
+  const token = localStorage.getItem("token");
+
+  if (!user && !token) {
+    valid = false;
+  } else {
+    valid = true;
+  }
+  return valid;
+};
