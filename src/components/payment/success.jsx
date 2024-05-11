@@ -2,8 +2,13 @@ import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
 import React from "react";
 import { checkChannel } from "../../utils/functions";
+import {useRouter } from "next/router";
 
 const success = ({ data }) => {
+
+const router = useRouter()
+
+
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
   const Total = data?.data?.order?.total.gross.amount;
@@ -16,7 +21,7 @@ const success = ({ data }) => {
       <div className="container">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
-            <p style={{ color: "gray" }}>Pay with cash upon delivery </p>
+            <p style={{ color: "gray" }}>Pay with Razor Pay </p>
             <h3>Order Details</h3>
             <div>
               <table className="table width-100">
@@ -76,7 +81,7 @@ const success = ({ data }) => {
                   </tr>
 
                   <tr>
-                    <td>Total</td>
+                    <td style={{ color: "black", fontWeight: "600" }}>Total</td>
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
@@ -129,6 +134,9 @@ const success = ({ data }) => {
                   Payment Method: <span>razor Pay</span>
                 </li>
               </ul>
+            </div>
+            <div className="mt-20">
+              <button onClick={() => router.push('/shop')} className="tp-cart-update-btn " style={{background:"rgb(194, 136, 43)", color:"white"}}>Continue Shopping</button>
             </div>
           </div>
         </div>

@@ -192,7 +192,7 @@ const DetailsWrapper = ({
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
-        router.push('/login')
+        router.push("/login");
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
@@ -379,14 +379,14 @@ const DetailsWrapper = ({
         </div>
       )}
 
-      <p style={{ color: "gray" }}>
+      {/* <p style={{ color: "gray" }}>
         Note : The stones we use are either natural or glass stones, the
         imperfections found on them are natural and inevitable. These
         imperfections add characteristics to the stones making it distinct and
         unique.
-      </p>
+      </p> */}
 
-      <p style={{ color: "black" }}>1 in stock</p>
+      <p style={{ color: "black" }}>{productItem?.defaultVariant?.quantityAvailable} in stock</p>
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">
@@ -495,25 +495,27 @@ const DetailsWrapper = ({
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.description && (
-          <ul style={{ paddingTop: "20px" }}>
-            <li
-              style={{
-                fontSize: "16px",
-                paddingBottom: "10px",
-              }}
-            >
-              Pure silver jewellery has a tendency to oxidise especially when
-              it’s worn regularly.
-            </li>
-            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-              To maintain the lustre of your jewellery, place it in re-sealable
-              poly bags/ air-tight container to prevent it from oxidation.
-            </li>
-            <li style={{ fontSize: "16px" }}>
-              A gentle wipe before storing is recommended. Avoid direct contact
-              with moisture/perfumes.
-            </li>
-          </ul>
+          <>
+            {JSON.parse(productItem.description).blocks.map((block) => (
+              <>
+              <div className="pt-10">
+                {block.type === "header" && (
+                  <ul className="pl-20">
+                    <li key={block.id}>
+                      {block.type === "header" && <h5 style={{ fontWeight: "400" }}>{block.data.text}</h5>}
+                    </li>
+                  </ul>
+                )}
+
+                <div key={block.id}>
+                  {block.type === "paragraph" && (
+                    <p style={{ color: "gray" }}>{block.data.text}</p>
+                  )}
+                </div>
+                </div>
+              </>
+            ))}
+          </>
         )}
       </div>
 
@@ -691,7 +693,7 @@ const DetailsWrapper = ({
           <b>SKU:</b> PBS_NP_33
         </p>
         <p style={{ color: "#55585b" }}>
-          <b>Categories:</b> Necklaces, New Arrivals
+          <b>Categories:</b> {productItem?.category?.name}
         </p>
       </div>
 

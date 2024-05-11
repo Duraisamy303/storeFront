@@ -162,7 +162,7 @@ const CartArea = () => {
                         <button
                           onClick={() => updateCart()}
                           type="button"
-                          className="tp-cart-update-btn"
+                          className="tp-cart-update-btn " style={{background:"#ececec"}}
                         >
                           UPDATE CART
                         </button>
