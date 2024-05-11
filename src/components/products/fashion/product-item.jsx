@@ -316,7 +316,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               >
                 <Wishlist />
                 <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View To Wishlist
+                  View Wishlist
                 </span>
               </button>
             ) : (
@@ -350,7 +350,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               <CompareThree />
               <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.id)
-                  ? "View To Compare"
+                  ? "View Compare"
                   : "Add To Compare"}
               </span>
             </button>

@@ -244,7 +244,7 @@ const ProductItem = ({
               >
                 <Wishlist />
                 <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View To Wishlist
+                  View Wishlist
                 </span>
               </button>
             ) : (
@@ -277,7 +277,7 @@ const ProductItem = ({
               <CompareThree />
               <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.node?.id)
-                  ? "View To Compare"
+                  ? "View Compare"
                   : "Add To Compare"}
               </span>
             </button>
@@ -290,7 +290,7 @@ const ProductItem = ({
               href="/cart"
               className="tp-product-add-cart-btn-large text-center"
             >
-              View To Cart
+              View Cart
             </Link>
           ) : (
             <button

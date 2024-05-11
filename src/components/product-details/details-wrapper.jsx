@@ -268,6 +268,8 @@ const DetailsWrapper = ({
     }
   }, []);
 
+  console.log("productItem", productItem)
+
   return (
     <div className="tp-product-details-wrapper">
       <ProductDetailsBreadcrumb
@@ -446,7 +448,7 @@ const DetailsWrapper = ({
             className="tp-product-details-action-sm-btn"
           >
             <WishlistTwo />
-            View To Wishlist
+            View Wishlist
           </button>
         ) : (
           <button
@@ -694,6 +696,10 @@ const DetailsWrapper = ({
         </p>
         <p style={{ color: "#55585b" }}>
           <b>Categories:</b> {productItem?.category?.name}
+        </p>
+
+        <p style={{ color: "#55585b" }}>
+          <b>Tags:</b> {productItem?.category?.name}
         </p>
       </div>
 

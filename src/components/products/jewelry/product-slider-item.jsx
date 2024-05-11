@@ -255,7 +255,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               >
                 <Wishlist />
                 <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View To Wishlist
+                  View Wishlist
                 </span>
               </button>
             ) : (
@@ -288,7 +288,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               <CompareThree />
               <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.node?.id)
-                  ? "View To Compare"
+                  ? "View Compare"
                   : "Add To Compare"}
               </span>
             </button>
