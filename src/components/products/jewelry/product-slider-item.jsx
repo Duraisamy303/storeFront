@@ -47,6 +47,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
 
   const [isAddWishlist, setWishlist] = useState(false);
   const [isCartlist, setCartList] = useState(false);
+  const [token, setToken] = useState("");
 
   const cart = useSelector((state) => state.cart.cart_list);
 
@@ -68,6 +69,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   useEffect(() => {
     const cartlist = checkWishlist(cart, product?.node?.id);
     setCartList(cartlist);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
   }, []);
 
   useEffect(() => {
@@ -107,7 +113,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
-        router.push('/login')
+        router.push("/login");
 
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
@@ -247,28 +253,46 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 Quick View
               </span>
             </button>
-            {isAddedToWishlist === true ? (
-              <button
-                type="button"
-                onClick={() => router.push("/wishlist")}
-                className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
-              >
-                <Wishlist />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  View To Wishlist
-                </span>
-              </button>
+
+            {token ? (
+              <>
+                {isAddedToWishlist === true ? (
+                  <button
+                    type="button"
+                    onClick={() => router.push("/wishlist")}
+                    className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+                  >
+                    <Wishlist />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      View Wishlist
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleWishlist(product)}
+                    className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
+                  >
+                    <Wishlist />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      Add To Wishlist
+                    </span>
+                  </button>
+                )}
+              </>
             ) : (
-              <button
-                type="button"
-                onClick={() => handleWishlist(product)}
-                className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
-              >
-                <Wishlist />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  Add To Wishlist
-                </span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => notifyError("Only logged-in users can add items to their wishlist or view it")}
+                  className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+                >
+                  <Wishlist />
+                  <span className="tp-product-tooltip tp-product-tooltip-top">
+                    View Wishlist
+                  </span>
+                </button>
+              </>
             )}
 
             <button
@@ -288,7 +312,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               <CompareThree />
               <span className="tp-product-tooltip tp-product-tooltip-top">
                 {compareList?.some((prd) => prd?.id === product?.node?.id)
-                  ? "View To Compare"
+                  ? "View Compare"
                   : "Add To Compare"}
               </span>
             </button>

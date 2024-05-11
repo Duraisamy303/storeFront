@@ -175,7 +175,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          {isAddToCart ? "View" : "Add"} To Cart
+          {isAddToCart ? "View Cart" : "Add To Cart"} 
         </button>
       </td>
 

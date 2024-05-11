@@ -339,12 +339,17 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               )}
 
                               <div className="d-flex flex-column">
-                                <Link
-                                  href="/profile"
-                                  style={{ paddingBottom: "5px" }}
-                                >
-                                  Order
-                                </Link>
+                                {
+                                  token && (
+                                    <Link
+                                    href="/profile"
+                                    style={{ paddingBottom: "5px" }}
+                                  >
+                                    Order
+                                  </Link>
+                                  )
+                                }
+                               
                                 <Link
                                   href="/wishlist"
                                   style={{ paddingBottom: "5px" }}
