@@ -12,6 +12,7 @@ import FooterTwo from '@/layout/footers/footer-2';
 
 const ProductDetailsPage = ({ query }) => {
   const { data: productData, isLoading, isError } = useGetProductQuery({productId:query.id});
+  console.log("productData: ", productData);
  
   const product=productData?.data?.product
 

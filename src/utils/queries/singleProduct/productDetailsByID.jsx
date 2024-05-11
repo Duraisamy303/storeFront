@@ -50,6 +50,15 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           id
           name
           quantityAvailable
+          sku
+        }
+        metadata {
+          key
+          value
+        }
+        tags{
+          name
+          id
         }
       }
     }

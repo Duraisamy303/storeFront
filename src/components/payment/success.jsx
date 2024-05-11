@@ -34,15 +34,15 @@ const router = useRouter()
                 <tbody>
                   {OrderDetails?.map((order) => {
                     return (
-                      <tr key={order.id}>
-                        <td>{order.productName}</td>
+                      <tr key={order?.id}>
+                        <td>{order?.productName}</td>
                         {checkChannel() === "india-channel" ? (
                           <>
-                            <td>&#8377;{order.totalPrice.gross.amount}</td>
+                            <td>&#8377;{order.totalPrice?.gross?.amount}</td>
                           </>
                         ) : (
                           <>
-                            <td>${order.totalPrice.gross.amount}</td>
+                            <td>${order?.totalPrice?.gross?.amount}</td>
                           </>
                         )}
                       </tr>

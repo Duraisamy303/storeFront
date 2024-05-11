@@ -496,9 +496,9 @@ const DetailsWrapper = ({
           <div>{visibility.description ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
-        {visibility.description && (
+        {visibility?.description && (
           <>
-            {JSON.parse(productItem.description).blocks.map((block) => (
+            {JSON.parse(productItem?.description).blocks.map((block) => (
               <>
               <div className="pt-10">
                 {block.type === "header" && (
@@ -511,7 +511,7 @@ const DetailsWrapper = ({
 
                 <div key={block.id}>
                   {block.type === "paragraph" && (
-                    <p style={{ color: "gray" }}>{block.data.text}</p>
+                    <p style={{ color: "gray" }}>{block?.data?.text}</p>
                   )}
                 </div>
                 </div>

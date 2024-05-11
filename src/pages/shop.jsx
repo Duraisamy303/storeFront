@@ -152,7 +152,9 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      setCategoryList(catList);
+      console.log("catList: ", catList);
+     const lastTen =catList?.slice(-9);
+      setCategoryList(lastTen);
     }
   }, [categoryData]);
 

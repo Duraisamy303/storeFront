@@ -12,6 +12,7 @@ import {
   PRODUCT_FILTER,
   PRODUCT_LIST,
   STYLE_LIST,
+  UPDATE_EMAIL,
   WISHLIST_LIST,
 } from "@/utils/queries/productList";
 import {
@@ -248,6 +249,17 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+   updateEmail: builder.mutation({
+      query: ({ checkoutId,email }) => {
+        console.log("checkoutId,email: ", checkoutId,email);
+        return configuration(
+          UPDATE_EMAIL({
+            checkoutId,email
+          })
+        );
+      },
+    }),
   }),
 });
 
@@ -274,4 +286,5 @@ export const {
   useFeatureProductQuery,
   useCountryListQuery,
   useStateListQuery,
+  useUpdateEmailMutation
 } = productApi;
