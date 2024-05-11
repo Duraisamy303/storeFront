@@ -115,15 +115,15 @@ const DetailsWrapper = ({
     );
   }
 
-  let textValue = "";
-  // Parse the JSON string
-  if (productItem?.description || productItem?.node?.description) {
-    const jsonObject = JSON.parse(
-      productItem?.description || productItem?.node?.description
-    );
-    // Extract the text value
-    textValue = jsonObject?.blocks[0]?.data?.text;
-  }
+  // let textValue = "";
+  // // Parse the JSON string
+  // if (productItem?.description || productItem?.node?.description) {
+  //   const jsonObject = JSON.parse(
+  //     productItem?.description || productItem?.node?.description
+  //   );
+  //   // Extract the text value
+  //   textValue = jsonObject?.blocks[0]?.data?.text;
+  // }
 
   // Convert the text value to JSON format
 
@@ -268,7 +268,7 @@ const DetailsWrapper = ({
     }
   }, []);
 
-  console.log("productItem", productItem)
+  console.log("productItem", productItem);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -338,7 +338,7 @@ const DetailsWrapper = ({
         </div>
       </div> */}
       <p style={{ color: "black" }}>
-        {textValue}
+        {productItem?.metadata[1]?.value}
         {/* {textMore
           ? description || productItem?.node?.description
           : `${
@@ -388,7 +388,9 @@ const DetailsWrapper = ({
         unique.
       </p> */}
 
-      <p style={{ color: "black" }}>{productItem?.defaultVariant?.quantityAvailable} in stock</p>
+      <p style={{ color: "black" }}>
+        {productItem?.defaultVariant?.quantityAvailable} in stock
+      </p>
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">
@@ -500,20 +502,24 @@ const DetailsWrapper = ({
           <>
             {JSON.parse(productItem?.description).blocks.map((block) => (
               <>
-              <div className="pt-10">
-                {block.type === "header" && (
-                  <ul className="pl-20">
-                    <li key={block.id}>
-                      {block.type === "header" && <h5 style={{ fontWeight: "400" }}>{block.data.text}</h5>}
-                    </li>
-                  </ul>
-                )}
-
-                <div key={block.id}>
-                  {block.type === "paragraph" && (
-                    <p style={{ color: "gray" }}>{block?.data?.text}</p>
+                <div className="pt-10">
+                  {block.type === "header" && (
+                    <ul className="pl-20">
+                      <li key={block.id}>
+                        {block.type === "header" && (
+                          <h5 style={{ fontWeight: "400" }}>
+                            {block.data.text}
+                          </h5>
+                        )}
+                      </li>
+                    </ul>
                   )}
-                </div>
+
+                  <div key={block.id}>
+                    {block.type === "paragraph" && (
+                      <p style={{ color: "gray" }}>{block?.data?.text}</p>
+                    )}
+                  </div>
                 </div>
               </>
             ))}
@@ -692,15 +698,19 @@ const DetailsWrapper = ({
 
       <div>
         <p style={{ color: "#55585b" }}>
-          <b>SKU:</b> PBS_NP_33
+          <b>SKU:</b> {productItem?.defaultVariant?.sku}
         </p>
         <p style={{ color: "#55585b" }}>
           <b>Categories:</b> {productItem?.category?.name}
         </p>
-
-        <p style={{ color: "#55585b" }}>
-          <b>Tags:</b> {productItem?.category?.name}
-        </p>
+        {productItem?.tags?.length > 0 && (
+          <p style={{ color: "#55585b" }}>
+            <b>Tags:</b>{" "}
+            {productItem?.tags?.map((tag) => {
+              return <span key={tag?.id}>{tag}</span>;
+            })}
+          </p>
+        )}
       </div>
 
       {/* if ProductDetailsCountdown true start */}
