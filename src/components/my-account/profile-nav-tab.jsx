@@ -1,6 +1,13 @@
+import { useRouter } from "next/router";
 import React from "react";
 
 function SingleNav({ active = false, id, title, icon }) {
+  const router = useRouter()
+  const handleClick = () => {
+    if (id === "wishlist") {
+     router.push("/wishlist");
+    }
+  };
   return (
     <button
       className={`nav-link ${active ? "active" : ""}`}
@@ -11,6 +18,7 @@ function SingleNav({ active = false, id, title, icon }) {
       role="tab"
       aria-controls={id}
       aria-selected={active ? "true" : "false"}
+      onClick={handleClick}
     >
       <span>
         <i className={icon}></i>
@@ -21,6 +29,7 @@ function SingleNav({ active = false, id, title, icon }) {
 }
 
 const ProfileNavTab = () => {
+
   return (
     <nav>
       <div
@@ -39,6 +48,8 @@ const ProfileNavTab = () => {
           title="Information"
           icon="fa-regular fa-circle-info"
         />
+        <SingleNav id="wishlist" title="Wishlist" icon="fa-regular fa-heart" />
+
         <SingleNav
           id="order"
           title="My Orders"

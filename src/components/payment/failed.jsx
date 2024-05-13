@@ -4,7 +4,7 @@ import React from "react";
 import { checkChannel } from "../../utils/functions";
 import {useRouter } from "next/router";
 
-const Success = ({ data }) => {
+const Failed = ({ data }) => {
 
 const Router = useRouter()
 
@@ -21,6 +21,7 @@ const Router = useRouter()
       <div className="container">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
+            <p style={{ color: "red" }}>Order Failed</p>
             <p style={{ color: "gray" }}>Pay with Razor Pay </p>
             <h3>Order Details</h3>
             <div>
@@ -109,7 +110,7 @@ const Router = useRouter()
               }}
             >
               <p style={{ color: "gray", fontSize: "18px", fontWeight: "600" }}>
-                Thank You. Your order has been received.
+                Your order has been Failed.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
                 <li style={{ paddingBottom: "8px" }}>
@@ -145,4 +146,4 @@ const Router = useRouter()
   );
 };
 
-export default Success;
+export default Failed;

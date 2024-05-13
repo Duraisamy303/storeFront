@@ -373,7 +373,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 pspReference: res?.razorpay_payment_id,
               });
               console.log("data: ", data);
-
               router.push(`/payment-success/${orderId}`);
             }
 

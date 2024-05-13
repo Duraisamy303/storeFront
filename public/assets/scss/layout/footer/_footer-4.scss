@@ -97,19 +97,19 @@
 
     }
     &-2{
-        padding-left: 23px;
+        padding-left: 0px;
         @media #{$xs}{
             padding-left: 0;
         }
     }
     &-3{
-        padding-left: 23px;
+        padding-left: 0px;
         @media #{$lg, $md,  $sm, $xs}{
             padding-left: 0;
         }
     }
     &-4{
-        padding-left: 23px;
+        padding-left: 0px;
         @media #{$lg, $md, $sm, $xs}{
             padding-left: 0;
         }

@@ -228,19 +228,19 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             </span>
                           </Link>
                         </div>
-                        {token &&
-                        <div className="tp-header-action-item d-none d-lg-block">
-                          <Link
-                            href="/wishlist"
-                            className="tp-header-action-btn"
-                          >
-                            <Wishlist />
-                            <span className="tp-header-action-badge">
-                              {WishListLength?.length || 0}
-                            </span>
-                          </Link>
-                        </div>
-                        }
+                        {token && (
+                          <div className="tp-header-action-item d-none d-lg-block">
+                            <Link
+                              href="/wishlist"
+                              className="tp-header-action-btn"
+                            >
+                              <Wishlist />
+                              <span className="tp-header-action-badge">
+                                {WishListLength?.length || 0}
+                              </span>
+                            </Link>
+                          </div>
+                        )}
                         <div className="tp-header-action-item">
                           <button
                             onClick={() => {
@@ -342,17 +342,23 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               )}
 
                               <div className="d-flex flex-column">
-                                {
-                                  token && (
+                                {token && (
+                                  <>
                                     <Link
-                                    href="/profile"
-                                    style={{ paddingBottom: "5px" }}
-                                  >
-                                    Order
-                                  </Link>
-                                  )
-                                }
-                               
+                                      href="/profile"
+                                      style={{ paddingBottom: "5px" }}
+                                    >
+                                      Profile
+                                    </Link>
+                                    <Link
+                                      href="/profile"
+                                      style={{ paddingBottom: "5px" }}
+                                    >
+                                      Order
+                                    </Link>
+                                  </>
+                                )}
+
                                 <Link
                                   href="/wishlist"
                                   style={{ paddingBottom: "5px" }}
