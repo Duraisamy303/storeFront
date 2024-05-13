@@ -257,7 +257,7 @@ const FooterTwo = () => {
                     <div className="col-md-12">
                       <div className="tp-footer-copyright">
                         <p>
-                          Copyright 2023 © PraDe Jewels, Concept by
+                          Copyright {new Date().getFullYear()} © PraDe Jewels, Concept by
                           <Link href="https://irepute.in/" target="blank">
                             {" "}
                             repute
