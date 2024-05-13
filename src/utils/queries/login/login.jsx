@@ -13,6 +13,7 @@ export const LOGIN = ({ email, password }) => {
           email
           firstName
           id
+          lastName
         }
       }
     }

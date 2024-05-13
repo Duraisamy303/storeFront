@@ -695,13 +695,13 @@ const Menus = () => {
       )} */}
 
       <li>
-        <Link href="/shop" style={{ fontWeight: "500" }}>
+        <Link href="/pre-orders" style={{ fontWeight: "500" }}>
           PRE-ORDERS
         </Link>
       </li>
 
       <li>
-        <Link href="/my-orders" style={{ fontWeight: "500" }}>
+        <Link href="/sale" style={{ fontWeight: "500" }}>
           SALE
         </Link>
       </li>

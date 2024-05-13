@@ -5,7 +5,7 @@ import HeaderTwo from "@/layout/headers/header-2";
 import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
 import {
-  useGetAllProductsQuery,
+  useGetPreOrderProductsQuery,
   useGetCategoryListQuery,
   usePriceFilterMutation,
 } from "@/redux/features/productApi";
@@ -28,16 +28,18 @@ import {
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 
-const ShopPage = () => {
+const PreOrders = () => {
   const {
     data: productsData,
     isError,
     isLoading,
-  } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
-  console.log("shop: ", productsData);
+  } = useGetPreOrderProductsQuery({
+    collectionid: ["Q29sbGVjdGlvbjoy"],
+  });
+
+  console.log("sale: ", productsData);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
-  console.log("filter: ", filter);
 
   const { data: wishlistData } = useGetWishlistQuery();
 
@@ -108,7 +110,8 @@ const ShopPage = () => {
 
   const [cartUpdate, setCartUpdate] = useState(false);
 
-  let products = productsData?.data?.products?.edges;
+  let products =
+    productsData?.data?.collections?.edges[0]?.node?.products?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
 
@@ -138,10 +141,11 @@ const ShopPage = () => {
     if (
       productsData &&
       productsData?.data &&
-      productsData?.data?.products &&
-      productsData?.data?.products?.edges?.length > 0
+      productsData?.data?.collections &&
+      productsData?.data?.collections?.edges?.length > 0
     ) {
-      const list = productsData?.data?.products?.edges;
+      const list =
+        productsData?.data?.collections?.edges[0]?.node?.products?.edges;
       setProductList(list);
     }
   };
@@ -154,7 +158,6 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      console.log("catList: ", catList);
       const lastTen = catList?.slice(-9);
       setCategoryList(lastTen);
     }
@@ -212,13 +215,13 @@ const ShopPage = () => {
     if (filter?.length > 0) {
       filter.forEach((item) => {
         if (item.type === "finish") {
-          datas.productFinish = item.id;
+          datas.finish = item.id;
         } else if (item.type === "style") {
-          datas.productstyle = item.id;
+          datas.style = item.id;
         } else if (item.type === "design") {
-          datas.prouctDesign = item.id;
+          datas.design = item.id;
         } else if (item.type === "stone") {
-          datas.productStoneType = item.id;
+          datas.stone = item.id;
         }
       });
 
@@ -262,8 +265,8 @@ const ShopPage = () => {
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Shop"
-        subtitle="Shop"
+        title="Pre Orders"
+        subtitle="Pre Orders"
         bgImage={shopBanner}
         catList={categoryList}
       />
@@ -272,7 +275,7 @@ const ShopPage = () => {
         products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
-        subtitle="Shop"
+        subtitle="Pre Orders"
         updateRange={(range) => setPriceValue(range)}
       />
       <ShopFilterOffCanvas
@@ -286,7 +289,7 @@ const ShopPage = () => {
   );
 };
 
-export default ShopPage;
+export default PreOrders;
 
 export const getServerSideProps = async (context) => {
   const { query } = context;
