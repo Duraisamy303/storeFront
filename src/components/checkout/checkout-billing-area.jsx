@@ -141,7 +141,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   //   pspReference: state.razorpayId,
   // });
 
-  const [failedPayment] = usePaymentMutation();
+  const [successPayment] = usePaymentMutation();
 
   const { data: linelist } = useGetCartListQuery();
 
@@ -348,7 +348,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           modal: {
             ondismiss: async (res) => {
               // console.log("res: ", res);
-              router.push(`/payment-success/${orderId}`);
+              router.push(`/order-failed/${orderId}`);
 
               // await paymentFailed(orderId);
               // paymentFaildRefetch();
@@ -367,13 +367,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 amount = parseInt(totalAmount);
               }
 
-              const data = await failedPayment({
+              const data = await successPayment({
                 amountAuthorized: amount,
                 amountCharged: amount,
                 pspReference: res?.razorpay_payment_id,
               });
               console.log("data: ", data);
-              router.push(`/payment-success/${orderId}`);
+              router.push(`/order-success/${orderId}`);
             }
 
             setState((prevState) => ({

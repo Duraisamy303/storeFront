@@ -103,6 +103,7 @@ export const ORDER_LIST = ({ orderId }) => {
           }
         }
         isPaid
+        paymentStatus
         created
       }
     }
@@ -433,7 +434,7 @@ export const UPDATE_EMAIL = ({ checkoutId, email }) => {
   });
 };
 
-export const PAYMENT_FAILED = ({
+export const PAYMENT_SUCCESS = ({
   id,
   name,
   message,

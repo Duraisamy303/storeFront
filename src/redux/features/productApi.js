@@ -10,6 +10,7 @@ import {
   MY_ORDER_LIST,
   ORDER_LIST,
   PAYMENT_FAILED,
+  PAYMENT_SUCCESS,
   PRE_ORDER_LIST,
   PRODUCT_20_PERCENTAGE,
   PRODUCT_FILTER,
@@ -252,7 +253,7 @@ export const productApi = apiSlice.injectEndpoints({
         console.log("body: ", body);
 
         return configuration(
-          PAYMENT_FAILED({
+          PAYMENT_SUCCESS({
             id,
             currency: checkChannel() == "india-channel" ? "INR" : "USD",
             amountAuthorized,

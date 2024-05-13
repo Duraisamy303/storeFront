@@ -9,12 +9,14 @@ import banner_bg_3 from "@assets/img/category-3.png";
 import banner_bg_4 from "@assets/img/category-4.jpg";
 import banner_bg_5 from "@assets/img/category-5.png";
 import banner_bg_6 from "@assets/img/category-6.png";
+import { useRouter } from "next/router";
 
 // BannerItem
 function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
   const { data: categoryData } = useGetCategoryListQuery();
-
-  const [categoryList, setCategoryList] = useState([]);
+  const router = useRouter();
+  const [necklaces, setNecklaces] = useState({});
+  console.log("categoryList: ", necklaces);
 
   useEffect(() => {
     if (
@@ -32,8 +34,16 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
           item.node.name === "Earrings" ||
           item.node.name === "Pendants"
       );
+      console.log("filteredItems: ", filteredItems);
 
-      setCategoryList(filteredItems?.map((item) => item.node));
+
+      const filteredNecklaces = catList.find(
+        (item) => item.node.name === "Necklaces"
+      );
+
+      setNecklaces(filteredNecklaces);
+
+      // setCategoryList(filteredItems?.map((item) => item.node));
     }
   }, [categoryData]);
 
@@ -53,9 +63,17 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
         <span>{content}</span>
         {isBtn && (
           <div className="tp-banner-btn-4">
-            <Link href="/shop" className="tp-btn tp-btn-border">
+            <button
+              onClick={() => {
+                router.push({
+                  pathname: "/shop",
+                  query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
+                });
+              }}
+              className="tp-btn tp-btn-border"
+            >
               VIEW PRODUCTS <ArrowRightLong />
-            </Link>
+            </button>
           </div>
         )}
       </div>
@@ -65,6 +83,8 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
 
 // BannerItem 2
 function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
+  const router = useRouter();
+
   return (
     <div
       className={`tp-banner-item-4 tp-banner-height fix p-relative z-index-1 ${cls}`}
@@ -86,9 +106,17 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
 
           {isBtn && (
             <div className="tp-banner-btn-4">
-              <Link href="/shop" className="tp-btn tp-btn-border">
-                VIEW PRODUCTS <ArrowRightLong />
-              </Link>
+              <button
+              onClick={() => {
+                router.push({
+                  pathname: "/shop",
+                  query: { categoryId: "Q2F0ZWdvcnk6Mzg4OQ==" }, // Your parameters
+                });
+              }}
+              className="tp-btn tp-btn-border"
+            >
+              VIEW PRODUCTS <ArrowRightLong />
+            </button>
             </div>
           )}
         </div>
@@ -99,6 +127,8 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
 
 // BannerItem 3
 function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
+  const router = useRouter();
+
   return (
     <div
       className={`tp-banner-item-4 tp-banner-height-4 fix p-relative z-index-1 ${cls}`}
@@ -127,6 +157,8 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
 }
 
 const JewelryShopBanner = () => {
+  const router = useRouter();
+
   return (
     <>
       <section className="tp-banner-area">
@@ -189,7 +221,7 @@ const JewelryShopBanner = () => {
                   <BannerItem
                     bg_clr="F3F7FF"
                     bg={banner_bg_4}
-                    title="JEWELLERY SET"
+                    title="PENDANTS"
                     content={
                       <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing

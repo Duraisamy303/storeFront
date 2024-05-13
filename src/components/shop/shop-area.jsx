@@ -155,7 +155,8 @@ const ShopArea = ({
                       </button>
                     </div>
                     <div onClick={() => clearFilter()}>
-                      <span>Clear filter</span>
+                      <i className="fa-regular fa-xmark " />
+                      <span style={{ paddingLeft: "5px" }}>Clear filter</span>
                     </div>
                     <div
                       className="pb-20"
@@ -185,7 +186,10 @@ const ShopArea = ({
                           </>
                         ) : (
                           <div key={index} onClick={() => removeFilter(item)}>
-                            <span>{item.name}</span>
+                            <i className="fa-regular fa-xmark " />
+                            <span style={{ paddingLeft: "5px" }}>
+                              {item.name}
+                            </span>
                           </div>
                         )
                       )}
@@ -209,7 +213,8 @@ const ShopArea = ({
                             ?.map((item) => (
                               <div
                                 key={item._id}
-                                className="col-xl-4 col-md-6 col-sm-6" style={{marginBottom:"50px"}}
+                                className="col-xl-4 col-md-6 col-sm-6"
+                                style={{ marginBottom: "50px" }}
                               >
                                 <ProductItem
                                   products={item}

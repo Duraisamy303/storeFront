@@ -1,13 +1,13 @@
 import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
-import React from "react";
+import React, { useCallback } from "react";
 import { checkChannel } from "../../utils/functions";
-import {useRouter } from "next/router";
+import { useRouter } from "next/router";
+import { usePaymentMutation } from "@/redux/features/productApi";
+import { notifyError, notifySuccess } from "@/utils/toast";
+import useRazorpay from "react-razorpay";
 
-const Failed = ({ data }) => {
-
-const Router = useRouter()
-
+const Failed = ({ data,orderId }) => {
 
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
@@ -15,6 +15,75 @@ const Router = useRouter()
   const OrderNumber = data?.data?.order?.number;
   const OrderDate = moment(data?.data?.order?.updatedAt).format("MMMM D, YYYY");
   const ShippingAmount = data?.data?.order?.shippingMethods[0].price.amount;
+  const status = data?.data?.order?.paymentStatus;
+
+  const [Razorpay] = useRazorpay();
+
+  const router = useRouter();
+
+  const [successPayment] = usePaymentMutation();
+
+  const handlePayment = useCallback(
+    async () => {
+      try {
+        console.log("options: ",);
+
+        const options = {
+          key: "rzp_test_tEMCtcfElFdYts",
+          key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
+          amount: Total * 100,
+          // order_id:orderId,
+          currency: checkChannel() == "india-channel" ? "INR" : "USD",
+          name: "Products",
+          description: "",
+          image: "https://example.com/your_logo",
+          modal: {
+            ondismiss: async (res) => {
+              // console.log("res: ", res);
+              router.push(`/order-failed/${orderId}`);
+
+              // await paymentFailed(orderId);
+              // paymentFaildRefetch();
+            },
+          },
+          handler: async (res) => {
+            console.log("res: ", res);
+            if (res?.razorpay_payment_id) {
+              notifySuccess("Payment Successful");
+
+              const data = await successPayment({
+                amountAuthorized: Total,
+                amountCharged: Total,
+                pspReference: res?.razorpay_payment_id,
+              });
+              router.push(`/order-success/${orderId}`);
+            }
+          },
+          prefill: {
+            name: "",
+            email: "",
+            contact: "",
+          },
+          notes: {
+            address: "",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+          retry: {
+            enabled: false,
+            max_count: true,
+          },
+        };
+
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    },
+    [Razorpay]
+  );
 
   return (
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
@@ -78,7 +147,13 @@ const Router = useRouter()
 
                   <tr>
                     <td>Payment Method</td>
+
                     <td>Razor Pay</td>
+                  </tr>
+                  <tr>
+                    <td>Payment Status</td>
+
+                    <td>{status}</td>
                   </tr>
 
                   <tr>
@@ -137,7 +212,13 @@ const Router = useRouter()
               </ul>
             </div>
             <div className="mt-20">
-              <button onClick={() => Router.push('/shop')} className="tp-cart-update-btn " style={{background:"rgb(194, 136, 43)", color:"white"}}>Continue Shopping</button>
+              <button
+                onClick={() => handlePayment()}
+                className="tp-cart-update-btn "
+                style={{ background: "rgb(194, 136, 43)", color: "white" }}
+              >
+                Pay Again
+              </button>
             </div>
           </div>
         </div>

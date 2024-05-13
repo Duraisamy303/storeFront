@@ -12,11 +12,12 @@ const PaymentFailed = () => {
   const router = useRouter();
   const orderId = router?.query?.id;
   const { data } = useOrderListQuery({ orderId: orderId });
+  console.log("data: ", data);
   return (
     <Wrapper>
     <SEO pageTitle="Order Success" />
     <HeaderTwo style_2={true} />
-    <Failed data={data} />
+    <Failed data={data}  orderId={orderId}/>
     <FooterTwo primary_style={true} />
   </Wrapper>
   )

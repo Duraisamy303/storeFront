@@ -27,6 +27,7 @@ import {
 } from "@/redux/features/shop-filter-slice";
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
+import { useRouter } from "next/router";
 
 const ShopPage = () => {
   const {
@@ -34,10 +35,11 @@ const ShopPage = () => {
     isError,
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
-  console.log("shop: ", productsData);
+
+  const router = useRouter();
+  console.log("router: ", router?.query);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
-  console.log("filter: ", filter);
 
   const { data: wishlistData } = useGetWishlistQuery();
 
@@ -154,7 +156,6 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      console.log("catList: ", catList);
       const lastTen = catList?.slice(-9);
       setCategoryList(lastTen);
     }
@@ -206,6 +207,26 @@ const ShopPage = () => {
   } else {
     // Render product items...
   }
+
+  useEffect(() => {
+    if (router?.query?.categoryId) {
+      filterByCategory();
+    }
+  }, [router]);
+
+  const filterByCategory = () => {
+    const datas = {
+      categories: router?.query?.categoryId,
+      // categories:"Q2F0ZWdvcnk6MTE2Mg=="
+    };
+
+    priceFilter({
+      filter: datas,
+    }).then((res) => {
+      const list = res?.data?.data?.products?.edges;
+      setProductList(list);
+    });
+  };
 
   const filters = () => {
     const datas = {};

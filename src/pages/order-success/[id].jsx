@@ -11,6 +11,7 @@ const PaymentSucess = () => {
   const router = useRouter();
   const orderId = router?.query?.id;
   const { data } = useOrderListQuery({ orderId: orderId });
+  console.log("data: ", data);
   return (
     <Wrapper>
     <SEO pageTitle="Payment Success" />
