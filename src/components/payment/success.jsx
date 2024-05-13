@@ -4,9 +4,9 @@ import React from "react";
 import { checkChannel } from "../../utils/functions";
 import {useRouter } from "next/router";
 
-const success = ({ data }) => {
+const Success = ({ data }) => {
 
-const router = useRouter()
+const Router = useRouter()
 
 
   const OrderDetails = data?.data?.order?.lines;
@@ -136,7 +136,7 @@ const router = useRouter()
               </ul>
             </div>
             <div className="mt-20">
-              <button onClick={() => router.push('/shop')} className="tp-cart-update-btn " style={{background:"rgb(194, 136, 43)", color:"white"}}>Continue Shopping</button>
+              <button onClick={() => Router.push('/shop')} className="tp-cart-update-btn " style={{background:"rgb(194, 136, 43)", color:"white"}}>Continue Shopping</button>
             </div>
           </div>
         </div>
@@ -145,4 +145,4 @@ const router = useRouter()
   );
 };
 
-export default success;
+export default Success;
