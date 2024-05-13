@@ -306,3 +306,19 @@
 .feature-adipisicing{
     color: rgb(195,147,91);
 }
+
+.hi-message {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-weight: bold;
+    transition: opacity 0.3s ease; /* Smooth transition */
+    color: white;
+    opacity: 0;
+    z-index: 2; /* Ensure the hi-message is on top of the parent container */
+  }
+  
+  .col-content-container:hover .hi-message {
+    opacity: 1; /* Show on hover */
+  }
+ 

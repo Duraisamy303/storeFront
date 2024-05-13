@@ -9,6 +9,7 @@ import insta_5 from "@assets/img/instagram/4/instagram-5.jpg";
 import insta_6 from "@assets/img/instagram/4/instagram-6.jpg";
 import { useProduct20PercentageMutation } from "@/redux/features/productApi";
 import { checkChannel } from "@/utils/functions";
+import { CompareThree, QuickView, Wishlist } from "@/svg";
 
 // instagram data
 const instagram_data = [
@@ -74,8 +75,22 @@ const InstagramAreaFour = () => {
             <div className="col-md-8">
               <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-1 gy-1 gy-lg-0">
                 {productList.map((item, i) => (
-                  <div className="col" key={i}>
+                  <div className="col col-content-container" key={i}>
                     <div className="tp-instagram-item-2 w-img">
+                      <div className="hi-message">
+                        <ul style={{ listStyle: "none" }}>
+                          <li>
+                            {" "}
+                            <Wishlist />
+                          </li>
+                          <li>
+                            <CompareThree />
+                          </li>
+                          <li>
+                            <QuickView />
+                          </li>
+                        </ul>
+                      </div>
                       <Image
                         src={item?.thumbnail?.url}
                         width={300}
