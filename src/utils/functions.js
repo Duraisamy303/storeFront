@@ -72,7 +72,9 @@ export const validLoginAndReg = () => {
   const user = localStorage.getItem("userInfo");
   const token = localStorage.getItem("token");
 
-  if (!user && !token) {
+  if (!user) {
+    valid = false;
+  } else if (!token) {
     valid = false;
   } else {
     valid = true;

@@ -27,19 +27,19 @@ const DetailsThumbWrapper = ({
         <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => (
-            <button
-              key={i}
-              className={`nav-link ${item === activeImg ? "active" : ""}`}
-              onClick={() => handleImageActive(item)}
-            >
-              <Image
-                src={item}
-                alt="image"
-                width={78}
-                height={100}
-                style={{ width: "100%", height: "100%" }}
-              />
-            </button>
+              <button
+                key={i}
+                className={`nav-link ${item === activeImg ? "active" : ""}`}
+                onClick={() => handleImageActive(item)}
+              >
+                <Image
+                  src={item}
+                  alt="image"
+                  width={78}
+                  height={100}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </button>
             ))}
           </div>
         </nav>
@@ -50,7 +50,11 @@ const DetailsThumbWrapper = ({
                 <Loader />
               ) : (
                 <Image
-                  src={activeImg ? activeImg : imageUrls[0]}
+                  src={
+                    activeImg
+                      ? activeImg
+                      : imageUrls?.length > 0 && imageUrls[0]
+                  }
                   alt="product img"
                   width={imgWidth}
                   height={imgHeight}
@@ -64,13 +68,16 @@ const DetailsThumbWrapper = ({
               </div>
 
               <div className="tp-product-badge-2">
-          {product?.defaultVariant?.quantityAvailable == 0 && (
-            <span className="product-hot text-center" style={{padding:"15px 12px"}}>
-              SOLD
-              <br /> OUT
-            </span>
-          )}
-        </div>
+                {product?.defaultVariant?.quantityAvailable == 0 && (
+                  <span
+                    className="product-hot text-center"
+                    style={{ padding: "15px 12px" }}
+                  >
+                    SOLD
+                    <br /> OUT
+                  </span>
+                )}
+              </div>
               {videoId && (
                 <div
                   onClick={() => setIsVideoOpen(true)}

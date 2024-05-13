@@ -20,6 +20,9 @@ import {
 } from "@/redux/features/card/cardApi";
 import {
   useCountryListQuery,
+  usePaymentFailedQuery,
+  usePaymentMutation,
+  usePaymentQuery,
   useStateListQuery,
   useUpdateEmailMutation,
 } from "@/redux/features/productApi";
@@ -31,7 +34,6 @@ import {
 import { checkChannel, validLoginAndReg } from "../../utils/functions";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 import { useLoginUserMutation } from "@/redux/features/auth/authApi";
-
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -52,7 +54,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   useEffect(() => {
     checkoutDetailsRefetch();
-  }, []);
+  }, [checkoutDetails]);
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
@@ -105,11 +107,41 @@ const CheckoutBillingArea = ({ register, errors }) => {
     password: "",
     confirmPassword: "",
     loginEmail: "",
+    isAgree: false,
+    razorpayId: "",
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
     code: state.selectedCountry,
   });
+
+  const totalAmount = cartList?.data?.checkout?.lines?.reduce(
+    (acc, curr) =>
+      acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
+    0
+  );
+
+  const amount = () => {
+    const checkoutAmt =
+      checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
+    let amount = 0;
+    if (checkoutAmt > 0) {
+      amount = parseInt(checkoutAmt) * 100;
+    } else {
+      amount = parseInt(totalAmount) * 100;
+    }
+    console.log("amount: ", amount);
+
+    return amount;
+  };
+
+  // const { data: failedPayment } = usePaymentQuery({
+  //   amountAuthorized: amount(),
+  //   amountCharged: amount(),
+  //   pspReference: state.razorpayId,
+  // });
+
+  const [failedPayment] = usePaymentMutation();
 
   const { data: linelist } = useGetCartListQuery();
 
@@ -174,63 +206,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const router = useRouter();
 
-  const totalAmount = cartList?.data?.checkout?.lines?.reduce(
-    (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
-    0
-  );
-
   let lines = [];
   if (cart?.length > 0) {
     lines = cart?.map((item) => {
       return { quantity: 1, variantId: item?.variant?.id };
     });
   }
-
-  const validateInputs = () => {
-    const fieldsToValidate = [
-      { name: "firstName", label: "First name" },
-      { name: "lastName", label: "Last name" },
-      // { name: "country", label: "Country" },
-      { name: "streetAddress1", label: "Street address" },
-      { name: "city", label: "City" },
-      { name: "postalCode", label: "PostalCode" },
-      { name: "phone", label: "Phone" },
-      { name: "email", label: "Email" },
-    ];
-
-    const errors = {};
-
-    fieldsToValidate.forEach(({ name, label }) => {
-      if (!state[name].trim()) {
-        errors[name] = `${label} is required`;
-      }
-    });
-    if (!state.COD) {
-      errors.paymentType = "Payment type is required";
-    }
-
-    if (state.diffAddress) {
-      const fieldsToValidate2 = [
-        { name: "firstName1", label: "First name" },
-        { name: "lastName1", label: "Last name" },
-        // { name: "country1", label: "Country" },
-        { name: "streetAddress2", label: "Street address" },
-        { name: "city1", label: "City" },
-        { name: "postalCode1", label: "PostalCode" },
-        { name: "phone1", label: "Phone" },
-        { name: "email1", label: "Email" },
-      ];
-
-      fieldsToValidate2.forEach(({ name, label }) => {
-        if (!state[name].trim()) {
-          errors[name] = `${label} is required`;
-        }
-      });
-    }
-    setState({ errors });
-    return errors;
-  };
 
   useEffect(() => {
     const channels = checkChannel();
@@ -241,79 +222,89 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       const errors = validateInputs();
       if (Object.keys(errors).length === 0) {
-        const sample = {
-          // email: state.email,
-          firstName: state.firstName,
-          lastName: state.lastName,
-          streetAddress1: state.streetAddress1,
-          city: state.city,
-          streetAddress2: state.streetAddress1,
-          cityArea: "",
-          companyName: state.companyName,
-          country: state.selectedCountry,
-          countryArea: state.selectedState,
-          phone: state.phone,
-          postalCode: state.postalCode,
-        };
-
-        let shippingAddress = {};
-        if (state.diffAddress) {
-          shippingAddress = {
-            // email: state.email,
-            firstName: state.firstName1,
-            lastName: state.lastName1,
-            streetAddress1: state.streetAddress2,
-            city: state.city1,
-            streetAddress2: state.streetAddress2,
-            cityArea: "",
-            companyName: state.companyName1,
-            country: state.selectedCountry1,
-            countryArea: state.selectedState1,
-            phone: state.phone1,
-            postalCode: state.postalCode1,
-          };
+        if (state.createAccount) {
+          await createAccount();
         } else {
-          shippingAddress = sample;
-        }
-
-        const checkoutId = localStorage.getItem("checkoutId");
-        if (checkoutId) {
-          const res = await updateBillingAddress({
-            checkoutId,
-            billingAddress: sample,
-          });
-
-          if (
-            res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0
-          ) {
-            notifyError(
-              res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
-            );
-          } else {
-            const response = await updateShippingAddress({
-              checkoutId,
-              shippingAddress,
-            });
-
-            if (
-              response.data?.data?.checkoutShippingAddressUpdate?.errors
-                ?.length > 0
-            ) {
-              notifyError(
-                response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
-                  ?.message
-              );
-            } else {
-              // ;
-              updateEmail(checkoutId);
-
-              // updateDelivertMethod(shippingAddress?.country);
-            }
-          }
+          await commonFunction();
         }
       }
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const commonFunction = async () => {
+    try {
+      const sample = {
+        // email: state.email,
+        firstName: state.firstName,
+        lastName: state.lastName,
+        streetAddress1: state.streetAddress1,
+        city: state.city,
+        streetAddress2: state.streetAddress1,
+        cityArea: "",
+        companyName: state.companyName,
+        country: state.selectedCountry,
+        countryArea: state.selectedState,
+        phone: state.phone,
+        postalCode: state.postalCode,
+      };
+
+      let shippingAddress = {};
+      if (state.diffAddress) {
+        shippingAddress = {
+          // email: state.email,
+          firstName: state.firstName1,
+          lastName: state.lastName1,
+          streetAddress1: state.streetAddress2,
+          city: state.city1,
+          streetAddress2: state.streetAddress2,
+          cityArea: "",
+          companyName: state.companyName1,
+          country: state.selectedCountry1,
+          countryArea: state.selectedState1,
+          phone: state.phone1,
+          postalCode: state.postalCode1,
+        };
+      } else {
+        shippingAddress = sample;
+      }
+
+      const checkoutId = localStorage.getItem("checkoutId");
+      if (checkoutId) {
+        const res = await updateBillingAddress({
+          checkoutId,
+          billingAddress: sample,
+        });
+
+        if (res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0) {
+          notifyError(
+            res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
+          );
+        } else {
+          const response = await updateShippingAddress({
+            checkoutId,
+            shippingAddress,
+          });
+
+          if (
+            response.data?.data?.checkoutShippingAddressUpdate?.errors?.length >
+            0
+          ) {
+            notifyError(
+              response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
+                ?.message
+            );
+          } else {
+            // ;
+            updateEmail(checkoutId);
+
+            // updateDelivertMethod(shippingAddress?.country);
+          }
+        }
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
@@ -342,96 +333,106 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  const amount = () => {
-    const checkoutAmt =
-      checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
-    let amount = 0;
-    if (checkoutAmt > 0) {
-      amount = parseInt(checkoutAmt) * 100;
-    } else {
-      amount = parseInt(totalAmount) * 100;
-    }
-    console.log("amount: ", amount);
-
-    return amount;
-  };
-
   const handlePayment = useCallback(
-    async (checkoutId) => {
-      const options = {
-        key: "rzp_test_tEMCtcfElFdYts",
-        key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-        amount: amount(),
-        currency: checkChannel() == "india-channel" ? "INR" : "USD",
-        name: state.firstName + " " + state.lastName,
-        description: state.notes,
-        image: "https://example.com/your_logo",
-        // order_id: "ORD20156712",
-        handler: async (res) => {
-          console.log("res: ", res);
-          notifySuccess("Payment Successful");
+    async (orderId) => {
+      try {
+        const options = {
+          key: "rzp_test_tEMCtcfElFdYts",
+          key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
+          amount: amount(),
+          // order_id:orderId,
+          currency: checkChannel() == "india-channel" ? "INR" : "USD",
+          name: state.firstName + " " + state.lastName,
+          description: state.notes,
+          image: "https://example.com/your_logo",
+          modal: {
+            ondismiss: async (res) => {
+              // console.log("res: ", res);
+              router.push(`/payment-success/${orderId}`);
 
-          const completeResponse = await checkoutComplete({ id: checkoutId });
-          console.log("completeResponse: ", completeResponse);
-          if (
-            completeResponse?.data?.data?.checkoutComplete?.errors?.length > 0
-          ) {
-            notifyError(res?.data?.data?.checkoutComplete?.errors[0]?.message);
-          } else {
-            router.push(
-              `/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
-            );
-          }
+              // await paymentFailed(orderId);
+              // paymentFaildRefetch();
+            },
+          },
+          handler: async (res) => {
+            console.log("res: ", res);
+            if (res?.razorpay_payment_id) {
+              notifySuccess("Payment Successful");
+              const checkoutAmt =
+                checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
+              let amount = 0;
+              if (checkoutAmt > 0) {
+                amount = parseInt(checkoutAmt);
+              } else {
+                amount = parseInt(totalAmount);
+              }
 
-          // localStorage.setItem(
-          //   "orderId",
-          //   completeResponse?.data?.data?.checkoutComplete?.order.id
-          // );
+              const data = await failedPayment({
+                amountAuthorized: amount,
+                amountCharged: amount,
+                pspReference: res?.razorpay_payment_id,
+              });
+              console.log("data: ", data);
 
-          setState({
-            firstName: "",
-            firstName1: "",
-            lastName: "",
-            lastName1: "",
-            streetAddress1: "",
-            streetAddress2: "",
-            city: "",
-            city1: "",
-            postalCode: "",
-            postalCode1: "",
-            phone: "",
-            email: "",
-            phone1: "",
-            email1: "",
-            country: "",
-            country1: "",
-            countryArea: "",
-            diffAddress: false,
-            errors: {},
-          });
-        },
-        prefill: {
-          name: state.firstName,
-          email: state.email,
-          contact: state.phone,
-        },
-        notes: {
-          address: state.streetAddress1,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-        retry: {
-          enabled: false,
-          max_count: true,
-        },
-      };
+              router.push(`/payment-success/${orderId}`);
+            }
 
-      const rzpay = new Razorpay(options);
-      rzpay.open();
+            setState((prevState) => ({
+              ...prevState,
+              firstName: "",
+              firstName1: "",
+              lastName: "",
+              lastName1: "",
+              streetAddress1: "",
+              streetAddress2: "",
+              city: "",
+              city1: "",
+              postalCode: "",
+              postalCode1: "",
+              phone: "",
+              email: "",
+              phone1: "",
+              email1: "",
+              country: "",
+              country1: "",
+              countryArea: "",
+              diffAddress: false,
+              errors: {},
+            }));
+          },
+          prefill: {
+            name: state.firstName,
+            email: state.email,
+            contact: state.phone,
+          },
+          notes: {
+            address: state.streetAddress1,
+          },
+          theme: {
+            color: "#3399cc",
+          },
+          retry: {
+            enabled: false,
+            max_count: true,
+          },
+        };
+
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      } catch (error) {
+        console.log("error: ", error);
+      }
     },
     [Razorpay]
   );
+
+  const paymentFailed = async (orderId) => {
+    console.log("orderId: ", orderId);
+    try {
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const updateEmail = async (checkoutId) => {
     try {
@@ -442,20 +443,37 @@ const CheckoutBillingArea = ({ register, errors }) => {
       if (res?.data?.data?.checkoutEmailUpdate?.errors?.length > 0) {
         notifyError(res?.data?.data?.checkoutEmailUpdate?.errors[0]?.message);
       } else {
-        handlePayment(checkoutId);
+        checkoutCompletes(checkoutId);
+        // handlePayment(checkoutId);
       }
     } catch (error) {
       console.log("error: ", error);
     }
   };
 
-  const handleCheckboxChange = (id) => {
-    const updatedCheckboxes = state.paymentType.map((checkbox) =>
-      checkbox.id === id
-        ? { ...checkbox, checked: true }
-        : { ...checkbox, checked: false }
-    );
-    setState({ paymentType: updatedCheckboxes, pType: true });
+  const checkoutCompletes = async (checkoutId) => {
+    try {
+      const completeResponse = await checkoutComplete({ id: checkoutId });
+      console.log("completeResponse: ", completeResponse);
+      if (completeResponse?.data?.data?.checkoutComplete?.errors?.length > 0) {
+        notifyError(
+          completeResponse?.data?.data?.checkoutComplete?.errors[0]?.message
+        );
+      } else {
+        handlePayment(
+          completeResponse?.data?.data?.checkoutComplete?.order?.id
+        );
+        localStorage.setItem(
+          "orderId",
+          completeResponse?.data?.data?.checkoutComplete?.order?.id
+        );
+        // router.push(
+        //   `/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
+        // );
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const verifyCoupen = () => {
@@ -478,6 +496,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       });
       updateDelivertMethod(e.target.value);
       checkoutDetailsRefetch();
+      checkoutDetailsRefetch();
+
     }
   };
 
@@ -503,6 +523,71 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
+  const validateInputs = () => {
+    const fieldsToValidate = [
+      { name: "firstName", label: "First name" },
+      { name: "lastName", label: "Last name" },
+      { name: "selectedCountry", label: "Country" },
+      { name: "selectedState", label: "State" },
+      { name: "streetAddress1", label: "Street address" },
+      { name: "city", label: "City" },
+      { name: "postalCode", label: "PostalCode" },
+      { name: "phone", label: "Phone" },
+      { name: "email", label: "Email" },
+    ];
+
+    const errors = {};
+
+    fieldsToValidate.forEach(({ name, label }) => {
+      if (!state[name].trim()) {
+        errors[name] = `${label} is required`;
+      }
+    });
+    if (!state.COD) {
+      errors.paymentType = "Payment type is required";
+    }
+
+    if (!state.isAgree) {
+      errors.isAgree = "Terms and condition is required";
+    }
+
+    const regValidate = [
+      { name: "loginFirstName", label: "First name" },
+      { name: "loginLastName", label: "Last name" },
+      { name: "loginEmail", label: "Email" },
+      { name: "password", label: "Password" },
+    ];
+    if (state.createAccount) {
+      regValidate.forEach(({ name, label }) => {
+        if (!state[name].trim()) {
+          errors[name] = `${label} is required`;
+        }
+      });
+    }
+
+    if (state.diffAddress) {
+      const fieldsToValidate2 = [
+        { name: "firstName1", label: "First name" },
+        { name: "lastName1", label: "Last name" },
+        { name: "selectedCountry1", label: "Country" },
+        { name: "selectedState1", label: "State" },
+        { name: "streetAddress2", label: "Street address" },
+        { name: "city1", label: "City" },
+        { name: "postalCode1", label: "PostalCode" },
+        { name: "phone1", label: "Phone" },
+        { name: "email1", label: "Email" },
+      ];
+
+      fieldsToValidate2.forEach(({ name, label }) => {
+        if (!state[name].trim()) {
+          errors[name] = `${label} is required`;
+        }
+      });
+    }
+    setState({ errors });
+    return errors;
+  };
+
   const createAccount = async () => {
     try {
       const body = {
@@ -514,11 +599,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       const res = await registerUser(body);
       if (res?.data?.data?.accountRegister?.errors?.length > 0) {
-        notifyError(res?.data?.data?.accountRegister?.errors[0].message);
+        notifyError("User email already registered");
       } else {
         const user = res?.data?.data?.accountRegister?.user;
-        localStorage.setItem("userInfo", JSON.stringify(user));
         login(user.email, state.password);
+        await commonFunction();
       }
 
       console.log("body: ", body);
@@ -535,14 +620,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
       };
 
       const res = await loginUser(body);
-      console.log("res: ", res);
-      // if (res?.data?.data?.accountRegister?.errors?.length > 0) {
-      //   notifyError(res?.data?.data?.accountRegister?.errors[0].message);
-      // } else {
-      //   const user = res?.data?.data?.accountRegister?.user;
-      //   localStorage.setItem("token", JSON.stringify(user));
-      // }
-      console.log("body: ", body);
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify(res.data?.data?.tokenCreate?.user)
+      );
+      localStorage.setItem(
+        "token",
+        JSON.stringify(res.data?.data?.tokenCreate?.token)
+      );
+      // location.reload();
+      // console.log("body: ", body);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -650,10 +737,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </option>
                       ))}
                     </select>
+                    {state.errors.selectedCountry && (
+                      <ErrorMsg msg={state.errors.selectedCountry} />
+                    )}
                   </div>
-                  {state.errors.selectedCountry && (
-                    <ErrorMsg msg={state.errors.country} />
-                  )}
                 </div>
 
                 <div className="col-md-6">
@@ -677,6 +764,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </option>
                       ))}
                     </select>
+                    {state.errors.selectedState && (
+                      <ErrorMsg msg={state.errors.selectedState} />
+                    )}
                   </div>
                 </div>
                 {/* <div className="col-md-12">
@@ -832,6 +922,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                                 handleInputChange(e, "loginFirstName")
                               }
                             />
+                            {state.errors.loginFirstName && (
+                              <ErrorMsg msg={state.errors.loginFirstName} />
+                            )}
                           </div>
                         </div>
                         <div className="col-md-6">
@@ -849,6 +942,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                                 handleInputChange(e, "loginLastName")
                               }
                             />
+                            {state.errors.loginLastName && (
+                              <ErrorMsg msg={state.errors.loginLastName} />
+                            )}
                           </div>
                         </div>
                         <div className="col-md-6">
@@ -868,6 +964,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                               // defaultValue={user?.email}
                             />
+                            {state.errors.loginEmail && (
+                              <ErrorMsg msg={state.errors.loginEmail} />
+                            )}
                           </div>
                         </div>
                         <div className="col-md-6">
@@ -883,11 +982,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
                               placeholder="Password"
                               onChange={(e) => handleInputChange(e, "password")}
                             />
+                            {state.errors.password && (
+                              <ErrorMsg msg={state.errors.password} />
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="tp-login-bottom">
+                    {/* <div className="tp-login-bottom">
                       <button
                         type="button"
                         className="tp-login-btn w-100"
@@ -895,7 +997,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       >
                         Submit
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </>
@@ -988,6 +1090,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           </option>
                         ))}
                       </select>
+                      {state.errors.selectedCountry1 && (
+                        <ErrorMsg msg={state.errors.selectedCountry1} />
+                      )}
                     </div>
                   </div>
 
@@ -1012,6 +1117,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           </option>
                         ))}
                       </select>
+                      {state.errors.selectedState1 && (
+                        <ErrorMsg msg={state.errors.selectedState1} />
+                      )}
                     </div>
                   </div>
                   <div className="col-md-12">
@@ -1219,35 +1327,87 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
               <li className="tp-order-info-list-total">
                 <span>Total</span>
-                {checkChannel() == "india-channel" ? (
-                  checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount >
-                  0 ? (
+                {checkChannel() === "india-channel" ? (
+                  <>
                     <span>
-                      &#8377;
-                      {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                        2
+                      {checkoutDetails?.data?.checkout?.totalPrice?.gross
+                        ?.amount > 0 ? (
+                        <>
+                          &#8377;
+                          {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                            2
+                          )}
+                          {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                            ?.amount && (
+                            <>
+                              <br />
+                              <span className="para">
+                                (includes &#8377;{" "}
+                                {
+                                  checkoutDetails?.data?.checkout?.totalPrice
+                                    ?.tax?.amount
+                                }{" "}
+                                VAT)
+                              </span>
+
+                              {/* <span className="para">{`(includes &#8377;${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span> */}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          &#8377;{totalAmount?.toFixed(2)}
+                          {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                            ?.amount && (
+                            <>
+                              <br />
+                              <span className="para">
+                                (includes &#8377;
+                                {
+                                  checkoutDetails?.data?.checkout?.totalPrice
+                                    ?.tax?.amount
+                                }{" "}
+                                VAT)
+                              </span>
+                            </>
+                          )}
+                        </>
                       )}
                     </span>
-                  ) : (
-                    <span>
-                      &#8377;
-                      {totalAmount?.toFixed(2)}
-                    </span>
-                  )
-                ) : checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount >
-                  0 ? (
-                  <span>
-                    $
-                    {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                      2
-                    )}
-                  </span>
+                  </>
                 ) : (
-                  <span>${totalAmount?.toFixed(2)}</span>
+                  <>
+                    {checkoutDetails?.data?.checkout?.totalPrice?.gross
+                      ?.amount > 0 ? (
+                      <>
+                        $
+                        {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                          2
+                        )}
+                        {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                          ?.amount && (
+                          <>
+                            <br />
+                            <span className="para">{`(includes $ ${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        ${totalAmount?.toFixed(2)}
+                        {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                          ?.amount && (
+                          <>
+                            <br />
+                            <span className="para">{`(includes $ ${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
                 )}
-
-                {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
               </li>
+
               <li>
                 <div className="tp-login-remeber">
                   <input
@@ -1266,7 +1426,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
               {state.errors.paymentType && (
                 <ErrorMsg msg={state.errors.paymentType} />
               )}
-
+              <li>
+                <div className="tp-login-remeber">
+                  <input
+                    id="agree"
+                    type="checkbox"
+                    checked={state.isAgree}
+                    onChange={(e) =>
+                      setState({ isAgree: e.target.checked, pType: true })
+                    }
+                  />
+                  <label htmlFor="agree" style={{ color: "black" }}>
+                    I have read and agree to the website terms and conditions *
+                  </label>
+                </div>
+              </li>
+              {state.errors.isAgree && <ErrorMsg msg={state.errors.isAgree} />}
               {/* {state.paymentType.map((checkbox) => {
                 return (
                   <li>

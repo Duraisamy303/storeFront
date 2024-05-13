@@ -433,6 +433,50 @@ export const UPDATE_EMAIL = ({ checkoutId, email }) => {
   });
 };
 
+export const PAYMENT_FAILED = ({
+  id,
+  name,
+  message,
+  pspReference,
+  amountAuthorized,
+  amountCharged,
+  externalUrl,
+  currency,
+}) => {
+  return JSON.stringify({
+    query: `
+    mutation ($id: ID!, $name: String!, $message: String!, $pspReference: String!, $currency: String!, $amountAuthorized: PositiveDecimal!, $amountCharged: PositiveDecimal!, $externalUrl: String!) {
+      transactionCreate(
+        id: $id
+        transaction: {
+          name: $name
+          message: $message
+          pspReference: $pspReference
+          availableActions: [REFUND]
+          amountAuthorized: { currency: $currency, amount: $amountAuthorized }
+          amountCharged: { currency: $currency, amount: $amountCharged }
+          externalUrl: $externalUrl
+        }
+      ) {
+        transaction {
+          id
+        }
+      }
+    }
+    `,
+    variables: {
+      id,
+      name,
+      message,
+      pspReference,
+      amountAuthorized,
+      amountCharged,
+      externalUrl,
+      currency,
+    },
+  });
+};
+
 export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
   return JSON.stringify({
     query: `
@@ -542,6 +586,260 @@ export const STATE_LIST = ({ code }) => {
         countryAreaChoices {
           raw
           verbose
+        }
+      }
+    }
+    `,
+    variables: { code },
+  });
+};
+
+export const PRE_ORDER_LIST = ({ first, after, channel, collectionid }) => {
+  return JSON.stringify({
+    query: `
+    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
+      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
+        edges {
+          node {
+            id
+            name
+            products(first: $first, after: $after) {
+              totalCount
+              edges {
+                node {
+                  ...ProductListItem
+                  id
+                  name
+                  images {
+                    url
+                    id
+                    alt
+                  }
+                }
+                cursor
+              }
+              pageInfo {
+                endCursor
+                hasNextPage
+                hasPreviousPage
+                startCursor
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+        }
+      }
+    }
+    
+    fragment ProductListItem on Product {
+      id
+      name
+      slug
+      pricing {
+        priceRange {
+          start {
+            gross {
+              amount
+              currency
+            }
+          }
+          stop {
+            gross {
+              amount
+              currency
+            }
+          }
+        }
+      }
+      category {
+        id
+        name
+        slug
+      }
+      thumbnail(size: 1024, format: WEBP) {
+        url
+        alt
+      }
+      description
+      defaultVariant {
+        id
+        quantityAvailable
+      }
+      media {
+        id
+        url
+        alt
+      }
+      defaultVariant {
+        id
+        quantityAvailable
+      }
+    }
+    
+    `,
+    variables: { first, after, channel, collectionid },
+  });
+};
+
+export const SALE_LIST = ({ code }) => {
+  return JSON.stringify({
+    query: `
+    query CollectionDetails($id: ID!, $first: Int, $after: String, $last: Int, $before: String) {
+      collection(id: $id) {
+        ...CollectionDetails
+        products(first: $first, after: $after, before: $before, last: $last) {
+          edges {
+            node {
+              ...CollectionProduct
+              __typename
+            }
+            __typename
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+    }
+    
+    fragment CollectionDetails on Collection {
+      ...Collection
+      ...Metadata
+      backgroundImage {
+        alt
+        url
+        __typename
+      }
+      slug
+      description
+      seoDescription
+      seoTitle
+      __typename
+    }
+    
+    fragment Collection on Collection {
+      id
+      name
+      channelListings {
+        isPublished
+        publicationDate
+        channel {
+          id
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    
+    fragment Metadata on ObjectWithMetadata {
+      metadata {
+        ...MetadataItem
+        __typename
+      }
+      privateMetadata {
+        ...MetadataItem
+        __typename
+      }
+      __typename
+    }
+    
+    fragment MetadataItem on MetadataItem {
+      key
+      value
+      __typename
+    }
+    
+    fragment CollectionProduct on Product {
+      id
+      name
+      productType {
+        id
+        name
+        __typename
+      }
+      thumbnail {
+        url
+        __typename
+      }
+      channelListings {
+        ...ChannelListingProductWithoutPricing
+        __typename
+      }
+      __typename
+    }
+    
+    fragment ChannelListingProductWithoutPricing on ProductChannelListing {
+      isPublished
+      publicationDate
+      isAvailableForPurchase
+      availableForPurchase
+      visibleInListings
+      channel {
+        id
+        name
+        currencyCode
+        __typename
+      }
+      __typename
+    }
+    
+    `,
+    variables: { code },
+  });
+};
+
+export const PRODUCT_SEARCH = ({ query, channel }) => {
+  return JSON.stringify({
+    query: `query ProductSearchbyName($query: String!, $channel: String!) {
+      products(
+        first: 50
+        channel: $channel
+        search: $query
+        sortBy: {direction: ASC, field: NAME}
+      ) {
+        edges {
+          node {
+            id
+            name
+            defaultVariant {
+              id
+              name
+              images {
+                url
+                alt
+              }
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { query, channel },
+  });
+};
+
+export const PARENT_CAT_LIST = ({ code }) => {
+  return JSON.stringify({
+    query: `
+    query MyQuery {
+      categories(first: 100, level: 0) {
+        edges {
+          node {
+            id
+            name
+            slug
+          }
         }
       }
     }

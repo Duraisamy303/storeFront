@@ -337,19 +337,12 @@ const DetailsWrapper = ({
           </div>
         </div>
       </div> */}
-      <p style={{ color: "black" }}>
-        {productItem?.metadata[1]?.value}
-        {/* {textMore
-          ? description || productItem?.node?.description
-          : `${
-              description?.substring(0, 100) ||
-              productItem?.node?.description?.substring(0, 100)
-            }...`} */}
-        {/* <span onClick={() => setTextMore(!textMore)}>
-          {textMore ? "See less" : "See more"}
-        </span> */}
-      </p>
-
+      {productItem?.metadata?.length > 1 && (
+        <p style={{ color: "black" }}>
+          {productItem?.metadata[1]?.value}
+         
+        </p>
+      )}
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
         <div className="tp-product-details-variation">

@@ -9,8 +9,11 @@ import {
   GET_PRODUCTLIST_BY_ID,
   MY_ORDER_LIST,
   ORDER_LIST,
+  PAYMENT_FAILED,
+  PRE_ORDER_LIST,
   PRODUCT_FILTER,
   PRODUCT_LIST,
+  PRODUCT_SEARCH,
   STYLE_LIST,
   UPDATE_EMAIL,
   WISHLIST_LIST,
@@ -27,6 +30,7 @@ import {
   STATE_LIST,
 } from "../../utils/queries/productList";
 import { GET_WISHLIST_LIST } from "@/utils/queries/cart/addToCart";
+import { checkChannel } from "@/utils/functions";
 
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -229,6 +233,40 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    payment: builder.mutation({
+      query: ({ amountAuthorized, amountCharged, pspReference }) => {
+        const id = localStorage.getItem("orderId");
+        console.log("id : ", id);
+        const body = {
+          id,
+          currency: checkChannel() == "india-channel" ? "INR" : "USD",
+          amountAuthorized,
+          amountCharged,
+          name: "Credit card",
+          message: "Authorized",
+          pspReference,
+          availableActions: ["REFUND"],
+          externalUrl: "https://saleor.io/payment-id/123",
+        };
+        console.log("body: ", body);
+
+        return configuration(
+          PAYMENT_FAILED({
+            id,
+            currency: checkChannel() == "india-channel" ? "INR" : "USD",
+            amountAuthorized,
+            amountCharged,
+            name: "Credit card",
+            message: "Authorized",
+            pspReference,
+            availableActions: ["REFUND"],
+            externalUrl: "https://saleor.io/payment-id/123",
+          })
+        );
+      },
+      providesTags: ["Products"],
+    }),
+
     //filters
     priceFilter: builder.mutation({
       query: ({ filter }) => {
@@ -250,15 +288,45 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
-   updateEmail: builder.mutation({
-      query: ({ checkoutId,email }) => {
-        console.log("checkoutId,email: ", checkoutId,email);
+    updateEmail: builder.mutation({
+      query: ({ checkoutId, email }) => {
+        console.log("checkoutId,email: ", checkoutId, email);
         return configuration(
           UPDATE_EMAIL({
-            checkoutId,email
+            checkoutId,
+            email,
           })
         );
       },
+    }),
+
+    getPreOrderProducts: builder.query({
+      query: ({collectionid}) => {
+        let channel = "";
+        if (checkChannel() == "india-channel") {
+          channel = "india-channel";
+        } else {
+          channel = "default-channel";
+        }
+        console.log("channel: ", channel);
+
+
+        return configuration(
+          PRE_ORDER_LIST({
+            first: 50,
+            channel,
+            after: null,
+            collectionid,
+          })
+        );
+      },
+
+      providesTags: ["Products"],
+    }),
+
+    productSearch: builder.query({
+      query: ({ code }) => configuration(PRODUCT_SEARCH({ code })),
+      providesTags: ["Products"],
     }),
   }),
 });
@@ -286,5 +354,8 @@ export const {
   useFeatureProductQuery,
   useCountryListQuery,
   useStateListQuery,
-  useUpdateEmailMutation
+  useUpdateEmailMutation,
+  usePaymentMutation,
+  useGetPreOrderProductsQuery,
+  useProductSearchQuery,
 } = productApi;

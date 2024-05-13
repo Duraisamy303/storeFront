@@ -123,13 +123,13 @@ const MobileMenus = () => {
         </li>
 
         <li>
-          <Link href="/shop" style={{ fontWeight: "500" }}>
+          <Link href="/pre-orders" style={{ fontWeight: "500" }}>
             PRE-ORDERS
           </Link>
         </li>
 
         <li>
-          <Link href="/myOrders" style={{ fontWeight: "500" }}>
+          <Link href="/sale" style={{ fontWeight: "500" }}>
             SALE
           </Link>
         </li>
@@ -139,13 +139,13 @@ const MobileMenus = () => {
             CONTACT US
           </Link>
         </li>
-        {token &&
-        <li>
-          <Link href="/wishlist" style={{ fontWeight: "500" }}>
-            WISHLIST
-          </Link>
-        </li>
-        }
+        {token && (
+          <li>
+            <Link href="/wishlist" style={{ fontWeight: "500" }}>
+              WISHLIST
+            </Link>
+          </li>
+        )}
 
         <li>
           <Link href="/compare" style={{ fontWeight: "500" }}>
