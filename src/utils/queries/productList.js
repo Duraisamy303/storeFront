@@ -815,9 +815,23 @@ export const PRODUCT_SEARCH = ({ query, channel }) => {
             defaultVariant {
               id
               name
-              images {
-                url
-                alt
+              
+            }
+            thumbnail {
+              url
+            }
+            pricing {
+              priceRange {
+                start {
+                  gross {
+                    amount
+                  }
+                }
+                stop {
+                  gross {
+                    amount
+                  }
+                }
               }
             }
           }
@@ -845,5 +859,97 @@ export const PARENT_CAT_LIST = ({ code }) => {
     }
     `,
     variables: { code },
+  });
+};
+
+export const PRODUCT_20_PERCENTAGE = ({ code }) => {
+  return JSON.stringify({
+    query: `
+    query Product20percentageDiscount($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
+      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
+        edges {
+          node {
+            id
+            name
+            products(first: $first, after: $after) {
+              totalCount
+              edges {
+                node {
+                  ...ProductListItem
+                  id
+                  name
+                }
+                cursor
+              }
+              pageInfo {
+                endCursor
+                hasNextPage
+                hasPreviousPage
+                startCursor
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+        }
+      }
+    }
+    
+    fragment ProductListItem on Product {
+      id
+      name
+      slug
+      pricing {
+        priceRange {
+          start {
+            gross {
+              amount
+              currency
+            }
+          }
+          stop {
+            gross {
+              amount
+              currency
+            }
+          }
+        }
+        priceRangeUndiscounted {
+          start {
+            gross {
+              amount
+              currency
+            }
+            net {
+              amount
+              currency
+            }
+          }
+        }
+      }
+      category {
+        id
+        name
+        slug
+      }
+      thumbnail(size: 1024, format: WEBP) {
+        url
+        alt
+      }
+      media {
+        id
+        url
+        alt
+      }
+      defaultVariant {
+        id
+        quantityAvailable
+      }
+    }
+    
+    `,
+    variables: { collectionid,after,channel,first },
   });
 };

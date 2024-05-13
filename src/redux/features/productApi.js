@@ -301,7 +301,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getPreOrderProducts: builder.query({
-      query: ({collectionid}) => {
+      query: ({ collectionid }) => {
         let channel = "";
         if (checkChannel() == "india-channel") {
           channel = "india-channel";
@@ -309,7 +309,6 @@ export const productApi = apiSlice.injectEndpoints({
           channel = "default-channel";
         }
         console.log("channel: ", channel);
-
 
         return configuration(
           PRE_ORDER_LIST({
@@ -324,8 +323,17 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    productSearch: builder.query({
-      query: ({ code }) => configuration(PRODUCT_SEARCH({ code })),
+    productSearch: builder.mutation({
+      query: ({ query }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(PRODUCT_SEARCH({ channel, query }));
+      },
       providesTags: ["Products"],
     }),
   }),
@@ -357,5 +365,5 @@ export const {
   useUpdateEmailMutation,
   usePaymentMutation,
   useGetPreOrderProductsQuery,
-  useProductSearchQuery,
+  useProductSearchMutation,
 } = productApi;

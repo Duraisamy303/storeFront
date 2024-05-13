@@ -33,7 +33,10 @@ import UserMiniSidebar from "@/components/common/user-sidebar";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { useGetWishlistQuery, useProductSearchQuery } from "@/redux/features/productApi";
+import {
+  useGetWishlistQuery,
+  useProductSearchMutation,
+} from "@/redux/features/productApi";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/router";
 
@@ -44,10 +47,11 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
-  const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
-  const { data: productSearch, refetch: searchRefetch } = useProductSearchQuery();
+  const [searchOption,setSearchOption]=useState([])
+  console.log("searchOption: ", searchOption);
 
-  
+  const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
+  const [searchProduct] = useProductSearchMutation();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
@@ -123,6 +127,27 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const handleLogout = () => {
     dispatch(userLoggedOut());
     router.push("/login");
+  };
+
+  const handleSearch = async (search) => {
+    try {
+      setSearchText(search);
+      if (search?.length > 3) {
+      }
+      const data = await searchProduct({
+        query: search,
+      });
+
+      const filter = data?.data?.data?.products?.edges?.map((item) => ({
+        name: item?.node?.name,
+        price: item?.node?.pricing?.priceRange?.start?.gross?.amount,
+        img: item?.node?.thumbnail?.url,
+        id:item?.node?.id
+      }));
+      setSearchOption(filter)
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
@@ -206,7 +231,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                       <div className="tp-header-search-2 d-none d-sm-block">
                         <form onSubmit={handleSubmit}>
                           <input
-                            onChange={(e) => setSearchText(e.target.value)}
+                            onChange={(e) => handleSearch(e.target.value)}
                             value={searchText}
                             type="text"
                             placeholder="Search for Products..."
