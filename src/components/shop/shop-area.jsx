@@ -209,7 +209,7 @@ const ShopArea = ({
                             ?.map((item) => (
                               <div
                                 key={item._id}
-                                className="col-xl-4 col-md-6 col-sm-6"
+                                className="col-xl-4 col-md-6 col-sm-6" style={{marginBottom:"50px"}}
                               >
                                 <ProductItem
                                   products={item}
