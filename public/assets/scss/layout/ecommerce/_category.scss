@@ -792,3 +792,23 @@
 
    
 }
+
+.anticon{
+    font-size: 18px;
+    color: white;
+}
+
+.printer-outline{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e4001c;
+    border-radius: 50%;
+    padding: 0px 7px;
+}
+
+
+// live antd style
+:where(.css-nllxry).ant-carousel .slick-dots-bottom {
+    bottom: 30px;
+}
