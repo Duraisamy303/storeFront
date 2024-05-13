@@ -39,6 +39,7 @@ import {
 } from "@/redux/features/productApi";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/router";
+import { checkChannel } from "@/utils/functions";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const router = useRouter();
@@ -141,9 +142,9 @@ const HeaderTwo = ({ style_2 = false, data }) => {
         name: item?.node?.name,
         price: item?.node?.pricing?.priceRange?.start?.gross?.amount,
         img: item?.node?.thumbnail?.url,
-        id:item?.node?.id
+        id: item?.node?.id,
       }));
-      setSearchOption(filter)
+      setSearchOption(filter);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -227,7 +228,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                   </div>
                   <div className="col-xl-4 col-lg-7 col-md-7 col-sm-8 col-6">
                     <div className="tp-header-bottom-right d-flex align-items-center justify-content-end pl-30">
-                      <div className="tp-header-search-2 d-none d-sm-block">
+                      <div
+                        className="tp-header-search-2 d-none d-sm-block"
+                        style={{ position: "relative" }}
+                      >
                         <form onSubmit={handleSubmit}>
                           <input
                             onChange={(e) => handleSearch(e.target.value)}
@@ -239,6 +243,105 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <Search />
                           </button>
                         </form>
+                        {searchOption?.length > 0 && (
+                          <div
+                            className="dropdown-content  d-flex flex-column"
+                            style={{
+                              position: "absolute",
+                              top: "46px",
+                              background: "white",
+                              padding: "30px 20px",
+                              right: "-10px",
+                              zIndex: "2",
+                              width: "300px",
+                              boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
+                              height: "400px",
+                              overflowY: "scroll",
+                            }}
+                          >
+                            {searchOption?.map((item) => (
+                              // <Link
+                              //   href={`/product/${item?.id}`}
+                              //   key={item?.id}
+                              //   className="dropdown-item"
+                              // >
+                              //   {item?.name}
+                              // </Link>
+
+                              <div
+                                className="d-flex align-items-center justify-content-between"
+                                style={{
+                                  marginBottom: "10px",
+                                  paddingBottom: "10px",
+                                  borderBottom: "1px solid #dadada",
+                                }}
+                              >
+                                {item.img ? (
+                                  <div
+                                    style={{
+                                      marginRight: "10px",
+                                      width: "50px",
+                                      height: "50px",
+                                    }}
+                                  >
+                                    <Image
+                                      src={item?.img}
+                                      alt="Product Image"
+                                      width={50}
+                                      height={50}
+                                      style={{ borderRadius: "50%" }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div
+                                    style={{
+                                      marginRight: "10px",
+                                      width: "50px",
+                                      height: "50px",
+                                    }}
+                                  >
+                                    <Image
+                                      src={pradeLogo}
+                                      alt="Placeholder Image"
+                                      width={50}
+                                      height={50}
+                                      style={{ borderRadius: "50%" }}
+                                    />
+                                  </div>
+                                )}
+
+                                <Link
+                                  href={`/product-details/${item?.id}`}
+                                  key={item?.id}
+                                  className="dropdown-item"
+                                >
+                                  {item?.name}
+                                </Link>
+                                {checkChannel() === "india-channel" ? (
+                                  <p
+                                    style={{
+                                      marginLeft: "10px !important",
+                                      color: "black",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    ₹{item?.price}
+                                  </p>
+                                ) : (
+                                  <p
+                                    style={{
+                                      marginLeft: "10px !important",
+                                      color: "black",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    ${item?.price}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="tp-header-action d-flex align-items-center ml-30">
                         <div className="tp-header-action-item d-none d-lg-block">
