@@ -379,7 +379,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
             notifyError(res?.data?.data?.checkoutComplete?.errors[0]?.message);
           } else {
             router.push(
-              `/payment-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
+              `/order-success/${completeResponse?.data?.data?.checkoutComplete?.order?.id}`
             );
           }
 

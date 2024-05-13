@@ -40,23 +40,35 @@ const Menus = () => {
                   Handpainted Earrings
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  One of a Kind Earrings
+                  Studs & Hooks
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
                   Statement Earrings
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Studs & Hooks
+                  Oxidized Silver Earrings
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Jhumkas
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Gold Plated Silver
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Dual Tones
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Cuff Earrings
                 </li>
               </ul>
             </div>
-            <div>
+            {/* <div>
               <Image
                 src={earingModel}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
-            </div>
+            </div> */}
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -93,36 +105,60 @@ const Menus = () => {
         </div>
       );
     } else if (
-      hoveredCategory === "Neckless" ||
-      lastHoveredCategory === "Neckless"
+      hoveredCategory === "Necklaces" ||
+      lastHoveredCategory === "Necklaces"
     ) {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALLNECKLESS</h6>
+              <h6 style={{ paddingBottom: "15px" }}>ALLNECKLACES</h6>
               <ul>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Chokers
+                  Gold Plated Silver
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
                   Everyday Jewellery
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Gold Plated Silver
+                  Mope Chains
                 </li>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                  Mope Chains
+                  Chokers
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Dual Tones
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Hasli
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Long Necklaces
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Pearls & Beads
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Short Necklaces
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Statement Necklaces
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Mangalsutras
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  LOOT SALE
                 </li>
               </ul>
             </div>
-            <div>
+            {/* <div>
               <Image
                 src={earingModel}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
-            </div>
+            </div> */}
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -241,9 +277,26 @@ const Menus = () => {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
+            {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6>
-            </div>
+            </div> */}
+            <ul>
+              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                Nose Pins
+              </li>
+              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                Pendants
+              </li>
+              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                Waist Keychains
+              </li>
+              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                Maang Tikkas
+              </li>
+              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                Hair Accessories
+              </li>
+            </ul>
             <div>
               <Image
                 src={earingModel}
@@ -368,6 +421,9 @@ const Menus = () => {
               <ul>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
                   Rope Anklet
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Stone Anklets
                 </li>
               </ul>
             </div>
@@ -528,18 +584,18 @@ const Menus = () => {
 
                 <li
                   className={`shop-submenu-catageroy-list ${
-                    lastHoveredCategory === "Neckless" ? "active" : ""
+                    lastHoveredCategory === "Necklaces" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Neckless")}
+                  onMouseEnter={() => handleCategoryHover("Necklaces")}
                   onMouseLeave={() => handleCategoryLeave()}
                 >
                   <Link
                     href="#"
                     className={`shop-submenu-catageroy-list-a ${
-                      lastHoveredCategory === "Neckless" ? "active" : ""
+                      lastHoveredCategory === "Necklaces" ? "active" : ""
                     }`}
                   >
-                    Neckless
+                    Necklaces
                   </Link>
                 </li>
 
@@ -557,23 +613,6 @@ const Menus = () => {
                     }`}
                   >
                     Bangles & Bracelets
-                  </Link>
-                </li>
-
-                <li
-                  className={`shop-submenu-catageroy-list ${
-                    lastHoveredCategory === "Pendants" ? "active" : ""
-                  }`}
-                  onMouseEnter={() => handleCategoryHover("Pendants")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                >
-                  <Link
-                    href="#"
-                    className={`shop-submenu-catageroy-list-a ${
-                      lastHoveredCategory === "Pendants" ? "active" : ""
-                    }`}
-                  >
-                    Pendants
                   </Link>
                 </li>
 
@@ -608,6 +647,23 @@ const Menus = () => {
                     }`}
                   >
                     Anklets
+                  </Link>
+                </li>
+
+                <li
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Pendants" ? "active" : ""
+                  }`}
+                  onMouseEnter={() => handleCategoryHover("Pendants")}
+                  onMouseLeave={() => handleCategoryLeave()}
+                >
+                  <Link
+                    href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Pendants" ? "active" : ""
+                    }`}
+                  >
+                    Other Accessories
                   </Link>
                 </li>
               </ul>

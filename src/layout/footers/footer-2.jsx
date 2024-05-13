@@ -258,8 +258,8 @@ const FooterTwo = () => {
                       <div className="tp-footer-copyright">
                         <p>
                           Copyright {new Date().getFullYear()} © PraDe Jewels,
-                          Concept by
-                          <Link href="https://irepute.in/" target="blank">
+                          Concept by 
+                           <Link href="https://irepute.in/" target="blank" style={{paddingLeft:"3px"}}>
                             repute
                           </Link>
                           .
