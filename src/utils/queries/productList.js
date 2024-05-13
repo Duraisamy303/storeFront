@@ -862,7 +862,7 @@ export const PARENT_CAT_LIST = ({ code }) => {
   });
 };
 
-export const PRODUCT_20_PERCENTAGE = ({ code }) => {
+export const PRODUCT_20_PERCENTAGE = ({ channel,first,after ,collectionid}) => {
   return JSON.stringify({
     query: `
     query Product20percentageDiscount($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
@@ -950,6 +950,6 @@ export const PRODUCT_20_PERCENTAGE = ({ code }) => {
     }
     
     `,
-    variables: { collectionid,after,channel,first },
+    variables: { channel,first,after ,collectionid},
   });
 };

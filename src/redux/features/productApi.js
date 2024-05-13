@@ -11,6 +11,7 @@ import {
   ORDER_LIST,
   PAYMENT_FAILED,
   PRE_ORDER_LIST,
+  PRODUCT_20_PERCENTAGE,
   PRODUCT_FILTER,
   PRODUCT_LIST,
   PRODUCT_SEARCH,
@@ -336,6 +337,27 @@ export const productApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Products"],
     }),
+
+    product20Percentage: builder.mutation({
+      query: () => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(
+          PRODUCT_20_PERCENTAGE({
+            channel,
+            first: 6,
+            after: null,
+            collectionid: ["Q29sbGVjdGlvbjo1"],
+          })
+        );
+      },
+      providesTags: ["Products"],
+    }),
   }),
 });
 
@@ -366,4 +388,5 @@ export const {
   usePaymentMutation,
   useGetPreOrderProductsQuery,
   useProductSearchMutation,
+  useProduct20PercentageMutation,
 } = productApi;

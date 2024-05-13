@@ -48,7 +48,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const [searchOption,setSearchOption]=useState([])
-  console.log("searchOption: ", searchOption);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
   const [searchProduct] = useProductSearchMutation();

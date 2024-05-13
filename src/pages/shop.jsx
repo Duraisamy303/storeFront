@@ -113,7 +113,7 @@ const ShopPage = () => {
   const [priceValue, setPriceValue] = useState([0, 0]);
 
   const [selectValue, setSelectValue] = useState("");
-  const [categoryList, setCategoryList] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [productList, setProductList] = useState("");
   const [filterList, setFilterList] = useState([]);
 
