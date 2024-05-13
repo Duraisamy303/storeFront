@@ -5,8 +5,9 @@ import NavProfileTab from "./nav-profile-tab";
 import ProfileInfo from "./profile-info";
 import ChangePassword from "./change-password";
 import MyOrders from "./my-orders";
+import { Wishlist } from "@/svg";
 
-const ProfileArea = ({orderData}) => {
+const ProfileArea = ({ orderData }) => {
   return (
     <>
       <section className="profile__area pt-120 pb-120">
