@@ -277,26 +277,27 @@ const Menus = () => {
       return (
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            {/* <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6>
-            </div> */}
-            <ul>
-              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Nose Pins
-              </li>
-              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Pendants
-              </li>
-              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Waist Keychains
-              </li>
-              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Maang Tikkas
-              </li>
-              <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Hair Accessories
-              </li>
-            </ul>
+            <div style={{ paddingLeft: "25px" }}>
+              {/* <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6> */}
+              <ul>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Nose Pins
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Pendants
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Waist Keychains
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Maang Tikkas
+                </li>
+                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                  Hair Accessories
+                </li>
+              </ul>
+            </div>
+
             <div>
               <Image
                 src={earingModel}
@@ -304,7 +305,7 @@ const Menus = () => {
                 style={{ width: "100%", height: "200px" }}
               />
             </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+            {/* <div style={{ textAlign: "center", padding: "20px 0px" }}>
               <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
@@ -313,7 +314,7 @@ const Menus = () => {
                 {" "}
                 <Link href="/shop">Shop Now</Link>
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
