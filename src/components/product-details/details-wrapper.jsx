@@ -490,7 +490,7 @@ const DetailsWrapper = ({
           onClick={() => toggleVisibility("description")}
         >
           <div
-            className={`${visibility.description ? "theme-color" : ""}`}
+            className={`${visibility?.description ? "theme-color" : ""}`}
             style={{ fontSize: "16px" }}
           >
             DESCRIPTION
@@ -500,15 +500,15 @@ const DetailsWrapper = ({
         </div>
         {visibility?.description && (
           <>
-            {JSON.parse(productItem?.description).blocks.map((block) => (
+            {JSON.parse(productItem?.description)?.blocks?.map((block) => (
               <>
                 <div className="pt-10">
                   {block.type === "header" && (
                     <ul className="pl-20">
-                      <li key={block.id}>
-                        {block.type === "header" && (
+                      <li key={block?.id}>
+                        {block?.type === "header" && (
                           <h5 style={{ fontWeight: "400" }}>
-                            {block.data.text}
+                            {block?.data?.text}
                           </h5>
                         )}
                       </li>
@@ -543,12 +543,12 @@ const DetailsWrapper = ({
           onClick={() => toggleVisibility("additionalInfo")}
         >
           <div
-            className={`${visibility.additionalInfo ? "theme-color" : ""}`}
+            className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
             style={{ fontSize: "16px" }}
           >
             ADDITIONAL INFORMATION
           </div>{" "}
-          <div>{visibility.additionalInfo ? "▲" : "▼"}</div>{" "}
+          <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.additionalInfo && (
