@@ -214,7 +214,7 @@ const FooterTwo = () => {
                                 <InstagramIcon />
                               </Link>
                             </div>
-                            <div  className="printer-outline">
+                            <div className="printer-outline">
                               <Link
                                 href="https://pin.it/2RQl6pL"
                                 target="_blank"
@@ -257,9 +257,9 @@ const FooterTwo = () => {
                     <div className="col-md-12">
                       <div className="tp-footer-copyright">
                         <p>
-                          Copyright {new Date().getFullYear()} © PraDe Jewels, Concept by
+                          Copyright {new Date().getFullYear()} © PraDe Jewels,
+                          Concept by
                           <Link href="https://irepute.in/" target="blank">
-                            {" "}
                             repute
                           </Link>
                           .
