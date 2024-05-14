@@ -17,7 +17,8 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import {  checkChannel } from "../../utils/functions";
+import { checkChannel } from "../../utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
@@ -130,10 +131,10 @@ const CartMiniSidebar = () => {
                               }}
                             >
                               <Image
-                                src={
+                                src={profilePic(
                                   item?.variant?.product?.thumbnail?.url ||
-                                  item?.node?.thumbnail?.url
-                                }
+                                    item?.node?.thumbnail?.url
+                                )}
                                 width={70}
                                 height={60}
                                 alt="product img"
@@ -201,10 +202,10 @@ const CartMiniSidebar = () => {
                               }}
                             >
                               <Image
-                                src={
+                                src={profilePic(
                                   item?.variant?.product?.thumbnail?.url ||
-                                  item?.node?.thumbnail?.url
-                                }
+                                    item?.node?.thumbnail?.url
+                                )}
                                 width={70}
                                 height={60}
                                 alt="product img"

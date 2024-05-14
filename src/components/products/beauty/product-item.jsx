@@ -17,6 +17,7 @@ import {
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
 import { checkChannel } from "@/utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const ProductItem = ({
   product,
@@ -160,7 +161,7 @@ const ProductItem = ({
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
         <Link href={`/product-details/${id}`}>
           <Image
-            src={thumbnail?.url}
+            src={profilePic(thumbnail?.url)}
             alt="product image"
             width={282}
             height={320}

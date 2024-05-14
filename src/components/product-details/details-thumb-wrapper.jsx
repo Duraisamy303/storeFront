@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import PopupVideo from "../common/popup-video";
 import Loader from "../loader/loader";
+import { profilePic } from "@/utils/constant";
 
 const DetailsThumbWrapper = ({
   imgWidth = 416,
@@ -26,21 +27,23 @@ const DetailsThumbWrapper = ({
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
         <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
-            {imageUrls?.map((item, i) => (
-              <button
-                key={i}
-                className={`nav-link ${item === activeImg ? "active" : ""}`}
-                onClick={() => handleImageActive(item)}
-              >
-                <Image
-                  src={item}
-                  alt="image"
-                  width={78}
-                  height={100}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </button>
-            ))}
+            {imageUrls?.map((item, i) => {
+              return (
+                <button
+                  key={i}
+                  className={`nav-link ${item === activeImg ? "active" : ""}`}
+                  onClick={() => handleImageActive(item)}
+                >
+                  <Image
+                    src={item}
+                    alt="image"
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </button>
+              );
+            })}
           </div>
         </nav>
         <div className="tab-content m-img">
@@ -50,11 +53,11 @@ const DetailsThumbWrapper = ({
                 <Loader />
               ) : (
                 <Image
-                  src={
+                  src={profilePic(
                     activeImg
                       ? activeImg
                       : imageUrls?.length > 0 && imageUrls[0]
-                  }
+                  )}
                   alt="product img"
                   width={imgWidth}
                   height={imgHeight}

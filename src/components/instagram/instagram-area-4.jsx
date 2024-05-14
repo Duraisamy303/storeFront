@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { compare_list } from "@/redux/features/cartSlice";
+import { profilePic } from "@/utils/constant";
 
 const InstagramAreaFour = () => {
   const [discountProduct] = useProduct20PercentageMutation({});
@@ -239,7 +240,7 @@ const InstagramAreaFour = () => {
                         </ul>
                       </div>
                       <Image
-                        src={item?.thumbnail?.url}
+                        src={profilePic(item?.thumbnail?.url)}
                         width={300}
                         height={300}
                         alt="instagram img"

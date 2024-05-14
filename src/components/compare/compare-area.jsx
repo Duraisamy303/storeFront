@@ -18,6 +18,7 @@ import {
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
+import { profilePic } from "@/utils/constant";
 
 const CompareArea = () => {
   const { data: wishlistData } = useGetWishlistQuery();
@@ -153,7 +154,7 @@ const CompareArea = () => {
                             <td key={item?.id} className="" style={{minWidth:"300px"}}>
                               <div className="tp-compare-thumb p-relative z-index-1">
                                 <Image
-                                  src={item?.thumbnail?.url}
+                                  src={profilePic(item?.thumbnail?.url)}
                                   alt="compare"
                                   width={500}
                                   height={500}

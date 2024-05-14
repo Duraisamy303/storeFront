@@ -26,6 +26,7 @@ import {
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
 import { checkChannel } from "../../../utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
   const { _id, title, price, status } = product || {};
@@ -190,7 +191,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
           <div
             className="tp-category-thumb-4 include-bg"
             style={{
-              backgroundImage: `url(${img})`,
+              backgroundImage: `url(${profilePic(img)})`,
               backgroundColor: "#FFFFFF",
               backgroundPosition: "0px -80px",
             }}
