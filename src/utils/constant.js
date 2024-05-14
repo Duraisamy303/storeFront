@@ -22,6 +22,5 @@ export const profilePic = (profile) => {
   } else {
     profiles = placeholder;
   }
-  console.log("profiles: ", profiles);
   return profiles;
 };
