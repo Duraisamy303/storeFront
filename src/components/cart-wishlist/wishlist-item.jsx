@@ -23,9 +23,10 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { checkChannel } from "../../utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
-  const { _id, img, title, price } = product || {};
+  const { variant, img, title, price } = product || {};
 
   const dispatch = useDispatch();
 
@@ -56,7 +57,6 @@ const WishlistItem = ({ product, refetchWishlist }) => {
     setChannelSelect(channels);
   }, []);
 
-
   // handle decrement product
   const handleDecrement = (prd) => {
     dispatch(quantityDecrement(prd));
@@ -74,7 +74,6 @@ const WishlistItem = ({ product, refetchWishlist }) => {
 
   const addToCartProductINR = async () => {
     try {
-
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -114,10 +113,12 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   return (
     <tr>
       <td className="tp-cart-img">
-        <Link href={`/product-details/${_id}`}>
+        <Link href={`/product-details/${variant}`}>
           <Image
-            src={product?.thumbnail?.url || data?.media[0]?.url}
-            alt="product img"
+            src={
+              profilePic(product?.product?.media[0]?.url) ||
+              profilePic(data?.media[0]?.url)
+            }
             width={70}
             height={100}
           />
@@ -168,14 +169,14 @@ const WishlistItem = ({ product, refetchWishlist }) => {
             if (isAddToCart) {
               router.push("/cart");
             } else {
-            addToCartProductINR();
-            addToCartProductUSD();
+              addToCartProductINR();
+              addToCartProductUSD();
             }
           }}
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          {isAddToCart ? "View Cart" : "Add To Cart"} 
+          {isAddToCart ? "View Cart" : "Add To Cart"}
         </button>
       </td>
 
