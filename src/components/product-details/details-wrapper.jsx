@@ -336,10 +336,7 @@ const DetailsWrapper = ({
         </div>
       </div> */}
       {productItem?.metadata?.length > 1 && (
-        <p style={{ color: "black" }}>
-          {productItem?.metadata[1]?.value}
-         
-        </p>
+        <p style={{ color: "black" }}>{productItem?.metadata[1]?.value}</p>
       )}
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
@@ -587,38 +584,37 @@ const DetailsWrapper = ({
         </div>
         {visibility.shipping && (
           <div style={{ paddingTop: "10px" }}>
-            <h5 style={{ fontWeight: "400" }}>MAECENAS IACULIS</h5>
+            <h5 style={{ fontWeight: "400" }}>Cancellation Policy:</h5>
             <p style={{ color: "#55585b" }}>
-              Vestibulum curae torquent diam diam commodo parturient penatibus
-              nunc dui adipiscing convallis bulum parturient suspendisse
-              parturient a.Parturient in parturient scelerisque nibh lectus quam
-              a natoque adipiscing a vestibulum hendrerit et pharetra fames nunc
-              natoque dui.
+              If you wish to cancel your order, we shall provide you with an
+              option to replace the ordered product with another product. In no
+              manner shall we provide any refund of the ordered product.
             </p>
-            <h5 style={{ fontWeight: "400" }}>ADIPISCING CONVALLIS BULUM</h5>
+            <p style={{ color: "#55585b" }}>
+              In the case where your order gets cancelled from our end for some
+              reason, we shall notify you about the same. We will also take all
+              efforts to refund the amount paid by yourself to your original
+              payment method within 2 working days.
+            </p>
+            <h5 style={{ fontWeight: "400" }}>Return & Exchange Policy:</h5>
             <p style={{ color: "#55585b" }}>
               {" "}
-              &#129174; Vestibulum penatibus nunc dui adipiscing convallis bulum
-              parturient suspendisse.
+              &#129174;Shipping charges are not refundable.
             </p>
 
             <p style={{ color: "#55585b" }}>
               {" "}
-              &#129174; Abitur parturient praesent lectus quam a natoque
-              adipiscing a vestibulum hendre.
+              &#129174; The brand has put the utmost effort in showcasing the
+              products as realistic as possible with the colour, appearance etc.
+              Please note that the colour of the jewellery might slightly vary
+              in person, any return/ exchange on these criteria will not be
+              accepted.
             </p>
             <p style={{ color: "#55585b" }}>
               {" "}
-              &#129174; Diam parturient dictumst parturient scelerisque nibh
-              lectus.
-            </p>
-
-            <p style={{ color: "#55585b" }}>
-              Scelerisque adipiscing bibendum sem vestibulum et in a a a purus
-              lectus faucibus lobortis tincidunt purus lectus nisl class
-              eros.Condimentum a et ullamcorper dictumst mus et tristique
-              elementum nam inceptos hac parturient scelerisque vestibulum amet
-              elit ut volutpat.
+              &#129174; We at PraDe believe in providing fair trade to our
+              artisans and hence selected products shall not be eligible for
+              returns.
             </p>
           </div>
         )}
