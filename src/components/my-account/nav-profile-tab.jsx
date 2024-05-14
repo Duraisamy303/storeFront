@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 // internal
@@ -9,11 +9,22 @@ const NavProfileTab = ({ orderData }) => {
   const {user} = useSelector(state => state.auth)
   const dispatch = useDispatch();
   const router = useRouter();
+
+const [ userName, setUserName] = useState("");
+
   // handle logout
   const handleLogout = () => {
     dispatch(userLoggedOut());
-    router.push('/')
+    router.push('/login')
   }
+  useEffect(() => {
+
+    const user = localStorage.getItem("userInfo");
+    const JsonUSer = JSON.parse(user);
+    const UserName = JsonUSer?.user?.firstName;
+    setUserName(UserName);
+  }, []);
+
   return (
     <div className="profile__main">
       <div className="profile__main-top pb-80">
@@ -21,7 +32,7 @@ const NavProfileTab = ({ orderData }) => {
           <div className="col-md-6">
             <div className="profile__main-inner d-flex flex-wrap align-items-center">
               <div className="profile__main-content">
-                <h4 className="profile__main-title">Welcome Mr. {user?.name}</h4>
+                <h4 className="profile__main-title">Welcome {userName}</h4>
               </div>
             </div>
           </div>
