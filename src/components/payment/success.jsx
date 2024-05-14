@@ -38,11 +38,11 @@ const Router = useRouter()
                         <td>{order?.productName}</td>
                         {checkChannel() === "india-channel" ? (
                           <>
-                            <td>&#8377;{order.totalPrice?.gross?.amount}</td>
+                            <td>&#8377;{order.totalPrice?.gross?.amount?.toFixed(2)}</td>
                           </>
                         ) : (
                           <>
-                            <td>${order?.totalPrice?.gross?.amount}</td>
+                            <td>${order?.totalPrice?.gross?.amount?.toFixed(2)}</td>
                           </>
                         )}
                       </tr>
@@ -53,11 +53,11 @@ const Router = useRouter()
                     <td>Subtotal</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{SubTotal}</td>
+                        <td>&#8377;{SubTotal?.toFixed(2)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${SubTotal}</td>
+                        <td>${SubTotal?.toFixed(2)}</td>
                       </>
                     )}
                   </tr>
@@ -66,11 +66,11 @@ const Router = useRouter()
                     <td>Shipping</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{ShippingAmount}</td>
+                        <td>&#8377;{ShippingAmount?.toFixed(2)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${ShippingAmount}</td>
+                        <td>${ShippingAmount?.toFixed(2)}</td>
                       </>
                     )}
                   </tr>
@@ -85,13 +85,13 @@ const Router = useRouter()
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          &#8377;{Total}
+                          &#8377;{Total?.toFixed(2)}
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          ${Total}
+                          ${Total?.toFixed(2)}
                         </td>
                       </>
                     )}
@@ -122,11 +122,11 @@ const Router = useRouter()
                   Total:{" "}
                   {checkChannel() === "india-channel" ? (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      &#8377;{Total}
+                      &#8377;{Total?.toFixed(2)}
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      ${Total}
+                      ${Total?.toFixed(2)}
                     </span>
                   )}
                 </li>

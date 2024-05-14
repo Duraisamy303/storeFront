@@ -290,8 +290,8 @@ const DetailsWrapper = ({
           <div className="tp-product-price-wrapper-2">
             <span className="tp-product-price-2 new-price">
               &#8377;
-              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+              {productItem?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2) ||
+                productItem?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
             </span>
           </div>
         ) : (

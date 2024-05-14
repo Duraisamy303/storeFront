@@ -61,11 +61,11 @@ const CartCheckout = ({ cartData }) => {
 
         {checkChannel()=== "india-channel" ? (
           <span className="tp-cart-checkout-top-price">
-            &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount}
+            &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
           </span>
         ) : (
           <span className="tp-cart-checkout-top-price">
-            ${list?.data?.checkout?.totalPrice?.gross?.amount}
+            ${list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
           </span>
         )}
       </div>

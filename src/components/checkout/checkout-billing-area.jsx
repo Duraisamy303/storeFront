@@ -1289,17 +1289,35 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <span>Total</span>
                 {checkChannel() === "india-channel" ? (
                   <>
-                    <span>&#8377; {state.total}</span>
-                    <br />
-                    <span className="para">
-                      (includes &#8377; {state.tax} VAT)
-                    </span>
+                    <p
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        textAlign: "right",
+                      }}
+                    >
+                      &#8377; {state.total.toFixed(2)}
+                      <br />
+                      <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                        (includes &#8377; {state.tax?.toFixed(2)} VAT)
+                      </span>
+                    </p>
                   </>
                 ) : (
                   <>
-                    <span>$ {state.total}</span>
-                    <br />
-                    <span className="para">(includes $ {state.tax} VAT)</span>
+                    <p
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        textAlign: "right",
+                      }}
+                    >
+                      &#8377; {state.total.toFixed(2)}
+                      <br />
+                      <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                        (includes &#8377; {state.tax.toFixed(2)} VAT)
+                      </span>
+                    </p>
                   </>
                 )}
               </li>
