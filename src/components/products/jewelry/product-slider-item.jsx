@@ -352,9 +352,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         </p>
         <p style={{ color: "gray", margin: "0px" }}>{Category_Name}</p>
         {checkChannel() === "india-channel" ? (
-          <p style={{ color: "gray", margin: "0px" }}>₹{Price}</p>
+          <p style={{ color: "gray", margin: "0px" }}>₹{Price?.toFixed(2)}</p>
         ) : (
-          <p style={{ color: "gray", margin: "0px" }}>${Price}</p>
+          <p style={{ color: "gray", margin: "0px" }}>${Price?.toFixed(2)}</p>
         )}
       </div>
     </>

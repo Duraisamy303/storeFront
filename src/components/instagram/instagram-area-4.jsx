@@ -256,7 +256,7 @@ const InstagramAreaFour = () => {
                         <p className="actor-hov-para">
                           Price :{" "}
                           {checkChannel() === "india-channel" ? "₹" : "$"}
-                          {item?.pricing?.priceRange?.start?.gross?.amount}
+                          {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
                         </p>
                         <button
                           type="button"
