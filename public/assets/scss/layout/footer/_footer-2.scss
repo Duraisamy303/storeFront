@@ -205,3 +205,15 @@
         }
     }
 }
+
+
+.footer-quicklinks{
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width:500px) {
+    .footer-quicklinks{
+        display: block;
+    }
+}

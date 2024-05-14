@@ -72,7 +72,7 @@ const FooterTwo = () => {
             <div className="container-fluid">
               <div style={{ padding: "0px 50px" }}>
                 <div className="row">
-                  <div className=" col-md-3 col-sm-6">
+                  <div className="col-lg-3 col-md-6 col-sm-6">
                     <div className="tp-footer-widget footer-col-4-1 mb-50">
                       <h4 className="tp-footer-widget-title">ABOUT US</h4>
                       <div className="tp-footer-logo">
@@ -92,7 +92,7 @@ const FooterTwo = () => {
                     </div>
                   </div>
 
-                  <div className="col-md-3 col-sm-12">
+                  <div className="  col-lg-3 col-md-6 col-sm-12 footer-quicklinks">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
                       <h4 className="tp-footer-widget-title">QUICK LINKS</h4>
                       <div className="tp-footer-widget-content">
@@ -143,7 +143,7 @@ const FooterTwo = () => {
                     </div>
                   </div> */}
 
-                  <div className="col-md-3 col-sm-12">
+                  <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
                       <h4 className="tp-footer-widget-title">STORE ADDRESS</h4>
                       <div className="tp-footer-widget-content">
@@ -161,7 +161,7 @@ const FooterTwo = () => {
                                   target="_blank"
                                 >
                                   Prade Jewels and Drapes Pvt Ltd <br/>No.28, 1st
-                                  floor, Vijay building, Near Andhra club,
+                                  floor, Vijay building,<br/> Near Andhra club,
                                   Vijaya Raghava road,
                                   <br /> Chennai – 600017.
                                 </a>
@@ -229,7 +229,7 @@ const FooterTwo = () => {
                     </div>
                   </div>
 
-                  <div className=" col-md-3 col-sm-12">
+                  <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-4 mb-50">
                       <h4 className="tp-footer-widget-title">STORE LOCATION</h4>
                       <div

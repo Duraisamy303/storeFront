@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import categoryImages from "@assets/img/sub-menu.jpg";
 import earingModel from "@assets/img/earring-menu-pic-1.png";
+import { useRouter } from "next/router";
 
 const Menus = () => {
+  const router = useRouter();
   // State to store the currently hovered category
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [token, setToken] = useState("");
@@ -435,7 +437,7 @@ const Menus = () => {
                 style={{ width: "100%", height: "200px" }}
               />
             </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+            {/* <div style={{ textAlign: "center", padding: "20px 0px" }}>
               <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
@@ -444,7 +446,7 @@ const Menus = () => {
                 {" "}
                 <Link href="/shop">Shop Now</Link>
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -572,15 +574,22 @@ const Menus = () => {
                   }`}
                   onMouseEnter={() => handleCategoryHover("Earrings")}
                   onMouseLeave={() => handleCategoryLeave()}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                    });
+                  }}
                 >
-                  <Link
-                    href="#"
+                  <p
+                    style={{ cursor: "pointer" }}
+                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
                     }`}
                   >
                     Earrings
-                  </Link>
+                  </p>
                 </li>
 
                 <li
@@ -589,15 +598,21 @@ const Menus = () => {
                   }`}
                   onMouseEnter={() => handleCategoryHover("Necklaces")}
                   onMouseLeave={() => handleCategoryLeave()}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
+                    });
+                  }}
                 >
-                  <Link
-                    href="#"
+                  <p
+                    style={{ cursor: "pointer" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Necklaces" ? "active" : ""
                     }`}
                   >
                     Necklaces
-                  </Link>
+                  </p>
                 </li>
 
                 <li
@@ -606,15 +621,22 @@ const Menus = () => {
                   }`}
                   onMouseEnter={() => handleCategoryHover("Bangles")}
                   onMouseLeave={() => handleCategoryLeave()}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
+                    });
+                  }}
                 >
-                  <Link
-                    href="#"
+                  <p
+                    style={{ cursor: "pointer" }}
+                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Bangles" ? "active" : ""
                     }`}
                   >
                     Bangles & Bracelets
-                  </Link>
+                  </p>
                 </li>
 
                 <li
@@ -623,15 +645,22 @@ const Menus = () => {
                   }`}
                   onMouseEnter={() => handleCategoryHover("Rings")}
                   onMouseLeave={() => handleCategoryLeave()}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
+                    });
+                  }}
                 >
-                  <Link
-                    href="#"
+                  <p
+                    style={{ cursor: "pointer" }}
+                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Rings" ? "active" : ""
                     }`}
                   >
                     Rings
-                  </Link>
+                  </p>
                 </li>
 
                 <li
@@ -640,18 +669,24 @@ const Menus = () => {
                   }`}
                   onMouseEnter={() => handleCategoryHover("Anklets")}
                   onMouseLeave={() => handleCategoryLeave()}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                    });
+                  }}
                 >
-                  <Link
-                    href="#"
+                  <p
+                    style={{ cursor: "pointer" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Anklets" ? "active" : ""
                     }`}
                   >
                     Anklets
-                  </Link>
+                  </p>
                 </li>
 
-                <li
+                {/* <li
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Pendants" ? "active" : ""
                   }`}
@@ -666,7 +701,7 @@ const Menus = () => {
                   >
                     Other Accessories
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
 
