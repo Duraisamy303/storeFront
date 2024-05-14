@@ -1272,14 +1272,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
-              {state.shippingCost && (
+              {state?.shippingCost && (
                 <li className="tp-order-info-list-total">
                   <span>Shipping</span>
                   {checkChannel() == "india-channel" ? (
-                    <span>&#8377;{state.shippingCost?.toFixed(2)}</span>
+                    <span>&#8377;{state?.shippingCost?.toFixed(2)}</span>
                   ) : (
                     <span>
-                      <span>${state.shippingCost?.toFixed(2)}</span>
+                      <span>${state?.shippingCost?.toFixed(2)}</span>
                     </span>
                   )}
                 </li>
@@ -1296,10 +1296,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      &#8377; {state.total.toFixed(2)}
+                      &#8377; {state?.total}
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                        (includes &#8377; {state.tax?.toFixed(2)} VAT)
+                        (includes &#8377; {state?.tax} GST)
                       </span>
                     </p>
                   </>
@@ -1312,10 +1312,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      &#8377; {state.total.toFixed(2)}
+                      &#8377; {state?.total}
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                        (includes &#8377; {state.tax.toFixed(2)} VAT)
+                        (includes &#8377; {state?.tax} GST)
                       </span>
                     </p>
                   </>
