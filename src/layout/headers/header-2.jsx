@@ -40,6 +40,7 @@ import {
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/router";
 import { checkChannel } from "@/utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const router = useRouter();
