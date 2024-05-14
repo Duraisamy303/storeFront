@@ -948,6 +948,10 @@ export const PRODUCT_20_PERCENTAGE = ({ channel,first,after ,collectionid}) => {
         id
         quantityAvailable
       }
+      images {
+        id
+        url
+      }
     }
     
     `,
