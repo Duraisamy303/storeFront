@@ -17,6 +17,7 @@ import {
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
 import { checkChannel } from "@/utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const ProductItem = ({
   product,
@@ -59,7 +60,6 @@ const ProductItem = ({
       return prd?.node?.variant === product?.id;
     }
   );
-
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -152,7 +152,7 @@ const ProductItem = ({
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
         <Link href={`/product-details/${id}`}>
           <Image
-            src={thumbnail?.url}
+            src={profilePic(thumbnail?.url)}
             alt="product image"
             width={282}
             height={320}
@@ -309,7 +309,9 @@ const ProductItem = ({
         <h3 className="tp-product-title-3">
           <Link href={`/product-details/${id}`}>{name}</Link>
         </h3>
-        <p style={{ color: "gray", marginBottom: "0px" }}>{product?.category?.name}</p>
+        <p style={{ color: "gray", marginBottom: "0px" }}>
+          {product?.category?.name}
+        </p>
         <div className="tp-product-price-wrapper-3">
           {checkChannel() === "india-channel" ? (
             <span className="tp-product-price-3">

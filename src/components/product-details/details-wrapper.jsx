@@ -268,8 +268,6 @@ const DetailsWrapper = ({
     }
   }, []);
 
-  console.log("productItem", productItem);
-
   return (
     <div className="tp-product-details-wrapper">
       <ProductDetailsBreadcrumb

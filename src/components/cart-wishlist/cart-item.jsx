@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { checkChannel } from "../../utils/functions";
+import { profilePic } from "@/utils/constant";
 
 const CartItem = ({
   product,
@@ -110,7 +111,7 @@ const CartItem = ({
                 router.push(`/product-details/${product?.variant?.product?.id}`)
               }
             >
-              <Image src={img} alt="product img" width={70} height={100} />
+              <Image src={profilePic(img)}alt="product img" width={70} height={100} />
             </div>
           </td>
           <td className="tp-cart-title">
@@ -208,7 +209,7 @@ const CartItem = ({
                 router.push(`/product-details/${product?.variant?.product?.id}`)
               }
             >
-              <Image src={img} alt="product img" width={70} height={100} />
+              <Image src={profilePic(img)} alt="product img" width={70} height={100} />
             </div>
           </td>
           {/* title */}
