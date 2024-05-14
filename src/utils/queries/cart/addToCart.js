@@ -318,13 +318,32 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
 export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
   return {
     query: `
-    mutation CheckoutUpdateDeliveryMethod($checkoutid:ID!,$deliveryMethodId: ID! ) {
+    
+    mutation CheckoutUpdateDeliveryMethod($checkoutid: ID!, $deliveryMethodId: ID!) {
       checkoutDeliveryMethodUpdate(
         deliveryMethodId: $deliveryMethodId
         id: $checkoutid
       ) {
         checkout {
           id
+          totalPrice {
+            gross {
+              ...Money
+              __typename
+            }
+            tax {
+              ...Money
+              __typename
+            }
+            __typename
+          }
+          shippingPrice {
+            gross {
+              amount
+              currency
+            }
+          }
+          
         }
         errors {
           field
@@ -333,6 +352,13 @@ export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
         }
       }
     }
+    
+    fragment Money on Money {
+      currency
+      amount
+      __typename
+    }
+      
     
       `,
     variables: { checkoutid, deliveryMethodId },
@@ -373,6 +399,10 @@ export const CREATE_CHECKOUT_ID = ({ channel, lines }) => {
           id
           totalPrice {
             gross {
+              amount
+              currency
+            }
+            tax {
               amount
               currency
             }

@@ -131,11 +131,10 @@ const CartMiniSidebar = () => {
                               }}
                             >
                               <Image
-                                src={
-                                  profilePic(
-                                    item?.variant?.product?.thumbnail?.url
-                                  ) || profilePic(item?.node?.thumbnail?.url)
-                                }
+                                src={profilePic(
+                                  item?.variant?.product?.thumbnail?.url ||
+                                    item?.node?.thumbnail?.url
+                                )}
                                 width={70}
                                 height={60}
                                 alt="product img"
@@ -203,8 +202,10 @@ const CartMiniSidebar = () => {
                               }}
                             >
                               <Image
-                                src={ profilePic(item?.variant?.product?.thumbnail?.url) || profilePic(item?.node?.thumbnail?.url) }
-                                
+                                src={profilePic(
+                                  item?.variant?.product?.thumbnail?.url ||
+                                    item?.node?.thumbnail?.url
+                                )}
                                 width={70}
                                 height={60}
                                 alt="product img"

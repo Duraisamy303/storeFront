@@ -24,14 +24,14 @@ const Failed = ({ data,orderId }) => {
   const [successPayment] = usePaymentMutation();
 
   const handlePayment = useCallback(
-    async () => {
+    async (total,orderId) => {
       try {
         console.log("options: ",);
 
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: Total * 100,
+          amount: Math.round(total * 100),
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: "Products",
@@ -213,7 +213,7 @@ const Failed = ({ data,orderId }) => {
             </div>
             <div className="mt-20">
               <button
-                onClick={() => handlePayment()}
+                onClick={() => handlePayment(Total,orderId)}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}
               >

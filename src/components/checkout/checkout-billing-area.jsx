@@ -50,13 +50,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
 
-  const [checkoutDetails] = useGetCheckoutDetailsMutation();
-
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
 
   const [updateShippingAddress] = useUpdateShippingAddressMutation();
+
   const [emailUpdate] = useUpdateEmailMutation();
 
   const [state, setState] = useSetState({
@@ -106,37 +105,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
     isAgree: false,
     razorpayId: "",
     checkoutData: {},
+    total: "",
+    tax: "",
+    shippingCost: "",
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
     code: state.selectedCountry,
   });
-
-  const totalAmount = cartList?.data?.checkout?.lines?.reduce(
-    (acc, curr) =>
-      acc + curr?.variant?.pricing?.price?.gross?.amount * curr?.quantity,
-    0
-  );
-
-  const amount = () => {
-    const checkoutAmt =
-      checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
-    let amount = 0;
-    if (checkoutAmt > 0) {
-      amount = parseInt(checkoutAmt) * 100;
-    } else {
-      amount = parseInt(totalAmount) * 100;
-    }
-    console.log("amount: ", amount);
-
-    return amount;
-  };
-
-  // const { data: failedPayment } = usePaymentQuery({
-  //   amountAuthorized: amount(),
-  //   amountCharged: amount(),
-  //   pspReference: state.razorpayId,
-  // });
 
   const [successPayment] = usePaymentMutation();
 
@@ -192,6 +168,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
       } else {
         const checkoutId = data?.data?.data?.checkoutCreate?.checkout?.id;
         localStorage.setItem("checkoutId", checkoutId);
+        const total =
+          data?.data?.data?.checkoutCreate?.checkout?.totalPrice?.gross?.amount;
+        const tax =
+          data?.data?.data?.checkoutCreate?.checkout?.totalPrice?.tax?.amount;
+        setState({ total, tax });
         // verifyCoupenCode(checkoutId);
       }
     } catch (error) {
@@ -313,15 +294,17 @@ const CheckoutBillingArea = ({ register, errors }) => {
           checkoutid: checkoutId,
           country,
         });
-        console.log(
-          "delivery: ",
-          res?.data?.data?.checkoutDeliveryMethodUpdate
-        );
         if (res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length > 0) {
           notifyError(
             res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message
           );
         } else {
+          const response =
+            res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
+          const total = response?.totalPrice?.gross?.amount;
+          const tax = response?.totalPrice?.tax?.amount;
+          const shippingCost = response?.shippingPrice?.gross?.amount;
+          setState({ shippingCost, tax, total });
           // handlePayment(checkoutId);
         }
       }
@@ -331,12 +314,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handlePayment = useCallback(
-    async (orderId) => {
+    async (orderId, total) => {
       try {
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: amount(),
+          amount: Math.round(total * 100),
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: state.firstName + " " + state.lastName,
@@ -354,18 +337,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
           handler: async (res) => {
             if (res?.razorpay_payment_id) {
               notifySuccess("Payment Successful");
-              const checkoutAmt =
-                checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount;
-              let amount = 0;
-              if (checkoutAmt > 0) {
-                amount = parseInt(checkoutAmt);
-              } else {
-                amount = parseInt(totalAmount);
-              }
-
               const data = await successPayment({
-                amountAuthorized: amount,
-                amountCharged: amount,
+                amountAuthorized: state.total,
+                amountCharged: state.total,
                 pspReference: res?.razorpay_payment_id,
               });
               console.log("data: ", data);
@@ -455,7 +429,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
         );
       } else {
         handlePayment(
-          completeResponse?.data?.data?.checkoutComplete?.order?.id
+          completeResponse?.data?.data?.checkoutComplete?.order?.id,
+          state.total
         );
         localStorage.setItem(
           "orderId",
@@ -490,9 +465,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           },
         });
         updateDelivertMethod(e.target.value);
-
-        const res = await checkoutDetails();
-        setState({ checkoutData: res?.data });
       }
     } catch (error) {
       console.log("error: ", error);
@@ -514,8 +486,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         },
       });
       updateDelivertMethod(e.target.value);
-      const res = await checkoutDetails();
-      setState({ checkoutData: res?.data });
     } catch (e) {
       console.log("e: ", e);
     }
@@ -1302,23 +1272,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
-              {state.checkoutData?.data?.checkout?.shippingMethods?.length >
-                0 && (
+              {state.shippingCost && (
                 <li className="tp-order-info-list-total">
                   <span>Shipping</span>
                   {checkChannel() == "india-channel" ? (
-                    <span>
-                      &#8377;
-                      {state.checkoutData?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
-                        2
-                      )}
-                    </span>
+                    <span>&#8377;{state.shippingCost?.toFixed(2)}</span>
                   ) : (
                     <span>
-                      $
-                      {state.checkoutData?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
-                        2
-                      )}
+                      <span>${state.shippingCost?.toFixed(2)}</span>
                     </span>
                   )}
                 </li>
@@ -1328,81 +1289,17 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <span>Total</span>
                 {checkChannel() === "india-channel" ? (
                   <>
-                    <span>
-                      {state.checkoutData?.data?.checkout?.totalPrice?.gross
-                        ?.amount > 0 ? (
-                        <>
-                          &#8377;
-                          {state.checkoutData?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                            2
-                          )}
-                          {state.checkoutData?.data?.checkout?.totalPrice?.tax
-                            ?.amount && (
-                            <>
-                              <br />
-                              <span className="para">
-                                (includes &#8377;{" "}
-                                {
-                                  state.checkoutData?.data?.checkout?.totalPrice
-                                    ?.tax?.amount
-                                }{" "}
-                                VAT)
-                              </span>
-
-                              {/* <span className="para">{`(includes &#8377;${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span> */}
-                            </>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          &#8377;{totalAmount?.toFixed(2)}
-                          {state.checkoutData?.data?.checkout?.totalPrice?.tax
-                            ?.amount && (
-                            <>
-                              <br />
-                              <span className="para">
-                                (includes &#8377;
-                                {
-                                  state.checkoutData?.data?.checkout?.totalPrice
-                                    ?.tax?.amount
-                                }{" "}
-                                VAT)
-                              </span>
-                            </>
-                          )}
-                        </>
-                      )}
+                    <span>&#8377; {state.total}</span>
+                    <br />
+                    <span className="para">
+                      (includes &#8377; {state.tax} VAT)
                     </span>
                   </>
                 ) : (
                   <>
-                    {state.checkoutData?.data?.checkout?.totalPrice?.gross
-                      ?.amount > 0 ? (
-                      <>
-                        $
-                        {state.checkoutData?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                          2
-                        )}
-                        {state.checkoutData?.data?.checkout?.totalPrice?.tax
-                          ?.amount && (
-                          <>
-                            <br />
-                            <span className="para">{`(includes $ ${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        ${totalAmount?.toFixed(2)}
-                        {state.checkoutData?.data?.checkout?.totalPrice?.tax
-                          ?.amount && (
-                          <>
-                            <br />
-                            <span className="para">{`(includes $ ${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
-                          </>
-                        )}
-                      </>
-                    )}
+                    <span>$ {state.total}</span>
+                    <br />
+                    <span className="para">(includes $ {state.tax} VAT)</span>
                   </>
                 )}
               </li>

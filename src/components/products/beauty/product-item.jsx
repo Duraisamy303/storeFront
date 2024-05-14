@@ -6,9 +6,9 @@ import Link from "next/link";
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import { useAddToCartMutation, useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
-import { notifySuccess } from "@/utils/toast";
+import { notifyError, notifySuccess } from "@/utils/toast";
 import { compare_list } from "@/redux/features/cartSlice";
 import { handleWishlistProduct } from "@/utils/common_function";
 import { useRouter } from "next/router";
@@ -25,7 +25,6 @@ const ProductItem = ({
   primary_style = false,
   data,
 }) => {
-  const [addToCart, {}] = useAddToCartMutation();
 
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
@@ -33,6 +32,8 @@ const ProductItem = ({
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
+
+  const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
   const router = useRouter();
 
@@ -48,7 +49,7 @@ const ProductItem = ({
 
   // const isAddedToCart = cart_products.some((prd) => prd.id === id);
   // const isAddedToWishlist = data?.some((prd) => prd.id === id);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // wishlist added and show
   const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
@@ -63,17 +64,37 @@ const ProductItem = ({
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
-  const handleAddProduct = async (data) => {
+  const addToCartProductINR = async () => {
     try {
-      const checkoutToken = localStorage.getItem("checkoutToken");
-      if (checkoutToken) {
-        const response = await addToCartMutation({
-          variantId: data?.variants[0]?.id,
-        });
-
-        notifySuccess(`${data.name} added to cart successfully`);
+      const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenINR,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
       } else {
-        router.push("/login");
+        notifySuccess(`Product added to cart successfully`);
+        cartRefetch();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    try {
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId: product?.defaultVariant?.id,
+      });
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        notifyError(err);
+      } else {
+        cartRefetch();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -115,18 +136,6 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-
-  // const addWishlistProduct = async () => {
-  //   try {
-  //     const modify = {
-  //       node: product,
-  //     };
-  //     const addedWishlist = handleWishlistProduct(modify);
-  //     dispatch(add_to_wishlist(addedWishlist));
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   const handleCompareProduct = (prd) => {
     const products = product || product.node;
@@ -212,7 +221,10 @@ const ProductItem = ({
                 ) : (
                   <button
                     type="button"
-                    onClick={() => handleAddProduct(product)}
+                    onClick={() => {
+                      addToCartProductINR();
+                      addToCartProductUSD();
+                    }}
                     className={`tp-product-action-btn-3 ${
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}

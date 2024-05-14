@@ -49,7 +49,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
-  const [searchOption,setSearchOption]=useState([])
+  const [searchOption, setSearchOption] = useState([]);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
   const [searchProduct] = useProductSearchMutation();
@@ -103,6 +103,27 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      // Check if the click is outside of the header elements
+      if (
+        !event.target.closest(".tp-header-area") &&
+        !event.target.closest(".dropdown-content")
+      ) {
+        setIsOpen(false);
+        setIsOpen2(false);
+      }
+    };
+
+    // Attach event listener for clicks outside the header area
+    document.addEventListener("click", handleOutsideClick);
+
+    // Cleanup function to remove the event listener when component unmounts
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   // Function to toggle the dropdown
   const toggleDropdown = () => {
@@ -252,7 +273,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <Search />
                           </button> */}
                         </form>
-                        {isOpen2 == true  ? (
+                        {isOpen2 == true ? (
                           <div
                             className="dropdown-content  d-flex flex-column"
                             style={{
@@ -264,91 +285,98 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               zIndex: "2",
                               width: "300px",
                               boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
-                              height: "400px",
+                              height:
+                                searchOption?.length > 5 ? "400px" : "auto",
                               overflowY: "scroll",
                             }}
                           >
-                            {searchOption?.map((item) => (
-                              // <Link
-                              //   href={`/product/${item?.id}`}
-                              //   key={item?.id}
-                              //   className="dropdown-item"
-                              // >
-                              //   {item?.name}
-                              // </Link>
+                            {searchOption?.length > 0 ? (
+                              searchOption?.map((item) => (
+                                // <Link
+                                //   href={`/product/${item?.id}`}
+                                //   key={item?.id}
+                                //   className="dropdown-item"
+                                // >
+                                //   {item?.name}
+                                // </Link>
 
-                              <div
-                                className="d-flex align-items-center justify-content-between"
-                                style={{
-                                  marginBottom: "10px",
-                                  paddingBottom: "10px",
-                                  borderBottom: "1px solid #dadada",
-                                }}
-                              >
-                                {item.img ? (
-                                  <div
-                                    style={{
-                                      marginRight: "10px",
-                                      width: "50px",
-                                      height: "50px",
-                                    }}
-                                  >
-                                    <Image
-                                      src={item?.img}
-                                      alt="Product Image"
-                                      width={50}
-                                      height={50}
-                                      style={{ borderRadius: "50%" }}
-                                    />
-                                  </div>
-                                ) : (
-                                  <div
-                                    style={{
-                                      marginRight: "10px",
-                                      width: "50px",
-                                      height: "50px",
-                                    }}
-                                  >
-                                    <Image
-                                      src={pradeLogo}
-                                      alt="Placeholder Image"
-                                      width={50}
-                                      height={50}
-                                      style={{ borderRadius: "50%" }}
-                                    />
-                                  </div>
-                                )}
-
-                                <Link
-                                  href={`/product-details/${item?.id}`}
-                                  key={item?.id}
-                                  className="dropdown-item"
+                                <div
+                                  className="d-flex align-items-center justify-content-between"
+                                  style={{
+                                    marginBottom: "10px",
+                                    paddingBottom: "10px",
+                                    borderBottom: "1px solid #dadada",
+                                  }}
                                 >
-                                  {item?.name}
-                                </Link>
-                                {checkChannel() === "india-channel" ? (
-                                  <p
-                                    style={{
-                                      marginLeft: "10px !important",
-                                      color: "black",
-                                      margin: "0",
-                                    }}
+                                  {item.img ? (
+                                    <div
+                                      style={{
+                                        marginRight: "10px",
+                                        width: "50px",
+                                        height: "50px",
+                                      }}
+                                    >
+                                      <Image
+                                        src={item?.img}
+                                        alt="Product Image"
+                                        width={50}
+                                        height={50}
+                                        style={{ borderRadius: "50%" }}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div
+                                      style={{
+                                        marginRight: "10px",
+                                        width: "50px",
+                                        height: "50px",
+                                      }}
+                                    >
+                                      <Image
+                                        src={pradeLogo}
+                                        alt="Placeholder Image"
+                                        width={50}
+                                        height={50}
+                                        style={{ borderRadius: "50%" }}
+                                      />
+                                    </div>
+                                  )}
+
+                                  <Link
+                                    href={`/product-details/${item?.id}`}
+                                    key={item?.id}
+                                    className="dropdown-item"
                                   >
-                                    ₹{item?.price}
-                                  </p>
-                                ) : (
-                                  <p
-                                    style={{
-                                      marginLeft: "10px !important",
-                                      color: "black",
-                                      margin: "0",
-                                    }}
-                                  >
-                                    ${item?.price}
-                                  </p>
-                                )}
-                              </div>
-                            ))}
+                                    {item?.name}
+                                  </Link>
+                                  {checkChannel() === "india-channel" ? (
+                                    <p
+                                      style={{
+                                        marginLeft: "10px !important",
+                                        color: "black",
+                                        margin: "0",
+                                      }}
+                                    >
+                                      ₹{item?.price}
+                                    </p>
+                                  ) : (
+                                    <p
+                                      style={{
+                                        marginLeft: "10px !important",
+                                        color: "black",
+                                        margin: "0",
+                                      }}
+                                    >
+                                      ${item?.price}
+                                    </p>
+                                  )}
+                                </div>
+                              ))
+                            ) : (
+                              <span className="item-center justify-center">
+                                No Data Found
+                              </span>
+                            )}
                           </div>
                         ) : null}
                       </div>
