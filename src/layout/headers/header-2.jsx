@@ -102,6 +102,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
 
   // Function to toggle the dropdown
   const toggleDropdown = () => {
@@ -145,6 +146,13 @@ const HeaderTwo = ({ style_2 = false, data }) => {
         img: item?.node?.thumbnail?.url,
         id: item?.node?.id,
       }));
+
+      if (search === "") {
+        setIsOpen2(false);
+      } else {
+        setIsOpen2(true);
+      }
+
       setSearchOption(filter);
     } catch (error) {
       console.log("error: ", error);
@@ -240,11 +248,11 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             type="text"
                             placeholder="Search for Products..."
                           />
-                          <button type="submit">
+                          {/* <button type="submit">
                             <Search />
-                          </button>
+                          </button> */}
                         </form>
-                        {searchOption?.length > 0 && (
+                        {isOpen2 == true  ? (
                           <div
                             className="dropdown-content  d-flex flex-column"
                             style={{
@@ -342,7 +350,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               </div>
                             ))}
                           </div>
-                        )}
+                        ) : null}
                       </div>
                       <div className="tp-header-action d-flex align-items-center ml-30">
                         <div className="tp-header-action-item d-none d-lg-block">
