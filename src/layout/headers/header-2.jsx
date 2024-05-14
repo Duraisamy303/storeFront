@@ -64,6 +64,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const dispatch = useDispatch();
 
   const [token, setToken] = useState("");
+  const [ userName, setUserName] = useState("");
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -80,6 +81,11 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+    const user = localStorage.getItem("userInfo");
+    const JsonUSer = JSON.parse(user);
+    const UserName = JsonUSer?.user?.firstName;
+    setUserName(UserName);
     setToken(token);
   }, []);
 
@@ -463,7 +469,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                     margin: "0px",
                                   }}
                                 >
-                                  Welcome
+                                  Welcome {userName}
                                 </p>
                                 <p style={{ color: "gray", margin: "0px" }}>
                                   To access account and manage orders

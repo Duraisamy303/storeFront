@@ -387,14 +387,14 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
                 &#8377;
-                {product?.pricing?.priceRange?.start?.gross?.amount}
+                {product?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
               </span>
             </div>
           ) : (
             <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
                 {"$"}
-                {product?.pricing?.priceRange?.start?.gross?.amount}
+                {product?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
               </span>
             </div>
           )}

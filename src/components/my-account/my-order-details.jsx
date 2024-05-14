@@ -42,11 +42,11 @@ const MyOrderDetails = ({ data }) => {
                   </td>
                   {checkChannel() == "india-channel" ? (
                     <>
-                      <td>&#8377;{item?.totalPrice?.gross?.amount}</td>
+                      <td>&#8377;{item?.totalPrice?.gross?.amount?.toFixed(2)}</td>
                     </>
                   ) : (
                     <>
-                      <td>${item?.totalPrice?.gross?.amount}</td>
+                      <td>${item?.totalPrice?.gross?.amount?.toFixed(2)}</td>
                     </>
                   )}
                 </tr>
@@ -56,11 +56,11 @@ const MyOrderDetails = ({ data }) => {
                 <td>Subtotal</td>
                 {checkChannel() == "india-channel" ? (
                   <>
-                    <td>&#8377;{SubTotal}</td>
+                    <td>&#8377;{SubTotal?.toFixed(2)}</td>
                   </>
                 ) : (
                   <>
-                    <td>${SubTotal}</td>
+                    <td>${SubTotal?.toFixed(2)}</td>
                   </>
                 )}
               </tr>
@@ -69,11 +69,11 @@ const MyOrderDetails = ({ data }) => {
                 <td>Shipping</td>
                 {checkChannel() == "india-channel" ? (
                   <>
-                    <td>&#8377;{ShippingAmount}</td>
+                    <td>&#8377;{ShippingAmount?.toFixed(2)}</td>
                   </>
                 ) : (
                   <>
-                    <td>${ShippingAmount}</td>
+                    <td>${ShippingAmount?.toFixed(2)}</td>
                   </>
                 )}
               </tr>
@@ -82,11 +82,11 @@ const MyOrderDetails = ({ data }) => {
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>
                 {checkChannel() === "india-channel" ? (
                   <>
-                    <td style={{ fontSize: "20px" }}>&#8377;{Total}</td>
+                    <td style={{ fontSize: "20px" }}>&#8377;{Total?.toFixed(2)}</td>
                   </>
                 ) : (
                   <>
-                    <td style={{ fontSize: "20px" }}>${Total}</td>
+                    <td style={{ fontSize: "20px" }}>${Total?.toFixed(2)}</td>
                   </>
                 )}
               </tr>

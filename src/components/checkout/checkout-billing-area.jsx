@@ -1272,14 +1272,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
-              {state.shippingCost && (
+              {state?.shippingCost && (
                 <li className="tp-order-info-list-total">
                   <span>Shipping</span>
                   {checkChannel() == "india-channel" ? (
-                    <span>&#8377;{state.shippingCost?.toFixed(2)}</span>
+                    <span>&#8377;{state?.shippingCost?.toFixed(2)}</span>
                   ) : (
                     <span>
-                      <span>${state.shippingCost?.toFixed(2)}</span>
+                      <span>${state?.shippingCost?.toFixed(2)}</span>
                     </span>
                   )}
                 </li>
@@ -1289,17 +1289,36 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 <span>Total</span>
                 {checkChannel() === "india-channel" ? (
                   <>
-                    <span>&#8377; {state.total}</span>
-                    <br />
-                    <span className="para">
-                      (includes &#8377; {state.tax} VAT)
-                    </span>
+                    <p
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        textAlign: "right",
+                      }}
+                    >
+                      {state?.total && <>&#8377; {state?.total?.toFixed(2)}</>}
+                      <br />
+                      <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                        (includes &#8377; {state?.tax} GST)
+                      </span>
+                    </p>
                   </>
                 ) : (
                   <>
-                    <span>$ {state.total}</span>
-                    <br />
-                    <span className="para">(includes $ {state.tax} VAT)</span>
+                    <p
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        textAlign: "right",
+                      }}
+                    >
+                      {state?.total && <>$ {state?.total?.toFixed(2)}</>}
+
+                      <br />
+                      <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                        (includes $ {state?.tax} GST)
+                      </span>
+                    </p>
                   </>
                 )}
               </li>
