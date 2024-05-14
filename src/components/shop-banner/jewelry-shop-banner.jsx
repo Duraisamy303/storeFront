@@ -36,7 +36,6 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
       );
       console.log("filteredItems: ", filteredItems);
 
-
       const filteredNecklaces = catList.find(
         (item) => item.node.name === "Necklaces"
       );
@@ -61,20 +60,42 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
           <Link href="/shop">{title}</Link>
         </h3>
         <span>{content}</span>
-        {isBtn && (
-          <div className="tp-banner-btn-4">
-            <button
-              onClick={() => {
-                router.push({
-                  pathname: "/shop",
-                  query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
-                });
-              }}
-              className="tp-btn tp-btn-border"
-            >
-              VIEW PRODUCTS <ArrowRightLong />
-            </button>
-          </div>
+        {title == "NECKLACES" ? (
+          <>
+            {isBtn && (
+              <div className="tp-banner-btn-4">
+                <button
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
+                    });
+                  }}
+                  className="tp-btn tp-btn-border"
+                >
+                  VIEW PRODUCTS <ArrowRightLong />
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {isBtn && (
+              <div className="tp-banner-btn-4">
+                <button
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6Mzg4OQ==" }, // Your parameters
+                    });
+                  }}
+                  className="tp-btn tp-btn-border"
+                >
+                  VIEW PRODUCTS <ArrowRightLong />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -104,20 +125,42 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
           </h3>
           <span className="category-content">{content}</span>
 
-          {isBtn && (
-            <div className="tp-banner-btn-4">
-              <button
-              onClick={() => {
-                router.push({
-                  pathname: "/shop",
-                  query: { categoryId: "Q2F0ZWdvcnk6Mzg4OQ==" }, // Your parameters
-                });
-              }}
-              className="tp-btn tp-btn-border"
-            >
-              VIEW PRODUCTS <ArrowRightLong />
-            </button>
-            </div>
+          {title === "ANKLETS" ? (
+            <>
+              {isBtn && (
+                <div className="tp-banner-btn-4">
+                  <button
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                      });
+                    }}
+                    className="tp-btn tp-btn-border"
+                  >
+                    VIEW PRODUCTS <ArrowRightLong />
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {isBtn && (
+                <div className="tp-banner-btn-4">
+                  <button
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                      });
+                    }}
+                    className="tp-btn tp-btn-border"
+                  >
+                    VIEW PRODUCTS <ArrowRightLong />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -144,12 +187,42 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
           <Link href="/shop">{title}</Link>
         </h3>
         <span>{content}</span>
-        {isBtn && (
-          <div className="tp-banner-btn-4">
-            <Link href="/shop" className="tp-btn tp-btn-border">
-              VIEW PRODUCTS <ArrowRightLong />
-            </Link>
-          </div>
+        {title === "RINGS" ? (
+          <>
+            {isBtn && (
+              <div className="tp-banner-btn-4">
+                <button
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
+                    });
+                  }}
+                  className="tp-btn tp-btn-border"
+                >
+                  VIEW PRODUCTS <ArrowRightLong />
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {isBtn && (
+              <div className="tp-banner-btn-4">
+                <button
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
+                    });
+                  }}
+                  className="tp-btn tp-btn-border"
+                >
+                  VIEW PRODUCTS <ArrowRightLong />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -253,7 +326,7 @@ const JewelryShopBanner = () => {
                     className="category-left-two"
                     bg_clr="131418"
                     img={banner_bg_6}
-                    title="PENDANTS"
+                    title="ANKLETS"
                     isBtn={true}
                     content={
                       <p>

@@ -72,7 +72,7 @@ const FooterTwo = () => {
             <div className="container-fluid">
               <div style={{ padding: "0px 50px" }}>
                 <div className="row">
-                  <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                  <div className=" col-md-3 col-sm-6">
                     <div className="tp-footer-widget footer-col-4-1 mb-50">
                       <h4 className="tp-footer-widget-title">ABOUT US</h4>
                       <div className="tp-footer-logo">
@@ -92,7 +92,7 @@ const FooterTwo = () => {
                     </div>
                   </div>
 
-                  <div className="col-xl-2 col-lg-4 col-md-4 col-sm-12">
+                  <div className="col-md-3 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
                       <h4 className="tp-footer-widget-title">QUICK LINKS</h4>
                       <div className="tp-footer-widget-content">
@@ -109,21 +109,6 @@ const FooterTwo = () => {
                           <li>
                             <Link href="/coupon">Gift Card</Link>
                           </li>
-                          <li>
-                            <Link href="/shipping-and-exchange-policy">
-                              Shipping and Exchange Policy
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-xl-2 col-lg-4 col-md-4 col-sm-12">
-                    <div className="tp-footer-widget footer-col-4-3 mb-50">
-                      <h4 className="tp-footer-widget-title">POLICIES</h4>
-                      <div className="tp-footer-widget-content">
-                        <ul>
                           <li>
                             <Link href="/terms-and-conditions">
                               Terms And Conditions
@@ -142,7 +127,23 @@ const FooterTwo = () => {
                     </div>
                   </div>
 
-                  <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                  {/* <div className="col-xl-2 col-lg-4 col-md-4 col-sm-12">
+                    <div className="tp-footer-widget footer-col-4-3 mb-50">
+                      <h4 className="tp-footer-widget-title">POLICIES</h4>
+                      <div className="tp-footer-widget-content">
+                        <ul>
+                         
+                          <li>
+                            <Link href="/shipping-and-exchange-policy">
+                              Shipping and Exchange Policy
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div> */}
+
+                  <div className="col-md-3 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
                       <h4 className="tp-footer-widget-title">STORE ADDRESS</h4>
                       <div className="tp-footer-widget-content">
@@ -159,7 +160,7 @@ const FooterTwo = () => {
                                   href="https://maps.app.goo.gl/RoQg5oRAZ6fawCVh6"
                                   target="_blank"
                                 >
-                                  Prade Jewels and Drapes Pvt Ltd No.28, 1st
+                                  Prade Jewels and Drapes Pvt Ltd <br/>No.28, 1st
                                   floor, Vijay building, Near Andhra club,
                                   Vijaya Raghava road,
                                   <br /> Chennai – 600017.
@@ -228,7 +229,7 @@ const FooterTwo = () => {
                     </div>
                   </div>
 
-                  <div className="col-xl-2 col-lg-4 col-md-4 col-sm-12">
+                  <div className=" col-md-3 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-4 mb-50">
                       <h4 className="tp-footer-widget-title">STORE LOCATION</h4>
                       <div
@@ -237,7 +238,7 @@ const FooterTwo = () => {
                       >
                         <iframe
                           src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7960308.336715554!2d80.242347!3d13.04399!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267e3de37ce75%3A0xd50eb41608bccab6!2sPraDe%20Jewels!5e0!3m2!1sen!2sin!4v1715580579688!5m2!1sen!2sin"
-                          style={{ border: "0", width: "100%" }}
+                          style={{ border: "0", width: "100%", height:"220px" }}
                           allowfullscreen=""
                           loading="lazy"
                           referrerpolicy="no-referrer-when-downgrade"
