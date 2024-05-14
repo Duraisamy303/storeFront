@@ -9,7 +9,8 @@ import {
   GET_PRODUCTLIST_BY_ID,
   MY_ORDER_LIST,
   ORDER_LIST,
-  PAYMENT_FAILED,
+  PARENT_CAT_LIST,
+  PARENT_CATEGORY_LIST,
   PAYMENT_SUCCESS,
   PRE_ORDER_LIST,
   PRODUCT_20_PERCENTAGE,
@@ -177,6 +178,13 @@ export const productApi = apiSlice.injectEndpoints({
           channel = channels;
         }
         return configuration(CATEGORY_LIST({ channel, first: 100 }));
+      },
+      providesTags: ["Products"],
+    }),
+
+    getParentCategoryList: builder.query({
+      query: (data) => {
+        return configuration(PARENT_CATEGORY_LIST({}));
       },
       providesTags: ["Products"],
     }),
@@ -390,4 +398,5 @@ export const {
   useGetPreOrderProductsQuery,
   useProductSearchMutation,
   useProduct20PercentageMutation,
+  useGetParentCategoryListQuery,
 } = productApi;

@@ -8,6 +8,7 @@ import {
   useGetPreOrderProductsQuery,
   useGetCategoryListQuery,
   usePriceFilterMutation,
+  useGetParentCategoryListQuery,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -34,7 +35,7 @@ const PreOrders = () => {
     isError,
     isLoading,
   } = useGetPreOrderProductsQuery({
-    collectionid: ["Q29sbGVjdGlvbjo0"]
+    collectionid: ["Q29sbGVjdGlvbjo0"],
   });
 
   const filter = useSelector((state) => state.shopFilter.filterData);
@@ -102,7 +103,7 @@ const PreOrders = () => {
   const dispatch = useDispatch();
 
   const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetCategoryListQuery();
+  const { data: categoryData } = useGetParentCategoryListQuery();
 
   const [priceFilter, {}] = usePriceFilterMutation();
 
@@ -142,9 +143,9 @@ const PreOrders = () => {
       productsData?.data?.collections &&
       productsData?.data?.collections?.edges?.length > 0
     ) {
-    const list =
-      productsData?.data?.collections?.edges[0]?.node?.products?.edges;
-    setProductList(list);
+      const list =
+        productsData?.data?.collections?.edges[0]?.node?.products?.edges;
+      setProductList(list);
     }
   };
 
@@ -156,7 +157,7 @@ const PreOrders = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(-9);
+      const lastTen = catList?.slice(0, 8);
       setCategoryList(lastTen);
     }
   }, [categoryData]);
