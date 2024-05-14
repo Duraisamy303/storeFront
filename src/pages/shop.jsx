@@ -6,7 +6,7 @@ import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
 import {
   useGetAllProductsQuery,
-  useGetCategoryListQuery,
+  useGetParentCategoryListQuery,
   usePriceFilterMutation,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
@@ -104,7 +104,7 @@ const ShopPage = () => {
   const dispatch = useDispatch();
 
   const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetCategoryListQuery();
+  const { data: categoryData } = useGetParentCategoryListQuery();
 
   const [priceFilter, {}] = usePriceFilterMutation();
 
@@ -156,7 +156,7 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(-9);
+      const lastTen = catList?.slice(0, 8);
       setCategoryList(lastTen);
     }
   }, [categoryData]);

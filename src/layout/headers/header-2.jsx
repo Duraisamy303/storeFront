@@ -106,7 +106,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      // Check if the click is outside of the header elements
       if (
         !event.target.closest(".tp-header-area") &&
         !event.target.closest(".dropdown-content")
@@ -116,10 +115,8 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       }
     };
 
-    // Attach event listener for clicks outside the header area
     document.addEventListener("click", handleOutsideClick);
 
-    // Cleanup function to remove the event listener when component unmounts
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -291,7 +288,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             }}
                           >
                             {searchOption?.length > 0 ? (
-                              searchOption?.map((item) => (
+                              searchOption?.map((item, index) => (
                                 // <Link
                                 //   href={`/product/${item?.id}`}
                                 //   key={item?.id}
@@ -301,6 +298,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                 // </Link>
 
                                 <div
+                                  key={index}
                                   className="d-flex align-items-center justify-content-between"
                                   style={{
                                     marginBottom: "10px",

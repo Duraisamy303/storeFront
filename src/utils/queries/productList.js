@@ -283,6 +283,25 @@ export const CATEGORY_LIST = ({ channel, first }) => {
   });
 };
 
+export const PARENT_CATEGORY_LIST = ({}) => {
+  return JSON.stringify({
+    query: `
+    query MyQuery {
+      categories(first: 100, level: 0) {
+        edges {
+          node {
+            id
+            name
+            slug
+          }
+        }
+      }
+    }
+    `,
+    variables: {},
+  });
+};
+
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
@@ -844,26 +863,12 @@ export const PRODUCT_SEARCH = ({ query, channel }) => {
   });
 };
 
-export const PARENT_CAT_LIST = ({ code }) => {
-  return JSON.stringify({
-    query: `
-    query MyQuery {
-      categories(first: 100, level: 0) {
-        edges {
-          node {
-            id
-            name
-            slug
-          }
-        }
-      }
-    }
-    `,
-    variables: { code },
-  });
-};
-
-export const PRODUCT_20_PERCENTAGE = ({ channel,first,after ,collectionid}) => {
+export const PRODUCT_20_PERCENTAGE = ({
+  channel,
+  first,
+  after,
+  collectionid,
+}) => {
   return JSON.stringify({
     query: `
     query Product20percentageDiscount($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
@@ -955,6 +960,6 @@ export const PRODUCT_20_PERCENTAGE = ({ channel,first,after ,collectionid}) => {
     }
     
     `,
-    variables: { channel,first,after ,collectionid},
+    variables: { channel, first, after, collectionid },
   });
 };

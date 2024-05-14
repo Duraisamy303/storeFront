@@ -8,6 +8,7 @@ import {
   useGetPreOrderProductsQuery,
   useGetCategoryListQuery,
   usePriceFilterMutation,
+  useGetParentCategoryListQuery,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -104,7 +105,7 @@ const PreOrders = () => {
   const dispatch = useDispatch();
 
   const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetCategoryListQuery();
+  const { data: categoryData } = useGetParentCategoryListQuery();
 
   const [priceFilter, {}] = usePriceFilterMutation();
 
@@ -158,7 +159,7 @@ const PreOrders = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(-9);
+      const lastTen = catList?.slice(0, 8);
       setCategoryList(lastTen);
     }
   }, [categoryData]);
@@ -265,8 +266,8 @@ const PreOrders = () => {
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Pre Orders"
-        subtitle="Pre Orders"
+        title="Sale"
+        subtitle="Sale"
         bgImage={shopBanner}
         catList={categoryList}
       />
@@ -275,7 +276,7 @@ const PreOrders = () => {
         products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
-        subtitle="Pre Orders"
+        subtitle="Sale"
         updateRange={(range) => setPriceValue(range)}
       />
       <ShopFilterOffCanvas
