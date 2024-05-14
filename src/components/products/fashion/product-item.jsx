@@ -24,6 +24,7 @@ import {
   useGetProductByIdQuery,
   useGetWishlistQuery,
 } from "../../../redux/features/productApi";
+import { profilePic } from "@/utils/constant";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
@@ -65,7 +66,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       return prd?.node?.variant === product?.id;
     }
   );
-
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
@@ -136,7 +136,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
-        router.push('/login')
+        router.push("/login");
 
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
@@ -152,7 +152,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         const isAddWishlist = wishlistData?.data?.wishlists?.edges
           ?.map((item) => item?.node)
           ?.some((node) => node?.id === product?.id);
-
 
         dispatch(
           add_to_wishlist(
@@ -188,6 +187,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     }
   }, []);
 
+  console.log("img: ", img);
   return (
     <div
       className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}${
@@ -198,7 +198,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         <Link href={`/product-details/${product?.id}`}>
           <Image
             // src={product?.thumbnail.url}
-            src={img}
+            src={profilePic(img)}
             alt="product img"
             width={284}
             height={302}
