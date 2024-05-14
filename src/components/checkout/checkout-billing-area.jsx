@@ -7,6 +7,7 @@ import {
   useCheckoutCompleteMutation,
   useCheckoutUpdateMutation,
   useCreateCheckoutTokenMutation,
+  useGetCheckoutDetailsMutation,
   useUpdateBillingAddressMutation,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -49,12 +50,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const [createDeliveryUpdate, { data: data }] = useCheckoutUpdateMutation();
 
-  const { data: checkoutDetails, refetch: checkoutDetailsRefetch } =
-    useGetCheckoutDetailsQuery();
-
-  useEffect(() => {
-    checkoutDetailsRefetch();
-  }, [checkoutDetails]);
+  const [checkoutDetails] = useGetCheckoutDetailsMutation();
 
   const [checkoutComplete, { data: complete }] = useCheckoutCompleteMutation();
 
@@ -109,6 +105,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     loginEmail: "",
     isAgree: false,
     razorpayId: "",
+    checkoutData: {},
   });
 
   const { data: stateList, refetch: stateRefetch } = useStateListQuery({
@@ -355,7 +352,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
             },
           },
           handler: async (res) => {
-            console.log("res: ", res);
             if (res?.razorpay_payment_id) {
               notifySuccess("Payment Successful");
               const checkoutAmt =
@@ -453,7 +449,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const checkoutCompletes = async (checkoutId) => {
     try {
       const completeResponse = await checkoutComplete({ id: checkoutId });
-      console.log("completeResponse: ", completeResponse);
       if (completeResponse?.data?.data?.checkoutComplete?.errors?.length > 0) {
         notifyError(
           completeResponse?.data?.data?.checkoutComplete?.errors[0]?.message
@@ -483,26 +478,29 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handleSelectChange = async (e) => {
-    setState({ selectedCountry: e.target.value, selectedState: "" });
-    stateRefetch();
-    if (!state.diffAddress) {
-      const checkoutId = localStorage.getItem("checkoutId");
-      await updateShippingAddress({
-        checkoutId,
-        shippingAddress: {
-          country: e.target.value,
-        },
-      });
-      updateDelivertMethod(e.target.value);
-      checkoutDetailsRefetch();
-      checkoutDetailsRefetch();
+    try {
+      setState({ selectedCountry: e.target.value, selectedState: "" });
+      stateRefetch();
+      if (!state.diffAddress) {
+        const checkoutId = localStorage.getItem("checkoutId");
+        await updateShippingAddress({
+          checkoutId,
+          shippingAddress: {
+            country: e.target.value,
+          },
+        });
+        updateDelivertMethod(e.target.value);
 
+        const res = await checkoutDetails();
+        setState({ checkoutData: res?.data });
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
   const shippingCoutryChange = async (e) => {
     try {
-      console.log("e: ", e.target.value);
       setState({
         selectedCountry1: e.target.value,
         selectedState1: "",
@@ -516,7 +514,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
         },
       });
       updateDelivertMethod(e.target.value);
-      checkoutDetailsRefetch();
+      const res = await checkoutDetails();
+      setState({ checkoutData: res?.data });
     } catch (e) {
       console.log("e: ", e);
     }
@@ -1303,20 +1302,21 @@ const CheckoutBillingArea = ({ register, errors }) => {
           </li> */}
 
               {/* total */}
-              {checkoutDetails?.data?.checkout?.shippingMethods?.length > 0 && (
+              {state.checkoutData?.data?.checkout?.shippingMethods?.length >
+                0 && (
                 <li className="tp-order-info-list-total">
                   <span>Shipping</span>
                   {checkChannel() == "india-channel" ? (
                     <span>
                       &#8377;
-                      {checkoutDetails?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
+                      {state.checkoutData?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
                         2
                       )}
                     </span>
                   ) : (
                     <span>
                       $
-                      {checkoutDetails?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
+                      {state.checkoutData?.data?.checkout?.shippingMethods[0]?.price?.amount?.toFixed(
                         2
                       )}
                     </span>
@@ -1329,41 +1329,41 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 {checkChannel() === "india-channel" ? (
                   <>
                     <span>
-                      {checkoutDetails?.data?.checkout?.totalPrice?.gross
+                      {state.checkoutData?.data?.checkout?.totalPrice?.gross
                         ?.amount > 0 ? (
                         <>
                           &#8377;
-                          {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                          {state.checkoutData?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
                             2
                           )}
-                          {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                          {state.checkoutData?.data?.checkout?.totalPrice?.tax
                             ?.amount && (
                             <>
                               <br />
                               <span className="para">
                                 (includes &#8377;{" "}
                                 {
-                                  checkoutDetails?.data?.checkout?.totalPrice
+                                  state.checkoutData?.data?.checkout?.totalPrice
                                     ?.tax?.amount
                                 }{" "}
                                 VAT)
                               </span>
 
-                              {/* <span className="para">{`(includes &#8377;${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span> */}
+                              {/* <span className="para">{`(includes &#8377;${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span> */}
                             </>
                           )}
                         </>
                       ) : (
                         <>
                           &#8377;{totalAmount?.toFixed(2)}
-                          {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                          {state.checkoutData?.data?.checkout?.totalPrice?.tax
                             ?.amount && (
                             <>
                               <br />
                               <span className="para">
                                 (includes &#8377;
                                 {
-                                  checkoutDetails?.data?.checkout?.totalPrice
+                                  state.checkoutData?.data?.checkout?.totalPrice
                                     ?.tax?.amount
                                 }{" "}
                                 VAT)
@@ -1376,29 +1376,29 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </>
                 ) : (
                   <>
-                    {checkoutDetails?.data?.checkout?.totalPrice?.gross
+                    {state.checkoutData?.data?.checkout?.totalPrice?.gross
                       ?.amount > 0 ? (
                       <>
                         $
-                        {checkoutDetails?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
+                        {state.checkoutData?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
                           2
                         )}
-                        {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                        {state.checkoutData?.data?.checkout?.totalPrice?.tax
                           ?.amount && (
                           <>
                             <br />
-                            <span className="para">{`(includes $ ${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
+                            <span className="para">{`(includes $ ${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
                           </>
                         )}
                       </>
                     ) : (
                       <>
                         ${totalAmount?.toFixed(2)}
-                        {checkoutDetails?.data?.checkout?.totalPrice?.tax
+                        {state.checkoutData?.data?.checkout?.totalPrice?.tax
                           ?.amount && (
                           <>
                             <br />
-                            <span className="para">{`(includes $ ${checkoutDetails?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
+                            <span className="para">{`(includes $ ${state.checkoutData?.data?.checkout?.totalPrice?.tax?.amount} VAT)`}</span>
                           </>
                         )}
                       </>

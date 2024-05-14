@@ -322,7 +322,7 @@ export const cardApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getCheckoutDetails: builder.query({
+    getCheckoutDetails: builder.mutation({
       query: () => {
         const id = localStorage.getItem("checkoutId");
         return configuration(
@@ -377,5 +377,5 @@ export const {
   useDeleteWishlistMutation,
   useCheckoutTokenEmailUpdatesMutation,
   useGetCartAllListQuery,
-  useGetCheckoutDetailsQuery,
+  useGetCheckoutDetailsMutation,
 } = cardApi;
