@@ -28,6 +28,7 @@ import {
   GET_CHECKOUT_DETAILS,
   UPDATE_SHIPPING_ADDRESS,
 } from "../../../utils/queries/cart/addToCart";
+import { checkChannel } from "@/utils/functions";
 
 export const cardApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -175,10 +176,18 @@ export const cardApi = apiSlice.injectEndpoints({
     checkoutUpdate: builder.mutation({
       query: ({ checkoutid, country }) => {
         let deliveryMethodId = "";
-        if (country == "IN") {
-          deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
+        if (checkChannel() == "india-channel") {
+          if (country == "IN") {
+            deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
+          } else {
+            deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6NA==";
+          }
         } else {
-          deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mg==";
+          if (country == "IN") {
+            deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6OA==";
+          } else {
+            deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6OQ==";
+          }
         }
         return configuration(
           CHECKOUT_DELIVERY_METHOD({
@@ -237,7 +246,6 @@ export const cardApi = apiSlice.injectEndpoints({
 
     createCheckoutId: builder.mutation({
       query: ({ lines }) => {
-
         let channel = "india-channel";
 
         const channels = localStorage.getItem("channel");
