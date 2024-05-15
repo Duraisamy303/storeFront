@@ -12,7 +12,7 @@ import {
   useGetWishlistQuery,
   useProduct20PercentageMutation,
 } from "@/redux/features/productApi";
-import { checkChannel } from "@/utils/functions";
+import { checkChannel, roundOff } from "@/utils/functions";
 import { CompareThree, QuickView, Wishlist } from "@/svg";
 import {
   useAddToCartMutation,
@@ -256,7 +256,9 @@ const InstagramAreaFour = () => {
                         <p className="actor-hov-para">
                           Price :{" "}
                           {checkChannel() === "india-channel" ? "₹" : "$"}
-                          {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
+                          {roundOff(
+                            item?.pricing?.priceRange?.start?.gross?.amount
+                          )}
                         </p>
                         <button
                           type="button"

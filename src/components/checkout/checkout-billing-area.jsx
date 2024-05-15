@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ErrorMsg from "../common/error-msg";
 import { useSelector } from "react-redux";
-import { useSetState } from "@/utils/functions";
+import { roundOff, useSetState } from "@/utils/functions";
 import CheckoutOrderArea from "./checkout-order-area";
 import {
   useCheckoutCompleteMutation,
@@ -319,7 +319,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: Math.round(total * 100),
+          amount: roundOff(total) * 100,
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: state.firstName + " " + state.lastName,
@@ -1203,83 +1203,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </p>
                   {state.channel == "india-channel" ? (
                     <span>
-                      &#8377;
-                      {item?.totalPrice?.gross?.amount?.toFixed(2)}
+                      &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
                     </span>
                   ) : (
-                    <span>${item?.totalPrice?.gross?.amount?.toFixed(2)}</span>
+                    <span>${roundOff(item?.totalPrice?.gross?.amount)}</span>
                   )}
                 </li>
               ))}
-
-              {/*  shipping */}
-              {/* <li className="tp-order-info-list-shipping">
-            <span>Shipping</span>
-            <div className="tp-order-info-list-shipping-item d-flex flex-column align-items-end">
-              <span>
-                <input
-                  {...register(`shippingOption`, {
-                    required: `Shipping Option is required!`,
-                  })}
-                  id="flat_shipping"
-                  type="radio"
-                  name="shippingOption"
-                />
-                <label
-                  onClick={() => handleShippingCost(60)}
-                  htmlFor="flat_shipping"
-                >
-                  Delivery: Today Cost :<span>&#8377;60.00</span>
-                </label>
-                <ErrorMsg msg={errors?.shippingOption?.message} />
-              </span>
-              <span>
-                <input
-                  {...register(`shippingOption`, {
-                    required: `Shipping Option is required!`,
-                  })}
-                  id="flat_rate"
-                  type="radio"
-                  name="shippingOption"
-                />
-                <label
-                  onClick={() => handleShippingCost(20)}
-                  htmlFor="flat_rate"
-                >
-                  Delivery: 7 Days Cost: <span>&#8377;20.00</span>
-                </label>
-                <ErrorMsg msg={errors?.shippingOption?.message} />
-              </span>
-            </div>
-          </li> */}
-
-              {/*  subtotal */}
-              {/* <li className="tp-order-info-list-subtotal">
-            <span>Subtotal</span>
-            <span>&#8377;{totalAmount?.toFixed(2)}</span>
-          </li> */}
-
-              {/*  shipping cost */}
-              {/* <li className="tp-order-info-list-subtotal">
-            <span>Shipping Cost</span>
-            <span>&#8377;{shippingCost.toFixed(2)}</span>
-          </li> */}
-
-              {/* discount */}
-              {/* <li className="tp-order-info-list-subtotal">
-            <span>Discount</span>
-            <span>&#8377;{discountAmount.toFixed(2)}</span>
-          </li> */}
 
               {/* total */}
               {state?.shippingCost && (
                 <li className="tp-order-info-list-total">
                   <span>Shipping</span>
                   {checkChannel() == "india-channel" ? (
-                    <span>&#8377;{state?.shippingCost?.toFixed(2)}</span>
+                    <span>&#8377;{roundOff(state?.shippingCost)}</span>
                   ) : (
                     <span>
-                      <span>${state?.shippingCost?.toFixed(2)}</span>
+                      <span>${roundOff(state?.shippingCost)}</span>
                     </span>
                   )}
                 </li>
@@ -1296,10 +1236,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      {state?.total && <>&#8377; {state?.total?.toFixed(2)}</>}
+                      {state?.total && <>&#8377;{roundOff(state?.total)}</>}
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                        (includes &#8377; {state?.tax} GST)
+                        (includes &#8377;{roundOff(state?.tax)} GST)
                       </span>
                     </p>
                   </>
@@ -1312,11 +1252,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      {state?.total && <>$ {state?.total?.toFixed(2)}</>}
+                      {state?.total && <>${roundOff(state?.total)}</>}
 
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                        (includes $ {state?.tax} GST)
+                        (includes ${roundOff(state?.tax)} GST)
                       </span>
                     </p>
                   </>

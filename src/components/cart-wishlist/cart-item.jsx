@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { checkChannel } from "../../utils/functions";
+import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const CartItem = ({
@@ -111,7 +111,12 @@ const CartItem = ({
                 router.push(`/product-details/${product?.variant?.product?.id}`)
               }
             >
-              <Image src={profilePic(img)}alt="product img" width={70} height={100} />
+              <Image
+                src={profilePic(img)}
+                alt="product img"
+                width={70}
+                height={100}
+              />
             </div>
           </td>
           <td className="tp-cart-title">
@@ -120,9 +125,9 @@ const CartItem = ({
 
           <td className="tp-cart-price">
             {channel == "india-channel" ? (
-              <span>&#8377;{price?.toFixed(2)}</span>
+              <span>&#8377;{roundOff(price)}</span>
             ) : (
-              <span>${price?.toFixed(2)}</span>
+              <span>${roundOff(price)}</span>
             )}
           </td>
           {/* quantity */}
@@ -170,19 +175,20 @@ const CartItem = ({
               {channel == "india-channel" ? (
                 <>
                   {!isQuantity ? (
-                    <span>&#8377;{price?.toFixed(2)}</span>
+
+                    <span>&#8377;{roundOff(price)}</span>
                   ) : (
-                    <span>&#8377;{(price * quantity).toFixed(2)}</span>
+                    <span>&#8377;{roundOff(price * quantity)}</span>
                   )}
                 </>
               ) : (
-              <>
-              {!isQuantity ? (
-                    <span>&#8377;{price?.toFixed(2)}</span>
+                <>
+                  {!isQuantity ? (
+                    <span>${roundOff(price)}</span>
                   ) : (
-                    <span>${(price * quantity).toFixed(2)}</span>
+                    <span>${roundOff(price * quantity)}</span>
                   )}
-              </>
+                </>
               )}
             </div>
           </td>
@@ -209,7 +215,12 @@ const CartItem = ({
                 router.push(`/product-details/${product?.variant?.product?.id}`)
               }
             >
-              <Image src={profilePic(img)} alt="product img" width={70} height={100} />
+              <Image
+                src={profilePic(img)}
+                alt="product img"
+                width={70}
+                height={100}
+              />
             </div>
           </td>
           {/* title */}
@@ -222,8 +233,7 @@ const CartItem = ({
       </td> */}
           {/* price */}
           <td className="tp-cart-price">
-            {/* <span>${(price * orderQuantity).toFixed(2)}</span> */}
-            <span>&#8377;{price?.toFixed(2)}</span>
+            <span>&#8377;{roundOff(price * orderQuantity)}</span>
           </td>
           {/* quantity */}
           {isQuantity && (
@@ -264,9 +274,9 @@ const CartItem = ({
           <td className="tp-cart-quantity">
             <div className="tp-product-quantity mt-10 mb-10">
               {!isQuantity ? (
-                <span>&#8377;{price?.toFixed(2)}</span>
+                <span>&#8377;{roundOff(price)}</span>
               ) : (
-                <span>${(price * quantity).toFixed(2)}</span>
+                <span>${roundOff(price * orderQuantity)}</span>
               )}
             </div>
           </td>

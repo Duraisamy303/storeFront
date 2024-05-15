@@ -28,6 +28,7 @@ import {
   useAddWishlistMutation,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
+import { roundOff } from "../../utils/functions";
 
 const DetailsWrapper = ({
   productItem,
@@ -289,52 +290,21 @@ const DetailsWrapper = ({
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
             <span className="tp-product-price-2 new-price">
-              &#8377;
-              {productItem?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2) ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
+              &#8377;{roundOff(productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount)}
+            
             </span>
           </div>
         ) : (
           <div className="tp-product-price-wrapper-2">
             <span className="tp-product-price-2 new-price">
-              {"$"}
-              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
+              {"$"}{roundOff(productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount)}
             </span>
           </div>
         )}
-        {/* {discount > 0 ? (
-          <>
-            <span className="tp-product-details-price old-price">${price}</span>
-            <span className="tp-product-details-price new-price">
-              &#8377;{" "}
-              {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-            </span>
-          </>
-        ) : (
-          <span className="tp-product-details-price new-price">
-            &#8377;{" "}
-            {productItem?.pricing?.priceRange?.start?.gross?.amount ||
-              productItem?.node?.pricing?.priceRange?.start?.gross?.amount}
-          </span>
-        )} */}
+        
       </div>
 
-      {/* inventory details */}
-      {/* <div className="tp-product-details-inventory d-flex align-items-center mb-10">
-        <div className="tp-product-details-stock mb-10">
-          <span>{status}</span>
-        </div>
-        <div className="tp-product-details-rating-wrapper d-flex align-items-center mb-10">
-          <div className="tp-product-details-rating">
-            <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
-          </div>
-          <div className="tp-product-details-reviews">
-            <span>({reviews && reviews.length > 0 ? reviews.length : 0} Review)</span>
-          </div>
-        </div>
-      </div> */}
+      
       {productItem?.metadata?.length > 1 && (
         <p style={{ color: "black" }}>{productItem?.metadata[1]?.value}</p>
       )}
@@ -693,7 +663,7 @@ const DetailsWrapper = ({
         {productItem?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
             <b>Tags:</b>{" "}
-            {productItem?.tags?.map((tag,index) => {
+            {productItem?.tags?.map((tag, index) => {
               return <span key={tag?.id}>{tag?.name}</span>;
             })}
           </p>

@@ -81,3 +81,13 @@ export const validLoginAndReg = () => {
   }
   return valid;
 };
+
+export const roundOff = (price) => {
+  let round = "";
+  if (price) {
+    round = Math.ceil(price)?.toFixed(2);
+  } else {
+    round = price;
+  }
+  return round;
+};

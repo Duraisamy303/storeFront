@@ -12,6 +12,7 @@ import { set_coupon } from "@/redux/features/coupon/couponSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import {useCreatePaymentIntentMutation,useSaveOrderMutation} from "@/redux/features/order/orderApi";
 import { useGetOfferCouponsQuery } from "@/redux/features/coupon/couponApi";
+import { roundOff } from "../utils/functions";
 
 const useCheckoutSubmit = () => {
   // offerCoupons
@@ -91,7 +92,7 @@ const useCheckoutSubmit = () => {
       0
     );
     let totalValue = "";
-    let subTotal = Number((total + shippingCost).toFixed(2));
+    let subTotal = roundOff(total + shippingCost);
     let discountTotal = Number(
       discountProductTotal * (discountPercentage / 100)
     );

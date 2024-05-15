@@ -1,4 +1,4 @@
-import { checkChannel } from "@/utils/functions";
+import { checkChannel, roundOff } from "@/utils/functions";
 import moment from "moment/moment";
 import React from "react";
 
@@ -42,11 +42,13 @@ const MyOrderDetails = ({ data }) => {
                   </td>
                   {checkChannel() == "india-channel" ? (
                     <>
-                      <td>&#8377;{item?.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                      <td>
+                        &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
+                      </td>
                     </>
                   ) : (
                     <>
-                      <td>${item?.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                      <td>${roundOff(item?.totalPrice?.gross?.amount)}</td>
                     </>
                   )}
                 </tr>
@@ -56,11 +58,11 @@ const MyOrderDetails = ({ data }) => {
                 <td>Subtotal</td>
                 {checkChannel() == "india-channel" ? (
                   <>
-                    <td>&#8377;{SubTotal?.toFixed(2)}</td>
+                    <td>&#8377;{roundOff(SubTotal)}</td>
                   </>
                 ) : (
                   <>
-                    <td>${SubTotal?.toFixed(2)}</td>
+                    <td>${roundOff(SubTotal)}</td>
                   </>
                 )}
               </tr>
@@ -69,11 +71,11 @@ const MyOrderDetails = ({ data }) => {
                 <td>Shipping</td>
                 {checkChannel() == "india-channel" ? (
                   <>
-                    <td>&#8377;{ShippingAmount?.toFixed(2)}</td>
+                    <td>&#8377;{roundOff(ShippingAmount)}</td>
                   </>
                 ) : (
                   <>
-                    <td>${ShippingAmount?.toFixed(2)}</td>
+                    <td>${roundOff(ShippingAmount)}</td>
                   </>
                 )}
               </tr>
@@ -82,11 +84,13 @@ const MyOrderDetails = ({ data }) => {
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>
                 {checkChannel() === "india-channel" ? (
                   <>
-                    <td style={{ fontSize: "20px" }}>&#8377;{Total?.toFixed(2)}</td>
+                    <td style={{ fontSize: "20px" }}>
+                      &#8377;{roundOff(Total)}
+                    </td>
                   </>
                 ) : (
                   <>
-                    <td style={{ fontSize: "20px" }}>${Total?.toFixed(2)}</td>
+                    <td style={{ fontSize: "20px" }}>${roundOff(Total)}</td>
                   </>
                 )}
               </tr>

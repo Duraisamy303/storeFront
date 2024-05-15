@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
 
 import { useGetWishlistQuery } from "@/redux/features/productApi";
-import { checkChannel } from "../../utils/functions";
+import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
@@ -133,9 +133,9 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       <td className="tp-cart-price">
         <span>
           {channelSelect == "india-channel" ? (
-            <>₹{parseFloat(data?.indiaChannelPricing)?.toFixed(2)}</>
+            <>₹{roundOff(data?.indiaChannelPricing)}</>
           ) : (
-            <>${parseFloat(data?.defaultChannelPricing)?.toFixed(2)}</>
+            <>${roundOff(data?.defaultChannelPricing)}</>
           )}
         </span>
       </td>
