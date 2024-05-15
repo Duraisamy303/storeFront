@@ -183,7 +183,7 @@ const InstagramAreaFour = () => {
                 <span className="discound">20%</span>
                 <br /> <span className="discount-2">ON ALL NECKLACES</span>
               </div>
-              <p style={{ textAlign: "center", color: "black" }}>
+              <p style={{ textAlign: "center", color: "gray" }}>
                 Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur.
               </p>
@@ -209,6 +209,22 @@ const InstagramAreaFour = () => {
                                   router.push("/wishlist");
                                 }
                               }}
+                              style={{
+                                background:
+                                  wishlistData?.data?.wishlists?.edges?.some(
+                                    (prd) => prd?.node?.variant === item?.id
+                                  )
+                                    ? "#c18634"
+                                    : "none",
+
+                                border:
+                                  wishlistData?.data?.wishlists?.edges?.some(
+                                    (prd) => prd?.node?.variant === item?.id
+                                  )
+                                    ? "1px solid #c18634"
+                                    : "1px solid white",
+                                padding: "3px 5px",
+                              }}
                             >
                               <Wishlist />
                             </button>
@@ -226,6 +242,21 @@ const InstagramAreaFour = () => {
                                   handleCompareProduct(item);
                                 }
                               }}
+                              style={{
+                                background: compareList?.some((prd) => {
+                                  return prd?.id == item?.id;
+                                })
+                                  ? "#c18634"
+                                  : "none",
+
+                                border: compareList?.some((prd) => {
+                                  return prd?.id == item?.id;
+                                })
+                                  ? "1px solid #c18634"
+                                  : "1px solid white",
+                                padding: "3px 7px",
+                                marginTop: "5px",
+                              }}
                             >
                               <CompareThree />
                             </button>
@@ -233,6 +264,12 @@ const InstagramAreaFour = () => {
                           <li>
                             <button
                               onClick={() => dispatch(handleProductModal(item))}
+                              style={{
+                                background: "none",
+                                border: "1px solid white",
+                                padding: "3px 5px",
+                                marginTop: "5px",
+                              }}
                             >
                               <QuickView />
                             </button>
@@ -242,25 +279,45 @@ const InstagramAreaFour = () => {
                       <Image
                         src={profilePic(item?.thumbnail?.url)}
                         width={300}
-                        height={300}
+                        height={320}
                         alt="instagram img"
                         className="actor-image"
                       />
                       <div className="tp-instagram-icon-2">
-                        <p className="actor-hov-para">{item?.name}</p>
+                        <p
+                          className="actor-hov-para"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {item?.name}
+                        </p>
                         {item?.category && (
-                          <p className="actor-hov-para">
+                          <p
+                            className="actor-hov-para"
+                            style={{ fontSize: "12px" }}
+                          >
                             {item?.category?.name}
                           </p>
                         )}
-                        <p className="actor-hov-para">
+                        <p
+                          className="actor-hov-para"
+                          style={{ fontSize: "12px" }}
+                        >
                           Price :{" "}
                           {checkChannel() === "india-channel" ? "₹" : "$"}
-                          {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
+                          {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
+                            2
+                          )}
                         </p>
                         <button
                           type="button"
-                          className="actor-hover-btn"
+                          // className="actor-hover-btn"
+                          style={{
+                            fontSize: "12px",
+                            color: "white",
+                            border: "1px solid white",
+                            padding: "5px 5px",
+                            lineHeight: "14px",
+                          }}
                           onClick={() => {
                             console.log("onClick: ");
                             if (

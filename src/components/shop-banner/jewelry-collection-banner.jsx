@@ -29,19 +29,29 @@ const JewelryCollectionBanner = () => {
     lineHeight: '400px',
     textAlign: 'center',
     background: '#f4f4f4',
+    padding:"0px 50px"
   };
 
   const customDotStyle = {
     width: '10px',
     height: '10px',
-    backgroundColor: 'black', // Set the background color to black
-    borderRadius: '50%', // Make the dots circular
+    borderRadius: '50%',
+    margin: '0 5px', // Adjust the margin between dots
+    border: '2px solid black', // Default outline style
+    backgroundColor: 'transparent', // Default background color
+  };
+
+  const activeDotStyle = {
+    ...customDotStyle,
+    backgroundColor: 'black !important', // Active dot fill color
   };
 
   const settings = {
-    customPaging: (i) => <div style={customDotStyle}></div>, // Customize the paging dots
-    dots: true, // Show the paging dots
-    autoplay: true, // Enable autoplay
+    customPaging: (i, active) => (
+      <div style={active ? activeDotStyle : customDotStyle}></div>
+    ), // Custom dots rendering
+    dots: true,
+    autoplay: true,
   };
 
   return (
@@ -62,8 +72,8 @@ const JewelryCollectionBanner = () => {
                             <div className='profile-outer'>
                               <Image src={profile1} alt='profile-1' className='carosel-profileImg'/>
                             </div>
-                            <p style={{marginBottom:"5px", color:"black"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
-                            <p style={{color:"black"}}><span style={{ fontWeight: "bold", color:"black" }}>Helen Signy</span> - Happy Customer</p>
+                            <p style={{marginBottom:"5px", color:"gray", fontSize:"14px"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
+                            <p style={{color:"black", fontSize:"14px"}}><span style={{ fontWeight: "bold", color:"black", fontSize:"14px" }}>Helen Signy</span> - Happy Customer</p>
                           </div>
                         </div>
 
@@ -74,20 +84,20 @@ const JewelryCollectionBanner = () => {
                             <div className='profile-outer'>
                               <Image src={profile2} alt='profile-1'className='carosel-profileImg' />
                             </div>
-                            <p  style={{marginBottom:"5px", color:"black"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
-                            <p style={{color:"black"}}><span style={{ fontWeight: "bold", color:"black" }}>Katell Oanez</span> - Happy Customer</p>
+                            <p  style={{marginBottom:"5px", color:"gray", fontSize:"14px"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
+                            <p style={{color:"black",fontSize:"14px"}}><span style={{ fontWeight: "bold", color:"black", fontSize:"14px" }}>Katell Oanez</span> - Happy Customer</p>
                           </div>
                         </div>
 
-                        <div className='profile-carosel'>
+                        <div className='profile-carosel' >
                           <div style={contentStyle}>
                             <h5 className='carosel-adisicing' >Adipisicing elit</h5>
                             <h3 className='carosel-title'>WHAT OUR CLIENTS SAY</h3>
                             <div className='profile-outer'>
                               <Image src={profile3} alt='profile-1' className='carosel-profileImg'/>
                             </div>
-                            <p  style={{marginBottom:"5px", color:"black"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
-                            <p style={{color:"black"}}><span style={{ fontWeight: "bold", color:"black" }}>Maelle Rozenn</span> - Happy Customer</p>
+                            <p  style={{marginBottom:"5px", color:"gray", fontSize:"14px"}}>Breakfast agreeable incommode departure it an. By ignorant at on wondered relation. Enough at tastes really so cousin am of. Extensive therefore supported by extremity of contented is pursuit compact</p>
+                            <p style={{color:"black", fontSize:"14px"}}><span style={{ fontWeight: "bold", color:"black", fontSize:"14px" }}>Maelle Rozenn</span> - Happy Customer</p>
                           </div>
                         </div>
 

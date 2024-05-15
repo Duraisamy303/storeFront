@@ -630,10 +630,12 @@
     color: rgb(195, 147, 91);
     padding: 50px 0px 10px 0px;
     margin: 0px;
+    font-weight: 400;
 }
 
 .carosel-title {
     color: black;
+    font-weight: 400;
 }
 
 :where(.css-dev-only-do-not-override-nllxry).ant-carousel .slick-dots-bottom {
@@ -818,4 +820,14 @@
 // live antd style
 :where(.css-nllxry).ant-carousel .slick-dots-bottom {
     bottom: 30px;
+}
+
+
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-carousel .slick-dots-bottom {
+    bottom: 35px;
+}
+
+:where(.css-1ae8k9u).ant-carousel .slick-dots-bottom {
+    bottom: 35px;
 }
