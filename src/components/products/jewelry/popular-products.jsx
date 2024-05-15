@@ -131,9 +131,9 @@ const PopularProducts = () => {
           <div className="row">
             <div className="col-xl-12">
               <div className="tp-section-title-wrapper-4 mb-60 text-center">
-                <h5 className="popular-adipisicing">Adipisicing elit</h5>
-                <h2 className="tp-section-title-4">FEATURED PRODUCTS</h2>
-                <p style={{ color: "black" }}>
+                <h5 className="popular-adipisicing" style={{ fontWeight: "400" }}>Adipisicing elit</h5>
+                <h4  style={{ fontWeight: "400" }}>FEATURED PRODUCTS</h4>
+                <p style={{ color: "gray", fontSize:"14px" }}>
                   There are many variations of passages of lorem ipsum
                   available.
                 </p>
