@@ -1296,7 +1296,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      &#8377; {state?.total}
+                      {state?.total && <>&#8377; {state?.total?.toFixed(2)}</>}
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
                         (includes &#8377; {state?.tax} GST)
@@ -1312,10 +1312,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         textAlign: "right",
                       }}
                     >
-                      &#8377; {state?.total}
+                      {state?.total && <>$ {state?.total?.toFixed(2)}</>}
+
                       <br />
                       <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                        (includes &#8377; {state?.tax} GST)
+                        (includes $ {state?.tax} GST)
                       </span>
                     </p>
                   </>

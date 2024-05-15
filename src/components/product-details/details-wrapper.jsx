@@ -693,8 +693,8 @@ const DetailsWrapper = ({
         {productItem?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
             <b>Tags:</b>{" "}
-            {productItem?.tags?.map((tag) => {
-              return <span key={tag?.id}>{tag}</span>;
+            {productItem?.tags?.map((tag,index) => {
+              return <span key={tag?.id}>{tag?.name}</span>;
             })}
           </p>
         )}
