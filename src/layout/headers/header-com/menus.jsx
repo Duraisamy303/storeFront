@@ -582,7 +582,7 @@ const Menus = () => {
                   }}
                 >
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
                     // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
@@ -606,7 +606,7 @@ const Menus = () => {
                   }}
                 >
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Necklaces" ? "active" : ""
                     }`}
@@ -629,7 +629,7 @@ const Menus = () => {
                   }}
                 >
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
                     // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Bangles" ? "active" : ""
@@ -653,7 +653,7 @@ const Menus = () => {
                   }}
                 >
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
                     // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Rings" ? "active" : ""
@@ -677,7 +677,7 @@ const Menus = () => {
                   }}
                 >
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Anklets" ? "active" : ""
                     }`}

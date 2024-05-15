@@ -354,11 +354,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         <p style={{ color: "black", fontWeight: "400", margin: "0px" }}>
           {Product_name}
         </p>
-        <p style={{ color: "gray", margin: "0px" }}>{Category_Name}</p>
+        <p style={{ color: "gray", margin: "0px", fontSize:"14px" }}>{Category_Name}</p>
         {checkChannel() === "india-channel" ? (
-          <p style={{ color: "gray", margin: "0px" }}>₹{roundOff(Price)}</p>
+          <p style={{ color: "gray", margin: "0px", fontSize:"14px" }}>₹{roundOff(Price)}</p>
         ) : (
-          <p style={{ color: "gray", margin: "0px" }}>${roundOff(Price)}</p>
+          <p style={{ color: "gray", margin: "0px" , fontSize:"14px"}}>${roundOff(Price)}</p>
         )}
       </div>
     </>

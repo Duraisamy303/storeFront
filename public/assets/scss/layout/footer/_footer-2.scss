@@ -29,14 +29,14 @@
                 &-title{
                     @extend %tp-ff-jost;
                     font-weight: 500;
-                    font-size: 23px;
+                    font-size: 20px;
                     margin-bottom: 15px;
                 }
                 & ul{
                     & li{
                         & a{
                             @extend %tp-ff-jost;
-                            font-size: 15px;
+                            font-size: 14px;
                             font-weight: 400;
                             color: var(--tp-text-2);
                             &::after{
@@ -76,7 +76,7 @@
                 &-content{
                     & p{
                         @extend %tp-ff-jost;
-                        font-size: 16px;
+                        font-size: 14px;
                         & a{
                             &:hover{
                                 color: var(--tp-theme-secondary);
@@ -92,7 +92,7 @@
                 & p{
                     @extend %tp-ff-jost;
                     margin-bottom: 0;
-                    font-size: 16px;
+                    font-size: 14px;
                     & a{
                         color: var(--tp-theme-secondary);
                     }

@@ -74,7 +74,7 @@ const FooterTwo = () => {
                 <div className="row">
                   <div className="col-lg-3 col-md-6 col-sm-6">
                     <div className="tp-footer-widget footer-col-4-1 mb-50">
-                      <h4 className="tp-footer-widget-title">ABOUT US</h4>
+                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>ABOUT US</h4>
                       <div className="tp-footer-logo">
                         <Link href="/">
                           <Image src={logo} alt="logo" />
@@ -94,7 +94,7 @@ const FooterTwo = () => {
 
                   <div className="  col-lg-3 col-md-6 col-sm-12 footer-quicklinks">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
-                      <h4 className="tp-footer-widget-title">QUICK LINKS</h4>
+                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>QUICK LINKS</h4>
                       <div className="tp-footer-widget-content">
                         <ul>
                           <li>
@@ -145,7 +145,7 @@ const FooterTwo = () => {
 
                   <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
-                      <h4 className="tp-footer-widget-title">STORE ADDRESS</h4>
+                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>STORE ADDRESS</h4>
                       <div className="tp-footer-widget-content">
                         <div className="tp-footer-contact">
                           <div className="tp-footer-contact-item d-flex align-items-start">
@@ -231,7 +231,7 @@ const FooterTwo = () => {
 
                   <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-4 mb-50">
-                      <h4 className="tp-footer-widget-title">STORE LOCATION</h4>
+                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>STORE LOCATION</h4>
                       <div
                         className="tp-footer-widget-content"
                         style={{ overflow: "hidden" }}
