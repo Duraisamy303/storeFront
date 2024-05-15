@@ -25,7 +25,7 @@ import {
   useWishlistMutation,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
-import { checkChannel } from "../../../utils/functions";
+import { checkChannel, roundOff } from "../../../utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
@@ -285,7 +285,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               <>
                 <button
                   type="button"
-                  onClick={() => notifyError("Only logged-in users can add items to their wishlist or view it")}
+                  onClick={() =>
+                    notifyError(
+                      "Only logged-in users can add items to their wishlist or view it"
+                    )
+                  }
                   className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
                 >
                   <Wishlist />
@@ -352,9 +356,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         </p>
         <p style={{ color: "gray", margin: "0px" }}>{Category_Name}</p>
         {checkChannel() === "india-channel" ? (
-          <p style={{ color: "gray", margin: "0px" }}>₹{Price?.toFixed(2)}</p>
+          <p style={{ color: "gray", margin: "0px" }}>₹{roundOff(Price)}</p>
         ) : (
-          <p style={{ color: "gray", margin: "0px" }}>${Price?.toFixed(2)}</p>
+          <p style={{ color: "gray", margin: "0px" }}>${roundOff(Price)}</p>
         )}
       </div>
     </>

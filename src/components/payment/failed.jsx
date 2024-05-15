@@ -1,14 +1,13 @@
 import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
 import React, { useCallback } from "react";
-import { checkChannel } from "../../utils/functions";
+import { checkChannel, roundOff } from "../../utils/functions";
 import { useRouter } from "next/router";
 import { usePaymentMutation } from "@/redux/features/productApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import useRazorpay from "react-razorpay";
 
-const Failed = ({ data,orderId }) => {
-
+const Failed = ({ data, orderId }) => {
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
   const Total = data?.data?.order?.total.gross.amount;
@@ -24,14 +23,14 @@ const Failed = ({ data,orderId }) => {
   const [successPayment] = usePaymentMutation();
 
   const handlePayment = useCallback(
-    async (total,orderId) => {
+    async (total, orderId) => {
       try {
-        console.log("options: ",);
+        console.log("options: ");
 
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: Math.round(total * 100),
+          amount: roundOff(total) * 100,
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: "Products",
@@ -108,11 +107,15 @@ const Failed = ({ data,orderId }) => {
                         <td>{order?.productName}</td>
                         {checkChannel() === "india-channel" ? (
                           <>
-                            <td>&#8377;{order.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                            <td>
+                              &#8377;{roundOff(order.totalPrice?.gross?.amount)}
+                            </td>
                           </>
                         ) : (
                           <>
-                            <td>${order?.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                            <td>
+                              ${roundOff(order.totalPrice?.gross?.amount)}
+                            </td>
                           </>
                         )}
                       </tr>
@@ -123,11 +126,11 @@ const Failed = ({ data,orderId }) => {
                     <td>Subtotal</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{SubTotal?.toFixed(2)}</td>
+                        <td>&#8377;{roundOff(SubTotal)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${SubTotal?.toFixed(2)}</td>
+                        <td>${roundOff(SubTotal)}</td>
                       </>
                     )}
                   </tr>
@@ -136,11 +139,11 @@ const Failed = ({ data,orderId }) => {
                     <td>Shipping</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{ShippingAmount?.toFixed(2)}</td>
+                        <td>&#8377;{roundOff(ShippingAmount)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${ShippingAmount?.toFixed(2)}</td>
+                        <td>${roundOff(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
@@ -161,13 +164,13 @@ const Failed = ({ data,orderId }) => {
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          &#8377;{Total?.toFixed(2)}
+                          &#8377;{roundOff(Total)}
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          ${Total?.toFixed(2)}
+                          ${roundOff(Total)}
                         </td>
                       </>
                     )}
@@ -198,11 +201,11 @@ const Failed = ({ data,orderId }) => {
                   Total:{" "}
                   {checkChannel() === "india-channel" ? (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      &#8377;{Total?.toFixed(2)}
+                      &#8377;{roundOff(Total)}
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      ${Total?.toFixed(2)}
+                      ${roundOff(Total)}
                     </span>
                   )}
                 </li>
@@ -213,7 +216,7 @@ const Failed = ({ data,orderId }) => {
             </div>
             <div className="mt-20">
               <button
-                onClick={() => handlePayment(Total,orderId)}
+                onClick={() => handlePayment(Total, orderId)}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}
               >

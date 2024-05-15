@@ -1,13 +1,11 @@
 import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
 import React from "react";
-import { checkChannel } from "../../utils/functions";
-import {useRouter } from "next/router";
+import { checkChannel, roundOff } from "../../utils/functions";
+import { useRouter } from "next/router";
 
 const Success = ({ data }) => {
-
-const Router = useRouter()
-
+  const Router = useRouter();
 
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
@@ -38,11 +36,15 @@ const Router = useRouter()
                         <td>{order?.productName}</td>
                         {checkChannel() === "india-channel" ? (
                           <>
-                            <td>&#8377;{order.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                            <td>
+                              &#8377;{roundOff(order.totalPrice?.gross?.amount)}
+                            </td>
                           </>
                         ) : (
                           <>
-                            <td>${order?.totalPrice?.gross?.amount?.toFixed(2)}</td>
+                            <td>
+                              ${roundOff(order.totalPrice?.gross?.amount)}
+                            </td>
                           </>
                         )}
                       </tr>
@@ -53,11 +55,11 @@ const Router = useRouter()
                     <td>Subtotal</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{SubTotal?.toFixed(2)}</td>
+                        <td>&#8377;{roundOff(SubTotal)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${SubTotal?.toFixed(2)}</td>
+                        <td>${roundOff(SubTotal)}</td>
                       </>
                     )}
                   </tr>
@@ -66,11 +68,11 @@ const Router = useRouter()
                     <td>Shipping</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{ShippingAmount?.toFixed(2)}</td>
+                        <td>&#8377;{roundOff(ShippingAmount)}</td>
                       </>
                     ) : (
                       <>
-                        <td>${ShippingAmount?.toFixed(2)}</td>
+                        <td>${roundOff(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
@@ -85,13 +87,13 @@ const Router = useRouter()
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          &#8377;{Total?.toFixed(2)}
+                          &#8377;{roundOff(Total)}
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          ${Total?.toFixed(2)}
+                          ${roundOff(Total)}
                         </td>
                       </>
                     )}
@@ -122,11 +124,11 @@ const Router = useRouter()
                   Total:{" "}
                   {checkChannel() === "india-channel" ? (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      &#8377;{Total?.toFixed(2)}
+                      &#8377;{roundOff(Total)}
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      ${Total?.toFixed(2)}
+                      ${roundOff(Total)}
                     </span>
                   )}
                 </li>
@@ -136,7 +138,13 @@ const Router = useRouter()
               </ul>
             </div>
             <div className="mt-20">
-              <button onClick={() => Router.push('/shop')} className="tp-cart-update-btn " style={{background:"rgb(194, 136, 43)", color:"white"}}>Continue Shopping</button>
+              <button
+                onClick={() => Router.push("/shop")}
+                className="tp-cart-update-btn "
+                style={{ background: "rgb(194, 136, 43)", color: "white" }}
+              >
+                Continue Shopping
+              </button>
             </div>
           </div>
         </div>

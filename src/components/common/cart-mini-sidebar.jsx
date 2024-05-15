@@ -17,7 +17,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { checkChannel } from "../../utils/functions";
+import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const CartMiniSidebar = () => {
@@ -151,25 +151,14 @@ const CartMiniSidebar = () => {
                               </Link>
                             </h5>
                             <div className="cartmini__price-wrapper">
-                              {/* {item?.discount > 0 ? (
-                                <span className="cartmini__price">
-                                  &#8377;
-                                  {(
-                                    Number(item?.price) -
-                                    (Number(item?.price) *
-                                      Number(item?.discount)) /
-                                      100
-                                  )?.toFixed(2)}
-                                </span>
-                              ) : ( */}
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {item?.totalPrice?.gross?.amount?.toFixed(2)}
+                                  {roundOff(item?.totalPrice?.gross?.amount)}
                                 </span>
                               ) : (
                                 <span className="cartmini__price">
-                                  ${item?.totalPrice?.gross?.amount?.toFixed(2)}
+                                  ${roundOff(item?.totalPrice?.gross?.amount)}
                                 </span>
                               )}
                               {/* )} */}
@@ -222,36 +211,25 @@ const CartMiniSidebar = () => {
                               </Link>
                             </h5>
                             <div className="cartmini__price-wrapper">
-                              {/* {item?.discount > 0 ? (
-                                <span className="cartmini__price">
-                                  &#8377;
-                                  {(
-                                    Number(item?.price) -
-                                    (Number(item?.price) *
-                                      Number(item?.discount)) /
-                                      100
-                                  )?.toFixed(2)}
-                                </span>
-                              ) : ( */}
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                                    2
-                                  ) ||
-                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                      2
-                                    )}
+                                  {roundOff(
+                                    item?.variant?.pricing?.price?.gross
+                                      ?.amount ||
+                                      item?.node?.pricing?.priceRange?.start
+                                        ?.gross?.amount
+                                  )}
                                 </span>
                               ) : (
                                 <span className="cartmini__price">
                                   $
-                                  {item?.variant?.pricing?.price?.gross?.amount?.toFixed(
-                                    2
-                                  ) ||
-                                    item?.node?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                      2
-                                    )}
+                                  {roundOff(
+                                    item?.variant?.pricing?.price?.gross
+                                      ?.amount ||
+                                      item?.node?.pricing?.priceRange?.start
+                                        ?.gross?.amount
+                                  )}
                                 </span>
                               )}
                               {/* )} */}
@@ -291,15 +269,15 @@ const CartMiniSidebar = () => {
               {channel == "india-channel" ? (
                 <span>
                   &#8377;
-                  {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                    2
+                  {roundOff(
+                    cartList?.data?.checkout?.totalPrice?.gross?.amount
                   )}
                 </span>
               ) : (
                 <span>
                   $
-                  {cartList?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(
-                    2
+                  {roundOff(
+                    cartList?.data?.checkout?.totalPrice?.gross?.amount
                   )}
                 </span>
               )}

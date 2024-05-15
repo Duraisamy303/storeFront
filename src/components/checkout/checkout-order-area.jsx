@@ -11,6 +11,7 @@ import {
   useCreateCheckoutTokenMutation,
   useCheckoutCompleteMutation,
 } from "@/redux/features/card/cardApi";
+import { roundOff } from "../../utils/functions";
 
 const CheckoutOrderArea = () => {
   // const {
@@ -26,7 +27,7 @@ const CheckoutOrderArea = () => {
   //   discountAmount,
   // } = checkoutData;
 
-  const shippingCost=100
+  const shippingCost = 100;
 
   const [createCheckout, { data: tokens }] = useCreateCheckoutTokenMutation();
 
@@ -61,7 +62,7 @@ const CheckoutOrderArea = () => {
     //     preValue + currentValue.price * currentValue.orderQuantity,
     //   0
     // );
-    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+    let subTotal = roundOff(totalAmount + shippingCost);
     // let discountTotal = Number(
     //   discountProductTotal * (discountPercentage / 100)
     // );
@@ -71,7 +72,7 @@ const CheckoutOrderArea = () => {
   }, [total, shippingCost, cartTotals]);
 
   useEffect(() => {
-    let subTotal = Number((totalAmount + shippingCost).toFixed(2));
+    let subTotal = roundOff(totalAmount + shippingCost);
     setCartTotal(subTotal);
   }, []);
 
@@ -191,143 +192,24 @@ const CheckoutOrderArea = () => {
                 {item?.variant?.product?.name} <span> x {1}</span>
               </p>
               <span>
-              &#8377;{item?.variant?.pricing?.price?.gross?.amount.toFixed(2)}
+                &#8377;{roundOff(item?.variant?.pricing?.price?.gross?.amount)}
               </span>
             </li>
           ))}
-
-          {/*  shipping */}
-          {/* <li className="tp-order-info-list-shipping">
-            <span>Shipping</span>
-            <div className="tp-order-info-list-shipping-item d-flex flex-column align-items-end">
-              <span>
-                <input
-                  {...register(`shippingOption`, {
-                    required: `Shipping Option is required!`,
-                  })}
-                  id="flat_shipping"
-                  type="radio"
-                  name="shippingOption"
-                />
-                <label
-                  onClick={() => handleShippingCost(60)}
-                  htmlFor="flat_shipping"
-                >
-                  Delivery: Today Cost :<span>&#8377;60.00</span>
-                </label>
-                <ErrorMsg msg={errors?.shippingOption?.message} />
-              </span>
-              <span>
-                <input
-                  {...register(`shippingOption`, {
-                    required: `Shipping Option is required!`,
-                  })}
-                  id="flat_rate"
-                  type="radio"
-                  name="shippingOption"
-                />
-                <label
-                  onClick={() => handleShippingCost(20)}
-                  htmlFor="flat_rate"
-                >
-                  Delivery: 7 Days Cost: <span>&#8377;20.00</span>
-                </label>
-                <ErrorMsg msg={errors?.shippingOption?.message} />
-              </span>
-            </div>
-          </li> */}
-
-          {/*  subtotal */}
-          {/* <li className="tp-order-info-list-subtotal">
-            <span>Subtotal</span>
-            <span>&#8377;{totalAmount?.toFixed(2)}</span>
-          </li> */}
-
-          {/*  shipping cost */}
-          {/* <li className="tp-order-info-list-subtotal">
-            <span>Shipping Cost</span>
-            <span>&#8377;{shippingCost.toFixed(2)}</span>
-          </li> */}
-
-          {/* discount */}
-          {/* <li className="tp-order-info-list-subtotal">
-            <span>Discount</span>
-            <span>&#8377;{discountAmount.toFixed(2)}</span>
-          </li> */}
 
           {/* total */}
           <li className="tp-order-info-list-total">
             <span>Total</span>
 
             <span>
-              {" "}
               &#8377;
               {totalAmount.toString() === "0"
-                ? shippingCost.toFixed(2)
-                : parseFloat(cartTotals).toFixed(2)}
+                ? roundOff(shippingCost)
+                : roundOff(cartTotals)}
             </span>
-
-            {/* <span>${totalAmount?.toFixed(2) == 0?shippingCost.toFixed(2):parseFloat(cartTotals).toFixed(2)}</span> */}
           </li>
         </ul>
       </div>
-      {/* <div className="tp-checkout-payment">
-        <div className="tp-checkout-payment-item">
-          <input
-            {...register(`payment`, {
-              required: `Payment Option is required!`,
-            })}
-            type="radio"
-            id="back_transfer"
-            name="payment"
-            value="Card"
-          />
-          <label
-            onClick={() => setShowCard(true)}
-            htmlFor="back_transfer"
-            data-bs-toggle="direct-bank-transfer"
-          >
-            Credit Card
-          </label>
-          {showCard && (
-            <div className="direct-bank-transfer">
-              <div className="payment_card">
-                <CardElement
-                  options={{
-                    style: {
-                      base: {
-                        fontSize: "16px",
-                        color: "#424770",
-                        "::placeholder": {
-                          color: "#aab7c4",
-                        },
-                      },
-                      invalid: {
-                        color: "#9e2146",
-                      },
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          )}
-          <ErrorMsg msg={errors?.payment?.message} />
-        </div>
-        <div className="tp-checkout-payment-item">
-          <input
-            {...register(`payment`, {
-              required: `Payment Option is required!`,
-            })}
-            onClick={() => setShowCard(false)}
-            type="radio"
-            id="cod"
-            name="payment"
-            value="COD"
-          />
-          <label htmlFor="cod">Cash on Delivery</label>
-          <ErrorMsg msg={errors?.payment?.message} />
-        </div>
-      </div> */}
 
       <div className="tp-checkout-btn-wrapper">
         <button

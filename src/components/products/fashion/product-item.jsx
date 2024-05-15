@@ -13,7 +13,7 @@ import {
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
-import { capitalizeFLetter } from "@/utils/functions";
+import { capitalizeFLetter, roundOff } from "@/utils/functions";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
@@ -387,14 +387,14 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
                 &#8377;
-                {product?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
+                {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
             </div>
           ) : (
             <div className="tp-product-price-wrapper-2">
               <span className="tp-product-price-2 new-price">
                 {"$"}
-                {product?.pricing?.priceRange?.start?.gross?.amount?.toFixed(2)}
+                {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
             </div>
           )}

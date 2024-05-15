@@ -1,3 +1,4 @@
+import { roundOff } from "@/utils/functions";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -46,7 +47,7 @@ const ProductSmItem = ({ product }) => {
           </div>
         </div>
         <div className="tp-product-price-wrapper">
-          <span className="tp-product-price">${price.toFixed(2)}</span>
+          <span className="tp-product-price">${roundOff(price)}</span>
         </div>
       </div>
     </div>

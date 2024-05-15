@@ -6,7 +6,10 @@ import Link from "next/link";
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { useAddToCartMutation, useGetCartListQuery } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartListQuery,
+} from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { compare_list } from "@/redux/features/cartSlice";
@@ -16,7 +19,7 @@ import {
   useAddWishlistMutation,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
-import { checkChannel } from "@/utils/functions";
+import { checkChannel, roundOff } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const ProductItem = ({
@@ -25,7 +28,6 @@ const ProductItem = ({
   primary_style = false,
   data,
 }) => {
-
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
 
@@ -327,11 +329,11 @@ const ProductItem = ({
         <div className="tp-product-price-wrapper-3">
           {checkChannel() === "india-channel" ? (
             <span className="tp-product-price-3">
-              &#8377;{pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
+              &#8377;{roundOff(pricing?.priceRange?.start?.gross?.amount)}
             </span>
           ) : (
             <span className="tp-product-price-3">
-              ${pricing?.priceRange?.start?.gross?.amount.toFixed(2)}
+              ${roundOff(pricing?.priceRange?.start?.gross?.amount)}
             </span>
           )}
         </div>

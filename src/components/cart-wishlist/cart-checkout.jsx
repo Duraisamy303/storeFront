@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { checkChannel } from "@/utils/functions";
+import { roundOff } from "@/utils/functions";
 
 const CartCheckout = ({ cartData }) => {
   const { total } = useCartInfo();
@@ -59,13 +60,14 @@ const CartCheckout = ({ cartData }) => {
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">Subtotal</span>
 
-        {checkChannel()=== "india-channel" ? (
+        {checkChannel() === "india-channel" ? (
           <span className="tp-cart-checkout-top-price">
-            &#8377;{list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+            &#8377;
+            {roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
           </span>
         ) : (
           <span className="tp-cart-checkout-top-price">
-            ${list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+            ${roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
           </span>
         )}
       </div>
@@ -116,15 +118,14 @@ const CartCheckout = ({ cartData }) => {
         {checkChannel() === "india-channel" ? (
           <>
             <span>
-              &#8377;
-              {list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+              &#8377;{roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
               <br />
               {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
             </span>
           </>
         ) : (
           <span>
-            ${list?.data?.checkout?.totalPrice?.gross?.amount?.toFixed(2)}
+            ${roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
             <br />
             {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
           </span>

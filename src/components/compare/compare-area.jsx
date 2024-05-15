@@ -19,6 +19,7 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { profilePic } from "@/utils/constant";
+import { roundOff } from "@/utils/functions";
 
 const CompareArea = () => {
   const { data: wishlistData } = useGetWishlistQuery();
@@ -77,7 +78,7 @@ const CompareArea = () => {
     localStorage.setItem("compareList", JSON.stringify(filter));
     dispatch(compare_list(filter));
   };
-  
+
   const IndiaChannel = compareList?.map((item) => {
     return item?.pricing?.priceRange?.start?.gross?.currency === "INR"
       ? true
@@ -149,9 +150,13 @@ const CompareArea = () => {
                     <tbody>
                       <tr>
                         <th>Product</th>
-                        {compareList?.map((item,index) => {
+                        {compareList?.map((item, index) => {
                           return (
-                            <td key={item?.id} className="" style={{minWidth:"300px"}}>
+                            <td
+                              key={item?.id}
+                              className=""
+                              style={{ minWidth: "300px" }}
+                            >
                               <div className="tp-compare-thumb p-relative z-index-1">
                                 <Image
                                   src={profilePic(item?.thumbnail?.url)}
@@ -186,15 +191,17 @@ const CompareArea = () => {
                                   {IndiaChannel[index] ? (
                                     <>
                                       ₹
-                                      {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                        2
+                                      {roundOff(
+                                        item?.pricing?.priceRange?.start?.gross
+                                          ?.amount
                                       )}
                                     </>
                                   ) : (
                                     <>
                                       $
-                                      {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                        2
+                                      {roundOff(
+                                        item?.pricing?.priceRange?.start?.gross
+                                          ?.amount
                                       )}
                                     </>
                                   )}

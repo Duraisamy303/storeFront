@@ -12,6 +12,7 @@ import logo from "@assets/img/logo/logo.svg";
 import ErrorMsg from "@/components/common/error-msg";
 import { useGetUserOrderByIdQuery } from "@/redux/features/order/orderApi";
 import PrdDetailsLoader from "@/components/loader/prd-details-loader";
+import { roundOff } from "@/utils/functions";
 
 
 const SingleOrder = ({ params }) => {
@@ -132,7 +133,7 @@ const SingleOrder = ({ params }) => {
                     <div className="invoice__total-ammount mb-30">
                       <h5 className="mb-0">Total Ammount</h5>
                       <p className="tp-font-medium text-danger">
-                        <strong>${parseInt(totalAmount).toFixed(2)}</strong>
+                        <strong>${roundOff(totalAmount)}</strong>
                       </p>
                     </div>
                   </div>
