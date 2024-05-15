@@ -193,7 +193,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
             style={{
               backgroundImage: `url(${profilePic(img)})`,
               backgroundColor: "#FFFFFF",
-              backgroundPosition: "0px -80px",
+              // backgroundPosition: "0px -80px",
             }}
           ></div>
           <div className="tp-product-badge-2">

@@ -55,7 +55,10 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
         className="tp-banner-thumb-4 include-bg black-bg transition-3"
         style={{ backgroundImage: `url(${bg?.src})` }}
       ></div>
-      <div className="tp-banner-content-4 first-card">
+      <div
+        className="tp-banner-content-4 first-card"
+        // style={{ textAlign: "center", width: "350px", fontSize: "14px" }}
+      >
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
         </h3>
@@ -71,9 +74,9 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                       query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
                     });
                   }}
-                  className="tp-btn tp-btn-border"
+                  style={{ textDecoration: "underline" }}
                 >
-                  VIEW PRODUCTS <ArrowRightLong />
+                  VIEW PRODUCTS
                 </button>
               </div>
             )}
@@ -89,9 +92,9 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                       query: { categoryId: "Q2F0ZWdvcnk6Mzg4OQ==" }, // Your parameters
                     });
                   }}
-                  className="tp-btn tp-btn-border"
+                  style={{ textDecoration: "underline" }}
                 >
-                  VIEW PRODUCTS <ArrowRightLong />
+                  VIEW PRODUCTS
                 </button>
               </div>
             )}
@@ -107,26 +110,23 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
   const router = useRouter();
 
   return (
-    <div
-      className={`tp-banner-item-4 tp-banner-height fix p-relative z-index-1 ${cls}`}
-      data-bg-color={`${bg_clr}`}
-    >
-      <div
-        className="tp-banner-thumb-4 include-bg black-bg transition-3"
-        style={{ backgroundColor: `#${bg_clr}` }}
-      ></div>
-      <div className="tp-banner-content-4 last-card">
-        <div>
-          <img src={img?.src} alt="category-product" />
-        </div>
-        <div className="last-card-body">
-          <h3 className="tp-banner-title-4">
-            <Link href="/shop">{title}</Link>
-          </h3>
-          <span className="category-content">{content}</span>
+    <>
+      {title === "ANKLETS" ? (
+        <div
+          className={`tp-banner-item-4 tp-banner-height fix p-relative z-index-1 ${cls}`}
+          data-bg-color={`${bg_clr}`}
+        >
+          <div
+            className="tp-banner-thumb-4 include-bg black-bg transition-3"
+            style={{ backgroundColor: `#${bg_clr}` }}
+          ></div>
+          <div className="tp-banner-content-4 last-card">
+            <div className="last-card-body">
+              <h3 className="tp-banner-title-4">
+                <Link href="/shop">{title}</Link>
+              </h3>
+              <span className="category-content">{content}</span>
 
-          {title === "ANKLETS" ? (
-            <>
               {isBtn && (
                 <div className="tp-banner-btn-4">
                   <button
@@ -136,15 +136,37 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                         query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
                       });
                     }}
-                    className="tp-btn tp-btn-border"
+                    style={{ textDecoration: "underline" }}
                   >
-                    VIEW PRODUCTS <ArrowRightLong />
+                    VIEW PRODUCTS
                   </button>
                 </div>
               )}
-            </>
-          ) : (
-            <>
+            </div>
+            <div>
+              <img src={img?.src} alt="category-product" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div
+          className={`tp-banner-item-4 tp-banner-height fix p-relative z-index-1 ${cls}`}
+          data-bg-color={`${bg_clr}`}
+        >
+          <div
+            className="tp-banner-thumb-4 include-bg black-bg transition-3"
+            style={{ backgroundColor: `#${bg_clr}` }}
+          ></div>
+          <div className="tp-banner-content-4 last-card">
+            <div>
+              <img src={img?.src} alt="category-product" />
+            </div>
+            <div className="last-card-body">
+              <h3 className="tp-banner-title-4">
+                <Link href="/shop">{title}</Link>
+              </h3>
+              <span className="category-content">{content}</span>
+
               {isBtn && (
                 <div className="tp-banner-btn-4">
                   <button
@@ -154,17 +176,17 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                         query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
                       });
                     }}
-                    className="tp-btn tp-btn-border"
+                    style={{ textDecoration: "underline" }}
                   >
-                    VIEW PRODUCTS <ArrowRightLong />
+                    VIEW PRODUCTS
                   </button>
                 </div>
               )}
-            </>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 
@@ -198,9 +220,9 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                       query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
                     });
                   }}
-                  className="tp-btn tp-btn-border"
+                  style={{ textDecoration: "underline" }}
                 >
-                  VIEW PRODUCTS <ArrowRightLong />
+                  VIEW PRODUCTS
                 </button>
               </div>
             )}
@@ -216,9 +238,9 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                       query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
                     });
                   }}
-                  className="tp-btn tp-btn-border"
+                  style={{ textDecoration: "underline" }}
                 >
-                  VIEW PRODUCTS <ArrowRightLong />
+                  VIEW PRODUCTS
                 </button>
               </div>
             )}
@@ -245,7 +267,7 @@ const JewelryShopBanner = () => {
                     bg={banner_bg_1}
                     title="NECKLACES"
                     content={
-                      <p>
+                      <p style={{ fontSize: "14px" }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing{" "}
                         <br /> lacinia accumsan lorem sit amet.
                       </p>
@@ -259,7 +281,7 @@ const JewelryShopBanner = () => {
                     cls="has-green sm-banner"
                     bg_clr="131418"
                     content={
-                      <p>
+                      <p style={{ fontSize: "14px" }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing
                         lacinia accumsan lorem sit amet.
                       </p>
@@ -277,7 +299,7 @@ const JewelryShopBanner = () => {
                     img={banner_bg_3}
                     title="BRACELETS"
                     content={
-                      <p>
+                      <p style={{ fontSize: "14px" }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing
                         lacinia accumsan lorem sit amet.
                       </p>
@@ -296,7 +318,7 @@ const JewelryShopBanner = () => {
                     bg={banner_bg_4}
                     title="PENDANTS"
                     content={
-                      <p>
+                      <p style={{ fontSize: "14px" }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing
                         <br /> lacinia accumsan lorem sit amet.
                       </p>
@@ -308,14 +330,14 @@ const JewelryShopBanner = () => {
                 <div className="col-xl-12 gx-0 gy-0">
                   <BannerItem2
                     className="category-left-two"
-                    bg_clr="090a0f"
+                    bg_clr="0e0f14"
                     img={banner_bg_5}
                     title="EARRINGS"
                     isBtn={true}
                     content={
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                        lacinia accumsan lorem sit amet.
+                      <p style={{ fontSize: "14px" }}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Quisque lacinia accumsan lorem sit amet euismod.
                       </p>
                     }
                   />
@@ -324,14 +346,14 @@ const JewelryShopBanner = () => {
                 <div className="col-xl-12 gx-0 gy-0">
                   <BannerItem2
                     className="category-left-two"
-                    bg_clr="131418"
+                    bg_clr="1b1b1d"
                     img={banner_bg_6}
                     title="ANKLETS"
                     isBtn={true}
                     content={
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                        lacinia accumsan lorem sit amet.
+                      <p style={{ fontSize: "14px" }}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Quisque lacinia accumsan lorem sit amet euismod.
                       </p>
                     }
                   />

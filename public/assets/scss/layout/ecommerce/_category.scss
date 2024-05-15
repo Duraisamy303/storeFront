@@ -678,6 +678,9 @@
 
 .first-card{
     margin-top: 100px;
+    text-align: center;
+    width: 350px;
+    font-size: 14px;
 }
 
 .menu-lists{
@@ -782,6 +785,10 @@
         width: 50%;
         height: 50px;
         
+        }
+
+        .first-card{
+            width: 100%;
         }
 }
 
