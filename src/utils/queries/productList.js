@@ -251,6 +251,8 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
             }
             defaultVariant {
               id
+              costPrice
+              name
             }
           }
         }

@@ -154,7 +154,7 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProductById: builder.query({
+    getProductById: builder.mutation({
       query: ({ ids }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
@@ -382,7 +382,7 @@ export const {
   useMyOrderListQuery,
   useAddWishlistMutation,
   useGetWishlistQuery,
-  useGetProductByIdQuery,
+  useGetProductByIdMutation,
   useGetCategoryListQuery,
   //filter
   usePriceFilterMutation,
@@ -399,4 +399,5 @@ export const {
   useProductSearchMutation,
   useProduct20PercentageMutation,
   useGetParentCategoryListQuery,
+  
 } = productApi;

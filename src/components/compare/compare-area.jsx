@@ -17,7 +17,11 @@ import {
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/router";
-import { useGetWishlistQuery } from "@/redux/features/productApi";
+import {
+  useGetProductByIdMutation,
+  useGetProductByIdQuery,
+  useGetWishlistQuery,
+} from "@/redux/features/productApi";
 import { profilePic } from "@/utils/constant";
 import { roundOff } from "@/utils/functions";
 
@@ -35,6 +39,8 @@ const CompareArea = () => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+  const [getProducts] = useGetProductByIdMutation();
+
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -45,10 +51,27 @@ const CompareArea = () => {
     dispatch(compare_list(arr));
   }, []);
 
-  // handle add product
-  // const handleAddProduct = (prd) => {
-  //   dispatch(add_cart_product(prd));
-  // };
+  useEffect(() => {
+    getProductListById();
+  }, []);
+
+  const getProductListById = async (item) => {
+    try {
+      const compareList = localStorage.getItem("compareList");
+      let productIds = [];
+      if (compareList) {
+        productIds = JSON.parse(compareList)?.map((item) => item.id);
+      } else {
+        productIds = [];
+      }
+      const response = await getProducts({
+        ids: productIds,
+      });
+      console.log("response: ", response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleAddProduct = async (item) => {
     try {
