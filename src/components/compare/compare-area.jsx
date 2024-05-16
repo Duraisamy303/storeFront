@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,6 +40,7 @@ const CompareArea = () => {
     useAddToCartMutation();
 
   const [getProducts] = useGetProductByIdMutation();
+  const [compareData, setCompareData] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -60,19 +61,19 @@ const CompareArea = () => {
       const compareList = localStorage.getItem("compareList");
       let productIds = [];
       if (compareList) {
-        productIds = JSON.parse(compareList)?.map((item) => item.id);
+        productIds = JSON.parse(compareList)?.map((item) => item.node?.id);
       } else {
         productIds = [];
       }
       const response = await getProducts({
         ids: productIds,
       });
-      console.log("response: ", response);
+      setCompareData(response?.data?.data?.products?.edges);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
+  console.log("compareData: ", compareData);
   const handleAddProduct = async (item) => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
@@ -97,22 +98,35 @@ const CompareArea = () => {
   };
   // handle add product
   const handleRemoveComparePrd = (prd) => {
-    const filter = compareList.filter((item) => item.id !== prd.id);
+    const filter = compareData.filter(
+      (item) => item?.node.id !== prd?.node?.id
+    );
     localStorage.setItem("compareList", JSON.stringify(filter));
     dispatch(compare_list(filter));
+
+    // getProductListById()
   };
 
-  const IndiaChannel = compareList?.map((item) => {
-    return item?.pricing?.priceRange?.start?.gross?.currency === "INR"
+  const IndiaChannel = compareData?.map((item) => {
+    return item?.node?.pricing?.priceRange?.start?.gross?.currency === "INR"
       ? true
       : false;
   });
 
   const description = (item) => {
+    console.log("✌️item --->", item);
     if (item) {
-      const jsonObject = JSON.parse(item);
-      const textValue = jsonObject?.blocks[0]?.data?.text;
-      return textValue;
+      try {
+        const jsonObject = JSON.parse(item);
+        console.log("✌️jsonObject --->", jsonObject);
+        const textValues = jsonObject?.blocks?.map((value) => {
+          return value?.data?.text;
+        });
+        console.log("✌️textValues --->", textValues);
+        return textValues;
+      } catch (e) {
+        console.error("Invalid JSON:", e);
+      }
     }
   };
 
@@ -159,7 +173,7 @@ const CompareArea = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-xl-12">
-              {compareList?.length === 0 && (
+              {compareData?.length === 0 && (
                 <div className="text-center pt-50">
                   <h3>No Compare Items Found</h3>
                   <Link href="/shop" className="tp-cart-checkout-btn mt-20">
@@ -167,30 +181,30 @@ const CompareArea = () => {
                   </Link>
                 </div>
               )}
-              {compareList?.length > 0 && (
+              {compareData?.length > 0 && (
                 <div className="tp-compare-table table-responsive text-center">
                   <table className="table">
                     <tbody>
                       <tr>
                         <th>Product</th>
-                        {compareList?.map((item, index) => {
+                        {compareData?.map((item, index) => {
                           return (
                             <td
-                              key={item?.id}
+                              key={item?.node?.id}
                               className=""
                               style={{ minWidth: "300px" }}
                             >
                               <div className="tp-compare-thumb p-relative z-index-1">
                                 <Image
-                                  src={profilePic(item?.thumbnail?.url)}
+                                  src={profilePic(item?.node?.thumbnail?.url)}
                                   alt="compare"
                                   width={500}
                                   height={500}
                                   className=""
                                 />
                                 <div className="tp-product-badge-2">
-                                  {item?.defaultVariant?.quantityAvailable ==
-                                    0 && (
+                                  {item?.node?.defaultVariant
+                                    ?.quantityAvailable == 0 && (
                                     <span
                                       className="product-hot text-center"
                                       style={{ padding: "15px 12px " }}
@@ -202,8 +216,10 @@ const CompareArea = () => {
                                 </div>
 
                                 <h4 className="tp-compare-product-title">
-                                  <Link href={`/product-details/${item?.id}`}>
-                                    {item?.name}
+                                  <Link
+                                    href={`/product-details/${item?.node?.id}`}
+                                  >
+                                    {item?.node?.name}
                                   </Link>
                                 </h4>
 
@@ -215,22 +231,22 @@ const CompareArea = () => {
                                     <>
                                       ₹
                                       {roundOff(
-                                        item?.pricing?.priceRange?.start?.gross
-                                          ?.amount
+                                        item?.node?.pricing?.priceRange?.start
+                                          ?.gross?.amount
                                       )}
                                     </>
                                   ) : (
                                     <>
                                       $
                                       {roundOff(
-                                        item?.pricing?.priceRange?.start?.gross
-                                          ?.amount
+                                        item?.node?.pricing?.priceRange?.start
+                                          ?.gross?.amount
                                       )}
                                     </>
                                   )}
                                 </div>
-                                {item?.defaultVariant?.quantityAvailable !=
-                                  0 && (
+                                {item?.node?.defaultVariant
+                                  ?.quantityAvailable != 0 && (
                                   <div className="tp-compare-add-to-cart">
                                     {datacartList?.data?.checkout?.lines?.some(
                                       (prd) =>
@@ -255,13 +271,7 @@ const CompareArea = () => {
                                         Add to Cart
                                       </button>
                                     )}
-                                    {/* <button
-                                onClick={() => handleAddProduct(item)}
-                                type="button"
-                                className="tp-btn"
-                              >
-                                Add to Cart
-                              </button> */}
+                                  
                                   </div>
                                 )}
                               </div>
@@ -270,65 +280,17 @@ const CompareArea = () => {
                         })}
                       </tr>
 
-                      {/* Price */}
-                      {/* <tr>
-                        <th>Price</th>
-                        {compareList.map((item) => (
-                          <td key={item?.id}>
-                            <div className="tp-compare-add-to-cart">
-                              &#8377;
-                              {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                2
-                              )}
-                            </div>
-                          </td>
-                        ))}
-                      </tr> */}
-
-                      {/* Add to cart*/}
-                      {/* <tr>
-                        <th>Add to cart</th>
-                        {compareList.map((item) => (
-                          <td key={item?.id}>
-                            <div className="tp-compare-add-to-cart">
-                              {cart.some(
-                                (prd) => prd?.variant?.product?.id === item?.id
-                              ) ? (
-                                <button
-                                  onClick={() => router.push("/cart")}
-                                  className="tp-btn"
-                                  type="button"
-                                >
-                                  View Cart
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => handleAddProduct(item)}
-                                  type="button"
-                                  className="tp-btn"
-                                >
-                                  Add to Cart
-                                </button>
-                              )}
-                              <button
-                                onClick={() => handleAddProduct(item)}
-                                type="button"
-                                className="tp-btn"
-                              >
-                                Add to Cart
-                              </button>
-                            </div>
-                          </td>
-                        ))}
-                      </tr> */}
+                     
 
                       {/* Description */}
                       <tr>
                         <th>Description</th>
-                        {compareList?.map((item) => (
-                          <td key={item?.id}>
+                        {compareData?.map((item) => (
+                          <td key={item?.node?.id}>
                             <div className="tp-compare-add-to-cart">
-                              <span>{description(item?.description)}</span>
+                              <span>
+                                {description(item?.node?.description)}
+                              </span>
                             </div>
                           </td>
                         ))}
@@ -336,14 +298,11 @@ const CompareArea = () => {
                       {/* SKU */}
                       <tr>
                         <th>SKU</th>
-                        {compareList.map((item) => (
-                          <td key={item?.id}>
-                            {/* <div className="tp-compare-add-to-cart">
-                              &#8377;
-                              {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
-                                2
-                              )}
-                            </div> */}
+                        {compareData.map((item) => (
+                          <td key={item?.node?.id}>
+                            <div className="tp-compare-add-to-cart">
+                              <span>{item?.node?.variants[0]?.sku}</span>
+                            </div>
                           </td>
                         ))}
                       </tr>
@@ -351,14 +310,19 @@ const CompareArea = () => {
                       {/* availability */}
                       <tr>
                         <th>Availability</th>
-                        {compareList.map((item) => (
-                          <td key={item?.id}>
+                        {compareData.map((item) => (
+                          <td key={item?.node?.id}>
                             {/* <div className="tp-compare-add-to-cart">
                               &#8377;
                               {item?.pricing?.priceRange?.start?.gross?.amount?.toFixed(
                                 2
                               )}
                             </div> */}
+                            <div className="tp-compare-add-to-cart">
+                              <span>
+                                {item?.node?.defaultVariant?.quantityAvailable}
+                              </span>
+                            </div>
                           </td>
                         ))}
                       </tr>
@@ -382,8 +346,8 @@ const CompareArea = () => {
                       {/* Remove */}
                       <tr>
                         <th>Remove</th>
-                        {compareList?.map((item) => (
-                          <td key={item?.id}>
+                        {compareData?.map((item) => (
+                          <td key={item?.node?.id}>
                             <div className="tp-compare-remove">
                               <button
                                 onClick={() => handleRemoveComparePrd(item)}
