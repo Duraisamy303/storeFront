@@ -61,19 +61,26 @@ const CompareArea = () => {
       const compareList = localStorage.getItem("compareList");
       let productIds = [];
       if (compareList) {
-        productIds = JSON.parse(compareList)?.map((item) => item.node?.id);
+        productIds = JSON.parse(compareList)?.map((item) =>
+          item?.node ? item?.node?.id : item?.id
+        );
       } else {
         productIds = [];
       }
-      const response = await getProducts({
-        ids: productIds,
-      });
-      setCompareData(response?.data?.data?.products?.edges);
+
+      if (productIds?.length > 0) {
+        const response = await getProducts({
+          ids: productIds,
+        });
+
+        setCompareData(response?.data?.data?.products?.edges);
+      } else {
+        setCompareData([]);
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  console.log("compareData: ", compareData);
   const handleAddProduct = async (item) => {
     try {
       const checkoutToken = localStorage.getItem("checkoutToken");
@@ -104,7 +111,7 @@ const CompareArea = () => {
     localStorage.setItem("compareList", JSON.stringify(filter));
     dispatch(compare_list(filter));
 
-    // getProductListById()
+    getProductListById();
   };
 
   const IndiaChannel = compareData?.map((item) => {
@@ -114,15 +121,12 @@ const CompareArea = () => {
   });
 
   const description = (item) => {
-    console.log("✌️item --->", item);
     if (item) {
       try {
         const jsonObject = JSON.parse(item);
-        console.log("✌️jsonObject --->", jsonObject);
         const textValues = jsonObject?.blocks?.map((value) => {
           return value?.data?.text;
         });
-        console.log("✌️textValues --->", textValues);
         return textValues;
       } catch (e) {
         console.error("Invalid JSON:", e);
@@ -271,7 +275,6 @@ const CompareArea = () => {
                                         Add to Cart
                                       </button>
                                     )}
-                                  
                                   </div>
                                 )}
                               </div>
@@ -279,8 +282,6 @@ const CompareArea = () => {
                           );
                         })}
                       </tr>
-
-                     
 
                       {/* Description */}
                       <tr>
