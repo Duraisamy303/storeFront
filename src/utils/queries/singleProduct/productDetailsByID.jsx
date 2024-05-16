@@ -51,6 +51,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           name
           quantityAvailable
           sku
+          costPrice
         }
         metadata {
           key
@@ -115,6 +116,7 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
               defaultVariant {
                 id
                 quantityAvailable
+                costPrice
               }
               category {
                 id

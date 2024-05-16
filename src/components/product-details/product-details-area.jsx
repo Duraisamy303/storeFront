@@ -6,6 +6,7 @@ import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
 
 const ProductDetailsArea = ({ productItem }) => {
+console.log('✌️productItem --->', productItem);
   const { images, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(images[0]);
   const dispatch = useDispatch();

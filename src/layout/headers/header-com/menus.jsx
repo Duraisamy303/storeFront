@@ -5,6 +5,9 @@ import Image from "next/image";
 import categoryImages from "@assets/img/sub-menu.jpg";
 import earingModel from "@assets/img/earring-menu-pic-1.png";
 import { useRouter } from "next/router";
+import Anklet from "@assets/img/banner/anklet.jpg";
+import Ring from "@assets/img/banner/ring.jpg";
+import Bangles from "@assets/img/banner/bangle.jpg";
 
 const Menus = () => {
   const router = useRouter();
@@ -222,7 +225,7 @@ const Menus = () => {
             </div>
             <div>
               <Image
-                src={earingModel}
+                src={Bangles}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
@@ -362,7 +365,7 @@ const Menus = () => {
             </div>
             <div>
               <Image
-                src={earingModel}
+                src={Ring}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
@@ -432,7 +435,7 @@ const Menus = () => {
             </div>
             <div>
               <Image
-                src={earingModel}
+                src={Anklet}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />

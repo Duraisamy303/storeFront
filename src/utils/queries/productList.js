@@ -575,6 +575,7 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
       defaultVariant {
         id
         quantityAvailable
+        costPrice
       }
     }
     
@@ -952,6 +953,7 @@ export const PRODUCT_20_PERCENTAGE = ({
       defaultVariant {
         id
         quantityAvailable
+        costPrice
       }
       images {
         id

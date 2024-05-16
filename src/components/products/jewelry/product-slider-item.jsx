@@ -25,7 +25,7 @@ import {
   useWishlistMutation,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
-import { checkChannel, roundOff } from "../../../utils/functions";
+import { RegularPrice, checkChannel, roundOff } from "../../../utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const ProductSliderItem = ({ product, loginPopup }) => {
@@ -34,6 +34,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   const router = useRouter();
 
   const RelatedProduct = product.node;
+  console.log("✌️RelatedProduct --->", RelatedProduct);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -354,11 +355,47 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         <p style={{ color: "black", fontWeight: "400", margin: "0px" }}>
           {Product_name}
         </p>
-        <p style={{ color: "gray", margin: "0px", fontSize:"14px" }}>{Category_Name}</p>
+        <p style={{ color: "gray", margin: "0px", fontSize: "14px" }}>
+          {Category_Name}
+        </p>
         {checkChannel() === "india-channel" ? (
-          <p style={{ color: "gray", margin: "0px", fontSize:"14px" }}>₹{roundOff(Price)}</p>
+          <>
+            {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
+              <span
+                style={{
+                  color: "black",
+                  margin: "0px",
+                  fontSize: "14px",
+                  textDecoration: "line-through",
+                }}
+                className="tp-product-price-1 pr-5 line-through "
+              >
+                ₹{roundOff(RelatedProduct?.defaultVariant?.costPrice)}
+              </span>
+            )}
+            <span className="tp-product-price-2 new-price" style={{ color: "#c2882b", margin: "0px", fontSize: "14px" }}>
+              ₹{roundOff(Price)}
+            </span>
+          </>
         ) : (
-          <p style={{ color: "gray", margin: "0px" , fontSize:"14px"}}>${roundOff(Price)}</p>
+          <>
+           {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
+              <span
+                style={{
+                  color: "black",
+                  margin: "0px",
+                  fontSize: "14px",
+                  textDecoration: "line-through",
+                }}
+                className="tp-product-price-1 pr-5 line-through "
+              >
+                ${roundOff(RelatedProduct?.defaultVariant?.costPrice)}
+              </span>
+            )}
+            <span style={{ color: "#c2882b", margin: "0px", fontSize: "14px" }}>
+              ${roundOff(Price)}
+            </span>
+          </>
         )}
       </div>
     </>
