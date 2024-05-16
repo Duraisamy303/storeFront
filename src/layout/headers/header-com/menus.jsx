@@ -36,30 +36,30 @@ const Menus = () => {
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALLEARRINGS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALLEARRINGS</h6>
               <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Handpainted Earrings
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Studs & Hooks
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Statement Earrings
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Oxidized Silver Earrings
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Jhumkas
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Gold Plated Silver
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Dual Tones
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Cuff Earrings
                 </li>
               </ul>
@@ -114,42 +114,42 @@ const Menus = () => {
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALLNECKLACES</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALLNECKLACES</h6>
               <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Gold Plated Silver
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Everyday Jewellery
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Mope Chains
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Chokers
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Dual Tones
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Hasli
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Long Necklaces
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Pearls & Beads
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Short Necklaces
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Statement Necklaces
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Mangalsutras
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   LOOT SALE
                 </li>
               </ul>
@@ -204,7 +204,7 @@ const Menus = () => {
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALL BANGLES & BRACELETS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL BANGLES & BRACELETS</h6>
               {/* <ul>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
                 Chokers
@@ -282,19 +282,19 @@ const Menus = () => {
             <div style={{ paddingLeft: "25px" }}>
               {/* <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6> */}
               <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Nose Pins
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Pendants
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Waist Keychains
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Maang Tikkas
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Hair Accessories
                 </li>
               </ul>
@@ -358,7 +358,7 @@ const Menus = () => {
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALL RINGS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL RINGS</h6>
             </div>
             <div>
               <Image
@@ -420,12 +420,12 @@ const Menus = () => {
         <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px" }}>ALL ANKLETS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL ANKLETS</h6>
               <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Rope Anklet
                 </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Stone Anklets
                 </li>
               </ul>
