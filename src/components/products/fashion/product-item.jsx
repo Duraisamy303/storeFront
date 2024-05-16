@@ -394,7 +394,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   style={{ textDecoration: "line-through" }}
                 >
                   &#8377;
-                  {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
+                  {roundOff(product?.defaultVariant?.costPrice)}
                 </span>
               )}
               <span className="tp-product-price-2 new-price ">
@@ -404,6 +404,18 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             </div>
           ) : (
             <div className="tp-product-price-wrapper-2">
+              {RegularPrice(
+                product?.defaultVariant?.costPrice,
+                product?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="tp-product-price-1 pr-5 line-through "
+                  style={{ textDecoration: "line-through" }}
+                >
+                  {"$"}
+                  {roundOff(product?.defaultVariant?.costPrice)}
+                </span>
+              )}
               <span className="tp-product-price-2 new-price">
                 {"$"}
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}

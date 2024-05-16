@@ -12,7 +12,7 @@ import {
   useGetWishlistQuery,
   useProduct20PercentageMutation,
 } from "@/redux/features/productApi";
-import { checkChannel, roundOff } from "@/utils/functions";
+import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 import { CompareThree, QuickView, Wishlist } from "@/svg";
 import {
   useAddToCartMutation,
@@ -162,7 +162,7 @@ const InstagramAreaFour = () => {
     notifySuccess("Product to added to compare list");
     dispatch(compare_list(arr));
   };
-
+  console.log("productList: ", productList);
   return (
     <>
       <section className="tp-instagram-area tp-instagram-style-4  pb-20">
@@ -183,7 +183,9 @@ const InstagramAreaFour = () => {
                 <span className="discound">20%</span>
                 <br /> <span className="discount-2">ON ALL NECKLACES</span>
               </div>
-              <p style={{ textAlign: "center", color: "gray", fontSize: "14px" }}>
+              <p
+                style={{ textAlign: "center", color: "gray", fontSize: "14px" }}
+              >
                 Duis aute irure dolor in reprehenderit in voluptate velit esse
                 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
                 cupidatat non proident, sunt in culpa qui officia deserunt
@@ -285,7 +287,7 @@ const InstagramAreaFour = () => {
                         alt="instagram img"
                         className="actor-image"
                       />
-                      <div className="tp-instagram-icon-2">
+                      <div className="tp-instagram-icon-2 text-center">
                         <p
                           className="actor-hov-para"
                           style={{ fontSize: "12px" }}
@@ -304,10 +306,47 @@ const InstagramAreaFour = () => {
                           className="actor-hov-para"
                           style={{ fontSize: "12px" }}
                         >
-                          Price :{" "}
-                          {checkChannel() === "india-channel" ? "₹" : "$"}
-                          {roundOff(
-                            item?.pricing?.priceRange?.start?.gross?.amount
+                          Price <br />
+                          {checkChannel() === "india-channel" ? (
+                            <>
+                              {RegularPrice(
+                                item?.defaultVariant?.costPrice,
+                                item?.pricing?.priceRange?.start?.gross?.amount
+                              ) && (
+                                <span
+                                  className="tp-product-price-1 pr-5 line-through "
+                                  style={{
+                                    textDecoration: "line-through red  ",
+                                  }}
+                                >
+                                  ₹ {roundOff(item?.defaultVariant?.costPrice)}
+                                </span>
+                              )}
+                              <br /> ₹{" "}
+                              {roundOff(
+                                item?.pricing?.priceRange?.start?.gross?.amount
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {RegularPrice(
+                                item?.defaultVariant?.costPrice,
+                                item?.pricing?.priceRange?.start?.gross?.amount
+                              ) && (
+                                <span
+                                  className="tp-product-price-1 pr-5 line-through "
+                                  style={{
+                                    textDecoration: "line-through red  ",
+                                  }}
+                                >
+                                  $ {roundOff(item?.defaultVariant?.costPrice)}
+                                </span>
+                              )}
+                              ${" "}
+                              {roundOff(
+                                item?.pricing?.priceRange?.start?.gross?.amount
+                              )}
+                            </>
                           )}
                         </p>
                         <button

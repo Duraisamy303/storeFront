@@ -15,7 +15,7 @@ import {
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
-import { capitalizeFLetter } from "@/utils/functions";
+import { RegularPrice, capitalizeFLetter } from "@/utils/functions";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
@@ -289,22 +289,50 @@ const DetailsWrapper = ({
       <div className="tp-product-details-price-wrapper mb-20">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
+            {RegularPrice(
+              productItem?.defaultVariant?.costPrice,
+              productItem?.pricing?.priceRange?.start?.gross?.amount
+            ) && (
+              <span
+                className="pr-5"
+                style={{ textDecoration: "line-through", color: "gray" }}
+              >
+                &#8377;{roundOff(productItem?.defaultVariant?.costPrice)}
+              </span>
+            )}
             <span className="tp-product-price-2 new-price">
-              &#8377;{roundOff(productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount)}
-            
+              &#8377;
+              {roundOff(
+                productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              )}
             </span>
           </div>
         ) : (
           <div className="tp-product-price-wrapper-2">
+            {RegularPrice(
+              productItem?.defaultVariant?.costPrice,
+              productItem?.pricing?.priceRange?.start?.gross?.amount
+            ) && (
+              <span
+                className="pr-5"
+                style={{ textDecoration: "line-through", color: "gray" }}
+              >
+                {"$"}
+                {roundOff(productItem?.defaultVariant?.costPrice)}
+              </span>
+            )}
             <span className="tp-product-price-2 new-price">
-              {"$"}{roundOff(productItem?.pricing?.priceRange?.start?.gross?.amount || productItem?.node?.pricing?.priceRange?.start?.gross?.amount)}
+              {"$"}
+              {roundOff(
+                productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              )}
             </span>
           </div>
         )}
-        
       </div>
 
-      
       {productItem?.metadata?.length > 1 && (
         <p style={{ color: "black" }}>{productItem?.metadata[1]?.value}</p>
       )}
