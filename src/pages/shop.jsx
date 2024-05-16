@@ -213,10 +213,29 @@ const ShopPage = () => {
     }
   }, [router]);
 
+  useEffect(() => {
+    if (router?.query?.tagId) {
+      filterByTags();
+    }
+  }, [router]);
+
   const filterByCategory = () => {
     const datas = {
       categories: router?.query?.categoryId,
       // categories:"Q2F0ZWdvcnk6MTE2Mg=="
+    };
+
+    priceFilter({
+      filter: datas,
+    }).then((res) => {
+      const list = res?.data?.data?.products?.edges;
+      setProductList(list);
+    });
+  };
+
+  const filterByTags = () => {
+    const datas = {
+      tags: router?.query?.tagId,
     };
 
     priceFilter({
