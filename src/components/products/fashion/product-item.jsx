@@ -13,7 +13,7 @@ import {
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
-import { capitalizeFLetter, roundOff } from "@/utils/functions";
+import { capitalizeFLetter, roundOff, RegularPrice } from "@/utils/functions";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
@@ -384,8 +384,20 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
         </div> */}
           {channel == "india-channel" ? (
-            <div className="tp-product-price-wrapper-2">
-              <span className="tp-product-price-2 new-price">
+            <div className="tp-product-price-wrapper ">
+              {RegularPrice(
+                product?.defaultVariant?.costPrice,
+                product?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="tp-product-price-1 pr-5 line-through "
+                  style={{ textDecoration: "line-through" }}
+                >
+                  &#8377;
+                  {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
+                </span>
+              )}
+              <span className="tp-product-price-2 new-price ">
                 &#8377;
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>

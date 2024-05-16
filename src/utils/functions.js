@@ -91,3 +91,15 @@ export const roundOff = (price) => {
   }
   return round;
 };
+
+export const RegularPrice = (costPrice, sale) => {
+  let price = false;
+  if (costPrice) {
+    if (costPrice == sale) {
+      price = false;
+    } else if (costPrice > sale) {
+      price = true;
+    }
+  }
+  return price;
+};
