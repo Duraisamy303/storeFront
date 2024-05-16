@@ -37,7 +37,6 @@ const ShopPage = () => {
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
 
   const router = useRouter();
-  console.log("router: ", router?.query);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 

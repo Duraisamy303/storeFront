@@ -38,6 +38,7 @@ fragment ProductListItem on Product {
   defaultVariant {
     id
     quantityAvailable
+    costPrice
   }
   media {
     id
