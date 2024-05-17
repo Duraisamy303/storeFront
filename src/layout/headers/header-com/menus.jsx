@@ -36,10 +36,15 @@ const Menus = () => {
   const renderCategoryContent = () => {
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALLEARRINGS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+                ALLEARRINGS
+              </h6>
               <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Handpainted Earrings
@@ -114,10 +119,15 @@ const Menus = () => {
       lastHoveredCategory === "Necklaces"
     ) {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALLNECKLACES</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+                ALLNECKLACES
+              </h6>
               <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Gold Plated Silver
@@ -204,10 +214,15 @@ const Menus = () => {
       lastHoveredCategory === "Bangles"
     ) {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL BANGLES & BRACELETS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+                ALL BANGLES & BRACELETS
+              </h6>
               {/* <ul>
                 <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
                 Chokers
@@ -280,7 +295,10 @@ const Menus = () => {
       lastHoveredCategory === "Pendants"
     ) {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
               {/* <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6> */}
@@ -358,10 +376,15 @@ const Menus = () => {
       );
     } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL RINGS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+                ALL RINGS
+              </h6>
             </div>
             <div>
               <Image
@@ -420,10 +443,20 @@ const Menus = () => {
       lastHoveredCategory === "Anklets"
     ) {
       return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
+        <div
+          className="row"
+          style={{
+            paddingBottom: "30px",
+            height: "400px",
+            overflowY: "scroll",
+            overflowX: "hidden",
+          }}
+        >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight:"500" }}>ALL ANKLETS</h6>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+                ALL ANKLETS
+              </h6>
               <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Rope Anklet
