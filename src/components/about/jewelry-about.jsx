@@ -15,7 +15,7 @@ const JewelryAbout = () => {
             <div className="col-12 text-center">
               <p
                 className="tp-about-title mb-25"
-                style={{ fontSize: "24px", lineHeight: "40px", color: "gray" }}
+                style={{ fontSize: "18px", lineHeight: "40px", color: "gray" }}
               >
                 PraDe strives to encapsulate Indian values and sentiments
                 through its designs. We look forward to maintain the Indian
@@ -27,8 +27,8 @@ const JewelryAbout = () => {
               <p
                 style={{
                   color: "black",
-                  fontWeight: "500",
-                  fontSize: "20px",
+                  fontWeight: "400",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -36,9 +36,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "gray",
-                  fontWeight: "400",
-                  fontSize: "18px",
+                  color: "#777",
+                  fontWeight: "100",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -46,9 +46,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -60,9 +60,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -77,18 +77,18 @@ const JewelryAbout = () => {
               <p
                 style={{
                   color: "black",
-                  fontWeight: "500",
-                  fontSize: "20px",
+                  fontWeight: "400",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
                 DEEPTHI MUTHUSAMY
               </p>
               <p
-                style={{
-                  color: "gray",
-                  fontWeight: "400",
-                  fontSize: "18px",
+                 style={{
+                  color: "#777",
+                  fontWeight: "100",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -96,9 +96,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
-                  fontWeight: "400",
-                  fontSize: "16px",
+                  color: "#777",
+                  fontWeight: "100",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -111,9 +111,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -130,8 +130,8 @@ const JewelryAbout = () => {
               <p
                 style={{
                   color: "black",
-                  fontWeight: "500",
-                  fontSize: "20px",
+                  fontWeight: "400",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -139,9 +139,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "gray",
-                  fontWeight: "400",
-                  fontSize: "18px",
+                  color: "#777",
+                  fontWeight: "100",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -149,9 +149,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -162,9 +162,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}
@@ -180,8 +180,8 @@ const JewelryAbout = () => {
               <p
                 style={{
                   color: "black",
-                  fontWeight: "500",
-                  fontSize: "20px",
+                  fontWeight: "400",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -189,9 +189,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "gray",
-                  fontWeight: "400",
-                  fontSize: "18px",
+                  color: "#777",
+                  fontWeight: "100",
+                  fontSize: "14px",
                   marginBottom: "5px",
                 }}
               >
@@ -199,9 +199,9 @@ const JewelryAbout = () => {
               </p>
               <p
                 style={{
-                  color: "black",
+                  color: "#777",
                   fontWeight: "400",
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginBottom: "5px",
                   lineHeight: "30px",
                 }}

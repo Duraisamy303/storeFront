@@ -530,7 +530,7 @@ const DetailsWrapper = ({
         >
           <div
             className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: "14px" }}
           >
             ADDITIONAL INFORMATION
           </div>{" "}
@@ -546,10 +546,10 @@ const DetailsWrapper = ({
               paddingTop: "20px",
             }}
           >
-            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+            <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
               Item type
             </li>
-            <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
+            <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
               Only Necklace, Necklace with Earrings
             </li>
           </ul>
@@ -573,7 +573,7 @@ const DetailsWrapper = ({
         >
           <div
             className={`${visibility.shipping ? "theme-color" : ""}`}
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: "14px" }}
           >
             SHIPPING & DELIVERY
           </div>{" "}
@@ -635,7 +635,7 @@ const DetailsWrapper = ({
         >
           <div
             className={`${visibility.maintenance ? "theme-color" : ""}`}
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: "14px" }}
           >
             MAINTENENCE TIPS
           </div>{" "}
@@ -692,7 +692,7 @@ const DetailsWrapper = ({
           <p style={{ color: "#55585b" }}>
             <b>Tags:</b>{" "}
             {productItem?.tags?.map((tag, index) => {
-              return <span key={tag?.id}>{tag?.name}</span>;
+              return <span key={tag?.id} style={{ marginRight: "10px", cursor: "pointer" }} onClick={() => router.push(`/shop?tag=${tag?.id}`)}>{tag?.name}</span>;
             })}
           </p>
         )}

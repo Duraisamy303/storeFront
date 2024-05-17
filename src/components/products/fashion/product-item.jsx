@@ -187,7 +187,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     }
   }, []);
 
-  console.log("img: ", img);
   return (
     <div
       className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}${
@@ -374,7 +373,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           </h3>
           <h3
             className="tp-product-title-2"
-            style={{ fontSize: "16px", color: "rgb(144 141 141)" }}
+            style={{ fontSize: "14px", color: "rgb(144 141 141)" }}
           >
             <Link href={`/product-details/${_id}`}>
               {capitalizeFLetter(product?.category?.name)}
@@ -391,13 +390,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
-                  style={{ textDecoration: "line-through" }}
+                  style={{ textDecoration: "line-through", color: "rgb(144 141 141)", fontSize: "14px" }}
                 >
                   &#8377;
                   {roundOff(product?.defaultVariant?.costPrice)}
                 </span>
               )}
-              <span className="tp-product-price-2 new-price ">
+              <span className="tp-product-price-2 new-price " style={{ fontSize: "14px" }}>
                 &#8377;
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
@@ -410,13 +409,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
-                  style={{ textDecoration: "line-through" }}
+                  style={{ textDecoration: "line-through", color: "rgb(144 141 141)", fontSize: "14px"  }}
                 >
                   {"$"}
                   {roundOff(product?.defaultVariant?.costPrice)}
                 </span>
               )}
-              <span className="tp-product-price-2 new-price">
+              <span className="tp-product-price-2 new-price" style={{ fontSize: "14px" }}>
                 {"$"}
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>

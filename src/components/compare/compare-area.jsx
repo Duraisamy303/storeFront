@@ -23,7 +23,7 @@ import {
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
 import { profilePic } from "@/utils/constant";
-import { roundOff } from "@/utils/functions";
+import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 
 const CompareArea = () => {
   const { data: wishlistData } = useGetWishlistQuery();
@@ -231,21 +231,65 @@ const CompareArea = () => {
                                   className="tp-compare-add-to-cart"
                                   style={{ paddingBottom: "10px" }}
                                 >
-                                  {IndiaChannel[index] ? (
+                                  {checkChannel() == "india-channel" ? (
                                     <>
-                                      ₹
-                                      {roundOff(
+                                      {RegularPrice(
+                                        item?.node?.defaultVariant?.costPrice,
                                         item?.node?.pricing?.priceRange?.start
                                           ?.gross?.amount
+                                      ) && (
+                                        <span
+                                          className="tp-product-price-1 pr-5 line-through "
+                                          style={{
+                                            textDecoration: "line-through",
+                                            color: "gray",
+                                          }}
+                                        >
+                                          ₹{" "}
+                                          {
+                                            item?.node?.defaultVariant
+                                              ?.costPrice
+                                          }
+                                        </span>
                                       )}
+
+                                      <span style={{ color: "#c2882b", fontWeight: "500" }}>
+                                        {" "}
+                                        ₹
+                                        {roundOff(
+                                          item?.node?.pricing?.priceRange?.start
+                                            ?.gross?.amount
+                                        )}
+                                      </span>
                                     </>
                                   ) : (
                                     <>
-                                      $
-                                      {roundOff(
+                                      {RegularPrice(
+                                        item?.node?.defaultVariant?.costPrice,
                                         item?.node?.pricing?.priceRange?.start
                                           ?.gross?.amount
+                                      ) && (
+                                        <span
+                                          className="tp-product-price-1 pr-5 line-through "
+                                          style={{
+                                            textDecoration: "line-through",
+                                            color: "gray",
+                                          }}
+                                        >
+                                          ${" "}
+                                          {
+                                            item?.node?.defaultVariant
+                                              ?.costPrice
+                                          }
+                                        </span>
                                       )}
+                                      <span style={{color:"#c2882b",  fontWeight: "500"}}>
+                                        $
+                                        {roundOff(
+                                          item?.node?.pricing?.priceRange?.start
+                                            ?.gross?.amount
+                                        )}
+                                      </span>
                                     </>
                                   )}
                                 </div>
@@ -259,7 +303,7 @@ const CompareArea = () => {
                                       <button
                                         onClick={() => router.push("/cart")}
                                         className="tp-btn"
-                                        type="button"
+                                        type="button" style={{backgroundColor: "#c2882b", color:"white"}}
                                       >
                                         View Cart
                                       </button>
@@ -270,7 +314,7 @@ const CompareArea = () => {
                                           addToCartProductUSD(item);
                                         }}
                                         type="button"
-                                        className="tp-btn "
+                                        className="tp-btn " style={{backgroundColor: "#c2882b", color:"white"}}
                                       >
                                         Add to Cart
                                       </button>

@@ -30,7 +30,7 @@ const ProductItem = ({
 }) => {
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
-console.log('✌️relatedproduct --->', product);
+  console.log("✌️relatedproduct --->", product);
 
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
@@ -348,9 +348,23 @@ console.log('✌️relatedproduct --->', product);
               </span>
             </>
           ) : (
-            <span className="tp-product-price-3">
-              ${roundOff(pricing?.priceRange?.start?.gross?.amount)}
-            </span>
+            <>
+              {RegularPrice(
+                product?.defaultVariant?.costPrice,
+                product?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="pr-5"
+                  style={{ textDecoration: "line-through", color: "gray" }}
+                >
+                  {" "}
+                  &#8377;{roundOff(product?.defaultVariant?.costPrice)}
+                </span>
+              )}
+              <span className="tp-product-price-3">
+                ${roundOff(pricing?.priceRange?.start?.gross?.amount)}
+              </span>
+            </>
           )}
         </div>
       </div>
