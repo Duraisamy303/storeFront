@@ -37,6 +37,7 @@ const ShopPage = () => {
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
 
   const router = useRouter();
+console.log('✌️router --->', router);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -214,7 +215,7 @@ const ShopPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (router?.query?.tagId) {
+    if (router?.query?.tag) {
       filterByTags();
     }
   }, [router]);
@@ -235,13 +236,17 @@ const ShopPage = () => {
 
   const filterByTags = () => {
     const datas = {
-      tag: router?.query?.tagId,
+      tag: router?.query?.tag,
+      // tag:"VGFnOjg="
     };
+    console.log('✌️datas --->', datas);
+
 
     priceFilter({
       filter: datas,
     }).then((res) => {
       const list = res?.data?.data?.products?.edges;
+  
       setProductList(list);
     });
   };

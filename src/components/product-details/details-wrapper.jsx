@@ -692,7 +692,20 @@ const DetailsWrapper = ({
           <p style={{ color: "#55585b" }}>
             <b>Tags:</b>{" "}
             {productItem?.tags?.map((tag, index) => {
-              return <span key={tag?.id} style={{ marginRight: "10px", cursor: "pointer" }} onClick={() => router.push(`/shop?tag=${tag?.id}`)}>{tag?.name}</span>;
+              return (
+                <span
+                  key={tag?.id}
+                  style={{ marginRight: "10px", cursor: "pointer" }}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                    });
+                  }}
+                >
+                  {tag?.name}
+                </span>
+              );
             })}
           </p>
         )}
