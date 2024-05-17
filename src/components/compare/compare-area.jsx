@@ -190,7 +190,7 @@ const CompareArea = () => {
                   <table className="table">
                     <tbody>
                       <tr>
-                        <th>Product</th>
+                        <th style={{ fontWeight: "400" }}>PRODUCT</th>
                         {compareData?.map((item, index) => {
                           return (
                             <td
@@ -253,7 +253,12 @@ const CompareArea = () => {
                                         </span>
                                       )}
 
-                                      <span style={{ color: "#c2882b", fontWeight: "500" }}>
+                                      <span
+                                        style={{
+                                          color: "#c2882b",
+                                          fontWeight: "500",
+                                        }}
+                                      >
                                         {" "}
                                         ₹
                                         {roundOff(
@@ -283,7 +288,12 @@ const CompareArea = () => {
                                           }
                                         </span>
                                       )}
-                                      <span style={{color:"#c2882b",  fontWeight: "500"}}>
+                                      <span
+                                        style={{
+                                          color: "#c2882b",
+                                          fontWeight: "500",
+                                        }}
+                                      >
                                         $
                                         {roundOff(
                                           item?.node?.pricing?.priceRange?.start
@@ -303,7 +313,11 @@ const CompareArea = () => {
                                       <button
                                         onClick={() => router.push("/cart")}
                                         className="tp-btn"
-                                        type="button" style={{backgroundColor: "#c2882b", color:"white"}}
+                                        type="button"
+                                        style={{
+                                          backgroundColor: "#c2882b",
+                                          color: "white",
+                                        }}
                                       >
                                         View Cart
                                       </button>
@@ -314,7 +328,11 @@ const CompareArea = () => {
                                           addToCartProductUSD(item);
                                         }}
                                         type="button"
-                                        className="tp-btn " style={{backgroundColor: "#c2882b", color:"white"}}
+                                        className="tp-btn "
+                                        style={{
+                                          backgroundColor: "#c2882b",
+                                          color: "white",
+                                        }}
                                       >
                                         Add to Cart
                                       </button>
@@ -329,11 +347,11 @@ const CompareArea = () => {
 
                       {/* Description */}
                       <tr>
-                        <th>Description</th>
+                        <th style={{ fontWeight: "400" }}>DESCRIPTION</th>
                         {compareData?.map((item) => (
                           <td key={item?.node?.id}>
                             <div className="tp-compare-add-to-cart">
-                              <span>
+                              <span  style={{color:"gray"}}>
                                 {description(item?.node?.description)}
                               </span>
                             </div>
@@ -342,11 +360,11 @@ const CompareArea = () => {
                       </tr>
                       {/* SKU */}
                       <tr>
-                        <th>SKU</th>
+                        <th style={{ fontWeight: "400" }}>SKU</th>
                         {compareData.map((item) => (
                           <td key={item?.node?.id}>
                             <div className="tp-compare-add-to-cart">
-                              <span>{item?.node?.variants[0]?.sku}</span>
+                              <span  style={{color:"gray"}}>{item?.node?.variants[0]?.sku}</span>
                             </div>
                           </td>
                         ))}
@@ -354,7 +372,7 @@ const CompareArea = () => {
 
                       {/* availability */}
                       <tr>
-                        <th>Availability</th>
+                        <th style={{ fontWeight: "400" }}>AVAILABILITY</th>
                         {compareData.map((item) => (
                           <td key={item?.node?.id}>
                             {/* <div className="tp-compare-add-to-cart">
@@ -364,7 +382,7 @@ const CompareArea = () => {
                               )}
                             </div> */}
                             <div className="tp-compare-add-to-cart">
-                              <span>
+                              <span style={{color:"gray"}}>
                                 {item?.node?.defaultVariant?.quantityAvailable}
                               </span>
                             </div>
@@ -390,7 +408,7 @@ const CompareArea = () => {
                       </tr> */}
                       {/* Remove */}
                       <tr>
-                        <th>Remove</th>
+                        <th style={{ fontWeight: "400" }}>REMOVE</th>
                         {compareData?.map((item) => (
                           <td key={item?.node?.id}>
                             <div className="tp-compare-remove">
