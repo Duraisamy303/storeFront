@@ -176,17 +176,17 @@ const CartItem = ({
                 <>
                   {!isQuantity ? (
 
-                    <span>&#8377;{roundOff(price)}</span>
+                    <span style={{color:"gray"}}>&#8377;{roundOff(price)}</span>
                   ) : (
-                    <span>&#8377;{roundOff(price * quantity)}</span>
+                    <span style={{color:"gray"}}>&#8377;{roundOff(price * quantity)}</span>
                   )}
                 </>
               ) : (
                 <>
                   {!isQuantity ? (
-                    <span>${roundOff(price)}</span>
+                    <span style={{color:"gray"}}>${roundOff(price)}</span>
                   ) : (
-                    <span>${roundOff(price * quantity)}</span>
+                    <span style={{color:"gray"}}>${roundOff(price * quantity)}</span>
                   )}
                 </>
               )}

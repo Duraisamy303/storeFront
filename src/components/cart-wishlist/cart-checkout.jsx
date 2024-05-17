@@ -53,12 +53,12 @@ const CartCheckout = ({ cartData }) => {
   return (
     <div className="tp-cart-checkout-wrapper">
       <div>
-        <h5 style={{ fontWeight: "500", paddingBottom: "20px" }}>
+        <h5 style={{ fontWeight: "400", paddingBottom: "20px" }}>
           CART TOTALS
         </h5>
       </div>
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
-        <span className="tp-cart-checkout-top-title">Subtotal</span>
+        <span className="tp-cart-checkout-top-title">SUBTOTAL</span>
 
         {checkChannel() === "india-channel" ? (
           <span className="tp-cart-checkout-top-price">
@@ -73,7 +73,7 @@ const CartCheckout = ({ cartData }) => {
       </div>
 
       <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
-        <span className="tp-cart-checkout-top-title">Shipping</span>
+        <span className="tp-cart-checkout-top-title">SHIPPING</span>
         <span
           className="tp-cart-checkout-top-price"
           style={{ textAlign: "right" }}
@@ -114,10 +114,10 @@ const CartCheckout = ({ cartData }) => {
         </div>
       </div> */}
       <div className="tp-cart-checkout-total d-flex align-items-center justify-content-between">
-        <span>Total</span>
+        <span>TOTAL</span>
         {checkChannel() === "india-channel" ? (
           <>
-            <span>
+            <span style={{color:'#c3935b', fontSize:'16px'}}>
               &#8377;{roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
               <br />
               {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}

@@ -235,7 +235,7 @@ const ShopPage = () => {
 
   const filterByTags = () => {
     const datas = {
-      tags: router?.query?.tagId,
+      tag: router?.query?.tagId,
     };
 
     priceFilter({

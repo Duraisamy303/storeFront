@@ -51,8 +51,8 @@ const slider_data = [
 const slider_nav_data = [
   { icon: nav_icon_1, title: <>EARRINGS</> },
   { icon: nav_icon_2, title: <>Bangles & Bracelets</> },
-  { icon: nav_icon_3, title: <>Drop Necklaces</> },
-  { icon: nav_icon_4, title: <>NECKLACES</> },
+  { icon: nav_icon_3, title: <>NECKLACES</> },
+  { icon: nav_icon_4, title: <>ANKLETS</> },
 ];
 
 const JewelryBanner = () => {

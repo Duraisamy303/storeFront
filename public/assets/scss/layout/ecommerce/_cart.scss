@@ -30,7 +30,7 @@
             background-color: #F1F3F4;
             border-bottom: 1px solid #e0e2e3;
             & th{
-                font-weight: 500;
+                font-weight: 400;
                 font-size: 14px;
                 color: var(--tp-common-black);
                 border: 0 !important;
@@ -91,8 +91,8 @@
         & a{
             margin-left: 20px;
             font-weight: 400;
-            font-size: 16px;
-            color: var(--tp-common-black);
+            font-size: 14px;
+            color: rgb(47, 46, 46);
 
             &:hover{
                 color:#c3935b;
@@ -102,8 +102,8 @@
     &-price{
         width: 126px;
         & span{
-            font-size: 16px;
-            color: var(--tp-common-black);
+            font-size: 14px;
+            color:gray;
         }
     }
     &-quantity{
@@ -150,8 +150,8 @@
     &-update{
        
         &-btn{
-            font-weight: 500;
-            font-size: 16px;
+            font-weight: 400;
+            font-size: 14px;
             color:#706969;
             background-color:white;
             padding: 9px 29px;
@@ -179,9 +179,9 @@
             margin-bottom: 19px;
             border-bottom: 1px solid #E0E2E3;
             & span{
-                font-size: 16px;
-                color: var(--tp-common-black);
-                font-weight: 500;
+                font-size: 14px;
+                color: rgb(47, 46, 46);
+                font-weight: 300;
             }
         }
         &-shipping{
@@ -256,18 +256,18 @@
         &-total{
             margin-bottom: 25px;
             & span{
-                font-weight: 500;
-                font-size: 18px;
+                font-weight: 400;
+                font-size: 14px;
                 color: var(--tp-common-black);
             }
         }
         &-btn{
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 400;
             color: var(--tp-common-white);
             background-color: #c3935b;
             display: inline-block;
-            padding: 10px 30px;
+            padding: 5px 30px;
             text-align: center;
             &:hover{
                 background-color: #c3935b;

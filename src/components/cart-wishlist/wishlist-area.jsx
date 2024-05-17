@@ -57,14 +57,14 @@ const WishlistArea = () => {
                     <thead>
                       <tr>
                         <th colSpan="2" className="tp-cart-header-product">
-                          Product
+                          PRODUCT
                         </th>
                         <th className="tp-cart-header-quantity">
-                          Product name
+                          PRODUCT NAME
                         </th>
-                        <th className="tp-cart-header-price">Price</th>
-                        <th>Add to Cart</th>
-                        <th>Action</th>
+                        <th className="tp-cart-header-price">PRICE</th>
+                        <th>ADD TO CART</th>
+                        <th>ACTION</th>
                       </tr>
                     </thead>
                     <tbody>
