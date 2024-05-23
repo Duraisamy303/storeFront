@@ -685,7 +685,12 @@ const DetailsWrapper = ({
         <p style={{ color: "#55585b" }}>
           <b>SKU:</b> {productItem?.defaultVariant?.sku}
         </p>
-        <p style={{ color: "#55585b" }}>
+        <p style={{ color: "#55585b" , cursor: "pointer"}} onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId:productItem?.category?.id }, // Your parameters
+                    });
+                  }}>
           <b>Categories:</b> {productItem?.category?.name}
         </p>
         {productItem?.tags?.length > 0 && (
@@ -696,10 +701,12 @@ const DetailsWrapper = ({
                 <span
                   key={tag?.id}
                   style={{ marginRight: "10px", cursor: "pointer" }}
+                  
+
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                      query: { tag: tag?.id }, // Your parameters
                     });
                   }}
                 >
