@@ -35,7 +35,6 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
 
   const [cartLoader, setCartLoader] = useState(false);
   const [wishlistLoader, setWishlistLoader] = useState(false);
-  const [compareLoader, setCompareLoader] = useState(false);
 
   const RelatedProduct = product.node;
   console.log("✌️RelatedProduct --->", RelatedProduct);
@@ -102,33 +101,39 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
   // };
 
   const handleWishlist = async (product) => {
-    setWishlistLoader(true);
-    try {
+    if (token) {
       setWishlistLoader(true);
-      const token = localStorage.getItem("token");
-      const user = localStorage.getItem("userInfo");
+      try {
+        setWishlistLoader(true);
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("userInfo");
 
-      if (token) {
-        const users = JSON.parse(user);
-        const input = {
-          input: {
-            user: users.user.id,
-            variant: product?.node?.id,
-          },
-        };
+        if (token) {
+          const users = JSON.parse(user);
+          const input = {
+            input: {
+              user: users.user.id,
+              variant: product?.node?.id,
+            },
+          };
 
-        const res = await addWishlist(input);
-        notifySuccess("Product added to wishlist");
-        wishlistRefetch();
-      } else {
-        router.push("/login");
+          const res = await addWishlist(input);
+          notifySuccess("Product added to wishlist");
+          wishlistRefetch();
+        } else {
+          router.push("/login");
 
-        // const addedWishlist = handleWishlistProduct(prd);
-        // dispatch(add_to_wishlist(addedWishlist));
+          // const addedWishlist = handleWishlistProduct(prd);
+          // dispatch(add_to_wishlist(addedWishlist));
+        }
+        setWishlistLoader(false);
+      } catch (error) {
+        console.error("Error:", error);
       }
-      setWishlistLoader(false);
-    } catch (error) {
-      console.error("Error:", error);
+    } else {
+      notifyError(
+        "Only logged-in users can add items to their wishlist or view it"
+      );
     }
   };
 
@@ -141,11 +146,9 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
     } else {
       arr = JSON.parse(compare);
     }
-    setCompareLoader(true);
     arr.push(prd.node);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
-    setCompareLoader(false);
   };
   const img = product?.node?.thumbnail?.url;
   const Product_name = product?.node?.name;
@@ -286,52 +289,20 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
               </span>
             </button>
 
-            {token ? (
-              <>
-                {isAddedToWishlist === true ? (
-                  <button
-                    type="button"
-                    onClick={() => router.push("/wishlist")}
-                    className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
-                  >
-                    <Wishlist />
-                    <span className="tp-product-tooltip tp-product-tooltip-top">
-                      View Wishlist
-                    </span>
-                  </button>
-                ) : (
-                  <>
-                    {wishlistLoader ? (
-                      <button
-                        type="button"
-                        className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
-                      >
-                        <ButtonLoader loader={wishlistLoader} />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleWishlist(product)}
-                        className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
-                      >
-                        <Wishlist />
-                        <span className="tp-product-tooltip tp-product-tooltip-top">
-                          Add To Wishlist
-                        </span>
-                      </button>
-                    )}
-                  </>
-                )}
-              </>
-            ) : (
-              <>
+            <>
+              {isAddedToWishlist === true ? (
                 <button
                   type="button"
-                  onClick={() =>
-                    notifyError(
-                      "Only logged-in users can add items to their wishlist or view it"
-                    )
-                  }
+                  onClick={() => {
+                    if (token) {
+                      router.push("/wishlist");
+                    } else {
+                      notifyError(
+                        "Only logged-in users can add items to their wishlist or view it"
+                      );
+                    }
+                    // router.push("/wishlist");
+                  }}
                   className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
                 >
                   <Wishlist />
@@ -339,8 +310,30 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
                     View Wishlist
                   </span>
                 </button>
-              </>
-            )}
+              ) : (
+                <>
+                  {wishlistLoader ? (
+                    <button
+                      type="button"
+                      className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+                    >
+                      <ButtonLoader loader={wishlistLoader} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleWishlist(product)}
+                      className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
+                    >
+                      <Wishlist />
+                      <span className="tp-product-tooltip tp-product-tooltip-top">
+                        Add To Wishlist
+                      </span>
+                    </button>
+                  )}
+                </>
+              )}
+            </>
 
             <button
               type="button"
@@ -356,25 +349,12 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
               }}
               // onClick={() => handleCompare()}
             >
-              {compareLoader ? (
-                <button
-                  type="button"
-                  className={`tp-product-action-btn-3 ${
-                    isAddWishlist ? "active" : ""
-                  } tp-product-add-to-wishlist-btn`}
-                >
-                  <ButtonLoader loader={compareLoader} />
-                </button>
-              ) : (
-                <>
-                  <CompareThree />
-                  <span className="tp-product-tooltip tp-product-tooltip-top">
-                    {compareList?.some((prd) => prd?.id === product?.node?.id)
-                      ? "View Compare"
-                      : "Add To Compare"}
-                  </span>
-                </>
-              )}
+              <CompareThree />
+              <span className="tp-product-tooltip tp-product-tooltip-top">
+                {compareList?.some((prd) => prd?.id === product?.node?.id)
+                  ? "View Compare"
+                  : "Add To Compare"}
+              </span>
             </button>
           </div>
         </div>

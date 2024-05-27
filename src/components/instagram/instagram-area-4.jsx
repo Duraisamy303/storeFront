@@ -25,6 +25,7 @@ import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { compare_list } from "@/redux/features/cartSlice";
 import { profilePic } from "@/utils/constant";
+import ButtonLoader from "../loader/button-loader";
 
 const InstagramAreaFour = () => {
   const [discountProduct] = useProduct20PercentageMutation({});
@@ -44,6 +45,8 @@ const InstagramAreaFour = () => {
     useGetWishlistQuery();
 
   const [productList, setProduct] = useState([]);
+  const [cartLoader, setCartLoader] = useState(false);
+  const [wishlistLoader, setWishlistLoader] = useState(false);
 
   const router = useRouter();
 
@@ -54,6 +57,13 @@ const InstagramAreaFour = () => {
   useEffect(() => {
     getWishlistList();
   }, [wishlistData]);
+
+
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
 
   const getDicountProduct = async () => {
     try {
@@ -72,7 +82,9 @@ const InstagramAreaFour = () => {
   };
 
   const addToCartProductINR = async (item) => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -86,13 +98,17 @@ const InstagramAreaFour = () => {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
       }
+
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addToCartProductUSD = async (item) => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -104,14 +120,18 @@ const InstagramAreaFour = () => {
       } else {
         cartRefetch();
       }
+
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const handleWishlist = async (item) => {
+    setWishlistLoader(true);
     try {
-      const token = localStorage.getItem("token");
+      setWishlistLoader(true);
+      // const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
 
       if (token) {
@@ -127,8 +147,12 @@ const InstagramAreaFour = () => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
-        router.push("/login");
+        notifyError(
+          "Only logged-in users can add items to their wishlist or view it"
+        )
       }
+
+      setWishlistLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -210,7 +234,12 @@ const InstagramAreaFour = () => {
                                 if (!isProductInWishlist) {
                                   handleWishlist(item);
                                 } else {
-                                  router.push("/wishlist");
+                                  // router.push("/wishlist");
+                                  if(token) {
+                                    router.push("/wishlist");
+                                  }else{
+                                    notifyError("Only logged-in users can add items to their wishlist or view it")
+                                  }
                                 }
                               }}
                               style={{
@@ -230,7 +259,11 @@ const InstagramAreaFour = () => {
                                 padding: "3px 5px",
                               }}
                             >
-                              <Wishlist />
+                              {wishlistLoader ? (
+                                <ButtonLoader loading={wishlistLoader} />
+                              ) : (
+                                <Wishlist />
+                              )}
                             </button>
                           </li>
                           <li>
@@ -377,11 +410,17 @@ const InstagramAreaFour = () => {
                             }
                           }}
                         >
-                          {cartList?.data?.checkout?.lines?.some(
-                            (prd) => prd?.variant?.product?.id == item?.id
-                          )
-                            ? "View Card"
-                            : "Add To Card"}
+                          {cartLoader ? (
+                            <ButtonLoader loading={cartLoader} />
+                          ) : (
+                            <>
+                              {cartList?.data?.checkout?.lines?.some(
+                                (prd) => prd?.variant?.product?.id == item?.id
+                              )
+                                ? "View Card"
+                                : "Add To Card"}
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>

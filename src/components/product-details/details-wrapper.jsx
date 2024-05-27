@@ -29,6 +29,7 @@ import {
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
 import { roundOff } from "../../utils/functions";
+import ButtonLoader from "../loader/button-loader";
 
 const DetailsWrapper = ({
   productItem,
@@ -54,6 +55,8 @@ const DetailsWrapper = ({
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
   const [channel, setChannel] = useState("india-channel");
+  const [cartLoader, setCartLoader] = useState(false);
+  const [wishlistLoader, setWishlistLoader] = useState(false);
 
   const [visibility, setVisibility] = useState({
     description: false,
@@ -146,6 +149,12 @@ const DetailsWrapper = ({
     }
   }, [reviews]);
 
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
+
   useEffect(() => {
     const whislist = checkWishlist(wishlist, productItem.id);
     setWishlist(whislist);
@@ -176,36 +185,48 @@ const DetailsWrapper = ({
   };
 
   const handleWishlist = async (prd) => {
-    try {
-      const token = localStorage.getItem("token");
-      const user = localStorage.getItem("userInfo");
+    if (token) {
+      setWishlistLoader(true);
+      try {
+        setWishlistLoader(true);
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("userInfo");
 
-      if (token) {
-        const users = JSON.parse(user);
-        const input = {
-          input: {
-            user: users.user.id,
-            variant: prd?.id,
-          },
-        };
+        if (token) {
+          const users = JSON.parse(user);
+          const input = {
+            input: {
+              user: users.user.id,
+              variant: prd?.id,
+            },
+          };
 
-        const res = await addWishlist(input);
-        notifySuccess("Product added to wishlist");
-        wishlistRefetch();
-      } else {
-        router.push("/login");
-        // const addedWishlist = handleWishlistProduct(prd);
-        // dispatch(add_to_wishlist(addedWishlist));
+          const res = await addWishlist(input);
+          notifySuccess("Product added to wishlist");
+          wishlistRefetch();
+        } else {
+          router.push("/login");
+          // const addedWishlist = handleWishlistProduct(prd);
+          // dispatch(add_to_wishlist(addedWishlist));
+        }
+
+        setWishlistLoader(false);
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } else {
+      notifyError(
+        "Only logged-in users can add items to their wishlist or view it"
+      );
     }
   };
 
   // handle add product
 
   const addToCartProductINR = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -218,13 +239,16 @@ const DetailsWrapper = ({
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addToCartProductUSD = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -236,6 +260,7 @@ const DetailsWrapper = ({
       } else {
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -394,7 +419,11 @@ const DetailsWrapper = ({
               disabled={status === "out-of-stock"}
               className="tp-btn tp-btn-border"
             >
-              {isAddedToCart ? "View Cart" : "Add To Cart"}
+              {cartLoader ? (
+                <ButtonLoader loader={cartLoader} />
+              ) : (
+                <>{isAddedToCart ? "View Cart" : "Add To Cart"}</>
+              )}
             </button>
           )}
         </div>
@@ -426,11 +455,21 @@ const DetailsWrapper = ({
             ? " View Compare"
             : " Add  Compare"}
         </button>
+        {}
 
         {isAddedToWishlist === true ? (
           <button
             disabled={status === "out-of-stock"}
-            onClick={() => router.push("/wishlist")}
+            onClick={() => {
+              if (token) {
+                router.push("/wishlist");
+              } else {
+                notifyError(
+                  "Only logged-in users can add items to their wishlist or view it"
+                );
+              }
+              // router.push("/wishlist");
+            }}
             // onClick={() => handleWishlistProduct(productItem)}
             type="button"
             className="tp-product-details-action-sm-btn"
@@ -447,7 +486,11 @@ const DetailsWrapper = ({
             className="tp-product-details-action-sm-btn"
           >
             <WishlistTwo />
-            Add To Wishlist
+            {wishlistLoader ? (
+              "Loading..."
+            ) : (
+              "Add To Wishlist"
+            )}
           </button>
         )}
 
@@ -685,12 +728,15 @@ const DetailsWrapper = ({
         <p style={{ color: "#55585b" }}>
           <b>SKU:</b> {productItem?.defaultVariant?.sku}
         </p>
-        <p style={{ color: "#55585b" , cursor: "pointer"}} onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId:productItem?.category?.id }, // Your parameters
-                    });
-                  }}>
+        <p
+          style={{ color: "#55585b", cursor: "pointer" }}
+          onClick={() => {
+            router.push({
+              pathname: "/shop",
+              query: { categoryId: productItem?.category?.id }, // Your parameters
+            });
+          }}
+        >
           <b>Categories:</b> {productItem?.category?.name}
         </p>
         {productItem?.tags?.length > 0 && (
@@ -701,8 +747,6 @@ const DetailsWrapper = ({
                 <span
                   key={tag?.id}
                   style={{ marginRight: "10px", cursor: "pointer" }}
-                  
-
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
