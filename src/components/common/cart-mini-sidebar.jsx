@@ -19,7 +19,6 @@ import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
-import { ClipLoader } from "react-spinners";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
@@ -55,12 +54,9 @@ const CartMiniSidebar = () => {
 
   const { total } = useCartInfo();
   const dispatch = useDispatch();
-  const [removeProductLoader, setRemoveProductLoader] = useState(false);
 
   const handleRemovePrd = async (val) => {
-    setRemoveProductLoader(true);
     try {
-      setRemoveProductLoader(true);
       const productId = val?.variant?.product?.id;
       const allListData = AllListChannel?.data?.checkout?.lines;
       const fine = allListData?.find(
@@ -78,7 +74,6 @@ const CartMiniSidebar = () => {
 
       cartRefetch();
       AllListChannelREfresh();
-      setRemoveProductLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -173,18 +168,12 @@ const CartMiniSidebar = () => {
                               </span>
                             </div>
                           </div>
-                          {removeProductLoader ? (
-                            <a className="cartmini__del ">
-                              <ClipLoader color="black" size={15} />
-                            </a>
-                          ) : (
-                            <a
-                              onClick={() => handleRemovePrd(item)}
-                              className="cartmini__del cursor-pointer"
-                            >
-                              <i className="fa-regular fa-xmark"></i>
-                            </a>
-                          )}
+                          <a
+                            onClick={() => handleRemovePrd(item)}
+                            className="cartmini__del cursor-pointer"
+                          >
+                            <i className="fa-regular fa-xmark"></i>
+                          </a>
                         </div>
                       ) : (
                         <div
@@ -250,18 +239,12 @@ const CartMiniSidebar = () => {
                               </span>
                             </div>
                           </div>
-                          {removeProductLoader ? (
-                            <a className="cartmini__del ">
-                              <ClipLoader color="black" size={15} />
-                            </a>
-                          ) : (
-                            <a
-                              onClick={() => handleRemovePrd(item)}
-                              className="cartmini__del cursor-pointer"
-                            >
-                              <i className="fa-regular fa-xmark"></i>
-                            </a>
-                          )}
+                          <a
+                            onClick={() => handleRemovePrd(item)}
+                            className="cartmini__del cursor-pointer"
+                          >
+                            <i className="fa-regular fa-xmark"></i>
+                          </a>
                         </div>
                       )}
                     </>

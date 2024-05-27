@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // internal
 import SEO from "@/components/seo";
 import HeaderTwo from "@/layout/headers/header-2";
