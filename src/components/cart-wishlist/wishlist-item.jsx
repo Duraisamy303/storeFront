@@ -24,11 +24,14 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
+import ButtonLoader from "../loader/button-loader";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
   const { variant, img, title, price } = product || {};
 
   const dispatch = useDispatch();
+
+  const [cartLoader, setCartLoader] = useState(false);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -73,7 +76,9 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   };
 
   const addToCartProductINR = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -87,13 +92,17 @@ const WishlistItem = ({ product, refetchWishlist }) => {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
       }
+
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addToCartProductUSD = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -105,6 +114,8 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       } else {
         cartRefetch();
       }
+
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -176,7 +187,17 @@ const WishlistItem = ({ product, refetchWishlist }) => {
           type="button"
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          {isAddToCart ? "View Cart" : "Add To Cart"}
+          {isAddToCart ? (
+            "View Cart"
+          ) : (
+            <>
+              {cartLoader ? (
+                <ButtonLoader loader={cartLoader} />
+              ) : (
+                "Add To Cart"
+              )}
+            </>
+          )}
         </button>
       </td>
 

@@ -70,20 +70,20 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
-  function CommonLoader({ loading, spinner }) {
-    return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Loader loading={loading} spinner={spinner} />
-      </div>
-    );
-  }
+    function CommonLoader({ loading, spinner }) {
+      return (
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+           <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
+        </div>
+      );
+    }
 
   const channelList = [
     { name: "india-channel", value: "INR" },
