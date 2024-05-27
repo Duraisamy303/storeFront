@@ -46,6 +46,16 @@ const client = new ApolloClient({
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  // Listen for route change start event
+  router.events.on("routeChangeStart", () => {
+    setLoading(true);
+  });
+
+  // Listen for route change complete event
+  router.events.on("routeChangeComplete", () => {
+    setLoading(false);
+  });
 
   const [channel, setChannel] = useState("");
 
@@ -86,8 +96,9 @@ export default function App({ Component, pageProps }) {
                   right: 0,
                 }}
               >
-                {channelList?.map((item,index) => (
-                  <div  key={index}
+                {channelList?.map((item, index) => (
+                  <div
+                    key={index}
                     className={` p-2 mb-1 text-white`}
                     style={{
                       backgroundColor:
@@ -103,7 +114,11 @@ export default function App({ Component, pageProps }) {
                 ))}
               </div>
             )}
-            <Component {...pageProps} />
+            {loading ? (
+              <div className="loading-indicator">Loading...</div>
+            ) : (
+              <Component {...pageProps} />
+            )}
           </div>
           {/* </Elements> */}
         </Provider>

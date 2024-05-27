@@ -37,7 +37,7 @@ const ShopPage = () => {
   } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
 
   const router = useRouter();
-console.log('✌️router --->', router);
+  console.log("✌️router --->", router);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -198,7 +198,7 @@ console.log('✌️router --->', router);
 
   let content = null;
 
-  if (isLoading) {
+  if (!isLoading) {
     content = <ShopLoader loading={isLoading} />;
   } else if (isError) {
     content = <ErrorMsg msg="There was an error" />;
@@ -239,14 +239,13 @@ console.log('✌️router --->', router);
       tag: router?.query?.tag,
       // tag:"VGFnOjg="
     };
-    console.log('✌️datas --->', datas);
-
+    console.log("✌️datas --->", datas);
 
     priceFilter({
       filter: datas,
     }).then((res) => {
       const list = res?.data?.data?.products?.edges;
-  
+
       setProductList(list);
     });
   };
@@ -311,21 +310,27 @@ console.log('✌️router --->', router);
         bgImage={shopBanner}
         catList={categoryList}
       />
-      <ShopArea
-        all_products={productList}
-        products={productList}
-        otherProps={otherProps}
-        updateData={() => setCartUpdate(true)}
-        subtitle="Shop"
-        updateRange={(range) => setPriceValue(range)}
-      />
-      <ShopFilterOffCanvas
-        all_products={products}
-        otherProps={otherProps}
-        filterByPrice={() => filterByPrice()}
-        finishFilterData={(data, type) => filterByPrice(data, type)}
-      />
-      <FooterTwo primary_style={true} />
+      {isLoading ? (
+        <ShopLoader loading={isLoading} />
+      ) : (
+        <>
+          <ShopArea
+            all_products={productList}
+            products={productList}
+            otherProps={otherProps}
+            updateData={() => setCartUpdate(true)}
+            subtitle="Shop"
+            updateRange={(range) => setPriceValue(range)}
+          />
+          <ShopFilterOffCanvas
+            all_products={products}
+            otherProps={otherProps}
+            filterByPrice={() => filterByPrice()}
+            finishFilterData={(data, type) => filterByPrice(data, type)}
+          />
+          <FooterTwo primary_style={true} />
+        </>
+      )}
     </Wrapper>
   );
 };
