@@ -56,6 +56,7 @@ const ProductDetailsPage = ({ query }) => {
       const data = await createCheckoutTokenWithoutEmail({
         channel: "default-channel",
       });
+      
       localStorage.setItem(
         "checkoutTokenUSD",
         data?.data?.data?.checkoutCreate?.checkout?.token
