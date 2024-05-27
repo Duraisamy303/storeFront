@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { setContext } from "@apollo/client/link/context";
+import Loader from "@/components/loader/loader";
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
 }
@@ -69,6 +70,21 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
+  function SingleLoader({ loading, spinner }) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader loading={loading} spinner={spinner} />
+      </div>
+    );
+  }
+
   const channelList = [
     { name: "india-channel", value: "INR" },
     { name: "default-channel", value: "USD" },
@@ -115,7 +131,7 @@ export default function App({ Component, pageProps }) {
               </div>
             )}
             {loading ? (
-              <div className="loading-indicator">Loading...</div>
+              <SingleLoader loading={loading} />
             ) : (
               <Component {...pageProps} />
             )}

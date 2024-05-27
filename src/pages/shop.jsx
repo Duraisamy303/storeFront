@@ -310,10 +310,10 @@ const ShopPage = () => {
         bgImage={shopBanner}
         catList={categoryList}
       />
-      {isLoading ? (
+      {/* {isLoading ? (
         <ShopLoader loading={isLoading} />
       ) : (
-        <>
+        <> */}
           <ShopArea
             all_products={productList}
             products={productList}
@@ -329,8 +329,8 @@ const ShopPage = () => {
             finishFilterData={(data, type) => filterByPrice(data, type)}
           />
           <FooterTwo primary_style={true} />
-        </>
-      )}
+        {/* </>
+      )} */}
     </Wrapper>
   );
 };
