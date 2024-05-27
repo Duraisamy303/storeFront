@@ -49,12 +49,12 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   // Listen for route change start event
-  router.events.on("routeChangeStart", () => {
+  router?.events?.on("routeChangeStart", () => {
     setLoading(true);
   });
 
   // Listen for route change complete event
-  router.events.on("routeChangeComplete", () => {
+  router?.events?.on("routeChangeComplete", () => {
     setLoading(false);
   });
 
@@ -70,7 +70,7 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
-  function SingleLoader({ loading, spinner }) {
+  function CommonLoader({ loading, spinner }) {
     return (
       <div
         style={{
@@ -131,7 +131,7 @@ export default function App({ Component, pageProps }) {
               </div>
             )}
             {loading ? (
-              <SingleLoader loading={loading} />
+              <CommonLoader loading={loading} />
             ) : (
               <Component {...pageProps} />
             )}

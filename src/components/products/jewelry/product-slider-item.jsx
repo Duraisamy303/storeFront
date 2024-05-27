@@ -27,11 +27,15 @@ import {
 import { useGetCartListQuery } from "../../../redux/features/card/cardApi";
 import { RegularPrice, checkChannel, roundOff } from "../../../utils/functions";
 import { profilePic } from "@/utils/constant";
-
-const ProductSliderItem = ({ product, loginPopup }) => {
+import ButtonLoader from "../../loader/button-loader";
+const ProductSliderItem = ({ product, loginPopup, loading }) => {
   const { _id, title, price, status } = product || {};
 
   const router = useRouter();
+
+  const [cartLoader, setCartLoader] = useState(false);
+  const [wishlistLoader, setWishlistLoader] = useState(false);
+  const [compareLoader, setCompareLoader] = useState(false);
 
   const RelatedProduct = product.node;
   console.log("✌️RelatedProduct --->", RelatedProduct);
@@ -98,7 +102,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   // };
 
   const handleWishlist = async (product) => {
+    setWishlistLoader(true);
     try {
+      setWishlistLoader(true);
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
 
@@ -120,6 +126,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
+      setWishlistLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -134,9 +141,11 @@ const ProductSliderItem = ({ product, loginPopup }) => {
     } else {
       arr = JSON.parse(compare);
     }
+    setCompareLoader(true);
     arr.push(prd.node);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
+    setCompareLoader(false);
   };
   const img = product?.node?.thumbnail?.url;
   const Product_name = product?.node?.name;
@@ -149,7 +158,9 @@ const ProductSliderItem = ({ product, loginPopup }) => {
   };
 
   const addToCartProductINR = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -162,13 +173,18 @@ const ProductSliderItem = ({ product, loginPopup }) => {
         notifySuccess(`${product.node.name} added to cart successfully`);
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  console.log("cartLoader: ", cartLoader);
+
   const addToCartProductUSD = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -180,6 +196,7 @@ const ProductSliderItem = ({ product, loginPopup }) => {
       } else {
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -226,21 +243,34 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                     </span>
                   </Link>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addToCartProductINR();
-                      addToCartProductUSD();
-                    }}
-                    className={`tp-product-action-btn-3 ${
-                      isAddedToCart ? "active" : ""
-                    } tp-product-add-cart-btn`}
-                  >
-                    <Cart />
-                    <span className="tp-product-tooltip tp-product-tooltip-top">
-                      Add to Cart
-                    </span>
-                  </button>
+                  <>
+                    {cartLoader ? (
+                      <button
+                        type="button"
+                        className={`tp-product-action-btn-3 ${
+                          isAddedToCart ? "active" : ""
+                        } tp-product-add-cart-btn`}
+                      >
+                        <ButtonLoader loader={cartLoader} />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          addToCartProductINR();
+                          addToCartProductUSD();
+                        }}
+                        className={`tp-product-action-btn-3 ${
+                          isAddedToCart ? "active" : ""
+                        } tp-product-add-cart-btn`}
+                      >
+                        <Cart />
+                        <span className="tp-product-tooltip tp-product-tooltip-top">
+                          Add to Cart
+                        </span>
+                      </button>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -270,16 +300,27 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                     </span>
                   </button>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleWishlist(product)}
-                    className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
-                  >
-                    <Wishlist />
-                    <span className="tp-product-tooltip tp-product-tooltip-top">
-                      Add To Wishlist
-                    </span>
-                  </button>
+                  <>
+                    {wishlistLoader ? (
+                      <button
+                        type="button"
+                        className={`tp-product-action-btn-3 active tp-product-add-to-wishlist-btn`}
+                      >
+                        <ButtonLoader loader={wishlistLoader} />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleWishlist(product)}
+                        className={`tp-product-action-btn-3 tp-product-add-to-wishlist-btn`}
+                      >
+                        <Wishlist />
+                        <span className="tp-product-tooltip tp-product-tooltip-top">
+                          Add To Wishlist
+                        </span>
+                      </button>
+                    )}
+                  </>
                 )}
               </>
             ) : (
@@ -315,12 +356,25 @@ const ProductSliderItem = ({ product, loginPopup }) => {
               }}
               // onClick={() => handleCompare()}
             >
-              <CompareThree />
-              <span className="tp-product-tooltip tp-product-tooltip-top">
-                {compareList?.some((prd) => prd?.id === product?.node?.id)
-                  ? "View Compare"
-                  : "Add To Compare"}
-              </span>
+              {compareLoader ? (
+                <button
+                  type="button"
+                  className={`tp-product-action-btn-3 ${
+                    isAddWishlist ? "active" : ""
+                  } tp-product-add-to-wishlist-btn`}
+                >
+                  <ButtonLoader loader={compareLoader} />
+                </button>
+              ) : (
+                <>
+                  <CompareThree />
+                  <span className="tp-product-tooltip tp-product-tooltip-top">
+                    {compareList?.some((prd) => prd?.id === product?.node?.id)
+                      ? "View Compare"
+                      : "Add To Compare"}
+                  </span>
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -373,13 +427,16 @@ const ProductSliderItem = ({ product, loginPopup }) => {
                 ₹{roundOff(RelatedProduct?.defaultVariant?.costPrice)}
               </span>
             )}
-            <span className="tp-product-price-2 new-price" style={{ color: "#c2882b", margin: "0px", fontSize: "14px" }}>
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ color: "#c2882b", margin: "0px", fontSize: "14px" }}
+            >
               ₹{roundOff(Price)}
             </span>
           </>
         ) : (
           <>
-           {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
+            {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
               <span
                 style={{
                   color: "black",
