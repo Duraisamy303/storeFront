@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
@@ -21,6 +21,7 @@ import {
 } from "@/redux/features/productApi";
 import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
+import ButtonLoader from "@/components/loader/button-loader";
 
 const ProductItem = ({
   product,
@@ -54,6 +55,9 @@ const ProductItem = ({
   // const isAddedToWishlist = data?.some((prd) => prd.id === id);
   const dispatch = useDispatch();
 
+  const [cartLoader, setCartLoader] = useState(false);
+  const [wishlistLoader, setWishlistLoader] = useState(false);
+
   // wishlist added and show
   const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
     {}
@@ -68,7 +72,9 @@ const ProductItem = ({
   const [addWishlist, {}] = useAddWishlistMutation();
 
   const addToCartProductINR = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -81,13 +87,16 @@ const ProductItem = ({
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addToCartProductUSD = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -99,24 +108,23 @@ const ProductItem = ({
       } else {
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
+const [token, setToken] = useState("");
   useEffect(() => {
-    getToken();
+    const Token = localStorage.getItem("checkoutToken");
+    setToken(Token);
   }, []);
 
-  const getToken = () => {
-    const token = localStorage.getItem("checkoutToken");
-  };
 
   // handle wishlist product
 
   const addWishlistProduct = async (product) => {
     try {
-      const token = localStorage.getItem("token");
+      setWishlistLoader(true);
       const user = localStorage.getItem("userInfo");
 
       if (token) {
@@ -132,9 +140,13 @@ const ProductItem = ({
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
+        notifyError(
+          "Only logged-in users can add items to their wishlist or view it"
+        )
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
+      setWishlistLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -232,11 +244,15 @@ const ProductItem = ({
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}
                     disabled={status === "out-of-stock"}
-                  >
+                  >{
+                    cartLoader ? <ButtonLoader loader={cartLoader} /> :<>
                     <Cart />
                     <span className="tp-product-tooltip tp-product-tooltip-top">
                       Add to Cart
                     </span>
+                    </>
+                  }
+                    
                   </button>
                 )}
               </>

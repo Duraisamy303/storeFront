@@ -25,6 +25,7 @@ import {
   useGetWishlistQuery,
 } from "../../../redux/features/productApi";
 import { profilePic } from "@/utils/constant";
+import ButtonLoader from "@/components/loader/button-loader";
 
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
@@ -36,6 +37,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const dispatch = useDispatch();
 
   const [isAddWishlist, setWishlist] = useState(false);
+  const [cartLoader, setCartLoader] = useState(false);
+  const [wishlistLoader, setWishlistLoader] = useState(false);
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -81,8 +84,18 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
+  
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setToken(token);
+  }, []);
+
   const addToCartProductINR = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
@@ -95,13 +108,16 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const addToCartProductUSD = async () => {
+    setCartLoader(true);
     try {
+      setCartLoader(true);
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
@@ -113,14 +129,17 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       } else {
         cartRefetch();
       }
+      setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   const handleWishlist = async () => {
+    setWishlistLoader(true);
     try {
-      const token = localStorage.getItem("token");
+      setWishlistLoader(true);
+      // const token = localStorage.getItem("token");
       const user = localStorage.getItem("userInfo");
 
       if (token) {
@@ -136,11 +155,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
       } else {
-        router.push("/login");
-
+        notifyError(
+          "Only logged-in users can add items to their wishlist or view it"
+        )
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
+      setWishlistLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -265,10 +286,16 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                     } tp-product-add-cart-btn`}
                     disabled={status === "out-of-stock"}
                   >
-                    <Cart />
-                    <span className="tp-product-tooltip tp-product-tooltip-top">
-                      Add to Cart
-                    </span>
+                    {cartLoader ? (
+                      <ButtonLoader loader={cartLoader} />
+                    ) : (
+                      <>
+                        <Cart />
+                        <span className="tp-product-tooltip tp-product-tooltip-top">
+                          Add to Cart
+                        </span>
+                      </>
+                    )}
                   </button>
                 )}
               </>
@@ -309,7 +336,15 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               <button
                 style={{ marginRight: "5px" }}
                 disabled={status === "out-of-stock"}
-                onClick={() => router.push("/wishlist")}
+                onClick={() =>{
+                  if(token){
+                    router.push("/wishlist");
+                  }else{
+                    notifyError(
+                      "Only logged-in users can add items to their wishlist or view it"
+                    )
+                  }
+                }}
                 // onClick={() => addWishlistProduct(product)}
                 className={`tp-product-action-btn-2 active tp-product-add-to-wishlist-btn`}
               >
@@ -327,10 +362,16 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 className={`tp-product-action-btn-2 
                 tp-product-add-to-wishlist-btn`}
               >
-                <Wishlist />
-                <span className="tp-product-tooltip tp-product-tooltip-top">
-                  Add To Wishlist
-                </span>
+                {wishlistLoader ? (
+                  <ButtonLoader loader={wishlistLoader} />
+                ) : (
+                  <>
+                    <Wishlist />
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
+                      Add To Wishlist
+                    </span>
+                  </>
+                )}
               </button>
             )}
 
@@ -390,13 +431,20 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
-                  style={{ textDecoration: "line-through", color: "rgb(144 141 141)", fontSize: "14px" }}
+                  style={{
+                    textDecoration: "line-through",
+                    color: "rgb(144 141 141)",
+                    fontSize: "14px",
+                  }}
                 >
                   &#8377;
                   {roundOff(product?.defaultVariant?.costPrice)}
                 </span>
               )}
-              <span className="tp-product-price-2 new-price " style={{ fontSize: "14px" }}>
+              <span
+                className="tp-product-price-2 new-price "
+                style={{ fontSize: "14px" }}
+              >
                 &#8377;
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
@@ -409,13 +457,20 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
-                  style={{ textDecoration: "line-through", color: "rgb(144 141 141)", fontSize: "14px"  }}
+                  style={{
+                    textDecoration: "line-through",
+                    color: "rgb(144 141 141)",
+                    fontSize: "14px",
+                  }}
                 >
                   {"$"}
                   {roundOff(product?.defaultVariant?.costPrice)}
                 </span>
               )}
-              <span className="tp-product-price-2 new-price" style={{ fontSize: "14px" }}>
+              <span
+                className="tp-product-price-2 new-price"
+                style={{ fontSize: "14px" }}
+              >
                 {"$"}
                 {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
