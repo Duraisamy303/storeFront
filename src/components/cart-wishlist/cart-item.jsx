@@ -20,6 +20,7 @@ import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
+import { ClipLoader } from "react-spinners";
 
 const CartItem = ({
   product,
@@ -51,6 +52,7 @@ const CartItem = ({
   const dispatch = useDispatch();
 
   const router = useRouter();
+  const [productRemoveLoader, setProductRemoveLoader] = useState(false);
 
   // const handleRemovePrd = () => {
   //   const checkoutToken = localStorage.getItem("checkoutToken");
@@ -69,7 +71,9 @@ const CartItem = ({
   }, []);
 
   const handleRemovePrd = async (val) => {
+    setProductRemoveLoader(true);
     try {
+      setProductRemoveLoader(true);
       const productId = product?.variant?.product?.id;
       const allListData = AllListChannel?.data?.checkout?.lines;
       const fine = allListData?.find(
@@ -91,6 +95,7 @@ const CartItem = ({
 
       refetch();
       AllListChannelREfresh();
+      setProductRemoveLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -199,8 +204,10 @@ const CartItem = ({
               <button
                 onClick={() => handleRemovePrd()}
                 className="tp-cart-action-btn"
-              >
-                <Close />
+              >{
+                productRemoveLoader ?   <ClipLoader color="red" size={13} /> : <Close />
+              }
+               
                 <span> Remove</span>
               </button>
             </td>

@@ -25,6 +25,7 @@ import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../loader/button-loader";
+import { ClipLoader } from "react-spinners";
 
 const WishlistItem = ({ product, refetchWishlist }) => {
   const { variant, img, title, price } = product || {};
@@ -32,6 +33,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   const dispatch = useDispatch();
 
   const [cartLoader, setCartLoader] = useState(false);
+  const [deleteLoader, setDeleteLoader] = useState(false);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -67,11 +69,14 @@ const WishlistItem = ({ product, refetchWishlist }) => {
 
   // handle remove product
   const handleRemovePrd = async () => {
+    setDeleteLoader(true);
     try {
+      setDeleteLoader(true);
       await wishlistDelete({
         variant: product?.variant,
       });
       refetchWishlist();
+      setDeleteLoader(false);
     } catch (error) {}
   };
 
@@ -206,7 +211,8 @@ const WishlistItem = ({ product, refetchWishlist }) => {
           onClick={() => handleRemovePrd()}
           className="tp-cart-action-btn"
         >
-          <Close />
+          {deleteLoader ?   <ClipLoader color="red" size={13} /> : <Close />}
+
           <span> Remove</span>
         </button>
       </td>
