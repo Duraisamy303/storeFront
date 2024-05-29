@@ -143,9 +143,9 @@
             opacity: 0;
             @extend %tp-transition;
 
-            @media #{$xs}{
-                top: 30px;
-            }
+            // @media #{$xs}{
+            //     top: 30px;
+            // }
         }
         &-btn-3{
             position: relative;

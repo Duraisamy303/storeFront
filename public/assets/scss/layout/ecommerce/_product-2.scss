@@ -92,8 +92,20 @@
             opacity: 0;
             @extend %tp-transition;
 
-            @media #{$xs}{
-                top: 30px;
+            @media(max-width:768px){
+                left: 95px !important ;
+            }
+            @media (max-width:600px){
+                left: 165px !important ;
+            }
+            @media (max-width:500px){
+                left: 115px !important ;
+            }
+            @media(max-width:400px ){
+                left: 95px !important ;
+            }
+            @media(max-width:350px ){
+                left: 75px !important ;
             }
         }
 
@@ -180,3 +192,4 @@
         }
     }
 }
+

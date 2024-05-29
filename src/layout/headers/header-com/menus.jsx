@@ -3,6 +3,7 @@ import menu_data from "@/data/menu-data";
 import Link from "next/link";
 import Image from "next/image";
 import categoryImages from "@assets/img/sub-menu.jpg";
+import commonImage from "@assets/img/earring-menu-pic-1.png";
 import earingModel from "@assets/img/earring-menu-pic-1.png";
 import { useRouter } from "next/router";
 import Anklet from "@assets/img/banner/anklet.jpg";
@@ -38,10 +39,10 @@ const Menus = () => {
       return (
         <div
           className="row"
-          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+          style={{ paddingBottom: "30px", }}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
+            {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
                 ALLEARRINGS
               </h6>
@@ -71,14 +72,33 @@ const Menus = () => {
                   Cuff Earrings
                 </li>
               </ul>
+            </div> */}
+          
+          <div style={{ paddingLeft: "25px" }}>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+              ALL EARRINGS
+              </h6>
+           
             </div>
-            {/* <div>
+            <div>
               <Image
-                src={earingModel}
+                src={commonImage}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
-            </div> */}
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4 style={{ fontWeight: "400" }}>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
+            </div>
+
+            
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -121,10 +141,10 @@ const Menus = () => {
       return (
         <div
           className="row"
-          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+          style={{ paddingBottom: "30px",  }}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
+            {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
                 ALLNECKLACES
               </h6>
@@ -166,14 +186,42 @@ const Menus = () => {
                   LOOT SALE
                 </li>
               </ul>
+            </div> */}
+
+
+<div style={{ paddingLeft: "25px" }}>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+              ALL NECKLACES
+              </h6>
+              {/* <ul>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Rope Anklet
+                </li>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Stone Anklets
+                </li>
+              </ul> */}
             </div>
-            {/* <div>
+            <div>
               <Image
-                src={earingModel}
+                src={commonImage}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
-            </div> */}
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4 style={{ fontWeight: "400" }}>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
+            </div>
+
+
+
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -216,7 +264,7 @@ const Menus = () => {
       return (
         <div
           className="row"
-          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+          style={{ paddingBottom: "30px",  }}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
@@ -240,7 +288,7 @@ const Menus = () => {
             </div>
             <div>
               <Image
-                src={Bangles}
+                src={commonImage}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
@@ -297,11 +345,10 @@ const Menus = () => {
       return (
         <div
           className="row"
-          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+          style={{ paddingBottom: "30px",  }}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
-              {/* <h6 style={{ paddingBottom: "15px" }}>ALL PENDANTS</h6> */}
+            {/* <div style={{ paddingLeft: "25px" }}>
               <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Nose Pins
@@ -327,8 +374,28 @@ const Menus = () => {
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
+            </div> */}
+            <div style={{ paddingLeft: "25px" }}>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+              ALL RINGS
+              </h6>
+              {/* <ul>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Rope Anklet
+                </li>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Stone Anklets
+                </li>
+              </ul> */}
             </div>
-            {/* <div style={{ textAlign: "center", padding: "20px 0px" }}>
+            <div>
+              <Image
+                src={commonImage}
+                alt="category image"
+                style={{ width: "100%", height: "200px" }}
+              />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
               <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
@@ -337,7 +404,9 @@ const Menus = () => {
                 {" "}
                 <Link href="/shop">Shop Now</Link>
               </button>
-            </div> */}
+            </div>
+
+
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -378,10 +447,10 @@ const Menus = () => {
       return (
         <div
           className="row"
-          style={{ paddingBottom: "30px", height: "400px", overflow: "scroll" }}
+          style={{ paddingBottom: "30px",}}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
+            {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
                 ALL RINGS
               </h6>
@@ -402,7 +471,46 @@ const Menus = () => {
                 {" "}
                 <Link href="/shop">Shop Now</Link>
               </button>
+            </div> */}
+            
+
+
+            <div style={{ paddingLeft: "25px" }}>
+              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
+              ALL RINGS
+              </h6>
+              {/* <ul>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Rope Anklet
+                </li>
+                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                  Stone Anklets
+                </li>
+              </ul> */}
             </div>
+            <div>
+              <Image
+                src={commonImage}
+                alt="category image"
+                style={{ width: "100%", height: "200px" }}
+              />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4 style={{ fontWeight: "400" }}>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn tp-btn-border">
+                {" "}
+                <Link href="/shop">Shop Now</Link>
+              </button>
+            </div>
+
+
+
+
+
+
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -447,9 +555,6 @@ const Menus = () => {
           className="row"
           style={{
             paddingBottom: "30px",
-            height: "400px",
-            overflowY: "scroll",
-            overflowX: "hidden",
           }}
         >
           <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -457,23 +562,23 @@ const Menus = () => {
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
                 ALL ANKLETS
               </h6>
-              <ul>
+              {/* <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Rope Anklet
                 </li>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
                   Stone Anklets
                 </li>
-              </ul>
+              </ul> */}
             </div>
             <div>
               <Image
-                src={Anklet}
+                src={commonImage}
                 alt="category image"
                 style={{ width: "100%", height: "200px" }}
               />
             </div>
-            {/* <div style={{ textAlign: "center", padding: "20px 0px" }}>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
               <h4 style={{ fontWeight: "400" }}>
                 Excepteur sint occaecat
                 <br /> cupidatat
@@ -482,7 +587,7 @@ const Menus = () => {
                 {" "}
                 <Link href="/shop">Shop Now</Link>
               </button>
-            </div> */}
+            </div>
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
