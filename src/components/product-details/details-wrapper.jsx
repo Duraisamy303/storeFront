@@ -358,8 +358,8 @@ const DetailsWrapper = ({
         )}
       </div>
 
-      {productItem?.metadata?.length > 1 && (
-        <p style={{ color: "black" }}>{productItem?.metadata[1]?.value}</p>
+      {productItem?.metadata?.length > 1 && ( 
+        <p style={{ color: "black" }}>{ productItem?.metadata?.filter((item) => item.key == "short_descripton")?.[0]?.value }</p>
       )}
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
@@ -506,8 +506,8 @@ const DetailsWrapper = ({
       <div
         style={{
           borderBottom: "1px solid #EAEBED",
-          paddingBottom: "25px",
-          marginBottom: "25px",
+          paddingBottom: "15px",
+          marginBottom: "15px",
         }}
       >
         <div
@@ -520,16 +520,16 @@ const DetailsWrapper = ({
         >
           <div
             className={`${visibility?.description ? "theme-color" : ""}`}
-            style={{ fontSize: "16px" }}
+          
           >
-            DESCRIPTION
+            MAINTENENCE TIPS
           </div>{" "}
           <div>{visibility.description ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility?.description && (
           <>
-            {JSON.parse(productItem?.description)?.blocks?.map((block) => (
+            {/* {JSON.parse(productItem?.description)?.blocks?.map((block) => (
               <>
                 <div className="pt-10">
                   {block.type === "header" && (
@@ -551,7 +551,12 @@ const DetailsWrapper = ({
                   </div>
                 </div>
               </>
-            ))}
+            ))} */}
+            {
+            <div className="pt-10">
+              {productItem?.metadata?.filter((item) => item.key === "description")?.[0]?.value}
+              </div>
+            }
           </>
         )}
       </div>
@@ -559,8 +564,8 @@ const DetailsWrapper = ({
       <div
         style={{
           borderBottom: "1px solid #EAEBED",
-          paddingBottom: "25px",
-          marginBottom: "25px",
+          paddingBottom: "15px",
+          marginBottom: "15px",
         }}
       >
         <div
@@ -573,7 +578,7 @@ const DetailsWrapper = ({
         >
           <div
             className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
-            style={{ fontSize: "14px" }}
+          
           >
             ADDITIONAL INFORMATION
           </div>{" "}
@@ -602,8 +607,8 @@ const DetailsWrapper = ({
       <div
         style={{
           borderBottom: "1px solid #EAEBED",
-          paddingBottom: "25px",
-          marginBottom: "25px",
+          paddingBottom: "15px",
+          marginBottom: "15px",
         }}
       >
         <div
@@ -661,7 +666,7 @@ const DetailsWrapper = ({
         )}
       </div>
 
-      <div
+      {/* <div
         style={{
           borderBottom: "1px solid #EAEBED",
           paddingBottom: "25px",
@@ -672,7 +677,7 @@ const DetailsWrapper = ({
           style={{
             display: "flex",
             justifyContent: "space-between",
-            cursor: "pointer", // Add cursor pointer to indicate it's clickable
+            cursor: "pointer", 
           }}
           onClick={() => toggleVisibility("maintenance")}
         >
@@ -683,7 +688,6 @@ const DetailsWrapper = ({
             MAINTENENCE TIPS
           </div>{" "}
           <div>{visibility.maintenance ? "▲" : "▼"}</div>{" "}
-          {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.maintenance && (
           <div style={{ paddingTop: "20px" }}>
@@ -722,7 +726,7 @@ const DetailsWrapper = ({
             </p>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div>
         <p style={{ color: "#55585b" }}>
