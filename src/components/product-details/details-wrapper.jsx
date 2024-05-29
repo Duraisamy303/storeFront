@@ -358,8 +358,14 @@ const DetailsWrapper = ({
         )}
       </div>
 
-      {productItem?.metadata?.length > 1 && ( 
-        <p style={{ color: "black" }}>{ productItem?.metadata?.filter((item) => item.key == "short_descripton")?.[0]?.value }</p>
+      {productItem?.metadata?.length > 1 && (
+        <p style={{ color: "black" }}>
+          {
+            productItem?.metadata?.filter(
+              (item) => item.key == "short_descripton"
+            )?.[0]?.value
+          }
+        </p>
       )}
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
@@ -486,11 +492,7 @@ const DetailsWrapper = ({
             className="tp-product-details-action-sm-btn"
           >
             <WishlistTwo />
-            {wishlistLoader ? (
-              "Loading..."
-            ) : (
-              "Add To Wishlist"
-            )}
+            {wishlistLoader ? "Loading..." : "Add To Wishlist"}
           </button>
         )}
 
@@ -518,10 +520,7 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("description")}
         >
-          <div
-            className={`${visibility?.description ? "theme-color" : ""}`}
-          
-          >
+          <div className={`${visibility?.description ? "theme-color" : ""}`}>
             MAINTENENCE TIPS
           </div>{" "}
           <div>{visibility.description ? "▲" : "▼"}</div>{" "}
@@ -553,8 +552,12 @@ const DetailsWrapper = ({
               </>
             ))} */}
             {
-            <div className="pt-10">
-              {productItem?.metadata?.filter((item) => item.key === "description")?.[0]?.value}
+              <div className="pt-10">
+                {
+                  productItem?.metadata?.filter(
+                    (item) => item.key === "description"
+                  )?.[0]?.value
+                }
               </div>
             }
           </>
@@ -576,31 +579,110 @@ const DetailsWrapper = ({
           }}
           onClick={() => toggleVisibility("additionalInfo")}
         >
-          <div
-            className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
-          
-          >
+          <div className={`${visibility?.additionalInfo ? "theme-color" : ""}`}>
             ADDITIONAL INFORMATION
           </div>{" "}
           <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.additionalInfo && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-              Item type
-            </li>
-            <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-              Only Necklace, Necklace with Earrings
-            </li>
-          </ul>
+          <>
+            {productItem?.productFinish?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
+                <li>
+                  {productItem?.productFinish?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productFinish.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+
+            {productItem?.productstyle?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
+                <li>
+                  {productItem?.productstyle?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productstyle.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+
+            {productItem?.prouctDesign?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
+                <li>
+                  {productItem?.prouctDesign?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.prouctDesign.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+
+            {productItem?.productStoneType?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
+                <li>
+                  {productItem?.productStoneType?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productStoneType.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+          </>
         )}
       </div>
 
@@ -741,7 +823,7 @@ const DetailsWrapper = ({
             });
           }}
         >
-          <b>Categories:</b> {productItem?.category?.name}
+          <b>Categories:</b> {productItem?.category?.name}  
         </p>
         {productItem?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
@@ -750,7 +832,7 @@ const DetailsWrapper = ({
               return (
                 <span
                   key={tag?.id}
-                  style={{ marginRight: "10px", cursor: "pointer" }}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
@@ -758,7 +840,7 @@ const DetailsWrapper = ({
                     });
                   }}
                 >
-                  {tag?.name}
+                  {tag?.name}{index < productItem.tags.length - 1 ? ", " : ""}
                 </span>
               );
             })}

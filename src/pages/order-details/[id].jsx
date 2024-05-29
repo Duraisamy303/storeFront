@@ -12,6 +12,7 @@ import OrderBanner from "@assets/img/shop-banner.jpg";
 import { useRouter } from "next/router";
 import { useOrderListQuery } from "@/redux/features/productApi";
 import MyOrderDetails from "../../components/my-account/my-order-details";
+import PrivateRouter from "@/layout/private-router";
 
 const OrderDetails = () => {
   const router = useRouter();
@@ -32,4 +33,4 @@ const OrderDetails = () => {
     </Wrapper>
   );
 };
-export default OrderDetails;
+export default PrivateRouter(OrderDetails); // export default OrderDetails;

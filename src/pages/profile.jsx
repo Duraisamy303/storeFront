@@ -9,6 +9,7 @@ import FooterTwo from "@/layout/footers/footer-2";
 import ProfileArea from "@/components/my-account/profile-area";
 import { useGetUserOrdersQuery } from "@/redux/features/order/orderApi";
 import Loader from "@/components/loader/loader";
+import PrivateRouter from "@/layout/private-router";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -41,4 +42,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default PrivateRouter(ProfilePage); // export default ProfilePage;

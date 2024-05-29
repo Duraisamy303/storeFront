@@ -6,6 +6,7 @@ import WishlistArea from '@/components/cart-wishlist/wishlist-area';
 import CommonBreadcrumb from '@/components/breadcrumb/common-breadcrumb';
 import FooterTwo from '@/layout/footers/footer-2';
 import WishlistBanner from "../../public/assets/img/shop-banner.jpg";
+import PrivateRouter from '@/layout/private-router';
 
 
 const WishlistPage = () => {
@@ -20,4 +21,4 @@ const WishlistPage = () => {
   );
 };
 
-export default WishlistPage;
+export default PrivateRouter(WishlistPage); // export default WishlistPage;

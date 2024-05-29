@@ -57,9 +57,25 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           key
           value
         }
-        tags{
+        tags {
           name
           id
+        }
+        productFinish {
+          id
+          name
+        }
+        productstyle {
+          id
+          name
+        }
+        prouctDesign {
+          id
+          name
+        }
+        productStoneType {
+          id
+          name
         }
       }
     }
