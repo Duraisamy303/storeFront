@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Anklet from "@assets/img/banner/anklet.jpg";
 import Ring from "@assets/img/banner/ring.jpg";
 import Bangles from "@assets/img/banner/bangle.jpg";
+import { RightOutlined } from "@ant-design/icons";
 
 const Menus = () => {
   const router = useRouter();
@@ -693,7 +694,7 @@ const Menus = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                   paddingRight: "10px",
+                    paddingRight: "10px",
                   }}
                 >
                   <p
@@ -705,15 +706,14 @@ const Menus = () => {
                   >
                     Earrings
                   </p>
-                  <p
+
+                  <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
                     }`}
-                  >
-                    &gt;{" "}
-                  </p>
+                  />
                 </li>
 
                 <li
@@ -732,7 +732,7 @@ const Menus = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                   paddingRight: "10px",
+                    paddingRight: "10px",
                   }}
                 >
                   <p
@@ -743,14 +743,13 @@ const Menus = () => {
                   >
                     Necklaces
                   </p>
-                  <p
+
+                  <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Necklaces" ? "active" : ""
                     }`}
-                  >
-                    &gt;{" "}
-                  </p>
+                  />
                 </li>
 
                 <li
@@ -769,7 +768,7 @@ const Menus = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                   paddingRight: "10px",
+                    paddingRight: "10px",
                   }}
                 >
                   <p
@@ -781,15 +780,14 @@ const Menus = () => {
                   >
                     Bangles & Bracelets
                   </p>
-                  <p
-                      style={{ cursor: "pointer", marginBottom: "0px" }}
-                      // href="#"
-                      className={`shop-submenu-catageroy-list-a ${
-                        lastHoveredCategory === "Bangles" ? "active" : ""
-                      }`}
-                  >
-                    &gt;{" "}
-                  </p>
+
+                  <RightOutlined
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    // href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Bangles" ? "active" : ""
+                    }`}
+                  />
                 </li>
 
                 <li
@@ -808,7 +806,7 @@ const Menus = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                   paddingRight: "10px",
+                    paddingRight: "10px",
                   }}
                 >
                   <p
@@ -820,15 +818,14 @@ const Menus = () => {
                   >
                     Rings
                   </p>
-                  <p
+
+                  <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Rings" ? "active" : ""
                     }`}
-                  >
-                    &gt;{" "}
-                  </p>
+                  />
                 </li>
 
                 <li
@@ -847,7 +844,7 @@ const Menus = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                   paddingRight: "10px",
+                    paddingRight: "10px",
                   }}
                 >
                   <p
@@ -858,14 +855,13 @@ const Menus = () => {
                   >
                     Anklets
                   </p>
-                  <p
-                   style={{ cursor: "pointer", marginBottom: "0px" }}
-                   className={`shop-submenu-catageroy-list-a ${
-                     lastHoveredCategory === "Anklets" ? "active" : ""
-                   }`}
-                  >
-                    &gt;{" "}
-                  </p>
+
+                  <RightOutlined
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Anklets" ? "active" : ""
+                    }`}
+                  />
                 </li>
 
                 {/* <li
