@@ -83,6 +83,31 @@ const ShopArea = ({
     dispatch(filterData([]));
   };
 
+  const [loading, setLoading] = useState(false);
+
+ useEffect(() => {
+   if(products?.length > 0) {
+    setLoading(false);
+   }else{
+    setLoading(true);
+   }
+  }, [])
+  
+  function CommonLoader({ loading, spinner }) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+         <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="tp-shop-area pb-50 mt-50">
@@ -196,7 +221,7 @@ const ShopArea = ({
                     </div>
                   </div>
                 )}
-                {products?.length === 0 && <h2>No products found</h2>}
+                {products?.length === 0 &&  <CommonLoader loading={loading} />}
                 {products?.length > 0 && (
                   <div className="tp-shop-items-wrapper tp-shop-item-primary">
                     <div className="tab-content" id="productTabContent">
