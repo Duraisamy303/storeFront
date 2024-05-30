@@ -37,10 +37,7 @@ const Menus = () => {
   const renderCategoryContent = () => {
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
       return (
-        <div
-          className="row"
-          style={{ paddingBottom: "30px", }}
-        >
+        <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
@@ -73,12 +70,11 @@ const Menus = () => {
                 </li>
               </ul>
             </div> */}
-          
-          <div style={{ paddingLeft: "25px" }}>
+
+            <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-              ALL EARRINGS
+                ALL EARRINGS
               </h6>
-           
             </div>
             <div>
               <Image
@@ -97,8 +93,6 @@ const Menus = () => {
                 <Link href="/shop">Shop Now</Link>
               </button>
             </div>
-
-            
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -139,10 +133,7 @@ const Menus = () => {
       lastHoveredCategory === "Necklaces"
     ) {
       return (
-        <div
-          className="row"
-          style={{ paddingBottom: "30px",  }}
-        >
+        <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
@@ -188,10 +179,9 @@ const Menus = () => {
               </ul>
             </div> */}
 
-
-<div style={{ paddingLeft: "25px" }}>
+            <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-              ALL NECKLACES
+                ALL NECKLACES
               </h6>
               {/* <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
@@ -219,9 +209,6 @@ const Menus = () => {
                 <Link href="/shop">Shop Now</Link>
               </button>
             </div>
-
-
-
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -262,10 +249,7 @@ const Menus = () => {
       lastHoveredCategory === "Bangles"
     ) {
       return (
-        <div
-          className="row"
-          style={{ paddingBottom: "30px",  }}
-        >
+        <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
@@ -343,10 +327,7 @@ const Menus = () => {
       lastHoveredCategory === "Pendants"
     ) {
       return (
-        <div
-          className="row"
-          style={{ paddingBottom: "30px",  }}
-        >
+        <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             {/* <div style={{ paddingLeft: "25px" }}>
               <ul>
@@ -377,7 +358,7 @@ const Menus = () => {
             </div> */}
             <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-              ALL RINGS
+                ALL RINGS
               </h6>
               {/* <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
@@ -405,8 +386,6 @@ const Menus = () => {
                 <Link href="/shop">Shop Now</Link>
               </button>
             </div>
-
-
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -445,10 +424,7 @@ const Menus = () => {
       );
     } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
       return (
-        <div
-          className="row"
-          style={{ paddingBottom: "30px",}}
-        >
+        <div className="row" style={{ paddingBottom: "30px" }}>
           <div className="col-3" style={{ paddingLeft: "30px" }}>
             {/* <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
@@ -472,12 +448,10 @@ const Menus = () => {
                 <Link href="/shop">Shop Now</Link>
               </button>
             </div> */}
-            
-
 
             <div style={{ paddingLeft: "25px" }}>
               <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-              ALL RINGS
+                ALL RINGS
               </h6>
               {/* <ul>
                 <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
@@ -505,12 +479,6 @@ const Menus = () => {
                 <Link href="/shop">Shop Now</Link>
               </button>
             </div>
-
-
-
-
-
-
           </div>
           <div className="col-9">
             <div className="row" style={{ padding: "20px" }}>
@@ -721,6 +689,12 @@ const Menus = () => {
                       query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
                     });
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                   paddingRight: "10px",
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
@@ -730,6 +704,15 @@ const Menus = () => {
                     }`}
                   >
                     Earrings
+                  </p>
+                  <p
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    // href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Earrings" ? "active" : ""
+                    }`}
+                  >
+                    &gt;{" "}
                   </p>
                 </li>
 
@@ -745,6 +728,12 @@ const Menus = () => {
                       query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
                     });
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                   paddingRight: "10px",
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
@@ -753,6 +742,14 @@ const Menus = () => {
                     }`}
                   >
                     Necklaces
+                  </p>
+                  <p
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Necklaces" ? "active" : ""
+                    }`}
+                  >
+                    &gt;{" "}
                   </p>
                 </li>
 
@@ -768,6 +765,12 @@ const Menus = () => {
                       query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
                     });
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                   paddingRight: "10px",
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
@@ -777,6 +780,15 @@ const Menus = () => {
                     }`}
                   >
                     Bangles & Bracelets
+                  </p>
+                  <p
+                      style={{ cursor: "pointer", marginBottom: "0px" }}
+                      // href="#"
+                      className={`shop-submenu-catageroy-list-a ${
+                        lastHoveredCategory === "Bangles" ? "active" : ""
+                      }`}
+                  >
+                    &gt;{" "}
                   </p>
                 </li>
 
@@ -792,6 +804,12 @@ const Menus = () => {
                       query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
                     });
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                   paddingRight: "10px",
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
@@ -801,6 +819,15 @@ const Menus = () => {
                     }`}
                   >
                     Rings
+                  </p>
+                  <p
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    // href="#"
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Rings" ? "active" : ""
+                    }`}
+                  >
+                    &gt;{" "}
                   </p>
                 </li>
 
@@ -816,6 +843,12 @@ const Menus = () => {
                       query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
                     });
                   }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                   paddingRight: "10px",
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
@@ -824,6 +857,14 @@ const Menus = () => {
                     }`}
                   >
                     Anklets
+                  </p>
+                  <p
+                   style={{ cursor: "pointer", marginBottom: "0px" }}
+                   className={`shop-submenu-catageroy-list-a ${
+                     lastHoveredCategory === "Anklets" ? "active" : ""
+                   }`}
+                  >
+                    &gt;{" "}
                   </p>
                 </li>
 
