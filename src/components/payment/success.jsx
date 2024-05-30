@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Success = ({ data }) => {
   const Router = useRouter();
@@ -138,13 +139,13 @@ const Success = ({ data }) => {
               </ul>
             </div>
             <div className="mt-20">
-              <button
-                onClick={() => Router.push("/shop")}
+              <Link href="http://www1.prade.in/shop"
+                // onClick={() => Router.push("/shop")}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}
               >
                 Continue Shopping
-              </button>
+              </Link>
             </div>
           </div>
         </div>
