@@ -34,7 +34,7 @@ const ShopPage = () => {
     data: productsData,
     isError,
     isLoading,
-  } = useGetAllProductsQuery({ channel: "india-channel", first: 100 });
+  } = useGetAllProductsQuery({ channel: "india-channel", first: 500 });
 
   const router = useRouter();
   console.log("✌️router --->", router);

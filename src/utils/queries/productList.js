@@ -4,7 +4,13 @@ export const PRODUCT_LIST = ({ channel, first }) => {
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int!, $after: String, $channel: String!) {
-      products(first: $first, after: $after, channel: $channel, filter: {isPublished: true}) {
+      products(
+        first: $first
+        after: $after
+        channel: $channel
+        filter: {isPublished: true}
+        sortBy: {direction: DESC, field: CREATED_AT}
+      ) {
         totalCount
         edges {
           node {

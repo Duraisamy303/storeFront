@@ -342,8 +342,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 amountCharged: state.total,
                 pspReference: res?.razorpay_payment_id,
               });
+              localStorage.removeItem("checkoutTokenUSD");
+              localStorage.removeItem("checkoutTokenINR");
               console.log("data: ", data);
               router.push(`/order-success/${orderId}`);
+              
             }
 
             setState((prevState) => ({

@@ -96,16 +96,17 @@
                 left: 95px !important ;
             }
             @media (max-width:600px){
-                left: 165px !important ;
+                left: 55px !important ;
             }
             @media (max-width:500px){
-                left: 115px !important ;
+                left: 40px !important ;
+                bottom: 5px;
             }
             @media(max-width:400px ){
-                left: 95px !important ;
+                left: 25px !important ;
             }
             @media(max-width:350px ){
-                left: 75px !important ;
+                left: 10px !important ;
             }
         }
 
@@ -193,3 +194,9 @@
     }
 }
 
+@media(max-width: 500px){
+    .tp-product-action-btn-2{
+        width: 30px;
+        height: 30px;
+    }
+}
