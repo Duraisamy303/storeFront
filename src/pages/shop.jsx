@@ -105,6 +105,7 @@ const ShopPage = () => {
 
   const { data: data } = useGetCartListQuery();
   const { data: categoryData } = useGetParentCategoryListQuery();
+console.log('✌️categoryData --->', categoryData);
 
   const [priceFilter, {}] = usePriceFilterMutation();
 

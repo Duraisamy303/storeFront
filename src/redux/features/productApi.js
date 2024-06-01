@@ -184,7 +184,14 @@ export const productApi = apiSlice.injectEndpoints({
 
     getParentCategoryList: builder.query({
       query: (data) => {
-        return configuration(PARENT_CATEGORY_LIST({}));
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(PARENT_CATEGORY_LIST({ channel, first: 100 }));
       },
       providesTags: ["Products"],
     }),

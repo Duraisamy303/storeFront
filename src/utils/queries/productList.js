@@ -292,22 +292,25 @@ export const CATEGORY_LIST = ({ channel, first }) => {
   });
 };
 
-export const PARENT_CATEGORY_LIST = ({}) => {
+export const PARENT_CATEGORY_LIST = ({channel}) => {
   return JSON.stringify({
     query: `
-    query MyQuery {
+    query MyQuery($channel: String!) {
       categories(first: 100, level: 0) {
         edges {
           node {
             id
             name
             slug
+            products(channel: $channel) {
+              totalCount
+            }
           }
         }
       }
     }
     `,
-    variables: {},
+    variables: {channel},
   });
 };
 
