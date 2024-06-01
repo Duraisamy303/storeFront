@@ -2,22 +2,84 @@ import React, { useEffect, useState } from "react";
 import menu_data from "@/data/menu-data";
 import Link from "next/link";
 import Image from "next/image";
-import categoryImages from "@assets/img/sub-menu.jpg";
-import commonImage from "@assets/img/earring-menu-pic-1.png";
-import earingModel from "@assets/img/earring-menu-pic-1.png";
 import { useRouter } from "next/router";
-import Anklet from "@assets/img/banner/anklet.jpg";
-import Ring from "@assets/img/banner/ring.jpg";
-import Bangles from "@assets/img/banner/bangle.jpg";
 import { RightOutlined } from "@ant-design/icons";
+import {
+  useFeatureProductQuery,
+  useGetProductTypeQuery,
+  usePriceFilterMutation,
+} from "@/redux/features/productApi";
+import { Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import MenusProductSlider from "./menus-product-slider";
+import { HomeTwoPopularPrdLoader } from "@/components/loader";
+import CommonImage from "@assets/img/earring-menu-pic-1.png";
 
-const Menus = () => {
+const slider_setting = {
+  slidesPerView: 5,
+  spaceBetween: 25,
+  pagination: {
+    el: ".tp-category-slider-dot-4",
+    clickable: true,
+  },
+  breakpoints: {
+    1400: {
+      slidesPerView: 5,
+    },
+    1200: {
+      slidesPerView: 4,
+    },
+    992: {
+      slidesPerView: 3,
+    },
+    768: {
+      slidesPerView: 2,
+    },
+    576: {
+      slidesPerView: 2,
+    },
+    0: {
+      slidesPerView: 1,
+    },
+  },
+};
+
+const CategoryContent = ({ title, commonImage, children }) => (
+  <div className="row" style={{ paddingBottom: "30px" }}>
+    <div className="col-3" style={{ paddingLeft: "30px" }}>
+      <div style={{ paddingLeft: "25px" }}>
+        <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
+      </div>
+      <div>
+        <Image
+          src={commonImage}
+          alt="category image" 
+          style={{ width: "100%", height: "200px" }}
+        />
+      </div>
+      <div style={{ textAlign: "center", padding: "20px 0px" }}>
+        <h4 style={{ fontWeight: "400" }}>
+          Excepteur sint occaecat
+          <br /> cupidatat
+        </h4>
+        <button className="tp-btn tp-btn-border">
+          <Link href="/shop">Shop Now</Link>
+        </button>
+      </div>
+    </div>
+    <div className="col-9">
+      <div className="row" style={{ padding: "20px" }}>
+        {children}
+      </div>
+    </div>
+  </div>
+);
+
+const CategoryComponent = ({ commonImage, lastHoveredCategory, setLastHoveredCategory }) => {
   const router = useRouter();
-  // State to store the currently hovered category
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [token, setToken] = useState("");
-
-  const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
+  const [priceFilter, {}] = usePriceFilterMutation();
+  const [productList, setProductList] = useState([]);
 
   const handleCategoryHover = (category) => {
     setHoveredCategory(category);
@@ -30,637 +92,106 @@ const Menus = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setToken(token);
-  }, []);
+    filterByCategory();
+  }, [hoveredCategory, lastHoveredCategory]);
 
-  // Render category-related content based on the hovered category
-  const renderCategoryContent = () => {
+  const filterByCategory = () => {
+    let categoryId = "";
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
-      return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            {/* <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALLEARRINGS
-              </h6>
-              <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Handpainted Earrings
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Studs & Hooks
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Statement Earrings
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Oxidized Silver Earrings
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Jhumkas
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Gold Plated Silver
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Dual Tones
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Cuff Earrings
-                </li>
-              </ul>
-            </div> */}
-
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL EARRINGS
-              </h6>
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (
-      hoveredCategory === "Necklaces" ||
-      lastHoveredCategory === "Necklaces"
-    ) {
-      return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            {/* <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALLNECKLACES
-              </h6>
-              <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Gold Plated Silver
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Everyday Jewellery
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Mope Chains
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Chokers
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Dual Tones
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Hasli
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Long Necklaces
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Pearls & Beads
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Short Necklaces
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Statement Necklaces
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Mangalsutras
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  LOOT SALE
-                </li>
-              </ul>
-            </div> */}
-
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL NECKLACES
-              </h6>
-              {/* <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Rope Anklet
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Stone Anklets
-                </li>
-              </ul> */}
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (
-      hoveredCategory === "Bangles" ||
-      lastHoveredCategory === "Bangles"
-    ) {
-      return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL BANGLES & BRACELETS
-              </h6>
-              {/* <ul>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Chokers
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Everyday Jewellery
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Gold Plated Silver
-                </li>
-                <li style={{ fontSize: "16px", paddingBottom: "10px" }}>
-                Mope Chains
-                </li>
-              </ul> */}
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (
-      hoveredCategory === "Pendants" ||
-      lastHoveredCategory === "Pendants"
-    ) {
-      return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            {/* <div style={{ paddingLeft: "25px" }}>
-              <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Nose Pins
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Pendants
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Waist Keychains
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Maang Tikkas
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Hair Accessories
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <Image
-                src={earingModel}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div> */}
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL RINGS
-              </h6>
-              {/* <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Rope Anklet
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Stone Anklets
-                </li>
-              </ul> */}
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      categoryId = "Q2F0ZWdvcnk6NQ==";
+    } else if (hoveredCategory === "Necklaces" || lastHoveredCategory === "Necklaces") {
+      categoryId = "Q2F0ZWdvcnk6NzA=";
+    } else if (hoveredCategory === "Bangles" || lastHoveredCategory === "Bangles") {
+      categoryId = "Q2F0ZWdvcnk6Njc=";
     } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
-      return (
-        <div className="row" style={{ paddingBottom: "30px" }}>
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            {/* <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL RINGS
-              </h6>
-            </div>
-            <div>
-              <Image
-                src={Ring}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div> */}
-
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL RINGS
-              </h6>
-              {/* <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Rope Anklet
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Stone Anklets
-                </li>
-              </ul> */}
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (
-      hoveredCategory === "Anklets" ||
-      lastHoveredCategory === "Anklets"
-    ) {
-      return (
-        <div
-          className="row"
-          style={{
-            paddingBottom: "30px",
-          }}
-        >
-          <div className="col-3" style={{ paddingLeft: "30px" }}>
-            <div style={{ paddingLeft: "25px" }}>
-              <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>
-                ALL ANKLETS
-              </h6>
-              {/* <ul>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Rope Anklet
-                </li>
-                <li style={{ fontSize: "14px", paddingBottom: "10px" }}>
-                  Stone Anklets
-                </li>
-              </ul> */}
-            </div>
-            <div>
-              <Image
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "200px" }}
-              />
-            </div>
-            <div style={{ textAlign: "center", padding: "20px 0px" }}>
-              <h4 style={{ fontWeight: "400" }}>
-                Excepteur sint occaecat
-                <br /> cupidatat
-              </h4>
-              <button className="tp-btn tp-btn-border">
-                {" "}
-                <Link href="/shop">Shop Now</Link>
-              </button>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="row" style={{ padding: "20px" }}>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-lg-3" style={{ padding: "0px 8px 0px 0px" }}>
-                <Image
-                  src={categoryImages}
-                  alt="category image"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      categoryId = "Q2F0ZWdvcnk6MTIwNw==";
+    } else if (hoveredCategory === "Anklets" || lastHoveredCategory === "Anklets") {
+      categoryId = "Q2F0ZWdvcnk6NzM1";
     }
-    // Add conditions for other categories as needed
 
-    return null; // If no category is hovered, return null
+    priceFilter({ filter: { categories: categoryId } }).then((res) => {
+      const list = res?.data?.data?.products?.edges?.slice(0,11);
+      setProductList(list);
+    });
   };
 
+  const renderContent = () => {
+    if (productList.length === 0) return null;
+
+    return (
+      <Swiper
+        {...slider_setting}
+        modules={[Pagination]}
+        className="tp-category-slider-active-4 swiper-container"
+      >
+        {productList.map((item) => (
+          <div
+            className="col-lg-3 menus-product-list"
+            style={{ padding: "0px 8px 0px 0px", width: "250px" }}
+            key={item?.id}
+          >
+            <SwiperSlide
+              style={{
+                width: "100%",
+                minWidth: "222px",
+                maxWidth: "222px",
+                marginRight: "10px !important",
+              }}
+            >
+              <MenusProductSlider product={item} />
+            </SwiperSlide>
+          </div>
+        ))}
+      </Swiper>
+    );
+  };
+
+  const renderCategoryContent = () => {
+    switch (hoveredCategory || lastHoveredCategory) {
+      case "Earrings":
+        return (
+          <CategoryContent title="ALL EARRINGS" commonImage={CommonImage}>
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "Necklaces":
+        return (
+          <CategoryContent title="ALL NECKLACES" commonImage={CommonImage}>
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "Bangles":
+        return (
+          <CategoryContent title="ALL BANGLES & BRACELETS" commonImage={CommonImage}>
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "Rings":
+        return (
+          <CategoryContent title="ALL RINGS" commonImage={CommonImage}>
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "Anklets":
+        return (
+          <CategoryContent title="ALL ANKLETS" commonImage={CommonImage}>
+            {renderContent()}
+          </CategoryContent>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return <div>{renderCategoryContent()}</div>;
+};
+
+const Menus = () => {
+  const router = useRouter();
+  const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
+  
   return (
     <ul style={{ display: "flex", justifyContent: "end" }}>
-      {/* {menu_data.map((menu) =>
-        menu.homes ? (
-          <li key={menu.id} className="has-dropdown has-mega-menu">
-            <Link href={menu.link}>{menu.title}</Link>
-            <div className="home-menu tp-submenu tp-mega-menu">
-              <div className="row row-cols-1 row-cols-lg-4 row-cols-xl-4">
-                {menu.home_pages.map((home, i) => (
-                  <div key={i} className="col">
-                    <div className="home-menu-item">
-                      <Link href={home.link}>
-                        <div className="home-menu-thumb p-relative fix">
-                          <Image src={home.img} alt="home img" />
-                        </div>
-                        <div className="home-menu-content">
-                          <h5 className="home-menu-title">{home.title}</h5>
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </li>
-        ) : menu.products ? (
-          <li key={menu.id} className="has-dropdown has-mega-menu ">
-            <Link href={menu.link}>{menu.title}</Link>
-            <ul className="tp-submenu tp-mega-menu mega-menu-style-2">
-              {menu.product_pages.map((p, i) => (
-                <li key={i} className="has-dropdown">
-                  <Link href={p.link} className="mega-menu-title">
-                    {p.title}
-                  </Link>
-                  <ul className="tp-submenu">
-                    {p.mega_menus.map((m, i) => (
-                      <li key={i}>
-                        <Link href={m.link}>{m.title}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ) : menu.sub_menu ? (
-          <li key={menu.id} className="has-dropdown">
-            <Link href={menu.link}>{menu.title}</Link>
-            <ul className="tp-submenu">
-              {menu.sub_menus.map((b, i) => (
-                <li key={i}>
-                  <Link href={b.link}>{b.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ) : (
-          <li key={menu.id}>
-            <Link href={menu.link}>{menu.title}</Link>
-          </li>
-        )
-      )} */}
-
       <li>
         <Link href="/" style={{ fontWeight: "500" }}>
           HOME
@@ -682,34 +213,30 @@ const Menus = () => {
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Earrings" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Earrings")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
-                    });
-                  }}
+                  onMouseEnter={() => setLastHoveredCategory("Earrings")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingRight: "10px",
                   }}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                    });
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
                     }`}
                   >
                     Earrings
                   </p>
-
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
                     }`}
@@ -720,19 +247,18 @@ const Menus = () => {
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Necklaces" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Necklaces")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
-                    });
-                  }}
+                  onMouseEnter={() => setLastHoveredCategory("Necklaces")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingRight: "10px",
+                  }}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
+                    });
                   }}
                 >
                   <p
@@ -743,7 +269,6 @@ const Menus = () => {
                   >
                     Necklaces
                   </p>
-
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -756,34 +281,30 @@ const Menus = () => {
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Bangles" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Bangles")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
-                    });
-                  }}
+                  onMouseEnter={() => setLastHoveredCategory("Bangles")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingRight: "10px",
                   }}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
+                    });
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Bangles" ? "active" : ""
                     }`}
                   >
                     Bangles & Bracelets
                   </p>
-
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Bangles" ? "active" : ""
                     }`}
@@ -794,34 +315,30 @@ const Menus = () => {
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Rings" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Rings")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
-                    });
-                  }}
+                  onMouseEnter={() => setLastHoveredCategory("Rings")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingRight: "10px",
                   }}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
+                    });
+                  }}
                 >
                   <p
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Rings" ? "active" : ""
                     }`}
                   >
                     Rings
                   </p>
-
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    // href="#"
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Rings" ? "active" : ""
                     }`}
@@ -832,19 +349,18 @@ const Menus = () => {
                   className={`shop-submenu-catageroy-list ${
                     lastHoveredCategory === "Anklets" ? "active" : ""
                   }`}
-                  onMouseEnter={() => handleCategoryHover("Anklets")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
-                    });
-                  }}
+                  onMouseEnter={() => setLastHoveredCategory("Anklets")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     paddingRight: "10px",
+                  }}
+                  onClick={() => {
+                    router?.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                    });
                   }}
                 >
                   <p
@@ -855,7 +371,6 @@ const Menus = () => {
                   >
                     Anklets
                   </p>
-
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -863,37 +378,26 @@ const Menus = () => {
                     }`}
                   />
                 </li>
-
-                {/* <li
-                  className={`shop-submenu-catageroy-list ${
-                    lastHoveredCategory === "Pendants" ? "active" : ""
-                  }`}
-                  onMouseEnter={() => handleCategoryHover("Pendants")}
-                  onMouseLeave={() => handleCategoryLeave()}
-                >
-                  <Link
-                    href="#"
-                    className={`shop-submenu-catageroy-list-a ${
-                      lastHoveredCategory === "Pendants" ? "active" : ""
-                    }`}
-                  >
-                    Other Accessories
-                  </Link>
-                </li> */}
               </ul>
             </div>
-
-            <div className="col-lg-10">{renderCategoryContent()}</div>
+            <div className="col-lg-10">
+              <div className="tp-mega-menu-item">
+                <CategoryComponent
+                  commonImage="/path/to/your/common/image.jpg" // Add the path to your common image
+                  lastHoveredCategory={lastHoveredCategory}
+                  setLastHoveredCategory={setLastHoveredCategory}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </li>
 
       <li>
         <Link href="/about" style={{ fontWeight: "500" }}>
-          ABOUT US
+          ABOUT
         </Link>
       </li>
-
       <li>
         <Link href="/coupon" style={{ fontWeight: "500" }}>
           GIFT CARD
@@ -918,10 +422,9 @@ const Menus = () => {
           SALE
         </Link>
       </li>
-
       <li>
         <Link href="/contact" style={{ fontWeight: "500" }}>
-          CONTACT US
+          CONTACT US 
         </Link>
       </li>
     </ul>

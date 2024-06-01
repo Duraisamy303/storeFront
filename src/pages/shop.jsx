@@ -299,13 +299,24 @@ const ShopPage = () => {
       dispatch(handleFilterSidebarClose());
     });
   };
+  const categoryAllDatas = categoryData?.data?.categories?.edges || [];
+
+  const categoryName = categoryAllDatas
+    .filter((item) => item?.node?.id === router?.query?.categoryId)
+    .map((item) => item?.node?.name)[0];
+
+  const shopTitle =
+  router.query && router.query.categoryId
+    ? `Shop / ${categoryName}`
+    : "Shop";
 
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Shop"
+        title={shopTitle}
+        // title="Shop"
         subtitle="Shop"
         bgImage={shopBanner}
         catList={categoryList}
@@ -314,22 +325,22 @@ const ShopPage = () => {
         <ShopLoader loading={isLoading} />
       ) : (
         <> */}
-          <ShopArea
-            all_products={productList}
-            products={productList}
-            otherProps={otherProps}
-            updateData={() => setCartUpdate(true)}
-            subtitle="Shop"
-            updateRange={(range) => setPriceValue(range)}
-          />
-          <ShopFilterOffCanvas
-            all_products={products}
-            otherProps={otherProps}
-            filterByPrice={() => filterByPrice()}
-            finishFilterData={(data, type) => filterByPrice(data, type)}
-          />
-          <FooterTwo primary_style={true} />
-        {/* </>
+      <ShopArea
+        all_products={productList}
+        products={productList}
+        otherProps={otherProps}
+        updateData={() => setCartUpdate(true)}
+        subtitle={shopTitle}
+        updateRange={(range) => setPriceValue(range)}
+      />
+      <ShopFilterOffCanvas
+        all_products={products}
+        otherProps={otherProps}
+        filterByPrice={() => filterByPrice()}
+        finishFilterData={(data, type) => filterByPrice(data, type)}
+      />
+      <FooterTwo primary_style={true} />
+      {/* </>
       )} */}
     </Wrapper>
   );
