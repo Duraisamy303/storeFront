@@ -24,6 +24,7 @@ import {
 import {
   RELATED_PRODUCT,
   SINGLE_PRODUCT,
+  NEXT_PRODUCT
 } from "@/utils/queries/singleProduct/productDetailsByID";
 import { useSelector } from "react-redux";
 import {
@@ -80,6 +81,8 @@ export const productApi = apiSlice.injectEndpoints({
       query: () => `/api/product/top-rated`,
       providesTags: ["TopRatedProducts"],
     }),
+
+
     // get single product
     getProduct: builder.query({
       query: ({ productId }) => {
@@ -98,6 +101,24 @@ export const productApi = apiSlice.injectEndpoints({
         { type: "RelatedProducts", id: arg },
       ],
     }),
+
+
+    // get next product 
+    getNextProduct: builder.query({
+      query: ({ nextProductId }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(NEXT_PRODUCT({ nextProductId, channel }));
+      },
+      providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
+    }),
+
+
     // get related products
     getRelatedProducts: builder.query({
       query: ({ id }) => {
@@ -384,6 +405,7 @@ export const {
   useGetPopularProductByTypeQuery,
   useGetTopRatedProductsQuery,
   useGetProductQuery,
+  useGetNextProductQuery,
   useGetRelatedProductsQuery,
   useOrderListQuery,
   useMyOrderListQuery,

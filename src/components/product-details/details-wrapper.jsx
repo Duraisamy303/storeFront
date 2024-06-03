@@ -26,6 +26,8 @@ import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
 import {
   useAddWishlistMutation,
+  useGetNextProductQuery,
+  useGetProductQuery,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
 import { roundOff } from "../../utils/functions";
@@ -333,6 +335,14 @@ const DetailsWrapper = ({
     router.push(`/product-details/${productItem?.nextProduct}`);
   };
 
+
+  const {
+    data: productData,
+    isLoadings,
+    isErrors,
+  } = useGetNextProductQuery({ nextProductId: "UHJvZHVjdDo1MzI1" });
+
+console.log("details wrapper next product query: ", productData);
   return (
     <div
       className="tp-product-details-wrapper"
