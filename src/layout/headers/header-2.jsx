@@ -64,7 +64,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const dispatch = useDispatch();
 
   const [token, setToken] = useState("");
-  const [ userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("");
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -156,6 +156,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   };
 
   const handleSearch = async (search) => {
+    console.log("search: ", search);
     try {
       setSearchText(search);
       if (search?.length > 3) {
@@ -170,6 +171,8 @@ const HeaderTwo = ({ style_2 = false, data }) => {
         img: item?.node?.thumbnail?.url,
         id: item?.node?.id,
       }));
+      console.log("filter: ", filter);
+
 
       if (search === "") {
         setIsOpen2(false);
@@ -178,6 +181,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       }
 
       setSearchOption(filter);
+
     } catch (error) {
       console.log("error: ", error);
     }
@@ -265,17 +269,23 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                         className="tp-header-search-2 d-none d-sm-block"
                         style={{ position: "relative" }}
                       >
-                        <form onSubmit={handleSubmit}>
+                        {/* <form onSubmit={handleSubmit}> */}
                           <input
                             onChange={(e) => handleSearch(e.target.value)}
                             value={searchText}
                             type="text"
                             placeholder="Search for Products..."
+                            onKeyPress={(e) => {
+                              if (e.key === "Enter") {
+                                // Call your search function here
+                                handleSearch(searchText);
+                              }
+                            }}
                           />
                           {/* <button type="submit">
                             <Search />
                           </button> */}
-                        </form>
+                        {/* </form> */}
                         {isOpen2 == true ? (
                           <div
                             className="dropdown-content  d-flex flex-column"
