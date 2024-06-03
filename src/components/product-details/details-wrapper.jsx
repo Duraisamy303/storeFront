@@ -30,6 +30,14 @@ import {
 } from "@/redux/features/productApi";
 import { roundOff } from "../../utils/functions";
 import ButtonLoader from "../loader/button-loader";
+import {
+  RightOutlined,
+  LeftOutlined,
+  AppstoreOutlined,
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
+import { profilePic } from "@/utils/constant";
+import Image from "next/image";
 
 const DetailsWrapper = ({
   productItem,
@@ -293,13 +301,160 @@ const DetailsWrapper = ({
       setChannel(channel);
     }
   }, []);
+  const previousProduct = productItem?.previousProduct;
+  console.log("✌️previousProduct --->", previousProduct);
+
+  const nextProduct = productItem?.nextProduct;
+  console.log("✌️nextProduct --->", nextProduct);
+
+  const [previousHovered, setPreviousHovered] = useState(false);
+  const [nextHovered, setNextHovered] = useState(false);
+
+  const PreviousMouseEnter = () => {
+    setPreviousHovered(true);
+  };
+
+  const PreviousMouseLeave = () => {
+    setPreviousHovered(false);
+  };
+
+  const NextMouseEnter = () => {
+    setNextHovered(true);
+  };
+
+  const NextMouseLeave = () => {
+    setNextHovered(false);
+  };
+
+  const PreviousProductClick = () => {
+    router.push(`/product-details/${productItem?.previousProduct}`);
+  };
+  const NextProductClick = () => {
+    router.push(`/product-details/${productItem?.nextProduct}`);
+  };
 
   return (
-    <div className="tp-product-details-wrapper">
-      <ProductDetailsBreadcrumb
-        category={productItem?.category?.name}
-        title={productItem?.name}
-      />
+    <div
+      className="tp-product-details-wrapper"
+      
+    >
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <ProductDetailsBreadcrumb
+            category={productItem?.category?.name}
+            title={productItem?.name}
+          />
+        </div>
+        <div style={{ paddingRight: "10px", display: "flex" }}>
+          <div style={{ position: "relative" }}  onMouseEnter={PreviousMouseEnter}
+              onMouseLeave={PreviousMouseLeave}>
+            <LeftOutlined
+              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
+              onClick={PreviousProductClick}
+              onMouseEnter={PreviousMouseEnter}
+              onMouseLeave={PreviousMouseLeave}
+            />
+            {previousHovered && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "25",
+                  right: "-35px",
+                  background: "white",
+                  padding: "0 5px 0 0",
+                  width: "200px",
+                }}
+              >
+                <div style={{ display: "flex" }}>
+                  <div style={{ paddingRight: "10px", width: "50%" }}>
+                    <Image
+                      style={{ width: "100%" }}
+                      height={100}
+                      src={profilePic()}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      width: "50%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div>
+                      <p style={{ color: "gray", marginBottom: "0px" }}>
+                      Previous Product Nme
+                      </p>
+                      <p style={{ color: "rgb(195,147,91)", marginBottom: "0px" }}>
+                        {channel === "india-channel" ? `₹${50000}` : `${50}`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div>
+            <Tooltip title="Back to product">
+              <Link href="/shop">
+                <AppstoreOutlined
+                  style={{ color: "gray", paddingRight: "5px" }}
+                />
+              </Link>
+            </Tooltip>
+          </div>
+          <div style={{ position: "relative" }}   onMouseEnter={NextMouseEnter}
+              onMouseLeave={NextMouseLeave}>
+            <RightOutlined
+              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
+              onClick={NextProductClick}
+              onMouseEnter={NextMouseEnter}
+              onMouseLeave={NextMouseLeave}
+            />{" "}
+            {nextHovered && (
+                <div
+                style={{
+                  position: "absolute",
+                  top: "25",
+                  right: "0px",
+                  background: "white",
+                  padding: "0 10px 0 0",
+                  width: "200px",
+                }}
+                onMouseEnter={NextMouseEnter}
+                onMouseLeave={NextMouseLeave}
+              >
+                <div style={{ display: "flex" }}>
+                  <div style={{ paddingRight: "10px", width: "50%" }}>
+                    <Image
+                      style={{ width: "100%" }}
+                      height={100}
+                      src={profilePic()}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      width: "50%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div>
+                      <p style={{ color: "gray", marginBottom: "0px" }}>
+                        Next Product Name
+                      </p>
+                      <p style={{ color: "rgb(195,147,91)", marginBottom: "0px" }}>
+                        {channel === "india-channel" ? `₹${50000}` : `${50}`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       {/* <div className="tp-product-details-category">
         <span>
           {capitalizeFLetter(
@@ -676,7 +831,9 @@ const DetailsWrapper = ({
                       style={{ marginRight: "3px", cursor: "pointer" }}
                     >
                       {finish?.name}
-                      {index < productItem.productStoneType.length - 1 ? ", " : ""}
+                      {index < productItem.productStoneType.length - 1
+                        ? ", "
+                        : ""}
                     </span>
                   ))}
                 </li>
@@ -823,7 +980,7 @@ const DetailsWrapper = ({
             });
           }}
         >
-          <b>Categories:</b> {productItem?.category?.name}  
+          <b>Categories:</b> {productItem?.category?.name}
         </p>
         {productItem?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
@@ -840,7 +997,8 @@ const DetailsWrapper = ({
                     });
                   }}
                 >
-                  {tag?.name}{index < productItem.tags.length - 1 ? ", " : ""}
+                  {tag?.name}
+                  {index < productItem.tags.length - 1 ? ", " : ""}
                 </span>
               );
             })}

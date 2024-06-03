@@ -77,6 +77,8 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           id
           name
         }
+        nextProduct
+        previousProduct
       }
     }
     `,
