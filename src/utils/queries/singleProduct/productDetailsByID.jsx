@@ -77,12 +77,43 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           id
           name
         }
+        nextProduct
+        previousProduct
       }
     }
     `,
     variables: { productId, channel },
   });
 };
+
+export const NEXT_PRODUCT = ({nextProductId, channel}) => {
+  return JSON.stringify({
+    query: `
+    query MyQuery($nextProductId:ID!) {
+      product(id: $nextProductId, channel: $channel) {
+        id
+        name
+        thumbnail {
+          url
+          alt
+        }
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+      }
+    }
+    `,
+    variables: { nextProductId, channel },
+  });
+};
+
 
 export const RELATED_PRODUCT = ({ id, channel }) => {
   return JSON.stringify({

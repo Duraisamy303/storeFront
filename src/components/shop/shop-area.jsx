@@ -121,7 +121,7 @@ const ShopArea = ({
           >
             <div>
               <span>
-                <a href="#">Home</a>
+                <a href="/">Home</a>
               </span>{" "}
               /{" "}
               <span style={{ color: "black", fontWeight: "600" }}>

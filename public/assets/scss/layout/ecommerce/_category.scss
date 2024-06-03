@@ -394,6 +394,35 @@
             }
         }
     }
+    &-item-7 {
+        min-height: 333px;
+
+        &:hover {
+            #{$self4} {
+                &-price-4 {
+                    visibility: hidden;
+                    opacity: 0;
+                }
+
+                &-add-to-cart-4 {
+                    visibility: visible;
+                    opacity: 1;
+                    @include transform(translateY(-30px) translateX(-50%));
+                }
+
+            }
+
+            .tp-product-action-7 {
+                visibility: visible;
+                opacity: 1;
+                right: 10px;
+            }
+            .tp-menu-product-name{
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+    }
 
     &-title-4 {
         font-weight: 500;
@@ -830,4 +859,18 @@
 
 :where(.css-1ae8k9u).ant-carousel .slick-dots-bottom {
     bottom: 35px;
+}
+
+
+.tp-product-action-7{
+    position: absolute;
+    bottom: 3px;
+    right: 10px;
+    visibility: hidden;
+}
+.tp-menu-product-name{
+    position: absolute;
+    top: 100px;
+    left: 70px;
+    visibility: hidden;
 }

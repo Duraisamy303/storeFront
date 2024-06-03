@@ -14,12 +14,12 @@ function SingleLoader({ loading }) {
 
 const HomeTwoPopularPrdLoader = ({loading}) => {
   return (
-    <div className="row row-cols-xl-5 row-cols-lg-5 row-cols-md-4">
+    <div className="text-center">
+      <SingleLoader loading={loading} />
+      {/* <SingleLoader loading={loading} />
       <SingleLoader loading={loading} />
       <SingleLoader loading={loading} />
-      <SingleLoader loading={loading} />
-      <SingleLoader loading={loading} />
-      <SingleLoader loading={loading} />
+      <SingleLoader loading={loading} /> */}
     </div>
   );
 };
