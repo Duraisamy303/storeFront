@@ -6,9 +6,9 @@ import { profilePic } from "@/utils/constant";
 import { FullscreenOutlined } from "@ant-design/icons";
 
 const DetailsThumbWrapper = ({
-  imgWidth = 416,
-  imgHeight = 480,
-  videoId = false,
+  imgWidth,
+  imgHeight,
+  videoId,
   status,
   product,
 }) => {
@@ -53,7 +53,7 @@ const DetailsThumbWrapper = ({
 
   const handleLightboxClose = () => {
     setShowLightbox(false);
-    setSelectedImageIndex(null);
+    setSelectedImageIndex(0); // Reset the selected image index
   };
 
   const navigateImage = (direction) => {
@@ -75,7 +75,7 @@ const DetailsThumbWrapper = ({
 
   return (
     <>
-      <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
+      <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
         <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => (
@@ -121,7 +121,7 @@ const DetailsThumbWrapper = ({
                     onMouseMove={handleMouseMove}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-                    onClick={() => handleImageClick(selectedImageIndex)}
+                    // onClick={() => handleImageClick(selectedImageIndex)}
                   >
                     <Image
                       src={profilePic(activeImg)}
@@ -165,12 +165,32 @@ const DetailsThumbWrapper = ({
                 {product?.defaultVariant?.quantityAvailable === 0 && (
                   <span
                     className="product-hot text-center"
-                    style={{ padding: "15px 12px" }}
+                    style={{ padding: "15px 12px" , fontSize: "12px"}}
                   >
                     SOLD
                     <br /> OUT
                   </span>
                 )}
+              </div>
+
+              <div
+                className={`${
+                  product?.defaultVariant?.quantityAvailable === 0 ?"tp-product-badge": "tp-product-badge-2"
+                }`}
+              >
+                {product?.metadata?.filter((item) => item.key === "label")
+                  .length > 0 &&
+                  product.metadata
+                    .filter((item) => item.key === "label")
+                    .map((item, index) => (
+                      <span
+                        key={index}
+                        className="product-trending text-center"
+                        style={{ padding: "18px 12px", textTransform: "capitalize" }}
+                      >
+                        {item.value}
+                      </span>
+                    ))}
               </div>
               {videoId && (
                 <div
@@ -239,7 +259,6 @@ const DetailsThumbWrapper = ({
               maxHeight: "90%",
               objectFit: "contain",
             }}
-            onClick={handleNavigationClick}
           />
           <button
             onClick={handleLightboxClose}

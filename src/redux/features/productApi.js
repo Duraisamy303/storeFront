@@ -24,7 +24,8 @@ import {
 import {
   RELATED_PRODUCT,
   SINGLE_PRODUCT,
-  NEXT_PRODUCT
+  NEXT_PRODUCT,
+  PREV_PRODUCT
 } from "@/utils/queries/singleProduct/productDetailsByID";
 import { useSelector } from "react-redux";
 import {
@@ -117,6 +118,22 @@ export const productApi = apiSlice.injectEndpoints({
       },
       providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
     }),
+
+
+      // get prev product 
+      getPrevProduct: builder.query({
+        query: ({ prevProductId }) => {
+          let channel = "";
+          const channels = localStorage.getItem("channel");
+          if (!channels) {
+            channel = "india-channel";
+          } else {
+            channel = channels;
+          }
+          return configuration(PREV_PRODUCT({ prevProductId, channel }));
+        },
+        providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
+      }),
 
 
     // get related products
@@ -406,6 +423,7 @@ export const {
   useGetTopRatedProductsQuery,
   useGetProductQuery,
   useGetNextProductQuery,
+  useGetPrevProductQuery,
   useGetRelatedProductsQuery,
   useOrderListQuery,
   useMyOrderListQuery,

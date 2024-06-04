@@ -27,6 +27,7 @@ import ProductDetailsBreadcrumb from "../breadcrumb/product-details-breadcrumb";
 import {
   useAddWishlistMutation,
   useGetNextProductQuery,
+  useGetPrevProductQuery,
   useGetProductQuery,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
@@ -303,14 +304,11 @@ const DetailsWrapper = ({
       setChannel(channel);
     }
   }, []);
-  const previousProduct = productItem?.previousProduct;
-  console.log("✌️previousProduct --->", previousProduct);
-
-  const nextProduct = productItem?.nextProduct;
-  console.log("✌️nextProduct --->", nextProduct);
 
   const [previousHovered, setPreviousHovered] = useState(false);
   const [nextHovered, setNextHovered] = useState(false);
+  const [nextProduct, setNextProduct] = useState();
+  const [previousProduct, setPreviousProduct] = useState();
 
   const PreviousMouseEnter = () => {
     setPreviousHovered(true);
@@ -335,19 +333,34 @@ const DetailsWrapper = ({
     router.push(`/product-details/${productItem?.nextProduct}`);
   };
 
+  const {
+    data: nextProductData,
+    isNextLoadings,
+    isNextErrors,
+  } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
   const {
-    data: productData,
-    isLoadings,
-    isErrors,
-  } = useGetNextProductQuery({ nextProductId: "UHJvZHVjdDo1MzI1" });
+    data: prevProductData,
+    isPreviousLoadings,
+    isPreviousErrors,
+  } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
-console.log("details wrapper next product query: ", productData);
+useEffect(() => {
+  if (prevProductData) {
+    setPreviousProduct(prevProductData?.data?.product);
+  }
+}, [prevProductData]);
+
+  useEffect(() => {
+    if (nextProductData) {
+      setNextProduct(nextProductData?.data?.product);
+    }
+  }, [nextProductData]);
+
+  
+
   return (
-    <div
-      className="tp-product-details-wrapper"
-      
-    >
+    <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
           <ProductDetailsBreadcrumb
@@ -356,8 +369,11 @@ console.log("details wrapper next product query: ", productData);
           />
         </div>
         <div style={{ paddingRight: "10px", display: "flex" }}>
-          <div style={{ position: "relative" }}  onMouseEnter={PreviousMouseEnter}
-              onMouseLeave={PreviousMouseLeave}>
+          <div
+            style={{ position: "relative" }}
+            onMouseEnter={PreviousMouseEnter}
+            onMouseLeave={PreviousMouseLeave}
+          >
             <LeftOutlined
               style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
               onClick={PreviousProductClick}
@@ -372,7 +388,7 @@ console.log("details wrapper next product query: ", productData);
                   right: "-35px",
                   background: "white",
                   padding: "0 5px 0 0",
-                  width: "200px",
+                  width: "250px",
                 }}
               >
                 <div style={{ display: "flex" }}>
@@ -380,7 +396,8 @@ console.log("details wrapper next product query: ", productData);
                     <Image
                       style={{ width: "100%" }}
                       height={100}
-                      src={profilePic()}
+                      width={100}
+                      src={profilePic(previousProduct?.thumbnail?.url)}
                     />
                   </div>
                   <div
@@ -393,10 +410,15 @@ console.log("details wrapper next product query: ", productData);
                   >
                     <div>
                       <p style={{ color: "gray", marginBottom: "0px" }}>
-                      Previous Product Nme
+                       {previousProduct?.name}
                       </p>
-                      <p style={{ color: "rgb(195,147,91)", marginBottom: "0px" }}>
-                        {channel === "india-channel" ? `₹${50000}` : `${50}`}
+                      <p
+                        style={{
+                          color: "rgb(195,147,91)",
+                          marginBottom: "0px",
+                        }}
+                      >
+                        {channel === "india-channel" ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}` : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
                       </p>
                     </div>
                   </div>
@@ -413,8 +435,11 @@ console.log("details wrapper next product query: ", productData);
               </Link>
             </Tooltip>
           </div>
-          <div style={{ position: "relative" }}   onMouseEnter={NextMouseEnter}
-              onMouseLeave={NextMouseLeave}>
+          <div
+            style={{ position: "relative" }}
+            onMouseEnter={NextMouseEnter}
+            onMouseLeave={NextMouseLeave}
+          >
             <RightOutlined
               style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
               onClick={NextProductClick}
@@ -422,14 +447,14 @@ console.log("details wrapper next product query: ", productData);
               onMouseLeave={NextMouseLeave}
             />{" "}
             {nextHovered && (
-                <div
+              <div
                 style={{
                   position: "absolute",
                   top: "25",
                   right: "0px",
                   background: "white",
                   padding: "0 10px 0 0",
-                  width: "200px",
+                  width: "250px",
                 }}
                 onMouseEnter={NextMouseEnter}
                 onMouseLeave={NextMouseLeave}
@@ -438,8 +463,9 @@ console.log("details wrapper next product query: ", productData);
                   <div style={{ paddingRight: "10px", width: "50%" }}>
                     <Image
                       style={{ width: "100%" }}
+                      width={100}
                       height={100}
-                      src={profilePic()}
+                      src={profilePic(nextProduct?.thumbnail?.url)}
                     />
                   </div>
                   <div
@@ -452,10 +478,17 @@ console.log("details wrapper next product query: ", productData);
                   >
                     <div>
                       <p style={{ color: "gray", marginBottom: "0px" }}>
-                        Next Product Name
+                        {nextProduct?.name}
                       </p>
-                      <p style={{ color: "rgb(195,147,91)", marginBottom: "0px" }}>
-                        {channel === "india-channel" ? `₹${50000}` : `${50}`}
+                      <p
+                        style={{
+                          color: "rgb(195,147,91)",
+                          marginBottom: "0px",
+                        }}
+                      >
+                        {channel === "india-channel"
+                          ? `₹${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                          : `$${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`}
                       </p>
                     </div>
                   </div>
@@ -878,7 +911,7 @@ console.log("details wrapper next product query: ", productData);
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.shipping && (
-          <div style={{ paddingTop: "10px" }}>
+          <div style={{ paddingTop: "10px", height:"300px", overflowY:"scroll",  }}>
             <h5 style={{ fontWeight: "400" }}>Cancellation Policy:</h5>
             <p style={{ color: "#55585b" }}>
               If you wish to cancel your order, we shall provide you with an

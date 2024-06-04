@@ -30,7 +30,7 @@ console.log('✌️productItem --->', productItem);
       <div className="tp-product-details-top">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-8 col-lg-7">
+            <div className="col-xl-8 col-lg-7" style={{ maxWidth: "100%" , overflow: "hidden"}}>
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}

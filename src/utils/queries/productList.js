@@ -357,6 +357,10 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
               id
             }
             description
+            metadata {
+              key
+              value
+            }
           }
         }
       }
@@ -525,6 +529,10 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
                   ...ProductListItem
                   id
                   name
+                  metadata {
+                    key
+                    value
+                  }
                 }
                 cursor
               }
@@ -970,6 +978,10 @@ export const PRODUCT_20_PERCENTAGE = ({
       images {
         id
         url
+      }
+      metadata {
+        key
+        value
       }
     }
     

@@ -52,10 +52,12 @@
             text-transform: capitalize;
 
             &.product-hot{
-                background-color:white;
+                background-color:white !important;
+                color: black;
             }
             &.product-trending{
-                background-color: var(--tp-green-1);
+                background-color: #e22d2d;
+                color: white;
             }
             &.product-offer{
                 background-color: var(--tp-orange-1);
@@ -84,10 +86,12 @@
             text-transform: capitalize;
 
             &.product-hot{
-                background-color:#e22d2d;
+                background-color:white;
+                color: black;
             }
             &.product-trending{
-                background-color: var(--tp-green-1);
+                background-color: #e22d2d;
+                color: white;
             }
             &.product-offer{
                 background-color: var(--tp-orange-1);

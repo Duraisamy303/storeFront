@@ -204,13 +204,33 @@ const [token, setToken] = useState("");
           {product?.defaultVariant?.quantityAvailable == 0 && (
             <span
               className="product-hot text-center"
-              style={{ padding: "15px 12px " }}
+              style={{ padding: "15px 12px ", fontSize: "12px" }}
             >
               SOLD
               <br /> OUT
             </span>
           )}
         </div>
+
+        <div
+                className={`${
+                  product?.defaultVariant?.quantityAvailable == 0 ?"tp-product-badge": "tp-product-badge-2"
+                }`}
+              >
+                {product?.metadata?.filter((item) => item.key === "label")
+                  .length > 0 &&
+                  product.metadata
+                    .filter((item) => item.key === "label")
+                    .map((item, index) => (
+                      <span
+                        key={index}
+                        className="product-trending text-center"
+                        style={{ padding: "18px 12px", textTransform: "capitalize" }}
+                      >
+                        {item.value}
+                      </span>
+                    ))}
+              </div>
 
         {/* <div className="tp-product-badge-2">
           <span className="product-hot">HOT</span>

@@ -41,6 +41,7 @@ const ChangePassword = () => {
 
   // on submit
   const onSubmit = (data) => {
+console.log('✌️data --->', data);
     changePassword({
       old_password: data.password,
       new_password: data.newPassword,

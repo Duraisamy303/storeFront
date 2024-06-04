@@ -228,6 +228,31 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
               </span>
             )}
           </div>
+
+          <div
+            className={`${
+              RelatedProduct?.defaultVariant?.quantityAvailable == 0
+                ? "tp-product-badge"
+                : "tp-product-badge-2"
+            }`}
+          >
+            {RelatedProduct?.metadata?.filter((item) => item.key === "label")
+              .length > 0 &&
+              RelatedProduct.metadata
+                .filter((item) => item.key === "label")
+                .map((item, index) => (
+                  <span
+                    key={index}
+                    className="product-trending text-center"
+                    style={{
+                      padding: "18px 12px",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {item.value}
+                  </span>
+                ))}
+          </div>
         </Link>
         <div className="tp-product-action-3 tp-product-action-4 tp-product-action-blackStyle tp-product-action-brownStyle">
           <div className="tp-product-action-item-3 d-flex">

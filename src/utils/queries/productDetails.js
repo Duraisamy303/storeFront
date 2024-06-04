@@ -44,5 +44,9 @@ fragment ProductListItem on Product {
     id
     url
   }
+  metadata {
+    key
+    value
+  }
 }
 `;

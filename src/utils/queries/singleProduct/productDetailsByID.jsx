@@ -89,7 +89,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
 export const NEXT_PRODUCT = ({nextProductId, channel}) => {
   return JSON.stringify({
     query: `
-    query MyQuery($nextProductId:ID!) {
+    query MyQuery($nextProductId:ID!,$channel:String!) {
       product(id: $nextProductId, channel: $channel) {
         id
         name
@@ -109,8 +109,39 @@ export const NEXT_PRODUCT = ({nextProductId, channel}) => {
         }
       }
     }
+    
     `,
     variables: { nextProductId, channel },
+  });
+};
+
+
+export const PREV_PRODUCT = ({prevProductId, channel}) => {
+  return JSON.stringify({
+    query: `
+    query MyQuery($prevProductId:ID!,$channel:String!) {
+      product(id: $prevProductId, channel: $channel) {
+        id
+        name
+        thumbnail {
+          url
+          alt
+        }
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    `,
+    variables: { prevProductId, channel },
   });
 };
 
@@ -118,7 +149,7 @@ export const NEXT_PRODUCT = ({nextProductId, channel}) => {
 export const RELATED_PRODUCT = ({ id, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($id: ID!, $channel:String!) {
+    query MyQuery($id: ID!, $channel: String!) {
       category(id: $id) {
         id
         products(channel: $channel, first: 10) {
@@ -152,14 +183,12 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                       currency
                     }
                   }
-                 
                 }
                 discount {
                   currency
                 }
               }
               description
-
               defaultVariant {
                 id
                 quantityAvailable
@@ -169,7 +198,10 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                 id
                 name
               }
-              
+              metadata {
+                key
+                value
+              }
             }
           }
         }
