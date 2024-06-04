@@ -45,8 +45,13 @@ const ProfileNavTab = () => {
         />
         <SingleNav
           id="information"
-          title="Information"
+          title="Account Details"
           icon="fa-regular fa-circle-info"
+        />
+         <SingleNav
+          id="address"
+          title="Address"
+          icon="fa-solid fa-location-dot"
         />
         <SingleNav id="wishlist" title="Wishlist" icon="fa-regular fa-heart" />
 

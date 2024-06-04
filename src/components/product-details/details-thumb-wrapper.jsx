@@ -78,11 +78,15 @@ const DetailsThumbWrapper = ({
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
         <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
-            {imageUrls?.map((item, i) => (
+            {imageUrls?.map((item, i) => {
+console.log('✌️item --->', item);
+              return(
               <button
                 key={i}
                 className={`nav-link ${item === activeImg ? "active" : ""}`}
-                onClick={() => handleImageActive(item, i)}
+                onClick={() => handleImageActive(item, i)} style={{
+                  height: imageUrls?.length > 3 ? "180px" : "250px" ,
+                }}
               >
                 <Image
                   src={item}
@@ -92,7 +96,7 @@ const DetailsThumbWrapper = ({
                   style={{ width: "100%", height: "100%" }}
                 />
               </button>
-            ))}
+            )})}
           </div>
         </nav>
         <div className="tab-content m-img">
