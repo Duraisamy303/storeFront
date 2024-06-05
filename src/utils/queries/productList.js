@@ -292,7 +292,7 @@ export const CATEGORY_LIST = ({ channel, first }) => {
   });
 };
 
-export const PARENT_CATEGORY_LIST = ({channel}) => {
+export const PARENT_CATEGORY_LIST = ({ channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($channel: String!) {
@@ -310,7 +310,7 @@ export const PARENT_CATEGORY_LIST = ({channel}) => {
       }
     }
     `,
-    variables: {channel},
+    variables: { channel },
   });
 };
 
@@ -987,5 +987,148 @@ export const PRODUCT_20_PERCENTAGE = ({
     
     `,
     variables: { channel, first, after, collectionid },
+  });
+};
+
+// address section
+
+export const ADDRESS_LIST = () => {
+  return JSON.stringify({
+    query: `
+    {
+      me {
+        id
+        email
+        firstName
+        lastName
+        addresses {
+          city
+          cityArea
+          companyName
+          country {
+            country
+            code
+          }
+          countryArea
+          firstName
+          id
+          isDefaultBillingAddress
+          isDefaultShippingAddress
+          lastName
+          phone
+          postalCode
+          streetAddress1
+          streetAddress2
+        }
+        defaultBillingAddress {
+          id
+        }
+        defaultShippingAddress {
+          id
+        }
+      }
+    }
+    `,
+  });
+};
+
+export const UPDATE_BILLING_ADDRESS = ({ addressId }) => {
+  return JSON.stringify({
+    query: `
+    mutation SetDefaultBillingAddress($addressId: ID!) {
+      accountSetDefaultAddress(id: $addressId, type: BILLING) {
+        user {
+          id
+          email
+          defaultBillingAddress {
+            id
+            firstName
+            lastName
+            streetAddress1
+            city
+            postalCode
+            country {
+              code
+              country
+            }
+          }
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId },
+  });
+};
+
+export const UPDATE_SHIPPING_ADDRESS = ({ addressId }) => {
+  return JSON.stringify({
+    query: `
+    mutation SetDefaultShippingAddress($addressId: ID!) {
+      accountSetDefaultAddress(id: $addressId, type: SHIPPING) {
+        user {
+          id
+          email
+          defaultShippingAddress {
+            id
+            firstName
+            lastName
+            streetAddress1
+            city
+            postalCode
+            country {
+              code
+              country
+            }
+          }
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId },
+  });
+};
+
+export const UPDATE_ADDRESS = ({ addressId, input }) => {
+  return JSON.stringify({
+    query: `
+    mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
+      accountAddressUpdate(id: $addressId, input: $input) {
+        address {
+          id
+          firstName
+          lastName
+          streetAddress1
+          streetAddress2
+          city
+          postalCode
+          country {
+            code
+            country
+          }
+          countryArea
+          phone
+          isDefaultBillingAddress
+          isDefaultShippingAddress
+        }
+        user {
+          id
+          email
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId, input },
   });
 };

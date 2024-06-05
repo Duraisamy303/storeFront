@@ -3,6 +3,7 @@ import { apiSlice } from "../api/apiSlice";
 import { configuration } from "@/utils/constant";
 import {
   ADD_WISHLIST,
+  ADDRESS_LIST,
   CATEGORY_LIST,
   FEATURE_PRODUCT,
   FINISH_LIST,
@@ -18,14 +19,17 @@ import {
   PRODUCT_LIST,
   PRODUCT_SEARCH,
   STYLE_LIST,
+  UPDATE_ADDRESS,
+  UPDATE_BILLING_ADDRESS,
   UPDATE_EMAIL,
+  UPDATE_SHIPPING_ADDRESS,
   WISHLIST_LIST,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
   SINGLE_PRODUCT,
   NEXT_PRODUCT,
-  PREV_PRODUCT
+  PREV_PRODUCT,
 } from "@/utils/queries/singleProduct/productDetailsByID";
 import { useSelector } from "react-redux";
 import {
@@ -83,7 +87,6 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["TopRatedProducts"],
     }),
 
-
     // get single product
     getProduct: builder.query({
       query: ({ productId }) => {
@@ -103,8 +106,7 @@ export const productApi = apiSlice.injectEndpoints({
       ],
     }),
 
-
-    // get next product 
+    // get next product
     getNextProduct: builder.query({
       query: ({ nextProductId }) => {
         let channel = "";
@@ -119,22 +121,20 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
     }),
 
-
-      // get prev product 
-      getPrevProduct: builder.query({
-        query: ({ prevProductId }) => {
-          let channel = "";
-          const channels = localStorage.getItem("channel");
-          if (!channels) {
-            channel = "india-channel";
-          } else {
-            channel = channels;
-          }
-          return configuration(PREV_PRODUCT({ prevProductId, channel }));
-        },
-        providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
-      }),
-
+    // get prev product
+    getPrevProduct: builder.query({
+      query: ({ prevProductId }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(PREV_PRODUCT({ prevProductId, channel }));
+      },
+      providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
+    }),
 
     // get related products
     getRelatedProducts: builder.query({
@@ -412,8 +412,54 @@ export const productApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Products"],
     }),
+
+    getAddressList: builder.query({
+      query: () => {
+        return configuration(ADDRESS_LIST());
+      },
+      providesTags: ["Products"],
+    }),
+
+    updateBillingAddress: builder.mutation({
+      query: ({ addressId }) => {
+        console.log("addressId: ", addressId);
+        return configuration(
+          UPDATE_BILLING_ADDRESS({
+            addressId,
+          })
+        );
+      },
+    }),
+
+    updateShippingAddress: builder.mutation({
+      query: ({ addressId }) => {
+        console.log("addressId: ", addressId);
+        return configuration(
+          UPDATE_SHIPPING_ADDRESS({
+            addressId,
+          })
+        );
+      },
+    }),
+
+
+    updateAddress: builder.mutation({
+      query: ({ addressId, input }) => {
+        console.log("addressId,input: ", addressId, input);
+        return configuration(
+          UPDATE_ADDRESS({
+            addressId,
+            input,
+          })
+        );
+      },
+    }),
+
+
   }),
 });
+
+
 
 export const {
   useGetAllProductsQuery,
@@ -431,6 +477,7 @@ export const {
   useGetWishlistQuery,
   useGetProductByIdMutation,
   useGetCategoryListQuery,
+  useGetAddressListQuery,
   //filter
   usePriceFilterMutation,
   useGetFinishListQuery,
@@ -446,5 +493,8 @@ export const {
   useProductSearchMutation,
   useProduct20PercentageMutation,
   useGetParentCategoryListQuery,
-  
+  useUpdateBillingAddressMutation,
+  useUpdateShippingAddressMutation,
+  useUpdateAddressMutation,
+
 } = productApi;
