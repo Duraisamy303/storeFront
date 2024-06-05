@@ -70,20 +70,20 @@ export default function App({ Component, pageProps }) {
     }
   }, []);
 
-    function CommonLoader({ loading, spinner }) {
-      return (
-        <div
-          style={{
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-           <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
-        </div>
-      );
-    }
+  function CommonLoader({ loading, spinner }) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
+      </div>
+    );
+  }
 
   const channelList = [
     { name: "india-channel", value: "INR" },
@@ -96,40 +96,53 @@ export default function App({ Component, pageProps }) {
     window.location.reload();
   };
 
+  const paths = [
+    "/checkout",
+    "/cart",
+    "/profile",
+    "/login",
+    "/forgot",
+    "/register",
+    "/order-success",
+  ];
+
+  const isOrderSuccessPath = router.pathname.startsWith("/order-success");
+
   return (
     <ApolloProvider client={client}>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           {/* <Elements stripe={stripePromise}> */}
           <div id="root">
-            {router.pathname !== "/checkout" && router.pathname !== "/cart" && (
-              <div
-                style={{
-                  position: "fixed",
-                  zIndex: 999,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  right: 0,
-                }}
-              >
-                {channelList?.map((item, index) => (
-                  <div
-                    key={index}
-                    className={` p-2 mb-1 text-white`}
-                    style={{
-                      backgroundColor:
-                        channel == item.name ? "#c2882b" : "#000",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      handleChannelChange(item.name);
-                    }}
-                  >
-                    {item.value}
-                  </div>
-                ))}
-              </div>
-            )}
+            {!paths.includes(router.pathname) &&
+              !isOrderSuccessPath && (
+                <div
+                  style={{
+                    position: "fixed",
+                    zIndex: 999,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    right: 0,
+                  }}
+                >
+                  {channelList?.map((item, index) => (
+                    <div
+                      key={index}
+                      className={` p-2 mb-1 text-white`}
+                      style={{
+                        backgroundColor:
+                          channel == item.name ? "#c2882b" : "#000",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleChannelChange(item.name);
+                      }}
+                    >
+                      {item.value}
+                    </div>
+                  ))}
+                </div>
+              )}
             {loading ? (
               <CommonLoader loading={loading} />
             ) : (

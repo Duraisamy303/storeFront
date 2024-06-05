@@ -40,6 +40,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
         variants {
           id
           quantityAvailable
+          name
         }
         created
         description
@@ -86,7 +87,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
   });
 };
 
-export const NEXT_PRODUCT = ({nextProductId, channel}) => {
+export const NEXT_PRODUCT = ({ nextProductId, channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($nextProductId:ID!,$channel:String!) {
@@ -115,8 +116,7 @@ export const NEXT_PRODUCT = ({nextProductId, channel}) => {
   });
 };
 
-
-export const PREV_PRODUCT = ({prevProductId, channel}) => {
+export const PREV_PRODUCT = ({ prevProductId, channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($prevProductId:ID!,$channel:String!) {
@@ -144,7 +144,6 @@ export const PREV_PRODUCT = ({prevProductId, channel}) => {
     variables: { prevProductId, channel },
   });
 };
-
 
 export const RELATED_PRODUCT = ({ id, channel }) => {
   return JSON.stringify({

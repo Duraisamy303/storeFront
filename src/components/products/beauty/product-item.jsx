@@ -31,7 +31,6 @@ const ProductItem = ({
 }) => {
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
-  console.log("✌️relatedproduct --->", product);
 
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =

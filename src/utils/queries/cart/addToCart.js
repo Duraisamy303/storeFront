@@ -79,6 +79,7 @@ export const CART_LIST = ({ checkoutToken }) => {
                 id
                 name
                 slug
+               
                 thumbnail {
                   url
                   alt
@@ -95,6 +96,7 @@ export const CART_LIST = ({ checkoutToken }) => {
               name
               id
               quantityAvailable
+              sku
             }
             quantity
           }
