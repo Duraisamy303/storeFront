@@ -79,7 +79,6 @@ const DetailsThumbWrapper = ({
         <nav className="product-side-nav-img">
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => {
-console.log('✌️item --->', item);
               return(
               <button
                 key={i}

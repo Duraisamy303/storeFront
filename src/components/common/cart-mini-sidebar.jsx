@@ -68,10 +68,14 @@ const CartMiniSidebar = () => {
         checkChannel() === "india-channel"
           ? checkoutTokenUSD
           : checkoutTokenINR;
-
-      await removeToCart({ checkoutToken: checkoutTokenINR, lineId: val.id });
-      await removeToCart({ checkoutToken: checkoutToken, lineId: fine?.id });
-
+      await removeToCart({
+        checkoutToken: checkoutTokenINR,
+        lineId: val.id,
+      });
+      await removeToCart({
+        checkoutToken: checkoutToken,
+        lineId: fine?.id,
+      });
       cartRefetch();
       AllListChannelREfresh();
     } catch (error) {
@@ -150,6 +154,7 @@ const CartMiniSidebar = () => {
                                   item?.node?.name}
                               </Link>
                             </h5>
+                            <div>{item?.variant?.sku}</div>
                             <div className="cartmini__price-wrapper">
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
