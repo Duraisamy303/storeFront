@@ -37,7 +37,6 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
   const [wishlistLoader, setWishlistLoader] = useState(false);
 
   const RelatedProduct = product.node;
-  console.log("✌️RelatedProduct --->", RelatedProduct);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
