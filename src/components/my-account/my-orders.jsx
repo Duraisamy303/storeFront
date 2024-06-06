@@ -92,10 +92,25 @@ const OrderList = () => {
                       <button
                         type="button"
                         className="order-view-btn"
-                        onClick={() => router.push(`/order-details/${item?.id}`)}
+                        onClick={() =>
+                          router.push(`/order-details/${item?.id}`)
+                        }
+                        style={{ marginRight: "5px", marginBottom: "5px" }}
                       >
                         View
                       </button>
+
+                      {item?.invoices[0]?.url && (
+                        <button
+                          type="button"
+                          className="order-view-btn"
+                          onClick={() =>
+                            window.open(item?.invoices[0]?.url, "_blank")
+                          }
+                        >
+                          Invoice
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -121,7 +121,7 @@ export const ORDER_LIST = ({ orderId }) => {
 export const MY_ORDER_LIST = ({ first }) => {
   return JSON.stringify({
     query: `
-    query Myorders($first:Int!) {
+    query Myorders($first: Int!) {
       me {
         email
         orders(first: $first) {
@@ -147,6 +147,10 @@ export const MY_ORDER_LIST = ({ first }) => {
                 }
               }
               created
+              invoices {
+                id
+                url
+              }
             }
           }
         }
@@ -1130,5 +1134,23 @@ export const UPDATE_ADDRESS = ({ addressId, input }) => {
     }
     `,
     variables: { addressId, input },
+  });
+};
+
+export const DELETE_ADDRESS = ({ id }) => {
+  return JSON.stringify({
+    query: `
+    mutation DeleteAddress($id: ID!) {
+      accountAddressDelete(id: $id) {
+        errors {
+          addressType
+          code
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { id },
   });
 };

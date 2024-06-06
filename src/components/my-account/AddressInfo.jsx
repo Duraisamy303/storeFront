@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useCountryListQuery,
+  useDeleteAddressMutation,
   useGetAddressListQuery,
   useStateListQuery,
   useUpdateAddressMutation,
@@ -71,6 +72,8 @@ const AddressInfo = () => {
   }, [selectedCountry]);
 
   const [updateAddress, {}] = useUpdateAddressMutation();
+
+  const [deleteAddress] = useDeleteAddressMutation();
 
   const [defaultBillingAddress, {}] = useUpdateBillingAddressMutation();
 
@@ -159,11 +162,23 @@ const AddressInfo = () => {
     setValue("countryArea", value);
   };
 
-
-
-
-
-
+  const handleSettingDeleteAddress = (data) => {
+    deleteAddress({
+      id: data?.id,
+    })
+      .then((result) => {
+        if (result?.error) {
+          notifyError(result?.error?.data?.message);
+        } else {
+          notifySuccess("Address deleted successfully.");
+          setShowSettingsBox(null);
+          getAddressListRefetch();
+        }
+      })
+      .catch((error) => {
+        notifyError("An error occurred while deleting the address.");
+      });
+  };
 
   const handleSettingDefaultBIllingClick = (data) => {
     defaultBillingAddress({
@@ -203,8 +218,6 @@ const AddressInfo = () => {
       });
   };
 
-
-
   return (
     <div>
       <h4 className="mb-4" style={{ fontWeight: "500" }}>
@@ -219,7 +232,27 @@ const AddressInfo = () => {
               style={{ marginBottom: "50px" }}
               onClick={() => handleAddressClick(address)} // Add onClick event handler
             >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding:
+                    address?.isDefaultBillingAddress ||
+                    address?.isDefaultShippingAddress
+                      ? "15px"
+                      : "0",
+                  borderRadius:
+                    address?.isDefaultBillingAddress ||
+                    address?.isDefaultShippingAddress
+                      ? "10px"
+                      : "0",
+                  background:
+                    address?.isDefaultBillingAddress ||
+                    address?.isDefaultShippingAddress
+                      ? "#ffe3be"
+                      : "white",
+                }}
+              >
                 <div>
                   {address?.isDefaultBillingAddress && (
                     <h5 style={{ color: "black", fontWeight: "500" }}>
@@ -287,6 +320,7 @@ const AddressInfo = () => {
                             cursor: "pointer",
                             paddingBottom: "10px",
                             lineHeight: "20px",
+                            fontWeight: "500",
                           }}
                           onClick={() =>
                             handleSettingDefaultBIllingClick(address)
@@ -299,6 +333,7 @@ const AddressInfo = () => {
                             cursor: "pointer",
                             paddingBottom: "10px",
                             lineHeight: "20px",
+                            fontWeight: "500",
                           }}
                           onClick={() =>
                             handleSettingDefaultShippingClick(address)
@@ -311,12 +346,20 @@ const AddressInfo = () => {
                             cursor: "pointer",
                             paddingBottom: "10px",
                             lineHeight: "20px",
+                            fontWeight: "500",
                           }}
                           onClick={() => handleSettingEditClick(address)}
                         >
                           Edit Address
                         </li>
-                        <li style={{ cursor: "pointer", lineHeight: "18px" }}>
+                        <li
+                          style={{
+                            cursor: "pointer",
+                            lineHeight: "18px",
+                            fontWeight: "500",
+                          }}
+                          onClick={() => handleSettingDeleteAddress(address)}
+                        >
                           Delete Address
                         </li>
                       </ul>

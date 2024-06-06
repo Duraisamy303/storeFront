@@ -5,6 +5,7 @@ import {
   ADD_WISHLIST,
   ADDRESS_LIST,
   CATEGORY_LIST,
+  DELETE_ADDRESS,
   FEATURE_PRODUCT,
   FINISH_LIST,
   GET_PRODUCTLIST_BY_ID,
@@ -455,6 +456,17 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
+    deleteAddress: builder.mutation({
+      query: ({ id }) => {
+        console.log("id: ", id);
+        return configuration(
+          DELETE_ADDRESS({
+            id,
+          })
+        );
+      },
+    }),
+
 
   }),
 });
@@ -496,5 +508,6 @@ export const {
   useUpdateBillingAddressMutation,
   useUpdateShippingAddressMutation,
   useUpdateAddressMutation,
+  useDeleteAddressMutation,
 
 } = productApi;
