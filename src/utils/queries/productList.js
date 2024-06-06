@@ -318,6 +318,8 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
   });
 };
 
+
+
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
@@ -993,6 +995,45 @@ export const PRODUCT_20_PERCENTAGE = ({
     variables: { channel, first, after, collectionid },
   });
 };
+
+
+export const SUB_CAT_LIST = ({ parentid }) => {
+  return {
+    query: `
+    query GetSubCategoryList($parentid: ID!) {
+      category(id: $parentid) {
+        id
+        name
+        children(first: 100) {
+          edges {
+            node {
+              id
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+      `,
+    variables: { parentid },
+  };
+};
+
+
+export const CATEGORY_NAME = ({ categoryid }) => {
+  return JSON.stringify({
+    query: `
+    query GetCategoryName($categoryid: ID!) {
+      category(id:$categoryid){
+        name    
+      }
+    }
+      `,
+    variables: { categoryid },
+  })
+
+}
 
 // address section
 

@@ -6,6 +6,7 @@ import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
 import {
   useGetAllProductsQuery,
+  useGetCategoryNameMutation,
   useGetParentCategoryListQuery,
   usePriceFilterMutation,
 } from "@/redux/features/productApi";
@@ -35,6 +36,8 @@ const ShopPage = () => {
     isError,
     isLoading,
   } = useGetAllProductsQuery({ channel: "india-channel", first: 500 });
+
+  const [getCategoryName] = useGetCategoryNameMutation();
 
   const router = useRouter();
   console.log("✌️router --->", router);
@@ -105,7 +108,7 @@ const ShopPage = () => {
 
   const { data: data } = useGetCartListQuery();
   const { data: categoryData } = useGetParentCategoryListQuery();
-console.log('✌️categoryData --->', categoryData);
+
 
   const [priceFilter, {}] = usePriceFilterMutation();
 
@@ -121,6 +124,15 @@ console.log('✌️categoryData --->', categoryData);
   const [filterList, setFilterList] = useState([]);
 
   const [currPage, setCurrPage] = useState(1);
+
+  
+  const [catName, setCatName] = useState("");
+
+  useEffect(() => {
+    if (router?.query?.categoryId) {
+      filterByCategoryName();
+    }
+  }, [router]);
 
   useEffect(() => {
     if (!isLoading && !isError && products?.length > 0) {
@@ -300,16 +312,24 @@ console.log('✌️categoryData --->', categoryData);
       dispatch(handleFilterSidebarClose());
     });
   };
-  const categoryAllDatas = categoryData?.data?.categories?.edges || [];
 
-  const categoryName = categoryAllDatas
-    .filter((item) => item?.node?.id === router?.query?.categoryId)
-    .map((item) => item?.node?.name)[0];
+
+
+
+  const filterByCategoryName = async () => {
+    try {
+      const res = await getCategoryName({
+        categoryid: router?.query?.categoryId,
+      });
+      const list = res?.data?.data?.category?.name;
+      setCatName(list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const shopTitle =
-  router.query && router.query.categoryId
-    ? `Shop / ${categoryName}`
-    : "Shop";
+    router.query && router.query.categoryId ? `Shop / ${catName}` : "Shop";
 
   return (
     <Wrapper>

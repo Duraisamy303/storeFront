@@ -5,6 +5,7 @@ import {
   ADD_WISHLIST,
   ADDRESS_LIST,
   CATEGORY_LIST,
+  CATEGORY_NAME,
   DELETE_ADDRESS,
   FEATURE_PRODUCT,
   FINISH_LIST,
@@ -20,6 +21,7 @@ import {
   PRODUCT_LIST,
   PRODUCT_SEARCH,
   STYLE_LIST,
+  SUB_CAT_LIST,
   UPDATE_ADDRESS,
   UPDATE_BILLING_ADDRESS,
   UPDATE_EMAIL,
@@ -414,6 +416,19 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    subCatList: builder.mutation({
+      query: ({ parentid }) => {
+        return configuration(SUB_CAT_LIST({ parentid }));
+      },
+    }),
+
+    getCategoryName: builder.mutation({
+      query: ({categoryid}) => {
+        return configuration(CATEGORY_NAME({categoryid}));
+      },
+      providesTags: ["Products"],
+    }),
+
     getAddressList: builder.query({
       query: () => {
         return configuration(ADDRESS_LIST());
@@ -509,5 +524,7 @@ export const {
   useUpdateShippingAddressMutation,
   useUpdateAddressMutation,
   useDeleteAddressMutation,
+  useSubCatListMutation,
+  useGetCategoryNameMutation  
 
 } = productApi;

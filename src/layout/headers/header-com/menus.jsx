@@ -7,7 +7,9 @@ import { RightOutlined } from "@ant-design/icons";
 import {
   useFeatureProductQuery,
   useGetProductTypeQuery,
+  useGetSubCategoryListQuery,
   usePriceFilterMutation,
+  useSubCatListMutation,
 } from "@/redux/features/productApi";
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,8 +18,8 @@ import { HomeTwoPopularPrdLoader } from "@/components/loader";
 import CommonImage from "@assets/img/earring-menu-pic-1.png";
 
 const slider_setting = {
-  slidesPerView: 5,
-  spaceBetween: 25,
+  slidesPerView: 4,
+  spaceBetween: 10,
   pagination: {
     el: ".tp-category-slider-dot-4",
     clickable: true,
@@ -44,28 +46,56 @@ const slider_setting = {
   },
 };
 
-const CategoryContent = ({ title, commonImage, children }) => (
+
+
+const CategoryContent = ({ title, commonImage, children, lists }) => {
+  const router = useRouter();
+  return (
   <div className="row" style={{ paddingBottom: "30px" }}>
     <div className="col-3" style={{ paddingLeft: "30px" }}>
       <div style={{ paddingLeft: "25px" }}>
         <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
       </div>
       <div>
-        <Image
-          src={commonImage}
-          alt="category image" 
-          style={{ width: "100%", height: "200px" }}
-        />
+        <ul>
+          {lists?.slice(0, 12)?.map((item) => {
+            return (
+              <li style={{ paddingLeft:"25px", cursor: "pointer", marginBottom:"5px" }} key={item?.node?.id}
+                onClick={() => {
+                  router?.push({
+                    pathname: "/shop",
+                    query: { categoryId: item?.node?.id }, // Your parameters
+                  });
+                }}
+              >
+                <p style={{ fontWeight: "500", marginBottom: "0px", color:"gray" }}>{item?.node?.name}</p>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-      <div style={{ textAlign: "center", padding: "20px 0px" }}>
-        <h4 style={{ fontWeight: "400" }}>
-          Excepteur sint occaecat
-          <br /> cupidatat
-        </h4>
-        <button className="tp-btn tp-btn-border">
-          <Link href="/shop">Shop Now</Link>
-        </button>
-      </div>
+      {lists?.length > 3 ? (
+        <></>
+      ) : (
+        <div>
+          <div>
+            <Image
+              src={commonImage}
+              alt="category image"
+              style={{ width: "100%", height: "200px" }}
+            />
+          </div>
+          <div style={{ textAlign: "center", padding: "20px 0px" }}>
+            <h4 style={{ fontWeight: "400" }}>
+              Excepteur sint occaecat
+              <br /> cupidatat
+            </h4>
+            <button className="tp-btn tp-btn-border">
+              <Link href="/shop">Shop Now</Link>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
     <div className="col-9">
       <div className="row" style={{ padding: "20px" }}>
@@ -73,13 +103,20 @@ const CategoryContent = ({ title, commonImage, children }) => (
       </div>
     </div>
   </div>
-);
+);}
 
-const CategoryComponent = ({ commonImage, lastHoveredCategory, setLastHoveredCategory }) => {
+const CategoryComponent = ({
+  commonImage,
+  lastHoveredCategory,
+  setLastHoveredCategory,
+}) => {
   const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [priceFilter, {}] = usePriceFilterMutation();
   const [productList, setProductList] = useState([]);
+  const [subCategoryLists, setSubCategoryLists] = useState([]);
+
+  const [subCatList] = useSubCatListMutation();
 
   const handleCategoryHover = (category) => {
     setHoveredCategory(category);
@@ -95,26 +132,40 @@ const CategoryComponent = ({ commonImage, lastHoveredCategory, setLastHoveredCat
     filterByCategory();
   }, [hoveredCategory, lastHoveredCategory]);
 
-  const filterByCategory = () => {
+  const filterByCategory = async () => {
     let categoryId = "";
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
       categoryId = "Q2F0ZWdvcnk6NQ==";
-    } else if (hoveredCategory === "Necklaces" || lastHoveredCategory === "Necklaces") {
+    } else if (
+      hoveredCategory === "Necklaces" ||
+      lastHoveredCategory === "Necklaces"
+    ) {
       categoryId = "Q2F0ZWdvcnk6NzA=";
-    } else if (hoveredCategory === "Bangles" || lastHoveredCategory === "Bangles") {
+    } else if (
+      hoveredCategory === "Bangles" ||
+      lastHoveredCategory === "Bangles"
+    ) {
       categoryId = "Q2F0ZWdvcnk6Njc=";
     } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
       categoryId = "Q2F0ZWdvcnk6MTIwNw==";
-    } else if (hoveredCategory === "Anklets" || lastHoveredCategory === "Anklets") {
+    } else if (
+      hoveredCategory === "Anklets" ||
+      lastHoveredCategory === "Anklets"
+    ) {
       categoryId = "Q2F0ZWdvcnk6NzM1";
     }
 
+    const SubCategory = await subCatList({
+      parentid: categoryId,
+    });
+
+    setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
+
     priceFilter({ filter: { categories: categoryId } }).then((res) => {
-      const list = res?.data?.data?.products?.edges?.slice(0,11);
+      const list = res?.data?.data?.products?.edges?.slice(0, 11);
       setProductList(list);
     });
   };
-
   const renderContent = () => {
     if (productList.length === 0) return null;
 
@@ -150,31 +201,38 @@ const CategoryComponent = ({ commonImage, lastHoveredCategory, setLastHoveredCat
     switch (hoveredCategory || lastHoveredCategory) {
       case "Earrings":
         return (
-          <CategoryContent title="ALL EARRINGS" commonImage={CommonImage}>
+          <CategoryContent
+            title="ALL EARRINGS"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+          >
             {renderContent()}
           </CategoryContent>
         );
       case "Necklaces":
         return (
-          <CategoryContent title="ALL NECKLACES" commonImage={CommonImage}>
+          <CategoryContent title="ALL NECKLACES" commonImage={CommonImage} lists={subCategoryLists}>
             {renderContent()}
           </CategoryContent>
         );
       case "Bangles":
         return (
-          <CategoryContent title="ALL BANGLES & BRACELETS" commonImage={CommonImage}>
+          <CategoryContent
+            title="ALL BANGLES & BRACELETS"
+            commonImage={CommonImage} lists={subCategoryLists}
+          >
             {renderContent()}
           </CategoryContent>
         );
       case "Rings":
         return (
-          <CategoryContent title="ALL RINGS" commonImage={CommonImage}>
+          <CategoryContent title="ALL RINGS" commonImage={CommonImage} lists={subCategoryLists}>
             {renderContent()}
           </CategoryContent>
         );
       case "Anklets":
         return (
-          <CategoryContent title="ALL ANKLETS" commonImage={CommonImage}>
+          <CategoryContent title="ALL ANKLETS" commonImage={CommonImage} lists={subCategoryLists}>
             {renderContent()}
           </CategoryContent>
         );
@@ -189,7 +247,7 @@ const CategoryComponent = ({ commonImage, lastHoveredCategory, setLastHoveredCat
 const Menus = () => {
   const router = useRouter();
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
-  
+
   return (
     <ul style={{ display: "flex", justifyContent: "end" }}>
       <li>
@@ -424,7 +482,7 @@ const Menus = () => {
       </li>
       <li>
         <Link href="/contact" style={{ fontWeight: "500" }}>
-          CONTACT US 
+          CONTACT US
         </Link>
       </li>
     </ul>
