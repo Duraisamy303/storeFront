@@ -35,6 +35,7 @@ const ProductDetailsArea = ({ productItem }) => {
                 product={productItem}
                 imgWidth={800}
                 imgHeight={740}
+                imgHeightMobile={450}
                 videoId={videoId}
                 status={status}
               />

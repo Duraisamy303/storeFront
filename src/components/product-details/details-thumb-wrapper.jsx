@@ -11,6 +11,7 @@ const DetailsThumbWrapper = ({
   videoId,
   status,
   product,
+  imgHeightMobile,
 }) => {
   const imageUrls = product?.images?.map((item) => item?.url);
 
@@ -101,11 +102,11 @@ const DetailsThumbWrapper = ({
             })}
           </div>
         </nav>
-        <div className="tab-content m-img">
-          <div className="tab-pane fade show active">
+        <div className="tab-content m-img details-section-main-image">
+          <div className="tab-pane fade show active details-section-main-image-cover">
             <div
               className="tp-product-details-nav-main-thumb p-relative"
-              style={{ overflow: "hidden" }}
+              style={{ overflow: "hidden", display:"flex", justifyContent:"center" }}
             >
               {loading ? (
                 <Loader />
@@ -134,13 +135,13 @@ const DetailsThumbWrapper = ({
                       alt="product img"
                       width={imgWidth}
                       height={imgHeight}
+                      className="imageHover"
                       style={{
-                        width: "100%",
-                        height: "auto",
                         cursor: "pointer",
                         transform: isZoomed ? "scale(2)" : "scale(1)",
                         transformOrigin: backgroundPosition,
                         transition: "transform 0.1s ease-in-out",
+                      
                       }}
                     />
                   </div>
@@ -154,7 +155,7 @@ const DetailsThumbWrapper = ({
                       padding: "10px",
                       background: "white",
                       borderRadius: "50%",
-                      zIndex: 999,
+                      zIndex: 1,
                     }}
                     onClick={() => handleImageClick(selectedImageIndex)}
                   />
@@ -262,8 +263,8 @@ const DetailsThumbWrapper = ({
           <Image
             src={imageUrls[selectedImageIndex]}
             alt="Lightbox"
-            width={imgWidth}
-            height={imgHeight}
+            width={imgWidth }
+            height={imgHeight }
             style={{
               width: "100%",
               maxWidth: "90%",
