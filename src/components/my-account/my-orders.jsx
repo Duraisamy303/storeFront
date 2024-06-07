@@ -50,7 +50,6 @@ const OrderList = () => {
             ondismiss: async (res) => {
               // console.log("res: ", res);
               // router.push(`/order-failed/${orderId}`);
-
               // await paymentFailed(orderId);
               // paymentFaildRefetch();
             },
@@ -190,6 +189,17 @@ const OrderList = () => {
                       >
                         Cancel
                       </button>
+                      {item?.invoices[0]?.url && (
+                        <button
+                          type="button"
+                          className="order-view-btn"
+                          onClick={() =>
+                            window.open(item?.invoices[0]?.url, "_blank")
+                          }
+                        >
+                          Invoice
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

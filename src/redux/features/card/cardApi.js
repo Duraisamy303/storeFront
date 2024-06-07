@@ -26,11 +26,12 @@ import {
   UPDATE_BILLING_ADDRESS,
   UPDATE_CART_QUANTITY,
   CHECKOUT_PAYMENT_METHOD_UPDATE,
+  UPDATE_SHIPPING_ADDRESS,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
 import {
   GET_CHECKOUT_DETAILS,
-  UPDATE_SHIPPING_ADDRESS,
+
 } from "../../../utils/queries/cart/addToCart";
 import { checkChannel } from "@/utils/functions";
 
@@ -182,12 +183,15 @@ export const cardApi = apiSlice.injectEndpoints({
         let deliveryMethodId = "";
         //COD and GiftWrap are false
         if (checkChannel() == "india-channel") {
+          console.log(" if : ",  );
           if (country == "IN") {
             deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
           } else {
             deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6NA==";
           }
         } else {
+          console.log(" else: ",  );
+
           if (country == "IN") {
             deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6OA==";
           } else {

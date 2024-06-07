@@ -6,6 +6,8 @@ import { handleModalClose } from "@/redux/features/productModalSlice";
 import DetailsThumbWrapper from "@/components/product-details/details-thumb-wrapper";
 import DetailsWrapper from "@/components/product-details/details-wrapper";
 import { initialOrderQuantity } from "@/redux/features/cartSlice";
+import DetailsWrapperQuick from "@/components/product-details/details-wrapper-quick";
+import DetailsThumbWrapperQuick from "@/components/product-details/details-thumb-wrapper-quick";
 
 const customStyles = {
   content: {
@@ -24,7 +26,8 @@ const ProductModal = () => {
     (state) => state.productModal
   );
 
-  const { img, imageURLs, status } = productItem || {};
+  const { img, imageURLs, status, sku } = productItem || {};
+console.log('✌️productItem --->', productItem);
   const imageUrls = productItem?.images?.map((item) => item?.url);
 
   const [activeImg, setActiveImg] = useState(img);
@@ -58,11 +61,11 @@ const ProductModal = () => {
               <i className="fa-regular fa-xmark"></i>
             </button>
             {/* product-details-thumb-wrapper start */}
-            <DetailsThumbWrapper product={productItem} status={status} />
+            <DetailsThumbWrapperQuick product={productItem} status={status} />
             {/* product-details-thumb-wrapper end */}
 
             {/* product-details-wrapper start */}
-            <DetailsWrapper
+            <DetailsWrapperQuick
               productItem={productItem}
               // handleImageActive={handleImageActive}
               activeImg={activeImg}

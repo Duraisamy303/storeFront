@@ -28,6 +28,7 @@ const ProfileInfo = () => {
   });
   // on submit
   const onSubmit = (data) => {
+console.log('✌️data --->', data);
     updateProfile({
       id:user?._id,
       name:data.name,

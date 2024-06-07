@@ -67,7 +67,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const [updateBillingAddress] = useUpdateBillingAddressMutation();
 
-  const [updateShippingAddress] = useUpdateShippingAddressMutation();
+  const [checkoutShippingAddressUpdate] = useUpdateShippingAddressMutation();
 
   const [emailUpdate] = useUpdateEmailMutation();
 
@@ -400,7 +400,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
             res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
           );
         } else {
-          const response = await updateShippingAddress({
+          const response = await checkoutShippingAddressUpdate({
             checkoutId,
             shippingAddress,
           });
@@ -598,19 +598,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handleSelectChange = async (e) => {
+    console.log("handleSelectChange: ");
     try {
       setState({ selectedCountry: e.target.value, selectedState: "" });
       stateRefetch();
-      if (!state.diffAddress) {
-        const checkoutId = localStorage.getItem("checkoutId");
-        await updateShippingAddress({
-          checkoutId,
-          shippingAddress: {
-            country: e.target.value,
-          },
-        });
-        updateDelivertMethod(e.target.value);
-      }
+      // if (!state.diffAddress) {
+      const checkoutId = localStorage.getItem("checkoutId");
+      console.log("checkoutId: ", checkoutId);
+      const res = await checkoutShippingAddressUpdate({
+        checkoutId,
+        shippingAddress: {
+          country: e.target.value,
+        },
+      });
+      console.log("res: ", res);
+
+      updateDelivertMethod(e.target.value);
+      // }
     } catch (error) {
       console.log("error: ", error);
     }
@@ -624,7 +628,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       });
       stateRefetch();
       const checkoutId = localStorage.getItem("checkoutId");
-      await updateShippingAddress({
+      await checkoutShippingAddressUpdate({
         checkoutId,
         shippingAddress: {
           country: e.target.value,
@@ -796,17 +800,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
     );
 
     const checkedOption = updatedPaymentType.find((item) => item.checked)?.name;
-    console.log("checkedOption: ", checkedOption);
 
     if (checkedOption == "Cash On delivery") {
       if (state.checkedGiftwrap) {
-        checkedGiftWrap_checkedCOD();
+        checkedGiftWrap_checkedCOD(state.checkedGiftwrap);
       } else {
-        unCheckedGiftWrap_checkedCOD();
+        unCheckedGiftWrap_checkedCOD(state.checkedGiftwrap);
       }
     } else {
       if (state.checkedGiftwrap) {
-        checkedGiftWrap_uncheckedCOD();
+        checkedGiftWrap_uncheckedCOD(state.checkedGiftwrap);
       } else {
         if (state.diffAddress) {
           updateDelivertMethod(state.selectedCountry1);
@@ -838,15 +841,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
   const handleGiftWrapChanged = (checked) => {
+    setState({ checkedGiftwrap: checked });
     if (checked) {
       if (state.selectedPaymentType == "Cash On delivery") {
-        checkedGiftWrap_checkedCOD();
+        checkedGiftWrap_checkedCOD(checked);
       } else {
-        checkedGiftWrap_uncheckedCOD();
+        checkedGiftWrap_uncheckedCOD(checked);
       }
     } else {
       if (state.selectedPaymentType == "Cash On delivery") {
-        unCheckedGiftWrap_checkedCOD();
+        unCheckedGiftWrap_checkedCOD(checked);
       } else {
         if (state.diffAddress) {
           updateDelivertMethod(state.selectedCountry1);
@@ -857,37 +861,40 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  const checkedGiftWrap_uncheckedCOD = () => {
+  const checkedGiftWrap_uncheckedCOD = (checked) => {
     let deliveryMethodId = "";
     if (checkChannel() == "india-channel") {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTA=";
     } else {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTI=";
     }
-    updateDelivertMethodCodAndGift(deliveryMethodId);
+    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
   };
 
-  const unCheckedGiftWrap_checkedCOD = () => {
+  const unCheckedGiftWrap_checkedCOD = (checked) => {
     let deliveryMethodId = "";
     if (checkChannel() == "india-channel") {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTQ=";
     } else {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTY=";
     }
-    updateDelivertMethodCodAndGift(deliveryMethodId);
+    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
   };
 
-  const checkedGiftWrap_checkedCOD = () => {
+  const checkedGiftWrap_checkedCOD = (checked) => {
     let deliveryMethodId = "";
     if (checkChannel() == "india-channel") {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTc=";
     } else {
       deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTg=";
     }
-    updateDelivertMethodCodAndGift(deliveryMethodId);
+    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
   };
 
-  const updateDelivertMethodCodAndGift = async (deliveryMethodId) => {
+  const updateDelivertMethodCodAndGift = async (
+    deliveryMethodId,
+    checked = false
+  ) => {
     try {
       const checkoutid = localStorage.getItem("checkoutId");
       const res = await updateDeliveryMethodCODAndGiftWrap({
@@ -897,12 +904,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const data = res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
       //Reduce 50 repee if giftwrap true
       let shippingCost = "";
-      if (!state.checkedGiftwrap) {
+      console.log("checked: ", checked);
+
+      if (checked) {
         shippingCost = data?.shippingPrice?.gross?.amount - 50;
       } else {
         shippingCost = data?.shippingPrice?.gross?.amount;
       }
-      console.log("shippingCost: ", shippingCost);
 
       setState({
         total: data?.totalPrice?.gross?.amount,
@@ -1723,7 +1731,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           type="checkbox"
                           checked={state.checkedGiftwrap}
                           onChange={(e) => {
-                            setState({ checkedGiftwrap: e.target.checked });
+                            console.log("e.target.checked: ", e.target.checked);
                             checkoutGiftWrapUpdate(e.target.checked);
                             handleGiftWrapChanged(e.target.checked);
                           }}
