@@ -5,10 +5,8 @@ import React from "react";
 const MyOrderDetails = ({ data }) => {
   const Data = data?.data?.order;
   const SubTotal = data?.data?.order?.subtotal.gross;
-  const Total = data?.data?.order?.total.gross.amount;
+  const Total = data?.data?.order?.total.gross;
   const ShippingAmount = data?.data?.order?.shippingPrice;
-  console.log("data?.data?.order: ", data?.data?.order);
-  console.log("ShippingAmount: ", ShippingAmount);
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -64,23 +62,18 @@ const MyOrderDetails = ({ data }) => {
 
                 <td>
                   {ShippingAmount?.gross?.currency == "USD" ? "$" : "₹"}
-                {roundOff(ShippingAmount?.gross?.amount)}
+                  {roundOff(ShippingAmount?.gross?.amount)}
                 </td>
               </tr>
 
               <tr>
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>
-                {checkChannel() === "india-channel" ? (
-                  <>
-                    <td style={{ fontSize: "20px" }}>
-                      &#8377;{roundOff(Total)}
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td style={{ fontSize: "20px" }}>${roundOff(Total)}</td>
-                  </>
-                )}
+
+                <td style={{ fontSize: "20px" }}>
+                  {Total?.currency == "USD" ? "$" : "₹"}
+
+                  {roundOff(Total?.amount)}
+                </td>
               </tr>
             </tbody>
           </table>

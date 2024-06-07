@@ -118,6 +118,7 @@ export const ORDER_LIST = ({ orderId }) => {
         shippingPrice {
           gross {
             amount
+            currency
           }
         }
       }

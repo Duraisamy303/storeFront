@@ -22,7 +22,6 @@ const OrderList = () => {
     isLoading,
     refetch: orderListRefetch,
   } = useMyOrderListQuery();
-  console.log("orders: ", orders);
 
   const [orderList, setOrderList] = useState([]);
   const [cancelLoading, setCancelLoading] = useState(false);
@@ -179,7 +178,11 @@ const OrderList = () => {
                       {item.status}
                     </td>
                     <td>
-                      {`${item?.total?.gross?.amount} for  ${item?.lines?.length} item`}
+                      {`${
+                        item?.total?.gross?.currency == "USD" ? "$" : "₹"
+                      }${roundOff(item?.total?.gross?.amount)} for  ${
+                        item?.lines?.length
+                      } item`}
                     </td>
                     {/* <td >
                             <Link
@@ -195,7 +198,6 @@ const OrderList = () => {
                           type="button"
                           className="order-view-btn"
                           onClick={() => {
-                            console.log("item", item);
                             handlePayment(
                               item?.total?.gross?.amount,
                               item?.total?.gross?.currency,
