@@ -1636,8 +1636,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 {/* giftCards */}
 
                 {state?.giftCard?.length > 0 &&
-                  state?.giftCard?.map((item) => (
-                    <li className="tp-order-info-list-total">
+                  state?.giftCard?.map((item,i) => (
+                    <li className="tp-order-info-list-total" key={i}>
                       <span className="para">Coupen code</span>
                       {checkChannel() == "india-channel" ? (
                         <span>

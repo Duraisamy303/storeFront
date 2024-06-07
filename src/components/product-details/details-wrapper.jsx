@@ -726,7 +726,7 @@ const DetailsWrapper = ({
           }}
         >
           {productItem?.variants?.map((item, i) => (
-            <button
+            <button key={i}
               onClick={() => {
                 setVariantId(item?.id);
                 setIndex(i);

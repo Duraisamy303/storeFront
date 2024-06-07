@@ -1,4 +1,5 @@
 
+import { useGetCartAllListQuery, useGetCartListQuery } from "@/redux/features/card/cardApi";
 import { cart_list } from "@/redux/features/cartSlice";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";

@@ -1,5 +1,6 @@
 import React from "react";
 import ProductItem from "../products/fashion/product-item";
+import Link from "next/link";
 
 export default function Newshops(props) {
   const {
@@ -41,7 +42,7 @@ export default function Newshops(props) {
           >
             <div>
               <span>
-                <a href="/">Home</a>
+                <Link href="/">Home</Link>
               </span>{" "}
               /{" "}
               <span style={{ color: "black", fontWeight: "600" }}>

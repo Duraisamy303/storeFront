@@ -13,6 +13,7 @@ import ShopTopRight from "./shop-top-right";
 import ResetButton from "./shop-filter/reset-button";
 import { useDispatch, useSelector } from "react-redux";
 import { filterData } from "@/redux/features/shop-filter-slice";
+import Link from "next/link";
 
 const ShopArea = ({
   all_products,
@@ -121,7 +122,7 @@ const ShopArea = ({
           >
             <div>
               <span>
-                <a href="/">Home</a>
+                <Link href="/">Home</Link>
               </span>{" "}
               /{" "}
               <span style={{ color: "black", fontWeight: "600" }}>
