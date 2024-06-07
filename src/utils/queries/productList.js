@@ -111,6 +111,15 @@ export const ORDER_LIST = ({ orderId }) => {
         isPaid
         paymentStatus
         created
+        isGiftWrap
+        paymentMethod {
+          name
+        }
+        shippingPrice {
+          gross {
+            amount
+          }
+        }
       }
     }
     `,
@@ -1077,37 +1086,37 @@ export const ADDRESS_LIST = () => {
   });
 };
 
-export const UPDATE_BILLING_ADDRESS = ({ addressId }) => {
-  return JSON.stringify({
-    query: `
-    mutation SetDefaultBillingAddress($addressId: ID!) {
-      accountSetDefaultAddress(id: $addressId, type: BILLING) {
-        user {
-          id
-          email
-          defaultBillingAddress {
-            id
-            firstName
-            lastName
-            streetAddress1
-            city
-            postalCode
-            country {
-              code
-              country
-            }
-          }
-        }
-        errors {
-          field
-          message
-        }
-      }
-    }
-    `,
-    variables: { addressId },
-  });
-};
+// export const UPDATE_BILLING_ADDRESS = ({ addressId }) => {
+//   return JSON.stringify({
+//     query: `
+//     mutation SetDefaultBillingAddress($addressId: ID!) {
+//       accountSetDefaultAddress(id: $addressId, type: BILLING) {
+//         user {
+//           id
+//           email
+//           defaultBillingAddress {
+//             id
+//             firstName
+//             lastName
+//             streetAddress1
+//             city
+//             postalCode
+//             country {
+//               code
+//               country
+//             }
+//           }
+//         }
+//         errors {
+//           field
+//           message
+//         }
+//       }
+//     }
+//     `,
+//     variables: { addressId },
+//   });
+// };
 
 export const UPDATE_SHIPPING_ADDRESS = ({ addressId }) => {
   return JSON.stringify({

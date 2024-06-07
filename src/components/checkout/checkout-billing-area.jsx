@@ -345,7 +345,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       }
     } catch (error) {
       notifyError(error);
-
+      setState({ orderLoading: false });
       console.error("Error:", error);
     }
   };
@@ -396,6 +396,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         });
 
         if (res?.data?.data?.checkoutBillingAddressUpdate?.errors?.length > 0) {
+          setState({ orderLoading: false });
           notifyError(
             res?.data?.data?.checkoutBillingAddressUpdate?.errors[0]?.message
           );
@@ -409,6 +410,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
             response.data?.data?.checkoutShippingAddressUpdate?.errors?.length >
             0
           ) {
+            setState({ orderLoading: false });
             notifyError(
               response?.data?.data?.checkoutShippingAddressUpdate?.errors[0]
                 ?.message
@@ -423,6 +425,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       }
     } catch (error) {
       notifyError(error);
+      setState({ orderLoading: false });
       console.log("error: ", error);
     }
   };
@@ -434,12 +437,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
         email: state.diffAddress ? state.email1 : state.email,
       });
       if (res?.data?.data?.checkoutEmailUpdate?.errors?.length > 0) {
+        setState({ orderLoading: false });
         notifyError(res?.data?.data?.checkoutEmailUpdate?.errors[0]?.message);
       } else {
         checkoutCompletes(checkoutId);
         // handlePayment(checkoutId);
       }
     } catch (error) {
+      setState({ orderLoading: false });
       console.log("error: ", error);
     }
   };
@@ -447,6 +452,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       const completeResponse = await checkoutComplete({ id: checkoutId });
       if (completeResponse?.data?.data?.checkoutComplete?.errors?.length > 0) {
+        setState({ orderLoading: false });
         notifyError(
           completeResponse?.data?.data?.checkoutComplete?.errors[0]?.message
         );
@@ -455,8 +461,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
           completeResponse?.data?.data?.checkoutComplete?.order?.id;
         const checkedOption = state.paymentType.find(
           (item) => item.checked
-        )?.label;
-        if (checkedOption == "COD") {
+        )?.name;
+        if (checkedOption == "Cash On delivery") {
           localStorage.removeItem("checkoutTokenUSD");
           localStorage.removeItem("checkoutTokenINR");
           dispatch(cart_list([]));
@@ -475,6 +481,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
         // );
       }
     } catch (error) {
+      setState({ orderLoading: false });
+
       console.log("error: ", error);
     }
   };
@@ -562,6 +570,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
         const rzpay = new Razorpay(options);
         rzpay.open();
       } catch (error) {
+        setState({ orderLoading: false });
+
         console.log("error: ", error);
       }
     },
@@ -602,19 +612,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       setState({ selectedCountry: e.target.value, selectedState: "" });
       stateRefetch();
-      // if (!state.diffAddress) {
-      const checkoutId = localStorage.getItem("checkoutId");
-      console.log("checkoutId: ", checkoutId);
-      const res = await checkoutShippingAddressUpdate({
-        checkoutId,
-        shippingAddress: {
-          country: e.target.value,
-        },
-      });
-      console.log("res: ", res);
 
-      updateDelivertMethod(e.target.value);
-      // }
+      if (!state.diffAddress) {
+        const checkoutId = localStorage.getItem("checkoutId");
+        const res = await checkoutShippingAddressUpdate({
+          checkoutId,
+          shippingAddress: {
+            country: e.target.value,
+          },
+        });
+        console.log("res: ", res);
+        updateDelivertMethod(e.target.value);
+      }
     } catch (error) {
       console.log("error: ", error);
     }
