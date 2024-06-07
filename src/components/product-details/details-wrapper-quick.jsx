@@ -305,57 +305,57 @@ const DetailsWrapperQuick = ({
     }
   }, []);
 
-  const [previousHovered, setPreviousHovered] = useState(false);
-  const [nextHovered, setNextHovered] = useState(false);
-  const [nextProduct, setNextProduct] = useState();
-  const [previousProduct, setPreviousProduct] = useState();
+//   const [previousHovered, setPreviousHovered] = useState(false);
+//   const [nextHovered, setNextHovered] = useState(false);
+//   const [nextProduct, setNextProduct] = useState();
+//   const [previousProduct, setPreviousProduct] = useState();
 
-  const PreviousMouseEnter = () => {
-    setPreviousHovered(true);
-  };
+//   const PreviousMouseEnter = () => {
+//     setPreviousHovered(true);
+//   };
 
-  const PreviousMouseLeave = () => {
-    setPreviousHovered(false);
-  };
+//   const PreviousMouseLeave = () => {
+//     setPreviousHovered(false);
+//   };
 
-  const NextMouseEnter = () => {
-    setNextHovered(true);
-  };
+//   const NextMouseEnter = () => {
+//     setNextHovered(true);
+//   };
 
-  const NextMouseLeave = () => {
-    setNextHovered(false);
-  };
+//   const NextMouseLeave = () => {
+//     setNextHovered(false);
+//   };
 
-  const PreviousProductClick = () => {
-    router.push(`/product-details/${productItem?.previousProduct}`);
-  };
-  const NextProductClick = () => {
-    router.push(`/product-details/${productItem?.nextProduct}`);
-  };
+//   const PreviousProductClick = () => {
+//     router.push(`/product-details/${productItem?.previousProduct}`);
+//   };
+//   const NextProductClick = () => {
+//     router.push(`/product-details/${productItem?.nextProduct}`);
+//   };
 
-  const {
-    data: nextProductData,
-    isNextLoadings,
-    isNextErrors,
-  } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
+//   const {
+//     data: nextProductData,
+//     isNextLoadings,
+//     isNextErrors,
+//   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-  const {
-    data: prevProductData,
-    isPreviousLoadings,
-    isPreviousErrors,
-  } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
+//   const {
+//     data: prevProductData,
+//     isPreviousLoadings,
+//     isPreviousErrors,
+//   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
-useEffect(() => {
-  if (prevProductData) {
-    setPreviousProduct(prevProductData?.data?.product);
-  }
-}, [prevProductData]);
+// useEffect(() => {
+//   if (prevProductData) {
+//     setPreviousProduct(prevProductData?.data?.product);
+//   }
+// }, [prevProductData]);
 
-  useEffect(() => {
-    if (nextProductData) {
-      setNextProduct(nextProductData?.data?.product);
-    }
-  }, [nextProductData]);
+//   useEffect(() => {
+//     if (nextProductData) {
+//       setNextProduct(nextProductData?.data?.product);
+//     }
+//   }, [nextProductData]);
 
   
 

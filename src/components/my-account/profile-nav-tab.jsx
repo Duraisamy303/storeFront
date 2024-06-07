@@ -43,11 +43,11 @@ const ProfileNavTab = () => {
           title="Profile"
           icon="fa-regular fa-user-pen"
         />
-        <SingleNav
+        {/* <SingleNav
           id="information"
           title="Account Details"
           icon="fa-regular fa-circle-info"
-        />
+        /> */}
          <SingleNav
           id="address"
           title="Address"
