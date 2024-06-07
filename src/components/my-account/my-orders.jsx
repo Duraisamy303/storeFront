@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   useMyOrderListQuery,
   usePaymentMutation,
+  useOrderCancelMutation,
 } from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import moment from "moment";
@@ -11,12 +12,23 @@ import { useRouter } from "next/router";
 import useRazorpay from "react-razorpay";
 import { checkChannel, roundOff } from "@/utils/functions";
 import { notifySuccess } from "@/utils/toast";
+import ButtonLoader from "../loader/button-loader";
 
 const OrderList = () => {
   // const orderId = id
-  const { data: orders, isError, isLoading } = useMyOrderListQuery();
+  const {
+    data: orders,
+    isError,
+    isLoading,
+    refetch: orderListRefetch,
+  } = useMyOrderListQuery();
+  console.log("orders: ", orders);
 
   const [orderList, setOrderList] = useState([]);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [index, setIndex] = useState("");
+
+  const [orderCancel] = useOrderCancelMutation();
 
   const router = useRouter();
 
@@ -93,6 +105,27 @@ const OrderList = () => {
     [Razorpay]
   );
 
+  const cancelOrder = async (item) => {
+    try {
+      setCancelLoading(true);
+      const res = await orderCancel({
+        id: item.id,
+      });
+
+      orderListRefetch();
+      setCancelLoading(false);
+    } catch (error) {
+      setCancelLoading(false);
+
+      console.log("error: ", error);
+    }
+
+    try {
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <>
       <section className="tp-cart-area ">
@@ -157,20 +190,22 @@ const OrderList = () => {
                             </Link>
                           </td> */}
                     <td style={{ display: "flex", gap: 10 }}>
-                      <button
-                        type="button"
-                        className="order-view-btn"
-                        onClick={() => {
-                          console.log("item", item);
-                          handlePayment(
-                            item?.total?.gross?.amount,
-                            item?.total?.gross?.currency,
-                            item?.id
-                          );
-                        }}
-                      >
-                        Pay
-                      </button>
+                      {item?.status == "NOT_CHARGET" && (
+                        <button
+                          type="button"
+                          className="order-view-btn"
+                          onClick={() => {
+                            console.log("item", item);
+                            handlePayment(
+                              item?.total?.gross?.amount,
+                              item?.total?.gross?.currency,
+                              item?.id
+                            );
+                          }}
+                        >
+                          Pay
+                        </button>
+                      )}
                       <button
                         type="button"
                         className="order-view-btn"
@@ -180,16 +215,25 @@ const OrderList = () => {
                       >
                         View
                       </button>
-                      <button
-                        type="button"
-                        className="order-view-btn"
-                        onClick={() =>
-                          router.push(`/order-details/${item?.id}`)
-                        }
-                      >
-                        Cancel
-                      </button>
-                      {item?.invoices[0]?.url && (
+                      {item?.status == "UNCONFIRMED" && (
+                        <button
+                          type="button"
+                          className="order-view-btn"
+                          onClick={() => {
+                            setIndex(i);
+                            cancelOrder(item);
+                          }}
+                        >
+                          {cancelLoading && index == i ? (
+                            <>
+                              <ButtonLoader />
+                            </>
+                          ) : (
+                            "Cancel"
+                          )}
+                        </button>
+                      )}
+                      {item?.invoices?.length > 0 && (
                         <button
                           type="button"
                           className="order-view-btn"

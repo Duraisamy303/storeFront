@@ -160,6 +160,13 @@ export const MY_ORDER_LIST = ({ first }) => {
                 id
                 url
               }
+              isGiftWrap
+              shippingPrice {
+                gross {
+                  amount
+                  currency
+                }
+              }
             }
           }
         }
@@ -327,8 +334,6 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
   });
 };
 
-
-
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
@@ -401,6 +406,27 @@ export const FINISH_LIST = () => {
       }
     }
     `,
+  });
+};
+
+export const ORDER_CANCEL = ({ id }) => {
+  console.log("ORDER_CANCEL: ", id);
+  return JSON.stringify({
+    query: `mutation customerCancelOrder($id: ID!) {
+      customerOrderCancel(id: $id) {
+        order {
+          id
+          status
+        }
+        errors {
+          field
+          message
+        }
+      }
+      
+    }
+    `,
+    variables: { id },
   });
 };
 
@@ -1005,7 +1031,6 @@ export const PRODUCT_20_PERCENTAGE = ({
   });
 };
 
-
 export const SUB_CAT_LIST = ({ parentid }) => {
   return {
     query: `
@@ -1029,7 +1054,6 @@ export const SUB_CAT_LIST = ({ parentid }) => {
   };
 };
 
-
 export const CATEGORY_NAME = ({ categoryid }) => {
   return JSON.stringify({
     query: `
@@ -1040,9 +1064,8 @@ export const CATEGORY_NAME = ({ categoryid }) => {
     }
       `,
     variables: { categoryid },
-  })
-
-}
+  });
+};
 
 // address section
 

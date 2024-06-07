@@ -167,7 +167,7 @@ const CategoryComponent = ({
     });
   };
   const renderContent = () => {
-    if (productList.length === 0) return null;
+    if (productList?.length == 0) return null;
 
     return (
       <Swiper
@@ -175,7 +175,7 @@ const CategoryComponent = ({
         modules={[Pagination]}
         className="tp-category-slider-active-4 swiper-container"
       >
-        {productList.map((item) => (
+        {productList?.map((item) => (
           <div
             className="col-lg-3 menus-product-list"
             style={{ padding: "0px 8px 0px 0px", width: "250px" }}
