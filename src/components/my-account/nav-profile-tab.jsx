@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 // internal
 import { Box, DeliveryTwo, Processing, Truck } from "@/svg";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
-
+import Location from "@assets/img/location.png"
+import Wishlist from "@assets/img/whislist.png"
+import Order from "@assets/img/order.png"
+import ChangePassword from "@assets/img/change-passwprd.png";
+import Image from "next/image";
 const NavProfileTab = ({ orderData }) => {
   const {user} = useSelector(state => state.auth)
   const dispatch = useDispatch();
@@ -51,48 +55,48 @@ const [ userName, setUserName] = useState("");
             <div className="profile__main-info-item">
               <div className="profile__main-info-icon">
                 <span>
-                  <span className="profile-icon-count profile-download">{orderData?.totalDoc}</span>
-                  <Box />
+                  {/* <span className="profile-icon-count profile-download">{orderData?.totalDoc}</span> */}
+                  <Image src={Location} alt="location" height={60} width={60} />
                 </span>
               </div>
-              <h4 className="profile__main-info-title">Total Order</h4>
+              <h4 className="profile__main-info-title">Address</h4>
             </div>
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="profile__main-info-item">
               <div className="profile__main-info-icon">
                 <span>
-                  <span className="profile-icon-count profile-order">{orderData?.pending}</span>
-                  <Processing />
-                </span>
+                  {/* <span className="profile-icon-count profile-order">{orderData?.pending}</span> */}
+                  <Image src={Wishlist} alt="location" height={60} width={60} />                
+                  </span>
               </div>
-              <h4 className="profile__main-info-title">Pending Order</h4>
+              <h4 className="profile__main-info-title">Wishlist</h4>
             </div>
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="profile__main-info-item">
               <div className="profile__main-info-icon">
                 <span>
-                  <span className="profile-icon-count profile-wishlist">
+                  {/* <span className="profile-icon-count profile-wishlist">
                     {orderData?.processing}
-                  </span>
-                  <Truck />
+                  </span> */}
+                  <Image src={Order} alt="location" height={60} width={60} />   
                 </span>
               </div>
-              <h4 className="profile__main-info-title">Processing Order</h4>
+              <h4 className="profile__main-info-title">My Orders</h4>
             </div>
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="profile__main-info-item">
               <div className="profile__main-info-icon">
                 <span>
-                  <span className="profile-icon-count profile-wishlist">
+                  {/* <span className="profile-icon-count profile-wishlist">
                     {orderData?.delivered}
+                  </span> */}
+                  <Image src={ChangePassword} alt="location" height={60} width={60} />   
                   </span>
-                  <DeliveryTwo />
-                </span>
               </div>
-              <h4 className="profile__main-info-title">Complete Order</h4>
+              <h4 className="profile__main-info-title">Change Password</h4>
             </div>
           </div>
         </div>

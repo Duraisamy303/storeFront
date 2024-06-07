@@ -42,10 +42,10 @@
                 }
 
                 &.active{
-                    color: var(--tp-theme-primary);
-                    background-color: rgba($color: $theme-primary , $alpha: .06);
+                    color: #c38c36;
+                    background-color: rgb(254 235 201);
                     &:hover{
-                        background-color: rgba($color: $theme-primary, $alpha: .06);
+                        background-color:rgb(254 235 201);
                     }
 
                 }
@@ -253,7 +253,7 @@
                     }
 
                     & th[scope="row"]{
-                        color: var(--tp-theme-primary);
+                        color: #c78c2c;
                     }
 
                     & td[data-info*="status done"]{
@@ -592,8 +592,8 @@
     text-align: center;
 
     &:hover{
-        background-color: var(--tp-theme-primary);
-        border-color: var(--tp-theme-primary);
+        background-color: #c38c36;
+        border-color: #c38c36;
         color: var(--tp-common-white);
     }
 }

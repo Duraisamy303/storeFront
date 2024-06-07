@@ -4,6 +4,7 @@ import PopupVideo from "../common/popup-video";
 import Loader from "../loader/loader";
 import { profilePic } from "@/utils/constant";
 import { FullscreenOutlined } from "@ant-design/icons";
+import { UpOutlined, DownOutlined } from "@ant-design/icons";
 
 const DetailsThumbWrapper = ({
   imgWidth,
@@ -74,11 +75,33 @@ const DetailsThumbWrapper = ({
     navigateImage(event.target.name);
   };
 
+  
+  const handleNavigationClicking = (direction) => {
+    const currentIndex = imageUrls.indexOf(activeImg);
+    let newIndex;
+
+    if (direction === "prev") {
+      newIndex = currentIndex === 0 ? imageUrls.length - 1 : currentIndex - 1;
+    } else {
+      newIndex = currentIndex === imageUrls.length - 1 ? 0 : currentIndex + 1;
+    }
+
+    const newActiveImage = imageUrls[newIndex];
+    handleImageActive(newActiveImage);
+
+    // Scroll into view
+    document.getElementById(`image-${newIndex}`)?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
+  };
+
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
       
-        <nav className="product-side-nav-img" style={{height: imageUrls?.length > 4 ? "700px": "auto", overflowY:imageUrls?.length > 4 ? "scroll": "hidden"}}>
+        <nav className="product-side-nav-img" style={{height: imageUrls?.length > 4 ? "740px": "auto", overflow:"hidden"}}>
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => {
               return (
@@ -101,6 +124,38 @@ const DetailsThumbWrapper = ({
               );
             })}
           </div>
+
+          <UpOutlined
+            className="prev-btn"
+            onClick={() => handleNavigationClicking("prev")}
+            style={{
+              fontSize: "12px",
+              background: "#f2efec",
+              borderRadius: "50%",
+              padding: "3px",
+              color: "black",
+              position: "absolute",
+              left: "80px",
+              top: "20px",
+              opacity: "0.8",
+            }}
+          />
+          <DownOutlined
+            className="next-btn"
+            onClick={() => handleNavigationClicking("next")}
+            style={{
+              fontSize: "12px",
+              background: "#f2efec",
+              borderRadius: "50%",
+              padding: "3px",
+              color: "black",
+              position: "absolute",
+              left: "80px",
+              bottom: "20px",
+              opacity: "0.8",
+            }}
+          />
+
         </nav>
         <div className="tab-content m-img details-section-main-image">
           <div className="tab-pane fade show active details-section-main-image-cover">
