@@ -35,7 +35,10 @@ const ShopPage = () => {
     data: productsData,
     isError,
     isLoading,
-  } = useGetAllProductsQuery({ channel: "india-channel", first: 500 });
+    refetch: getProductRefetch,
+  } = useGetAllProductsQuery({
+    sortBy: { direction: "ASC", field: "ORDER_NO" },
+  });
 
   const [getCategoryName] = useGetCategoryNameMutation();
 
@@ -109,7 +112,6 @@ const ShopPage = () => {
   const { data: data } = useGetCartListQuery();
   const { data: categoryData } = useGetParentCategoryListQuery();
 
-
   const [priceFilter, {}] = usePriceFilterMutation();
 
   const [cartUpdate, setCartUpdate] = useState(false);
@@ -125,7 +127,6 @@ const ShopPage = () => {
 
   const [currPage, setCurrPage] = useState(1);
 
-  
   const [catName, setCatName] = useState("");
 
   useEffect(() => {
@@ -179,8 +180,22 @@ const ShopPage = () => {
     setPriceValue(val);
   };
 
-  const selectHandleFilter = (e) => {
-    console.log("e: ", e);
+  const selectHandleFilter = async (e) => {
+    try {
+      let sortBy = {};
+      if ((e = "Default Sorting")) {
+        sortBy = { direction: "ASC", field: "ORDER_NO" };
+      } else if (e == "Low to High") {
+        sortBy = { direction: ASC, field: PRICE };
+      } else if (e == "High to Low") {
+        sortBy = { direction: DESC, field: PRICE };
+      } else if (e == "New Added") {
+        sortBy = { direction: DESC, field: CREATED_AT };
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+    console.log("e: ", e.value);
     setSelectValue(e.value);
   };
 
@@ -312,9 +327,6 @@ const ShopPage = () => {
       dispatch(handleFilterSidebarClose());
     });
   };
-
-
-
 
   const filterByCategoryName = async () => {
     try {

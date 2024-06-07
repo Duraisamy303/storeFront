@@ -13,14 +13,19 @@ const Success = ({ data }) => {
   const Total = data?.data?.order?.total.gross.amount;
   const OrderNumber = data?.data?.order?.number;
   const OrderDate = moment(data?.data?.order?.updatedAt).format("MMMM D, YYYY");
-  const ShippingAmount = data?.data?.order?.shippingMethods[0].price.amount;
+  const ShippingAmount = data?.data?.order?.shippingPrice?.gross.amount;
+  const giftWrap = data?.data?.order?.isGiftWrap;
+  const paymentMethod = data?.data?.order?.paymentMethod?.name;
+
 
   return (
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
       <div className="container">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
-            <p style={{ color: "gray" }}>Pay with Razor Pay </p>
+            {/* {paymentMethod != "Cash On delivery" && */}
+            <p style={{ color: "gray" }}>Pay with {paymentMethod} </p>
+            {/* } */}
             <h3>Order Details</h3>
             <div>
               <table className="table width-100">
@@ -66,23 +71,33 @@ const Success = ({ data }) => {
                   </tr>
 
                   <tr>
-                    <td>Shipping</td>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "Cash On delivery"
+                        : "Shipping"}
+                    </td>
+
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{roundOff(ShippingAmount)}</td>
+                        <td>
+                          &#8377;{roundOff(ShippingAmount)}
+                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
+                        </td>
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(ShippingAmount)}</td>
+                        <td>
+                          ${roundOff(ShippingAmount)}
+                          <div>&#8377; Include Gift wrap 50</div>
+                        </td>
                       </>
                     )}
                   </tr>
 
                   <tr>
                     <td>Payment Method</td>
-                    <td>Razor Pay</td>
+                    <td>{paymentMethod}</td>
                   </tr>
-
                   <tr>
                     <td style={{ color: "black", fontWeight: "600" }}>Total</td>
                     {checkChannel() === "india-channel" ? (
@@ -139,7 +154,8 @@ const Success = ({ data }) => {
               </ul>
             </div>
             <div className="mt-20">
-              <Link href="http://www1.prade.in/shop"
+              <Link
+                href="http://www1.prade.in/shop"
                 // onClick={() => Router.push("/shop")}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}

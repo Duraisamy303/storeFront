@@ -169,7 +169,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
+        // notifyError(err);
       } else {
         notifySuccess(`${product.node.name} added to cart successfully`);
         cartRefetch();
@@ -192,7 +192,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
+        // notifyError(err);
       } else {
         cartRefetch();
       }

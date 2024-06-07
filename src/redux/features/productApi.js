@@ -23,7 +23,6 @@ import {
   STYLE_LIST,
   SUB_CAT_LIST,
   UPDATE_ADDRESS,
-  UPDATE_BILLING_ADDRESS,
   UPDATE_EMAIL,
   UPDATE_SHIPPING_ADDRESS,
   WISHLIST_LIST,
@@ -48,7 +47,7 @@ export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ first }) => {
+      query: ({ first,direction }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -56,7 +55,7 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_LIST({ channel, first }));
+        return configuration(PRODUCT_LIST({ channel, first:500 ,direction}));
       },
 
       providesTags: ["Products"],
@@ -436,16 +435,16 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    updateBillingAddress: builder.mutation({
-      query: ({ addressId }) => {
-        console.log("addressId: ", addressId);
-        return configuration(
-          UPDATE_BILLING_ADDRESS({
-            addressId,
-          })
-        );
-      },
-    }),
+    // updateBillingAddress: builder.mutation({
+    //   query: ({ addressId }) => {
+    //     console.log("addressId: ", addressId);
+    //     return configuration(
+    //       UPDATE_BILLING_ADDRESS({
+    //         addressId,
+    //       })
+    //     );
+    //   },
+    // }),
 
     // updateShippingAddress: builder.mutation({
     //   query: ({ addressId }) => {
@@ -522,7 +521,7 @@ export const {
   useGetParentCategoryListQuery,
   useUpdateBillingAddressMutation,
   // useUpdateShippingAddressMutation,
-  
+
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSubCatListMutation,
