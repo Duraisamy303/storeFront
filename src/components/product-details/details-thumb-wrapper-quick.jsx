@@ -74,36 +74,41 @@ const DetailsThumbWrapperQuick = ({
               </button>
             ))}
           </div>
-          <UpOutlined
-            className="prev-btn"
-            onClick={() => handleNavigationClick("prev")}
-            style={{
-              fontSize: "12px",
-              background: "#f2efec",
-              borderRadius: "50%",
-              padding: "3px",
-              color: "black",
-              position: "absolute",
-              left: "70px",
-              top: "20px",
-              opacity: "0.8",
-            }}
-          />
-          <DownOutlined
-            className="next-btn"
-            onClick={() => handleNavigationClick("next")}
-            style={{
-              fontSize: "12px",
-              background: "#f2efec",
-              borderRadius: "50%",
-              padding: "3px",
-              color: "black",
-              position: "absolute",
-              left: "70px",
-              bottom: "80px",
-              opacity: "0.8",
-            }}
-          />
+          {imageUrls?.length > 4 && (
+            <>
+              {" "}
+              <UpOutlined
+                className="prev-btn"
+                onClick={() => handleNavigationClick("prev")}
+                style={{
+                  fontSize: "12px",
+                  background: "#f2efec",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "black",
+                  position: "absolute",
+                  left: "70px",
+                  top: "20px",
+                  opacity: "0.8",
+                }}
+              />
+              <DownOutlined
+                className="next-btn"
+                onClick={() => handleNavigationClick("next")}
+                style={{
+                  fontSize: "12px",
+                  background: "#f2efec",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "black",
+                  position: "absolute",
+                  left: "70px",
+                  bottom: "80px",
+                  opacity: "0.8",
+                }}
+              />
+            </>
+          )}
         </nav>
         <div className="tab-content m-img">
           <div className="tab-pane fade show active">

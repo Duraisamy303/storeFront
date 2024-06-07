@@ -75,7 +75,6 @@ const DetailsThumbWrapper = ({
     navigateImage(event.target.name);
   };
 
-  
   const handleNavigationClicking = (direction) => {
     const currentIndex = imageUrls.indexOf(activeImg);
     let newIndex;
@@ -100,8 +99,13 @@ const DetailsThumbWrapper = ({
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
-      
-        <nav className="product-side-nav-img" style={{height: imageUrls?.length > 4 ? "740px": "auto", overflow:"hidden"}}>
+        <nav
+          className="product-side-nav-img"
+          style={{
+            height: imageUrls?.length > 4 ? "740px" : "auto",
+            overflow: "hidden",
+          }}
+        >
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => {
               return (
@@ -124,44 +128,50 @@ const DetailsThumbWrapper = ({
               );
             })}
           </div>
-
-          <UpOutlined
-            className="prev-btn"
-            onClick={() => handleNavigationClicking("prev")}
-            style={{
-              fontSize: "12px",
-              background: "#f2efec",
-              borderRadius: "50%",
-              padding: "3px",
-              color: "black",
-              position: "absolute",
-              left: "80px",
-              top: "20px",
-              opacity: "0.8",
-            }}
-          />
-          <DownOutlined
-            className="next-btn"
-            onClick={() => handleNavigationClicking("next")}
-            style={{
-              fontSize: "12px",
-              background: "#f2efec",
-              borderRadius: "50%",
-              padding: "3px",
-              color: "black",
-              position: "absolute",
-              left: "80px",
-              bottom: "20px",
-              opacity: "0.8",
-            }}
-          />
-
+          {imageUrls?.length > 4 && (
+            <>
+              <UpOutlined
+                className="prev-btn"
+                onClick={() => handleNavigationClicking("prev")}
+                style={{
+                  fontSize: "12px",
+                  background: "#f2efec",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "black",
+                  position: "absolute",
+                  left: "80px",
+                  top: "20px",
+                  opacity: "0.8",
+                }}
+              />
+              <DownOutlined
+                className="next-btn"
+                onClick={() => handleNavigationClicking("next")}
+                style={{
+                  fontSize: "12px",
+                  background: "#f2efec",
+                  borderRadius: "50%",
+                  padding: "3px",
+                  color: "black",
+                  position: "absolute",
+                  left: "80px",
+                  bottom: "20px",
+                  opacity: "0.8",
+                }}
+              />
+            </>
+          )}
         </nav>
         <div className="tab-content m-img details-section-main-image">
           <div className="tab-pane fade show active details-section-main-image-cover">
             <div
               className="tp-product-details-nav-main-thumb p-relative"
-              style={{ overflow: "hidden", display:"flex", justifyContent:"center" }}
+              style={{
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+              }}
             >
               {loading ? (
                 <Loader />
@@ -196,7 +206,6 @@ const DetailsThumbWrapper = ({
                         transform: isZoomed ? "scale(2)" : "scale(1)",
                         transformOrigin: backgroundPosition,
                         transition: "transform 0.1s ease-in-out",
-                      
                       }}
                     />
                   </div>
@@ -318,8 +327,8 @@ const DetailsThumbWrapper = ({
           <Image
             src={imageUrls[selectedImageIndex]}
             alt="Lightbox"
-            width={imgWidth }
-            height={imgHeight }
+            width={imgWidth}
+            height={imgHeight}
             style={{
               width: "100%",
               maxWidth: "90%",
