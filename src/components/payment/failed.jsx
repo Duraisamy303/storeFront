@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { usePaymentMutation } from "@/redux/features/productApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import useRazorpay from "react-razorpay";
+import { useDispatch } from "react-redux";
+import { cart_list } from "@/redux/features/cartSlice";
 
 const Failed = ({ data, orderId }) => {
   const OrderDetails = data?.data?.order?.lines;
@@ -13,10 +15,14 @@ const Failed = ({ data, orderId }) => {
   const Total = data?.data?.order?.total.gross.amount;
   const OrderNumber = data?.data?.order?.number;
   const OrderDate = moment(data?.data?.order?.updatedAt).format("MMMM D, YYYY");
-  const ShippingAmount = data?.data?.order?.shippingMethods[0].price.amount;
+  const ShippingAmount = data?.data?.order?.shippingPrice?.gross.amount;
   const status = data?.data?.order?.paymentStatus;
+  const giftWrap = data?.data?.order?.isGiftWrap;
+  const paymentMethod = data?.data?.order?.paymentMethod?.name;
 
   const [Razorpay] = useRazorpay();
+
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -39,6 +45,9 @@ const Failed = ({ data, orderId }) => {
           modal: {
             ondismiss: async (res) => {
               // console.log("res: ", res);
+              localStorage.removeItem("checkoutTokenUSD");
+              localStorage.removeItem("checkoutTokenINR");
+              dispatch(cart_list([]));
               router.push(`/order-failed/${orderId}`);
 
               // await paymentFailed(orderId);
@@ -55,6 +64,9 @@ const Failed = ({ data, orderId }) => {
                 amountCharged: Total,
                 pspReference: res?.razorpay_payment_id,
               });
+              localStorage.removeItem("checkoutTokenUSD");
+              localStorage.removeItem("checkoutTokenINR");
+              dispatch(cart_list([]));
               router.push(`/order-success/${orderId}`);
             }
           },
@@ -90,7 +102,7 @@ const Failed = ({ data, orderId }) => {
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
             <p style={{ color: "red" }}>Order Failed</p>
-            <p style={{ color: "gray" }}>Pay with Razor Pay </p>
+            <p style={{ color: "gray" }}>Pay with {paymentMethod} </p>
             <h3>Order Details</h3>
             <div>
               <table className="table width-100">
@@ -139,11 +151,17 @@ const Failed = ({ data, orderId }) => {
                     <td>Shipping</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{roundOff(ShippingAmount)}</td>
+                        <td>
+                          &#8377;{roundOff(ShippingAmount)}
+                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
+                        </td>
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(ShippingAmount)}</td>
+                        <td>
+                          ${roundOff(ShippingAmount)}
+                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
+                        </td>
                       </>
                     )}
                   </tr>
@@ -151,8 +169,9 @@ const Failed = ({ data, orderId }) => {
                   <tr>
                     <td>Payment Method</td>
 
-                    <td>Razor Pay</td>
+                    <td>{paymentMethod}</td>
                   </tr>
+
                   <tr>
                     <td>Payment Status</td>
 

@@ -245,7 +245,7 @@ const DetailsWrapperQuick = ({
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
+        // notifyError(err);
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
@@ -267,7 +267,7 @@ const DetailsWrapperQuick = ({
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
+        // notifyError(err);
       } else {
         cartRefetch();
       }
