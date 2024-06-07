@@ -167,7 +167,7 @@ const CategoryComponent = ({
     });
   };
   const renderContent = () => {
-    if (productList?.length === 0) return null;
+    if (productList?.length == 0) return null;
 
     return (
       <Swiper

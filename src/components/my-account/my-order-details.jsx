@@ -4,9 +4,9 @@ import React from "react";
 
 const MyOrderDetails = ({ data }) => {
   const Data = data?.data?.order;
-  const SubTotal = data?.data?.order?.subtotal.gross.amount;
-  const Total = data?.data?.order?.total.gross.amount;
-  const ShippingAmount = data?.data?.order?.shippingMethods[0].price.amount;
+  const SubTotal = data?.data?.order?.subtotal.gross;
+  const Total = data?.data?.order?.total.gross;
+  const ShippingAmount = data?.data?.order?.shippingPrice;
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -23,7 +23,7 @@ const MyOrderDetails = ({ data }) => {
           <p style={{ color: "gray", marginBottom: "5px" }}>
             Monday 22nd of April 2024, 03:38pm
           </p>
-          <p style={{ color: "gray" }}>hi mam</p>
+          {/* <p style={{ color: "gray" }}>hi mam</p> */}
         </div>
         <h3 style={{ fontWeight: "300" }}>ORDER DETAILS</h3>
         <div className="responsive-table">
@@ -40,59 +40,40 @@ const MyOrderDetails = ({ data }) => {
                   <td scope="row">
                     {item.productName} ({item?.quantity})
                   </td>
-                  {checkChannel() == "india-channel" ? (
-                    <>
-                      <td>
-                        &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>${roundOff(item?.totalPrice?.gross?.amount)}</td>
-                    </>
-                  )}
+
+                  <td>
+                    {item?.totalPrice?.gross?.currency === "USD" ? "$" : "₹"}
+                    {roundOff(item?.totalPrice?.gross?.amount)}
+                  </td>
                 </tr>
               ))}
 
               <tr>
                 <td>Subtotal</td>
-                {checkChannel() == "india-channel" ? (
-                  <>
-                    <td>&#8377;{roundOff(SubTotal)}</td>
-                  </>
-                ) : (
-                  <>
-                    <td>${roundOff(SubTotal)}</td>
-                  </>
-                )}
+
+                <td>
+                  {SubTotal?.currency == "USD" ? "$" : "₹"}
+                  {roundOff(SubTotal?.amount)}
+                </td>
               </tr>
 
               <tr>
                 <td>Shipping</td>
-                {checkChannel() == "india-channel" ? (
-                  <>
-                    <td>&#8377;{roundOff(ShippingAmount)}</td>
-                  </>
-                ) : (
-                  <>
-                    <td>${roundOff(ShippingAmount)}</td>
-                  </>
-                )}
+
+                <td>
+                  {ShippingAmount?.gross?.currency == "USD" ? "$" : "₹"}
+                  {roundOff(ShippingAmount?.gross?.amount)}
+                </td>
               </tr>
 
               <tr>
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>
-                {checkChannel() === "india-channel" ? (
-                  <>
-                    <td style={{ fontSize: "20px" }}>
-                      &#8377;{roundOff(Total)}
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td style={{ fontSize: "20px" }}>${roundOff(Total)}</td>
-                  </>
-                )}
+
+                <td style={{ fontSize: "20px" }}>
+                  {Total?.currency == "USD" ? "$" : "₹"}
+
+                  {roundOff(Total?.amount)}
+                </td>
               </tr>
             </tbody>
           </table>

@@ -245,7 +245,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   useEffect(() => {
     enableGiftWrap();
-  }, [state.selectedCountry1, state.selectedCountry, state.diffAddress]);
+  }, [
+    state.selectedCountry1,
+    state.selectedCountry,
+    state.diffAddress,
+    state.total,
+  ]);
 
   const enableCOD = async () => {
     try {
@@ -270,16 +275,26 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       const arr = [{ id: 1, name: "Razorpay", checked: false }];
 
-      if (state.total > 3000 && state.total < 30000) {
+      console.log("state.orderData.: ", state.orderData);
+
+      const hasPreOrders = state.orderData?.lines.some((line) =>
+        line?.variant?.product?.collections?.some(
+          (collection) => collection.name === "Pre Orders"
+        )
+      );
+
+      console.log("hasPreOrders: ", hasPreOrders);
+
+      if (state.total > 3000 && state.total < 30000 && !hasPreOrders) {
         if (state.diffAddress) {
           if (state.selectedCountry1 == "IN") {
-            if (pincode.includes(state.postalCode1)) {
+            if (pincode.includes(Number(state.postalCode1))) {
               isShowCOD = true;
             }
           }
         } else {
           if (state.selectedCountry == "IN") {
-            if (pincode.includes(state.postalCode)) {
+            if (pincode.includes(Number(state.postalCode))) {
               isShowCOD = true;
             }
           }
@@ -648,6 +663,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("e: ", e);
     }
   };
+  console.log("state.selectedPaymentType: ", state.selectedPaymentType);
 
   const validateInputs = () => {
     const fieldsToValidate = [
@@ -1714,7 +1730,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           id={`payment-${item.id}`}
                           type="checkbox"
                           checked={item.checked}
-                          onChange={() => handleCheckboxChange(item.id)}
+                          onChange={() => {
+                            handleCheckboxChange(item.id);
+                          }}
                         />
                         <label
                           htmlFor={`payment-${item.id}`}
@@ -1725,6 +1743,26 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                     ))}
 
+                    {state.paymentType.find((item) => item.checked)?.name ==
+                      "Cash On Delivery" && (
+                      <div>
+                        Cash On Delivery orders will be booked only if the pin
+                        code is serviceable for COD by our Logistics Partner In
+                        case of Cash on Delivery, confirmation will be taken
+                        from the recipient over the call. PraDe Jewels reserves
+                        the right to disable COD option for the User, If COD
+                        order is rejected. Only cash/UPI payments will be
+                        accepted while delivering the order under the COD
+                        format. Demand Draft/ Cheques will not be accepted for
+                        orders booked under the COD method of payment. It is
+                        strictly a cash/UPI payment method only . E-Gift
+                        Vouchers or store credit cannot be used for COD orders.
+                        Foreign currency cannot be used to make a COD payment.{" "}
+                        Cash on Delivery is not applicable on Pre-order products{" "}
+                        Cash on Delivery option is eligible on orders between
+                        3000 INR to 30,000 INR{" "}
+                      </div>
+                    )}
                     {state.errors.paymentType && (
                       <ErrorMsg msg={state.errors.paymentType} />
                     )}

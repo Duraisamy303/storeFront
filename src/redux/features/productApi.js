@@ -26,6 +26,7 @@ import {
   UPDATE_EMAIL,
   UPDATE_SHIPPING_ADDRESS,
   WISHLIST_LIST,
+  ORDER_CANCEL
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -481,6 +482,16 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
+    orderCancel: builder.mutation({
+      query: ({ id }) => {
+        return configuration(
+          ORDER_CANCEL({
+            id,
+          })
+        );
+      },
+    }),
+
 
   }),
 });
@@ -525,6 +536,7 @@ export const {
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSubCatListMutation,
-  useGetCategoryNameMutation  
+  useGetCategoryNameMutation  ,
+  useOrderCancelMutation
 
 } = productApi;

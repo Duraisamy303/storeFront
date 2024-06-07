@@ -79,10 +79,13 @@ export const CART_LIST = ({ checkoutToken }) => {
                 id
                 name
                 slug
-               
                 thumbnail {
                   url
                   alt
+                }
+                collections {
+                  id
+                  name
                 }
               }
               pricing {

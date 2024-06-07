@@ -153,11 +153,9 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
   const Category_Name = product?.node?.category?.name;
   const Price = product?.node?.pricing?.priceRange?.start?.gross?.amount;
 
-  console.log("product", product);
 
   const openModal = () => {
     const datas = { ...product?.node, images: product?.node?.images,  };
-console.log('✌️datas --->', datas);
     dispatch(handleProductModal(datas));
   };
 
