@@ -447,16 +447,16 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
-    updateShippingAddress: builder.mutation({
-      query: ({ addressId }) => {
-        console.log("addressId: ", addressId);
-        return configuration(
-          UPDATE_SHIPPING_ADDRESS({
-            addressId,
-          })
-        );
-      },
-    }),
+    // updateShippingAddress: builder.mutation({
+    //   query: ({ addressId }) => {
+    //     console.log("addressId: ", addressId);
+    //     return configuration(
+    //       UPDATE_SHIPPING_ADDRESS({
+    //         addressId,
+    //       })
+    //     );
+    //   },
+    // }),
 
 
     updateAddress: builder.mutation({
@@ -521,7 +521,8 @@ export const {
   useProduct20PercentageMutation,
   useGetParentCategoryListQuery,
   useUpdateBillingAddressMutation,
-  useUpdateShippingAddressMutation,
+  // useUpdateShippingAddressMutation,
+  
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSubCatListMutation,

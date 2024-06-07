@@ -16,7 +16,6 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
   const { data: categoryData } = useGetCategoryListQuery();
   const router = useRouter();
   const [necklaces, setNecklaces] = useState({});
-  console.log("categoryList: ", necklaces);
 
   useEffect(() => {
     if (
@@ -34,7 +33,6 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
           item.node.name === "Earrings" ||
           item.node.name === "Pendants"
       );
-      console.log("filteredItems: ", filteredItems);
 
       const filteredNecklaces = catList.find(
         (item) => item.node.name === "Necklaces"

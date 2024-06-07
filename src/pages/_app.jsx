@@ -104,9 +104,11 @@ export default function App({ Component, pageProps }) {
     "/forgot",
     "/register",
     "/order-success",
+    "/order-failed",
   ];
 
   const isOrderSuccessPath = router.pathname.startsWith("/order-success");
+  const isOrderFailedPath = router.pathname.startsWith("/order-failed");
 
   return (
     <ApolloProvider client={client}>
@@ -115,7 +117,8 @@ export default function App({ Component, pageProps }) {
           {/* <Elements stripe={stripePromise}> */}
           <div id="root">
             {!paths.includes(router.pathname) &&
-              !isOrderSuccessPath && (
+              !isOrderSuccessPath &&
+              !isOrderFailedPath && (
                 <div
                   style={{
                     position: "fixed",

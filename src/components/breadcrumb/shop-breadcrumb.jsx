@@ -3,8 +3,8 @@ import { capitalizeFLetter } from "../../utils/functions";
 import { useRouter } from "next/router";
 
 const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
-console.log('✌️catList --->', catList);
-const router = useRouter();
+  console.log("✌️catList --->", catList);
+  const router = useRouter();
 
   return (
     <>
@@ -25,12 +25,15 @@ const router = useRouter();
                   {catList?.length > 0 &&
                     catList?.map((item, index) => (
                       <li key={index}>
-                        <h5 className="shop-banner-categoryList-title cursor-pointer"  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { categoryId: item?.node?.id }, // Your parameters
-                    });
-                  }}>
+                        <h5
+                          className="shop-banner-categoryList-title cursor-pointer"
+                          onClick={() => {
+                            router.push({
+                              pathname: "/shop",
+                              query: { categoryId: item?.node?.id }, // Your parameters
+                            });
+                          }}
+                        >
                           {item?.node?.name?.toUpperCase()}
                         </h5>
                         <p className="shop-banner-categoryList-count">

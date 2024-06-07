@@ -15,7 +15,11 @@ import {
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
-import { RegularPrice, capitalizeFLetter } from "@/utils/functions";
+import {
+  RegularPrice,
+  capitalizeFLetter,
+  checkChannel,
+} from "@/utils/functions";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
@@ -68,6 +72,8 @@ const DetailsWrapper = ({
   const [channel, setChannel] = useState("india-channel");
   const [cartLoader, setCartLoader] = useState(false);
   const [wishlistLoader, setWishlistLoader] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [variantId, setVariantId] = useState("");
 
   const [visibility, setVisibility] = useState({
     description: false,
@@ -238,10 +244,20 @@ const DetailsWrapper = ({
     setCartLoader(true);
     try {
       setCartLoader(true);
+      let variantID = "";
+      if (productItem?.variants?.length > 1) {
+        if (variantId == "") {
+          variantID = productItem?.variants[0].id;
+        } else {
+          variantID = variantId;
+        }
+      } else {
+        variantID = productItem?.defaultVariant?.id;
+      }
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
-        variantId: productItem?.defaultVariant?.id,
+        variantId: variantID,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -260,10 +276,21 @@ const DetailsWrapper = ({
     setCartLoader(true);
     try {
       setCartLoader(true);
+
+      let variantID = "";
+      if (productItem?.variants?.length > 1) {
+        if (variantId == "") {
+          variantID = productItem?.variants[0].id;
+        } else {
+          variantID = variantId;
+        }
+      } else {
+        variantID = productItem?.defaultVariant?.id;
+      }
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: productItem?.defaultVariant?.id,
+        variantId: variantID,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -345,11 +372,11 @@ const DetailsWrapper = ({
     isPreviousErrors,
   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
-useEffect(() => {
-  if (prevProductData) {
-    setPreviousProduct(prevProductData?.data?.product);
-  }
-}, [prevProductData]);
+  useEffect(() => {
+    if (prevProductData) {
+      setPreviousProduct(prevProductData?.data?.product);
+    }
+  }, [prevProductData]);
 
   useEffect(() => {
     if (nextProductData) {
@@ -357,7 +384,94 @@ useEffect(() => {
     }
   }, [nextProductData]);
 
-  
+  const multiVariantPrice = () => {
+    if (checkChannel() == "india-channel") {
+      if (productItem?.variants?.length > 1) {
+        {
+          RegularPrice(
+            productItem?.variants[0]?.costPrice,
+            productItem?.pricing?.price?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              &#8377;
+              {roundOff(productItem?.variants[0]?.costPrice?.gross?.amount)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          &#8377;
+          {roundOff(productItem?.pricing?.price?.gross?.amount)}
+        </span>;
+      } else {
+        {
+          RegularPrice(
+            productItem?.defaultVariant?.costPrice,
+            productItem?.pricing?.priceRange?.start?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              &#8377;{roundOff(productItem?.defaultVariant?.costPrice)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          &#8377;
+          {roundOff(
+            productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+          )}
+        </span>;
+      }
+    } else {
+      if (productItem?.variants?.length > 1) {
+        {
+          RegularPrice(
+            productItem?.variants[0]?.costPrice,
+            productItem?.pricing?.price?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              {"$"}
+              {roundOff(productItem?.variants[0]?.costPrice?.gross?.amount)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          {"$"}
+          {roundOff(productItem?.pricing?.price?.gross?.amount)}
+        </span>;
+      } else {
+        {
+          RegularPrice(
+            productItem?.defaultVariant?.costPrice,
+            productItem?.pricing?.priceRange?.start?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              {"$"}
+              {roundOff(productItem?.defaultVariant?.costPrice)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          {"$"}
+          {roundOff(
+            productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+          )}
+        </span>;
+      }
+    }
+  };
 
   return (
     <div className="tp-product-details-wrapper">
@@ -410,7 +524,7 @@ useEffect(() => {
                   >
                     <div>
                       <p style={{ color: "gray", marginBottom: "0px" }}>
-                       {previousProduct?.name}
+                        {previousProduct?.name}
                       </p>
                       <p
                         style={{
@@ -418,7 +532,9 @@ useEffect(() => {
                           marginBottom: "0px",
                         }}
                       >
-                        {channel === "india-channel" ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}` : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                        {channel === "india-channel"
+                          ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                          : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
                       </p>
                     </div>
                   </div>
@@ -602,6 +718,35 @@ useEffect(() => {
         imperfections add characteristics to the stones making it distinct and
         unique.
       </p> */}
+      {productItem?.variants?.length > 1 && (
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+          }}
+        >
+          {productItem?.variants?.map((item, i) => (
+            <button
+              onClick={() => {
+                setVariantId(item?.id);
+                setIndex(i);
+              }}
+              type="button"
+              style={{
+                borderWidth: 1,
+                borderColor: "grey",
+                padding: 10,
+                borderStyle: "solid",
+                borderRadius: 10,
+                backgroundColor: index == i ? "black" : "white",
+                color: index == i ? "white" : "black",
+              }}
+            >
+              {item?.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       <p style={{ color: "black" }}>
         {productItem?.defaultVariant?.quantityAvailable} in stock
@@ -612,21 +757,21 @@ useEffect(() => {
           {productItem?.defaultVariant?.quantityAvailable != 0 && (
             <button
               onClick={() => {
-                if (isAddedToCart) {
-                  dispatch(handleModalClose());
-                  router.push("/cart");
-                } else {
-                  addToCartProductINR();
-                  addToCartProductUSD();
-                }
+                // if (isAddedToCart) {
+                //   dispatch(handleModalClose());
+                //   router.push("/cart");
+                // } else {
+                addToCartProductINR();
+                addToCartProductUSD();
+                // }
               }}
               disabled={status === "out-of-stock"}
-              className="tp-btn tp-btn-border"
+              className={`tp-btn tp-btn-border`}
             >
               {cartLoader ? (
                 <ButtonLoader loader={cartLoader} />
               ) : (
-                <>{isAddedToCart ? "View Cart" : "Add To Cart"}</>
+                <>{"Add To Cart"}</>
               )}
             </button>
           )}
@@ -911,7 +1056,9 @@ useEffect(() => {
           {/* Toggle arrow up/down based on content visibility */}
         </div>
         {visibility.shipping && (
-          <div style={{ paddingTop: "10px", height:"300px", overflowY:"scroll",  }}>
+          <div
+            style={{ paddingTop: "10px", height: "300px", overflowY: "scroll" }}
+          >
             <h5 style={{ fontWeight: "400" }}>Cancellation Policy:</h5>
             <p style={{ color: "#55585b" }}>
               If you wish to cancel your order, we shall provide you with an

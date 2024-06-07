@@ -24,3 +24,15 @@ export const profilePic = (profile) => {
   }
   return profiles;
 };
+
+export const pincode = [
+  "799013",
+  "384160",
+  "384135",
+  "481990",
+  "370150",
+  "481776",
+  "815302",
+  "475330",
+  "276141",
+];
