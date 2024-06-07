@@ -125,7 +125,7 @@ const CartItem = ({
             </div>
           </td>
           <td className="tp-cart-title">
-            <Link href={`/product-details/${_id}`}>{title}</Link>
+            <Link href={`/product-details/${product?.variant?.product?.id}`}>{title}</Link>
           </td>
 
           <td className="tp-cart-price">

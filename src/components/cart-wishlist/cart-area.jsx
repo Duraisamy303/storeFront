@@ -158,6 +158,9 @@ const CartArea = () => {
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
                     <div className="col-xl-12 col-md-12">
+                      <div className="tp-cart-coupon">
+                        <Link href="/checkout" >Apply Coupon Code in Checkout</Link>
+                        </div>
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
                           onClick={() => updateCart()}

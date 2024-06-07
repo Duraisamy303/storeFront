@@ -14,9 +14,9 @@ import LoginForm from "@/components/forms/login-form";
 // slider setting
 const slider_setting = {
   slidesPerView: 5,
-  spaceBetween: 25,
+  spaceBetween: 10,
   pagination: {
-    el: ".tp-category-slider-dot-4",
+    el: ".tp-category-slider-dot-3",
     clickable: true,
   },
   scrollbar: {

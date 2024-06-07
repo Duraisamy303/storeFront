@@ -513,3 +513,26 @@ font-weight:400;
 	padding: 8px 15px;
 	border: none;
 }
+
+
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-select-single {
+    font-size: 14px;
+    height: 50px;
+    width: 100%;
+}
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-item, :where(.css-dev-only-do-not-override-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    padding-left: 35px;
+}
+
+
+:where(.css-1ae8k9u).ant-select-single {
+    font-size: 14px;
+    height: 50px;
+    width: 100%;
+}
+
+:where(.css-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-item, :where(.css-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    padding-left: 35px;
+}

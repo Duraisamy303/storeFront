@@ -6,7 +6,7 @@ import ProfileInfo from "./profile-info";
 import ChangePassword from "./change-password";
 import MyOrders from "./my-orders";
 import { Wishlist } from "@/svg";
-// import AddressInfo from "./AddressInfo";
+import AddressInfo from "./AddressInfo";
 
 const ProfileArea = ({ orderData }) => {
   return (
@@ -42,14 +42,14 @@ const ProfileArea = ({ orderData }) => {
                       <ProfileInfo />
                     </div>
 
-                    {/* <div
+                    <div
                       className="tab-pane fade"
                       id="nav-address"
                       role="tabpanel"
                       aria-labelledby="nav-address-tab"
                     >
                       <AddressInfo />
-                    </div> */}
+                    </div>
 
                     <div
                       className="tab-pane fade"

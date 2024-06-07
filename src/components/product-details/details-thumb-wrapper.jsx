@@ -76,26 +76,29 @@ const DetailsThumbWrapper = ({
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
-        <nav className="product-side-nav-img">
+      
+        <nav className="product-side-nav-img" style={{height: imageUrls?.length > 4 ? "700px": "auto", overflowY:imageUrls?.length > 4 ? "scroll": "hidden"}}>
           <div className="nav nav-tabs flex-sm-column">
             {imageUrls?.map((item, i) => {
-              return(
-              <button
-                key={i}
-                className={`nav-link ${item === activeImg ? "active" : ""}`}
-                onClick={() => handleImageActive(item, i)} style={{
-                  height: imageUrls?.length > 3 ? "180px" : "250px" ,
-                }}
-              >
-                <Image
-                  src={item}
-                  alt="image"
-                  width={78}
-                  height={100}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </button>
-            )})}
+              return (
+                <button
+                  key={i}
+                  className={`nav-link ${item === activeImg ? "active" : ""}`}
+                  onClick={() => handleImageActive(item, i)}
+                  style={{
+                    height: imageUrls?.length > 3 ? "180px" : "250px",
+                  }}
+                >
+                  <Image
+                    src={item}
+                    alt="image"
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </button>
+              );
+            })}
           </div>
         </nav>
         <div className="tab-content m-img">
@@ -168,7 +171,7 @@ const DetailsThumbWrapper = ({
                 {product?.defaultVariant?.quantityAvailable === 0 && (
                   <span
                     className="product-hot text-center"
-                    style={{ padding: "15px 12px" , fontSize: "12px"}}
+                    style={{ padding: "15px 12px", fontSize: "12px" }}
                   >
                     SOLD
                     <br /> OUT
@@ -178,7 +181,9 @@ const DetailsThumbWrapper = ({
 
               <div
                 className={`${
-                  product?.defaultVariant?.quantityAvailable === 0 ?"tp-product-badge": "tp-product-badge-2"
+                  product?.defaultVariant?.quantityAvailable === 0
+                    ? "tp-product-badge"
+                    : "tp-product-badge-2"
                 }`}
               >
                 {product?.metadata?.filter((item) => item.key === "label")
@@ -189,7 +194,10 @@ const DetailsThumbWrapper = ({
                       <span
                         key={index}
                         className="product-trending text-center"
-                        style={{ padding: "18px 12px", textTransform: "capitalize" }}
+                        style={{
+                          padding: "18px 12px",
+                          textTransform: "capitalize",
+                        }}
                       >
                         {item.value}
                       </span>

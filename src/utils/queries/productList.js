@@ -121,7 +121,7 @@ export const ORDER_LIST = ({ orderId }) => {
 export const MY_ORDER_LIST = ({ first }) => {
   return JSON.stringify({
     query: `
-    query Myorders($first:Int!) {
+    query Myorders($first: Int!) {
       me {
         email
         orders(first: $first) {
@@ -147,6 +147,10 @@ export const MY_ORDER_LIST = ({ first }) => {
                 }
               }
               created
+              invoices {
+                id
+                url
+              }
             }
           }
         }
@@ -292,7 +296,7 @@ export const CATEGORY_LIST = ({ channel, first }) => {
   });
 };
 
-export const PARENT_CATEGORY_LIST = ({channel}) => {
+export const PARENT_CATEGORY_LIST = ({ channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($channel: String!) {
@@ -310,9 +314,11 @@ export const PARENT_CATEGORY_LIST = ({channel}) => {
       }
     }
     `,
-    variables: {channel},
+    variables: { channel },
   });
 };
+
+
 
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
@@ -987,5 +993,205 @@ export const PRODUCT_20_PERCENTAGE = ({
     
     `,
     variables: { channel, first, after, collectionid },
+  });
+};
+
+
+export const SUB_CAT_LIST = ({ parentid }) => {
+  return {
+    query: `
+    query GetSubCategoryList($parentid: ID!) {
+      category(id: $parentid) {
+        id
+        name
+        children(first: 100) {
+          edges {
+            node {
+              id
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+      `,
+    variables: { parentid },
+  };
+};
+
+
+export const CATEGORY_NAME = ({ categoryid }) => {
+  return JSON.stringify({
+    query: `
+    query GetCategoryName($categoryid: ID!) {
+      category(id:$categoryid){
+        name    
+      }
+    }
+      `,
+    variables: { categoryid },
+  })
+
+}
+
+// address section
+
+export const ADDRESS_LIST = () => {
+  return JSON.stringify({
+    query: `
+    {
+      me {
+        id
+        email
+        firstName
+        lastName
+        addresses {
+          city
+          cityArea
+          companyName
+          country {
+            country
+            code
+          }
+          countryArea
+          firstName
+          id
+          isDefaultBillingAddress
+          isDefaultShippingAddress
+          lastName
+          phone
+          postalCode
+          streetAddress1
+          streetAddress2
+        }
+        defaultBillingAddress {
+          id
+        }
+        defaultShippingAddress {
+          id
+        }
+      }
+    }
+    `,
+  });
+};
+
+export const UPDATE_BILLING_ADDRESS = ({ addressId }) => {
+  return JSON.stringify({
+    query: `
+    mutation SetDefaultBillingAddress($addressId: ID!) {
+      accountSetDefaultAddress(id: $addressId, type: BILLING) {
+        user {
+          id
+          email
+          defaultBillingAddress {
+            id
+            firstName
+            lastName
+            streetAddress1
+            city
+            postalCode
+            country {
+              code
+              country
+            }
+          }
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId },
+  });
+};
+
+export const UPDATE_SHIPPING_ADDRESS = ({ addressId }) => {
+  return JSON.stringify({
+    query: `
+    mutation SetDefaultShippingAddress($addressId: ID!) {
+      accountSetDefaultAddress(id: $addressId, type: SHIPPING) {
+        user {
+          id
+          email
+          defaultShippingAddress {
+            id
+            firstName
+            lastName
+            streetAddress1
+            city
+            postalCode
+            country {
+              code
+              country
+            }
+          }
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId },
+  });
+};
+
+export const UPDATE_ADDRESS = ({ addressId, input }) => {
+  return JSON.stringify({
+    query: `
+    mutation UpdateAddress($addressId: ID!, $input: AddressInput!) {
+      accountAddressUpdate(id: $addressId, input: $input) {
+        address {
+          id
+          firstName
+          lastName
+          streetAddress1
+          streetAddress2
+          city
+          postalCode
+          country {
+            code
+            country
+          }
+          countryArea
+          phone
+          isDefaultBillingAddress
+          isDefaultShippingAddress
+        }
+        user {
+          id
+          email
+        }
+        errors {
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { addressId, input },
+  });
+};
+
+export const DELETE_ADDRESS = ({ id }) => {
+  return JSON.stringify({
+    query: `
+    mutation DeleteAddress($id: ID!) {
+      accountAddressDelete(id: $id) {
+        errors {
+          addressType
+          code
+          field
+          message
+        }
+      }
+    }
+    `,
+    variables: { id },
   });
 };
