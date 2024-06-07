@@ -319,9 +319,7 @@ export const CHECKOUT_UPDATE_SHIPPING_ADDRESS = ({
 
 export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
   return {
-    query: `
-    
-    mutation CheckoutUpdateDeliveryMethod($checkoutid: ID!, $deliveryMethodId: ID!) {
+    query: `mutation CheckoutUpdateDeliveryMethod($checkoutid: ID!, $deliveryMethodId: ID!) {
       checkoutDeliveryMethodUpdate(
         deliveryMethodId: $deliveryMethodId
         id: $checkoutid
@@ -354,14 +352,11 @@ export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
         }
       }
     }
-    
     fragment Money on Money {
       currency
       amount
       __typename
     }
-      
-    
       `,
     variables: { checkoutid, deliveryMethodId },
   };
@@ -1036,5 +1031,66 @@ export const GET_CHECKOUT_DETAILS = ({ id, languageCode }) => {
     
       `,
     variables: { id, languageCode },
+  };
+};
+
+export const GIFT_WRAP_UPDATE = ({ checkoutId, isgiftwrap }) => {
+  return {
+    query: `
+    mutation CheckoutGiftWrapUpdate($checkoutId: ID!, $isgiftwrap:Boolean!) {
+      checkoutGiftWrapUpdate(
+        checkoutId: $checkoutId
+        isgiftwrap: $isgiftwrap
+      ) {
+        errors {
+          code
+        }
+        checkout {
+          id
+          isGiftWrap
+       
+        }
+      }
+    }
+      `,
+    variables: { checkoutId, isgiftwrap },
+  };
+};
+
+export const PAYMENT_METHOD_LIST = () => {
+  return {
+    query: `
+    query PaymentGatewayList {
+      paymentGateways(first: 100) {
+        edges {
+          node {
+            id
+            isActive
+            name
+          }
+        }
+      }
+    }
+      `,
+    variables: {},
+  };
+};
+
+export const CHECKOUT_PAYMENT_METHOD_UPDATE = ({
+  checkoutId,
+  paymentMethod,
+}) => {
+  return {
+    query: `
+    mutation CheckoutPaymentMethodUpdate($checkoutId:ID!,$paymentMethod:ID!) {
+      checkoutPaymentMethodUpdate(checkoutId:$checkoutId,paymentMethod:$paymentMethod){
+        errors{
+          code
+        }
+      }
+    }
+    
+      `,
+    variables: { checkoutId, paymentMethod },
   };
 };

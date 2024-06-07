@@ -89,6 +89,46 @@ const HeaderTwo = ({ style_2 = false, data }) => {
     setToken(token);
   }, []);
 
+  useEffect(() => {
+    const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
+    const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+
+    if (!checkoutTokenINR) {
+      createCheckoutTokenINR();
+    }
+    if (!checkoutTokenUSD) {
+      createCheckoutTokenUSD();
+    }
+  }, []);
+
+  const createCheckoutTokenINR = async () => {
+    try {
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "india-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenINR",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const createCheckoutTokenUSD = async () => {
+    try {
+      const data = await createCheckoutTokenWithoutEmail({
+        channel: "default-channel",
+      });
+      localStorage.setItem(
+        "checkoutTokenUSD",
+        data?.data?.data?.checkoutCreate?.checkout?.token
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const getWishlistList = async (prd) => {
     try {
       if (wishlistData?.data?.wishlists?.edges?.length > 0) {
@@ -173,7 +213,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       }));
       console.log("filter: ", filter);
 
-
       if (search === "") {
         setIsOpen2(false);
       } else {
@@ -181,7 +220,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       }
 
       setSearchOption(filter);
-
     } catch (error) {
       console.log("error: ", error);
     }
@@ -270,19 +308,19 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                         style={{ position: "relative" }}
                       >
                         {/* <form onSubmit={handleSubmit}> */}
-                          <input
-                            onChange={(e) => handleSearch(e.target.value)}
-                            value={searchText}
-                            type="text"
-                            placeholder="Search for Products..."
-                            onKeyPress={(e) => {
-                              if (e.key === "Enter") {
-                                // Call your search function here
-                                handleSearch(searchText);
-                              }
-                            }}
-                          />
-                          {/* <button type="submit">
+                        <input
+                          onChange={(e) => handleSearch(e.target.value)}
+                          value={searchText}
+                          type="text"
+                          placeholder="Search for Products..."
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              // Call your search function here
+                              handleSearch(searchText);
+                            }
+                          }}
+                        />
+                        {/* <button type="submit">
                             <Search />
                           </button> */}
                         {/* </form> */}

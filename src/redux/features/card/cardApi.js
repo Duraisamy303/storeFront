@@ -19,9 +19,13 @@ import {
   CREATE_CHECKOUT_TOKEN,
   DELETE_WISHLIST,
   GET_WISHLIST_LIST,
+  GIFT_WRAP_UPDATE,
+  PAYMENT_METHOD_LIST,
   REMOVETOCART,
+  SUB_CAT_LIST,
   UPDATE_BILLING_ADDRESS,
   UPDATE_CART_QUANTITY,
+  CHECKOUT_PAYMENT_METHOD_UPDATE,
 } from "@/utils/queries/cart/addToCart";
 import { cart_list, checkout_token } from "../cartSlice";
 import {
@@ -176,6 +180,7 @@ export const cardApi = apiSlice.injectEndpoints({
     checkoutUpdate: builder.mutation({
       query: ({ checkoutid, country }) => {
         let deliveryMethodId = "";
+        //COD and GiftWrap are false
         if (checkChannel() == "india-channel") {
           if (country == "IN") {
             deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6Mw==";
@@ -189,6 +194,25 @@ export const cardApi = apiSlice.injectEndpoints({
             deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6OQ==";
           }
         }
+        return configuration(
+          CHECKOUT_DELIVERY_METHOD({
+            checkoutid,
+            deliveryMethodId,
+          })
+        );
+      },
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
+
+    updateDeliveryMethodForCODAndGidtWrap: builder.mutation({
+      query: ({ checkoutid, deliveryMethodId }) => {
         return configuration(
           CHECKOUT_DELIVERY_METHOD({
             checkoutid,
@@ -300,11 +324,6 @@ export const cardApi = apiSlice.injectEndpoints({
 
     updateShippingAddress: builder.mutation({
       query: ({ checkoutId, shippingAddress }) => {
-        console.log(
-          "checkoutId, shippingAddress: ",
-          checkoutId,
-          shippingAddress
-        );
         return configuration(
           UPDATE_SHIPPING_ADDRESS({
             checkoutId,
@@ -364,6 +383,31 @@ export const cardApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    updateGiftWrap: builder.mutation({
+      query: ({ checkoutId, isgiftwrap }) => {
+        return configuration(
+          GIFT_WRAP_UPDATE({
+            checkoutId,
+            isgiftwrap,
+          })
+        );
+      },
+    }),
+
+    paymentMethodList: builder.mutation({
+      query: () => {
+        return configuration(PAYMENT_METHOD_LIST());
+      },
+    }),
+    paymentMethodUpdate: builder.mutation({
+      query: ({ paymentMethod }) => {
+        const checkoutId = localStorage.getItem("checkoutId");
+        return configuration(
+          CHECKOUT_PAYMENT_METHOD_UPDATE({ checkoutId, paymentMethod })
+        );
+      },
+    }),
   }),
 });
 
@@ -386,4 +430,8 @@ export const {
   useCheckoutTokenEmailUpdatesMutation,
   useGetCartAllListQuery,
   useGetCheckoutDetailsMutation,
+  useUpdateGiftWrapMutation,
+  usePaymentMethodListMutation,
+  useUpdateDeliveryMethodForCODAndGidtWrapMutation,
+  usePaymentMethodUpdateMutation,
 } = cardApi;

@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // internal
 
-import { useMyOrderListQuery } from "@/redux/features/productApi";
+import {
+  useMyOrderListQuery,
+  usePaymentMutation,
+} from "@/redux/features/productApi";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
 import moment from "moment";
-import { useRouter,  } from "next/router";
+import { useRouter } from "next/router";
+import useRazorpay from "react-razorpay";
+import { checkChannel, roundOff } from "@/utils/functions";
+import { notifySuccess } from "@/utils/toast";
 
 const OrderList = () => {
-
- 
-
   // const orderId = id
   const { data: orders, isError, isLoading } = useMyOrderListQuery();
 
   const [orderList, setOrderList] = useState([]);
 
   const router = useRouter();
+
+  const [Razorpay] = useRazorpay();
+
+  const [successPayment] = usePaymentMutation();
 
   useEffect(() => {
     if (orders?.data?.me?.orders?.edges?.length > 0) {
@@ -24,6 +31,68 @@ const OrderList = () => {
       setOrderList(list);
     }
   }, [orders]);
+
+  const handlePayment = useCallback(
+    async (total, currency, orderId) => {
+      try {
+        console.log("options: ");
+
+        const options = {
+          key: "rzp_test_tEMCtcfElFdYts",
+          key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
+          amount: roundOff(total) * 100,
+          // order_id:orderId,
+          currency,
+          name: "Products",
+          description: "",
+          image: "https://example.com/your_logo",
+          modal: {
+            ondismiss: async (res) => {
+              // console.log("res: ", res);
+              // router.push(`/order-failed/${orderId}`);
+
+              // await paymentFailed(orderId);
+              // paymentFaildRefetch();
+            },
+          },
+          handler: async (res) => {
+            console.log("res: ", res);
+            if (res?.razorpay_payment_id) {
+              notifySuccess("Payment Successful");
+
+              const data = await successPayment({
+                amountAuthorized: total,
+                amountCharged: total,
+                pspReference: res?.razorpay_payment_id,
+              });
+              router.push(`/order-success/${orderId}`);
+            }
+          },
+          prefill: {
+            name: "",
+            email: "",
+            contact: "",
+          },
+          notes: {
+            address: "",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+          retry: {
+            enabled: false,
+            max_count: true,
+          },
+        };
+
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    },
+    [Razorpay]
+  );
 
   return (
     <>
@@ -88,13 +157,38 @@ const OrderList = () => {
                               <span> View</span>
                             </Link>
                           </td> */}
-                    <td>
+                    <td style={{ display: "flex", gap: 10 }}>
                       <button
                         type="button"
                         className="order-view-btn"
-                        onClick={() => router.push(`/order-details/${item?.id}`)}
+                        onClick={() => {
+                          console.log("item", item);
+                          handlePayment(
+                            item?.total?.gross?.amount,
+                            item?.total?.gross?.currency,
+                            item?.id
+                          );
+                        }}
+                      >
+                        Pay
+                      </button>
+                      <button
+                        type="button"
+                        className="order-view-btn"
+                        onClick={() =>
+                          router.push(`/order-details/${item?.id}`)
+                        }
                       >
                         View
+                      </button>
+                      <button
+                        type="button"
+                        className="order-view-btn"
+                        onClick={() =>
+                          router.push(`/order-details/${item?.id}`)
+                        }
+                      >
+                        Cancel
                       </button>
                     </td>
                   </tr>

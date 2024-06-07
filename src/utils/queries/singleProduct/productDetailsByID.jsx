@@ -41,6 +41,21 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           id
           quantityAvailable
           name
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+            costPrice {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+          
         }
         created
         description
