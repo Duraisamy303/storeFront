@@ -115,9 +115,9 @@ const CartMiniSidebar = () => {
                 </button>
               </div>
             </div>
-            <div className="cartmini__shipping">
+            {/* <div className="cartmini__shipping">
               <RenderCartProgress />
-            </div>
+            </div> */}
             {CartList?.length > 0 && (
               <div className="cartmini__widget">
                 {CartList?.map((item) => {

@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import React from "react";
 
 function SingleNav({ active = false, id, title, icon }) {
-  const router = useRouter()
+  const router = useRouter();
   const handleClick = () => {
     if (id === "wishlist") {
-     router.push("/wishlist");
+      router.push("/wishlist");
     }
   };
   return (
@@ -29,7 +29,6 @@ function SingleNav({ active = false, id, title, icon }) {
 }
 
 const ProfileNavTab = () => {
-
   return (
     <nav>
       <div
@@ -40,15 +39,15 @@ const ProfileNavTab = () => {
         <SingleNav
           active={true}
           id="profile"
-          title="Profile"
-          icon="fa-regular fa-user-pen"
+          title="Dashboard"
+          icon="fa-regular fa-circle-info"
         />
-        {/* <SingleNav
+        <SingleNav
           id="information"
           title="Account Details"
-          icon="fa-regular fa-circle-info"
-        /> */}
-         <SingleNav
+          icon="fa-regular fa-user-pen"
+        />
+        <SingleNav
           id="address"
           title="Address"
           icon="fa-solid fa-location-dot"

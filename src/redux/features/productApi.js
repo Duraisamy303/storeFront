@@ -438,7 +438,7 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    updateBillingAddress: builder.mutation({
+    updateBillingAddressAddressSection: builder.mutation({
       query: ({ addressId }) => {
         console.log("addressId: ", addressId);
         return configuration(
@@ -449,7 +449,7 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
-    updateShippingAddress: builder.mutation({
+    updateShippingAddressAddressSection: builder.mutation({
       query: ({ addressId }) => {
         console.log("addressId: ", addressId);
         return configuration(
@@ -532,8 +532,8 @@ export const {
   useProductSearchMutation,
   useProduct20PercentageMutation,
   useGetParentCategoryListQuery,
-  useUpdateBillingAddressMutation,
-  // useUpdateShippingAddressMutation,
+  useUpdateBillingAddressAddressSectionMutation,
+  useUpdateShippingAddressAddressSectionMutation,
 
   useUpdateAddressMutation,
   useDeleteAddressMutation,

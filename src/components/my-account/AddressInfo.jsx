@@ -5,7 +5,7 @@ import {
   useGetAddressListQuery,
   useStateListQuery,
   useUpdateAddressMutation,
-  useUpdateBillingAddressMutation,
+  useUpdateBillingAddressAddressSectionMutation,useUpdateShippingAddressAddressSectionMutation
 } from "@/redux/features/productApi";
 import { SettingOutlined } from "@ant-design/icons";
 import { Modal, Select } from "antd";
@@ -17,7 +17,6 @@ import ErrorMsg from "../common/error-msg";
 import { EmailTwo, LocationTwo, PhoneThree, UserThree } from "@/svg";
 import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useUpdateShippingAddressMutation } from "@/redux/features/card/cardApi";
 
 const { Option } = Select;
 
@@ -45,6 +44,7 @@ const AddressInfo = () => {
     setSelectedCountry(data?.country?.code);
     setSelectedState(data?.countryArea);
     setEditAddressModalVisible(true);
+    getAddressListRefetch()
   };
 
   
@@ -71,9 +71,9 @@ const AddressInfo = () => {
 
   const [deleteAddress] = useDeleteAddressMutation();
 
-  const [defaultBillingAddress, {}] = useUpdateBillingAddressMutation();
+  const [defaultBillingAddress, {}] = useUpdateBillingAddressAddressSectionMutation();
 
-  const [defaultShippingAddress, {}] = useUpdateShippingAddressMutation();
+  const [defaultShippingAddress, {}] = useUpdateShippingAddressAddressSectionMutation();
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -224,6 +224,10 @@ const AddressInfo = () => {
         );
       });
   };
+
+
+  const DefaultCountry = selectedAddress?.country?.code
+console.log('✌️DefaultCountry --->', DefaultCountry);
 
   return (
     <div>

@@ -129,7 +129,8 @@ const OrderList = () => {
     <>
       <section className="tp-cart-area ">
         <div className="profile__ticket table-responsive">
-          {orderList?.length < 0 && (
+       
+          {orderList?.length < 0  || orderList?.length == 0&& (
             <div
               style={{ height: "210px" }}
               className="d-flex align-items-center justify-content-center"

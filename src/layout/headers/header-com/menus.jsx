@@ -451,11 +451,7 @@ const Menus = () => {
         </div>
       </li>
 
-      <li>
-        <Link href="/about" style={{ fontWeight: "500" }}>
-          ABOUT
-        </Link>
-      </li>
+     
       <li>
         <Link href="/coupon" style={{ fontWeight: "500" }}>
           GIFT CARD
@@ -478,6 +474,11 @@ const Menus = () => {
       <li>
         <Link href="/sale" style={{ fontWeight: "500" }}>
           SALE
+        </Link>
+      </li>
+      <li>
+        <Link href="/about" style={{ fontWeight: "500" }}>
+          ABOUT
         </Link>
       </li>
       <li>
