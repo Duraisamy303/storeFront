@@ -26,7 +26,9 @@ import {
   UPDATE_EMAIL,
   UPDATE_SHIPPING_ADDRESS,
   WISHLIST_LIST,
-  ORDER_CANCEL
+  ORDER_CANCEL,
+  UPDATE_BILLING_ADDRESS_ADDRESS_SECTION,
+  UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -41,7 +43,7 @@ import {
   STONE_LIST,
   STATE_LIST,
 } from "../../utils/queries/productList";
-import { GET_WISHLIST_LIST } from "@/utils/queries/cart/addToCart";
+import { GET_WISHLIST_LIST, UPDATE_BILLING_ADDRESS } from "@/utils/queries/cart/addToCart";
 import { checkChannel } from "@/utils/functions";
 
 export const productApi = apiSlice.injectEndpoints({
@@ -436,27 +438,27 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    // updateBillingAddress: builder.mutation({
-    //   query: ({ addressId }) => {
-    //     console.log("addressId: ", addressId);
-    //     return configuration(
-    //       UPDATE_BILLING_ADDRESS({
-    //         addressId,
-    //       })
-    //     );
-    //   },
-    // }),
+    updateBillingAddress: builder.mutation({
+      query: ({ addressId }) => {
+        console.log("addressId: ", addressId);
+        return configuration(
+          UPDATE_BILLING_ADDRESS_ADDRESS_SECTION({
+            addressId,
+          })
+        );
+      },
+    }),
 
-    // updateShippingAddress: builder.mutation({
-    //   query: ({ addressId }) => {
-    //     console.log("addressId: ", addressId);
-    //     return configuration(
-    //       UPDATE_SHIPPING_ADDRESS({
-    //         addressId,
-    //       })
-    //     );
-    //   },
-    // }),
+    updateShippingAddress: builder.mutation({
+      query: ({ addressId }) => {
+        console.log("addressId: ", addressId);
+        return configuration(
+          UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION({
+            addressId,
+          })
+        );
+      },
+    }),
 
 
     updateAddress: builder.mutation({

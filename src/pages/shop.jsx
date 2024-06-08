@@ -181,21 +181,21 @@ const ShopPage = () => {
   };
 
   const selectHandleFilter = async (e) => {
-    try {
-      let sortBy = {};
-      if ((e = "Default Sorting")) {
-        sortBy = { direction: "ASC", field: "ORDER_NO" };
-      } else if (e == "Low to High") {
-        sortBy = { direction: "ASC", field: "PRICE" };
-      } else if (e == "High to Low") {
-        sortBy = { direction: "DESC", field: "PRICE" };
-      } else if (e == "New Added") {
-        sortBy = { direction: "DESC", field: "CREATED_AT" };
-      }
-    } catch (error) {
-      console.log("error: ", error);
-    }
-    console.log("e: ", e.value);
+    // try {
+    //   let sortBy = {};
+    //   if ((e = "Default Sorting")) {
+    //     sortBy = { direction: "ASC", field: "ORDER_NO" };
+    //   } else if (e == "Low to High") {
+    //     sortBy = { direction: "ASC", field: "PRICE" };
+    //   } else if (e == "High to Low") {
+    //     sortBy = { direction: "DESC", field: "PRICE" };
+    //   } else if (e == "New Added") {
+    //     sortBy = { direction: "DESC", field: "CREATED_AT" };
+    //   }
+    // } catch (error) {
+    //   console.log("error: ", error);
+    // }
+    // console.log("e: ", e.value);
     setSelectValue(e.value);
   };
 
