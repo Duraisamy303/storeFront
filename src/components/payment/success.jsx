@@ -155,8 +155,8 @@ const Success = ({ data }) => {
             </div>
             <div className="mt-20">
               <Link
-                href="http://www1.prade.in/shop"
-                // onClick={() => Router.push("/shop")}
+                // href="http://www1.prade.in/shop"
+                onClick={() => Router.push("/shop")}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}
               >
