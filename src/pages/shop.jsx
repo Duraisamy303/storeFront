@@ -43,7 +43,6 @@ const ShopPage = () => {
   const [getCategoryName] = useGetCategoryNameMutation();
 
   const router = useRouter();
-  console.log("✌️router --->", router);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
