@@ -186,11 +186,11 @@ const ShopPage = () => {
       if ((e = "Default Sorting")) {
         sortBy = { direction: "ASC", field: "ORDER_NO" };
       } else if (e == "Low to High") {
-        sortBy = { direction: ASC, field: PRICE };
+        sortBy = { direction: "ASC", field: "PRICE" };
       } else if (e == "High to Low") {
-        sortBy = { direction: DESC, field: PRICE };
+        sortBy = { direction: "DESC", field: "PRICE" };
       } else if (e == "New Added") {
-        sortBy = { direction: DESC, field: CREATED_AT };
+        sortBy = { direction: "DESC", field: "CREATED_AT" };
       }
     } catch (error) {
       console.log("error: ", error);
