@@ -47,11 +47,7 @@ const AddressInfo = () => {
     setEditAddressModalVisible(true);
   };
 
-  const handleEditAddressModalCancel = () => {
-    setSelectedAddress(null);
-    setEditAddressModalVisible(false);
-  };
-
+  
   const handleAddressClick = (address) => {
     setSelectedAddress(address);
   };
@@ -118,6 +114,15 @@ const AddressInfo = () => {
     }
   }, [selectedAddress, setValue]);
 
+
+  const handleEditAddressModalCancel = () => {
+    setSelectedAddress(null);
+    setEditAddressModalVisible(false);
+    reset();
+    reset({country: selectedAddress.country?.code})
+  };
+
+
   const handleEditAddressSubmit = (data) => {
     const formData = {
       firstName: data.firstName,
@@ -136,8 +141,9 @@ const AddressInfo = () => {
       input: formData,
     })
       .then((result) => {
-        if (result?.data?.accountAddressUpdate?.error?.length > 0) {
+        if (result?.data?.accountAddressUpdate?.error?.length > 0 || result?.data?.data?.accountAddressUpdate?.errors?.length > 0) {
           notifyError(result?.data?.accountAddressUpdate?.error[0]?.message);
+          notifyError(result?.data?.data?.accountAddressUpdate?.errors[0]?.message);
         } else {
           notifySuccess("Address updated successfully!");
           reset(); // Reset form fields
@@ -150,6 +156,7 @@ const AddressInfo = () => {
       .catch(() => {
         notifyError("An error occurred while updating the address.");
       });
+      getAddressListRefetch();
   };
 
   const handleCountryChange = (value) => {
