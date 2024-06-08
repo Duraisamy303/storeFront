@@ -283,9 +283,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
         )
       );
 
-      console.log("hasPreOrders: ", hasPreOrders);
+      const hasGiftCard = state.orderData?.lines.some((line) =>
+        line?.variant?.product?.collections?.some(
+          (collection) => collection.name === "Gift Card"
+        )
+      );
 
-      if (state.total > 3000 && state.total < 30000 && !hasPreOrders) {
+      if (
+        state.total > 3000 &&
+        state.total < 30000 &&
+        !hasPreOrders &&
+        !hasGiftCard
+      ) {
         if (state.diffAddress) {
           if (state.selectedCountry1 == "IN") {
             if (pincode.includes(Number(state.postalCode1))) {
@@ -1652,7 +1661,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 {/* giftCards */}
 
                 {state?.giftCard?.length > 0 &&
-                  state?.giftCard?.map((item,i) => (
+                  state?.giftCard?.map((item, i) => (
                     <li className="tp-order-info-list-total" key={i}>
                       <span className="para">Coupen code</span>
                       {checkChannel() == "india-channel" ? (

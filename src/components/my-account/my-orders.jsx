@@ -129,24 +129,7 @@ const OrderList = () => {
     <>
       <section className="tp-cart-area ">
         <div className="profile__ticket table-responsive">
-       
-          {orderList?.length < 0  || orderList?.length == 0&& (
-            <div
-              style={{ height: "210px" }}
-              className="d-flex align-items-center justify-content-center"
-            >
-              <div className="text-center">
-                <i
-                  style={{ fontSize: "30px" }}
-                  className="fa-solid fa-cart-circle-xmark"
-                ></i>
-                <p style={{ fontSize: "20px", color: "black" }}>
-                  You have no order Yet!
-                </p>
-              </div>
-            </div>
-          )}
-          {orderList?.length > 0 && (
+          {orderList?.length > 0 ? (
             <table className="table">
               <thead>
                 <tr>
@@ -252,6 +235,21 @@ const OrderList = () => {
                 ))}
               </tbody>
             </table>
+          ) : (
+            <div
+              style={{ height: "210px" }}
+              className="d-flex align-items-center justify-content-center"
+            >
+              <div className="text-center">
+                <i
+                  style={{ fontSize: "30px" }}
+                  className="fa-solid fa-cart-circle-xmark"
+                ></i>
+                <p style={{ fontSize: "20px", color: "black" }}>
+                  You have no order Yet!
+                </p>
+              </div>
+            </div>
           )}
         </div>
       </section>
