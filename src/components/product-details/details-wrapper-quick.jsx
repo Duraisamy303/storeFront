@@ -68,6 +68,7 @@ const DetailsWrapperQuick = ({
   const [channel, setChannel] = useState("india-channel");
   const [cartLoader, setCartLoader] = useState(false);
   const [wishlistLoader, setWishlistLoader] = useState(false);
+  const [variantId, setVariantId] = useState("");
 
   const [visibility, setVisibility] = useState({
     description: false,
@@ -235,13 +236,24 @@ const DetailsWrapperQuick = ({
   // handle add product
 
   const addToCartProductINR = async () => {
-    setCartLoader(true);
     try {
       setCartLoader(true);
+      let variantID = "";
+      if (productItem?.variants?.length > 1) {
+        if (variantId == "") {
+          notifyError("Please select a variant");
+          setCartLoader(false);
+          return false;
+        } else {
+          variantID = variantId;
+        }
+      } else {
+        variantID = productItem?.defaultVariant?.id;
+      }
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
-        variantId: productItem?.defaultVariant?.id,
+        variantId: variantID,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -257,13 +269,23 @@ const DetailsWrapperQuick = ({
   };
 
   const addToCartProductUSD = async () => {
-    setCartLoader(true);
     try {
       setCartLoader(true);
+      let variantID = "";
+      if (productItem?.variants?.length > 1) {
+        if (variantId == "") {
+          setCartLoader(false);
+          return false;
+        } else {
+          variantID = variantId;
+        }
+      } else {
+        variantID = productItem?.defaultVariant?.id;
+      }
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: productItem?.defaultVariant?.id,
+        variantId: variantID,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -305,59 +327,57 @@ const DetailsWrapperQuick = ({
     }
   }, []);
 
-//   const [previousHovered, setPreviousHovered] = useState(false);
-//   const [nextHovered, setNextHovered] = useState(false);
-//   const [nextProduct, setNextProduct] = useState();
-//   const [previousProduct, setPreviousProduct] = useState();
+  //   const [previousHovered, setPreviousHovered] = useState(false);
+  //   const [nextHovered, setNextHovered] = useState(false);
+  //   const [nextProduct, setNextProduct] = useState();
+  //   const [previousProduct, setPreviousProduct] = useState();
 
-//   const PreviousMouseEnter = () => {
-//     setPreviousHovered(true);
-//   };
+  //   const PreviousMouseEnter = () => {
+  //     setPreviousHovered(true);
+  //   };
 
-//   const PreviousMouseLeave = () => {
-//     setPreviousHovered(false);
-//   };
+  //   const PreviousMouseLeave = () => {
+  //     setPreviousHovered(false);
+  //   };
 
-//   const NextMouseEnter = () => {
-//     setNextHovered(true);
-//   };
+  //   const NextMouseEnter = () => {
+  //     setNextHovered(true);
+  //   };
 
-//   const NextMouseLeave = () => {
-//     setNextHovered(false);
-//   };
+  //   const NextMouseLeave = () => {
+  //     setNextHovered(false);
+  //   };
 
-//   const PreviousProductClick = () => {
-//     router.push(`/product-details/${productItem?.previousProduct}`);
-//   };
-//   const NextProductClick = () => {
-//     router.push(`/product-details/${productItem?.nextProduct}`);
-//   };
+  //   const PreviousProductClick = () => {
+  //     router.push(`/product-details/${productItem?.previousProduct}`);
+  //   };
+  //   const NextProductClick = () => {
+  //     router.push(`/product-details/${productItem?.nextProduct}`);
+  //   };
 
-//   const {
-//     data: nextProductData,
-//     isNextLoadings,
-//     isNextErrors,
-//   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
+  //   const {
+  //     data: nextProductData,
+  //     isNextLoadings,
+  //     isNextErrors,
+  //   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-//   const {
-//     data: prevProductData,
-//     isPreviousLoadings,
-//     isPreviousErrors,
-//   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
+  //   const {
+  //     data: prevProductData,
+  //     isPreviousLoadings,
+  //     isPreviousErrors,
+  //   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
-// useEffect(() => {
-//   if (prevProductData) {
-//     setPreviousProduct(prevProductData?.data?.product);
-//   }
-// }, [prevProductData]);
+  // useEffect(() => {
+  //   if (prevProductData) {
+  //     setPreviousProduct(prevProductData?.data?.product);
+  //   }
+  // }, [prevProductData]);
 
-//   useEffect(() => {
-//     if (nextProductData) {
-//       setNextProduct(nextProductData?.data?.product);
-//     }
-//   }, [nextProductData]);
-
-  
+  //   useEffect(() => {
+  //     if (nextProductData) {
+  //       setNextProduct(nextProductData?.data?.product);
+  //     }
+  //   }, [nextProductData]);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -603,22 +623,52 @@ const DetailsWrapperQuick = ({
         unique.
       </p> */}
 
-      <p style={{ color: "black" }}>
-        {productItem?.defaultVariant?.quantityAvailable} in stock
-      </p>
+      <div className="w-full row">
+        {productItem?.variants?.length > 1 && (
+          <div className="flex flex-wrap gap-3">
+            <div
+              className="text-bold text-lg"
+              style={{ color: "grey", fontSize: "20px" }}
+            >
+              <span> Product variants:</span>
+            </div>
+
+            <select
+              name="country"
+              id="country"
+              value={variantId}
+              className="nice-select"
+              onChange={(e) => setVariantId(e.target.value)}
+            >
+              <option value="">Select variant</option>
+              {productItem?.variants?.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-2">
+        <p style={{ color: "grey", fontSize: "20px" }}>
+          {productItem?.defaultVariant?.quantityAvailable} in stock
+        </p>
+      </div>
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">
           {productItem?.defaultVariant?.quantityAvailable != 0 && (
             <button
               onClick={() => {
-                if (isAddedToCart) {
-                  dispatch(handleModalClose());
-                  router.push("/cart");
-                } else {
-                  addToCartProductINR();
-                  addToCartProductUSD();
-                }
+                // if (isAddedToCart) {
+                //   dispatch(handleModalClose());
+                //   router.push("/cart");
+                // } else {
+                addToCartProductINR();
+                addToCartProductUSD();
+                // }
               }}
               disabled={status === "out-of-stock"}
               className="tp-btn tp-btn-border"
@@ -626,7 +676,7 @@ const DetailsWrapperQuick = ({
               {cartLoader ? (
                 <ButtonLoader loader={cartLoader} />
               ) : (
-                <>{isAddedToCart ? "View Cart" : "Add To Cart"}</>
+                <>{"Add To Cart"}</>
               )}
             </button>
           )}
@@ -693,12 +743,8 @@ const DetailsWrapperQuick = ({
             {wishlistLoader ? "Loading..." : "Add To Wishlist"}
           </button>
         )}
-
-       
       </div>
       {/* product-details-action-sm end */}
-
-     
 
       <div>
         <p style={{ color: "#55585b" }}>

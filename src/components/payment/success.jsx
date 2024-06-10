@@ -11,12 +11,12 @@ const Success = ({ data }) => {
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
   const Total = data?.data?.order?.total.gross.amount;
+  const Tax = data?.data?.order?.total?.tax;
   const OrderNumber = data?.data?.order?.number;
   const OrderDate = moment(data?.data?.order?.updatedAt).format("MMMM D, YYYY");
   const ShippingAmount = data?.data?.order?.shippingPrice?.gross.amount;
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
-
 
   return (
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
@@ -104,12 +104,24 @@ const Success = ({ data }) => {
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
                           &#8377;{roundOff(Total)}
+                          <div
+                            style={{ fontSize: "15px", fontWeight: "normal" }}
+                          >
+                            (includes {Tax?.currency == "USD" ? "$" : "₹"}
+                            {roundOff(Tax?.amount)} GST)
+                          </div>
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
                           ${roundOff(Total)}
+                          <div
+                            style={{ fontSize: "15px", fontWeight: "normal" }}
+                          >
+                            (includes {Tax?.currency == "USD" ? "$" : "₹"}
+                            {roundOff(Tax?.amount)} GST)
+                          </div>
                         </td>
                       </>
                     )}
@@ -149,7 +161,7 @@ const Success = ({ data }) => {
                   )}
                 </li>
                 <li style={{ paddingBottom: "8px" }}>
-                  Payment Method: <span>razor Pay</span>
+                  Payment Method: <span>{paymentMethod}</span>
                 </li>
               </ul>
             </div>

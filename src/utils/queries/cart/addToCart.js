@@ -87,6 +87,9 @@ export const CART_LIST = ({ checkoutToken }) => {
                   id
                   name
                 }
+                category {
+                  name
+                }
               }
               pricing {
                 price {
@@ -105,6 +108,14 @@ export const CART_LIST = ({ checkoutToken }) => {
           }
           totalPrice {
             gross {
+              amount
+              currency
+            }
+            tax {
+              amount
+              currency
+            }
+            net {
               amount
               currency
             }

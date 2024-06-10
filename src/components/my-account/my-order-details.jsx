@@ -6,6 +6,7 @@ const MyOrderDetails = ({ data }) => {
   const Data = data?.data?.order;
   const SubTotal = data?.data?.order?.subtotal.gross;
   const Total = data?.data?.order?.total.gross;
+  const Tax = data?.data?.order?.total.tax;
   const ShippingAmount = data?.data?.order?.shippingPrice;
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
@@ -73,6 +74,10 @@ const MyOrderDetails = ({ data }) => {
                   {Total?.currency == "USD" ? "$" : "₹"}
 
                   {roundOff(Total?.amount)}
+                  <div style={{ fontSize: "15px" }}>
+                    (includes {Total?.currency == "USD" ? "$" : "₹"}
+                    {roundOff(Tax?.amount)} GST)
+                  </div>
                 </td>
               </tr>
             </tbody>

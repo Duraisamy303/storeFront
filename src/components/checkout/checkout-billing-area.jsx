@@ -132,6 +132,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     coupenLoader: false,
     checkedGiftwrap: false,
     isGiftWrap: false,
+    preOrderMsg: false,
   });
 
   useEffect(() => {
@@ -236,6 +237,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     enableCOD();
   }, [
     // state.total,
+    state.orderData,
     state.selectedCountry1,
     state.selectedCountry,
     state.diffAddress,
@@ -250,6 +252,32 @@ const CheckoutBillingArea = ({ register, errors }) => {
     state.selectedCountry,
     state.diffAddress,
     state.total,
+  ]);
+
+  useEffect(() => {
+    const hasPreOrders = state.orderData?.lines?.some((line) =>
+      line?.variant?.product?.collections?.some(
+        (collection) => collection.name === "Pre Orders"
+      )
+    );
+
+    const hasGiftCard = state.orderData?.lines?.some(
+      (line) => line?.variant?.product?.category.name === "Gift Card"
+    );
+
+    if (hasPreOrders) {
+      setState({ preOrderMsg: true });
+    }
+    if (hasGiftCard) {
+      setState({ preOrderMsg: true });
+    }
+  }, [
+    state.orderData,
+    state.selectedCountry1,
+    state.selectedCountry,
+    state.diffAddress,
+    state.postalCode1,
+    state.postalCode,
   ]);
 
   const enableCOD = async () => {
@@ -277,16 +305,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       console.log("state.orderData.: ", state.orderData);
 
-      const hasPreOrders = state.orderData?.lines.some((line) =>
+      const hasPreOrders = state.orderData?.lines?.some((line) =>
         line?.variant?.product?.collections?.some(
           (collection) => collection.name === "Pre Orders"
         )
       );
 
-      const hasGiftCard = state.orderData?.lines.some((line) =>
-        line?.variant?.product?.collections?.some(
-          (collection) => collection.name === "Gift Card"
-        )
+      const hasGiftCard = state.orderData?.lines?.some(
+        (line) => line?.variant?.product?.category.name === "Gift Card"
       );
 
       if (
@@ -818,7 +844,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
             giftCard: res?.giftCards,
             total: res.totalPrice?.gross?.amount,
             coupenLoader: false,
+            promoCode: "",
           });
+          notifySuccess("Coupen code applied");
         }
       }
     } catch (error) {
@@ -858,6 +886,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     });
     updatePaymentMethod(checkedOption);
   };
+  console.log("selectedPaymentType: ", state.selectedPaymentType);
 
   const updatePaymentMethod = async (option) => {
     try {
@@ -1219,7 +1248,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="tp-checkout-input">
-                      <label>Postcode ZIP</label>
+                      <label>
+                        Postcode ZIP <span>*</span>
+                      </label>
                       <input
                         name="zipCode"
                         id="zipCode"
@@ -1727,6 +1758,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </>
                   )}
                 </li>
+                <div className=" text-danger">
+                  {state.preOrderMsg &&
+                    "Cash on Delivery is not applicable on Pre-order and gift cart products"}
+                </div>
+
                 <div className="flex w-full flex-row justify-between">
                   <div>
                     <div className="mt-3 mb-2">
@@ -1752,25 +1788,41 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                     ))}
 
-                    {state.paymentType.find((item) => item.checked)?.name ==
-                      "Cash On Delivery" && (
-                      <div>
-                        Cash On Delivery orders will be booked only if the pin
-                        code is serviceable for COD by our Logistics Partner In
-                        case of Cash on Delivery, confirmation will be taken
-                        from the recipient over the call. PraDe Jewels reserves
-                        the right to disable COD option for the User, If COD
-                        order is rejected. Only cash/UPI payments will be
-                        accepted while delivering the order under the COD
-                        format. Demand Draft/ Cheques will not be accepted for
-                        orders booked under the COD method of payment. It is
-                        strictly a cash/UPI payment method only . E-Gift
-                        Vouchers or store credit cannot be used for COD orders.
-                        Foreign currency cannot be used to make a COD payment.{" "}
-                        Cash on Delivery is not applicable on Pre-order products{" "}
-                        Cash on Delivery option is eligible on orders between
-                        3000 INR to 30,000 INR{" "}
-                      </div>
+                    {state.selectedPaymentType == "Cash On delivery" && (
+                      <ol>
+                        <li>
+                          Cash On Delivery orders will be booked only if the pin
+                          code is serviceable for COD by our Logistics Partner
+                        </li>
+                        <li>
+                          In case of Cash on Delivery, confirmation will be
+                          taken from the recipient over the call.
+                        </li>
+                        <li>
+                          PraDe Jewels reserves the right to disable COD option
+                          for the User, If COD order is rejected. Only cash/UPI
+                          payments will be accepted while delivering the order
+                          under the COD format.
+                        </li>
+                        <li>
+                          Demand Draft/ Cheques will not be accepted for orders
+                          booked under the COD method of payment. It is strictly
+                          a cash/UPI payment method only.
+                        </li>
+                        <li>
+                          E-Gift Vouchers or store credit cannot be used for COD
+                          orders. Foreign currency cannot be used to make a COD
+                          payment.
+                        </li>
+                        <li>
+                          Cash on Delivery is not applicable on Pre-order
+                          products
+                        </li>
+                        <li>
+                          Cash on Delivery option is eligible on orders between
+                          3000 INR to 30,000 INR
+                        </li>
+                      </ol>
                     )}
                     {state.errors.paymentType && (
                       <ErrorMsg msg={state.errors.paymentType} />
@@ -1799,6 +1851,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </div>
                   )}
                 </div>
+
                 <li>
                   <div className="tp-login-remeber">
                     <input

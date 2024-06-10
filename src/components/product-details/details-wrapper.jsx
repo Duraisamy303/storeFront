@@ -241,13 +241,15 @@ const DetailsWrapper = ({
   // handle add product
 
   const addToCartProductINR = async () => {
-    setCartLoader(true);
+    
     try {
       setCartLoader(true);
       let variantID = "";
       if (productItem?.variants?.length > 1) {
         if (variantId == "") {
-          variantID = productItem?.variants[0].id;
+          notifyError("Please select a variant");
+          setCartLoader(false);
+          return false;
         } else {
           variantID = variantId;
         }
@@ -273,14 +275,13 @@ const DetailsWrapper = ({
   };
 
   const addToCartProductUSD = async () => {
-    setCartLoader(true);
     try {
       setCartLoader(true);
-
       let variantID = "";
       if (productItem?.variants?.length > 1) {
         if (variantId == "") {
-          variantID = productItem?.variants[0].id;
+          setCartLoader(false);
+          return false;
         } else {
           variantID = variantId;
         }
@@ -718,7 +719,35 @@ const DetailsWrapper = ({
         imperfections add characteristics to the stones making it distinct and
         unique.
       </p> */}
-      {productItem?.variants?.length > 1 && (
+      <div className="w-full row">
+        {productItem?.variants?.length > 1 && (
+          <div className="flex flex-wrap gap-3">
+            <div
+              className="text-bold text-lg"
+              style={{ color: "grey", fontSize: "20px" }}
+            >
+              <span> Product variants:</span>
+            </div>
+
+            <select
+              name="country"
+              id="country"
+              value={variantId}
+              className="nice-select"
+              onChange={(e) => setVariantId(e.target.value)}
+            >
+              <option value="">Select variant</option>
+              {productItem?.variants?.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* {productItem?.variants?.length > 1 && (
         <div
           style={{
             display: "flex",
@@ -726,7 +755,8 @@ const DetailsWrapper = ({
           }}
         >
           {productItem?.variants?.map((item, i) => (
-            <button key={i}
+            <button
+              key={i}
               onClick={() => {
                 setVariantId(item?.id);
                 setIndex(i);
@@ -746,11 +776,12 @@ const DetailsWrapper = ({
             </button>
           ))}
         </div>
-      )}
-
-      <p style={{ color: "black" }}>
-        {productItem?.defaultVariant?.quantityAvailable} in stock
-      </p>
+      )} */}
+      <div className="mt-2">
+        <p style={{ color: "grey", fontSize: "20px" }}>
+          {productItem?.defaultVariant?.quantityAvailable} in stock
+        </p>
+      </div>
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">

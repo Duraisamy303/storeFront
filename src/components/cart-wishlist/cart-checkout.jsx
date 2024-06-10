@@ -117,16 +117,29 @@ const CartCheckout = ({ cartData }) => {
         <span>TOTAL</span>
         {checkChannel() === "india-channel" ? (
           <>
-            <span style={{color:'#c3935b', fontSize:'16px'}}>
+            <span style={{ color: "#c3935b", fontSize: "16px" }}>
               &#8377;{roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
               <br />
-              {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
+              <span style={{ fontSize: "14px" }}>
+                (includes &#8377;
+                {roundOff(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
+              </span>
             </span>
           </>
         ) : (
           <span>
             ${roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
             <br />
+            <div
+              style={{
+                fontWeight: "400",
+                fontSize: "14px",
+                justifyContent: "flex-end",
+              }}
+            >
+              (includes $
+              {roundOff(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
+            </div>
             {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
           </span>
         )}

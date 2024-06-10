@@ -3,7 +3,6 @@ import { capitalizeFLetter } from "../../utils/functions";
 import { useRouter } from "next/router";
 
 const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
-  console.log("✌️catList --->", catList);
   const router = useRouter();
 
   return (

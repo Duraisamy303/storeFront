@@ -15,7 +15,7 @@ import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
 import ShopLoader from "@/components/loader/shop/shop-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 import shopBanner from "../../public/assets/img/shop-banner.jpg";
-import { shortData } from "@/utils/functions";
+import { checkChannel, shortData } from "@/utils/functions";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useCreateCheckoutTokenWithoutEmailMutation,
@@ -35,15 +35,17 @@ const ShopPage = () => {
     data: productsData,
     isError,
     isLoading,
-    refetch: getProductRefetch,
   } = useGetAllProductsQuery({
+    sortBy: { direction: "ASC", field: "ORDER_NO" },
+  });
+
+  const { data: newData, refetch: getProductRefetch } = useGetAllProductsQuery({
     sortBy: { direction: "ASC", field: "ORDER_NO" },
   });
 
   const [getCategoryName] = useGetCategoryNameMutation();
 
   const router = useRouter();
-  console.log("✌️router --->", router);
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -65,6 +67,26 @@ const ShopPage = () => {
       createCheckoutTokenUSD();
     }
   }, []);
+
+  useEffect(() => {
+    getProductList();
+  }, []);
+
+  const getProductList = async () => {
+    try {
+      const res = await getProductRefetch({
+        first: 500,
+        after: null,
+        channel: checkChannel(),
+        sortByField: "CREATED_AT",
+        sortByDirection: "DESC",
+      });
+      console.log("res: ", res);
+      setProductList(res?.data?.data?.products?.edges);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const createCheckoutTokenINR = async () => {
     try {
@@ -192,6 +214,17 @@ const ShopPage = () => {
     //   } else if (e == "New Added") {
     //     sortBy = { direction: "DESC", field: "CREATED_AT" };
     //   }
+    //   console.log("sortBy: ", sortBy);
+
+    //   const res = await getProductRefetch({
+    //     first: 500,
+    //     after: null,
+    //     channel: checkChannel(),
+    //     sortByField: sortBy.field,
+    //     sortByDirection: sortBy.direction,
+    //   });
+    //   console.log("selectHandleFilter: ", res);
+    //   setProductList(res?.data?.data?.products?.edges);
     // } catch (error) {
     //   console.log("error: ", error);
     // }

@@ -100,6 +100,10 @@ export const ORDER_LIST = ({ orderId }) => {
             amount
             currency
           }
+          tax {
+            amount
+            currency
+          }
         }
         shippingMethods {
           id
@@ -381,6 +385,9 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
             metadata {
               key
               value
+            }
+            defaultVariant {
+              id
             }
           }
         }

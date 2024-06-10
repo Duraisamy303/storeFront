@@ -272,18 +272,46 @@ const CartMiniSidebar = () => {
             <div className="cartmini__checkout-title mb-30">
               <h4>Subtotal:</h4>
               {channel == "india-channel" ? (
-                <span>
-                  &#8377;
-                  {roundOff(
-                    cartList?.data?.checkout?.totalPrice?.gross?.amount
-                  )}
-                </span>
+                <>
+                  <span>
+                    &#8377;
+                    {roundOff(
+                      cartList?.data?.checkout?.totalPrice?.gross?.amount
+                    )}
+                  </span>
+                  <div
+                    style={{
+                      fontWeight: "400",
+                      fontSize: "14px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    (includes &#8377;
+                    {roundOff(
+                      cartList?.data?.checkout?.totalPrice?.tax?.amount
+                    )}{" "}
+                    GST)
+                  </div>
+                </>
               ) : (
                 <span>
                   $
                   {roundOff(
                     cartList?.data?.checkout?.totalPrice?.gross?.amount
                   )}
+                  <div
+                    style={{
+                      fontWeight: "400",
+                      fontSize: "14px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    (includes $
+                    {roundOff(
+                      cartList?.data?.checkout?.totalPrice?.tax?.amount
+                    )}{" "}
+                    GST)
+                  </div>
                 </span>
               )}
             </div>

@@ -7,7 +7,7 @@ import RelatedProducts from "./related-products";
 
 const ProductDetailsArea = ({ productItem }) => {
   const { images, imageURLs, videoId, status } = productItem || {};
-  const [activeImg, setActiveImg] = useState(images[0]);
+  const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
   // active image change when img change
   useEffect(() => {
