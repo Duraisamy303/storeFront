@@ -363,6 +363,7 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
                 currency
               }
             }
+            
             defaultVariant {
               id
             }
