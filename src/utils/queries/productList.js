@@ -343,56 +343,59 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
     query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
-      products(filter: $filter, channel: $channel, first: $first, after: $after) {
-        edges {
-          node {
-            id
-            name
-            slug
-            pricing {
-              priceRange {
-                start {
-                  gross {
-                    amount
-                    currency
-                  }
-                }
-                stop {
-                  gross {
-                    amount
-                    currency
-                  }
-                }
+  products(filter: $filter, channel: $channel, first: $first, after: $after) {
+    edges {
+      node {
+        id
+        name
+        slug
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
               }
             }
-            category {
-              id
-              name
-              description
-            }
-            thumbnail(size: 1024, format: WEBP) {
-              url
-              alt
-            }
-            created
-            images {
-              url
-            }
-            variants {
-              id
-            }
-            description
-            metadata {
-              key
-              value
+            stop {
+              gross {
+                amount
+                currency
+              }
             }
             defaultVariant {
               id
             }
           }
         }
+        category {
+          id
+          name
+          description
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        created
+        images {
+          url
+        }
+        variants {
+          id
+        }
+        description
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          id
+        }
       }
     }
+  }
+}
     `,
     variables: { channel, first, after, filter },
   });

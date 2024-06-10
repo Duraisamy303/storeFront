@@ -14,6 +14,7 @@ import nav_icon_4 from "@assets/img/slider/4/nav/icon-4.png";
 import { ArrowNextTwo, ArrowPrevTwo, Pause, Play } from "@/svg";
 import text_shape from "@assets/img/slider/4/shape/rounded-test.png";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 // slider data
 const slider_data = [
@@ -23,28 +24,33 @@ const slider_data = [
     img: slider_img_1,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  },
+ shopId: "Q2F0ZWdvcnk6NQ=="
+    },
   {
     subtitle: "Find the ideal gift",
     title: "JEWELLERY WITH A MODERN TWIST",
     img: slider_img_2,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  },
+
+   shopId:"Q2F0ZWdvcnk6Njc="
+    },
   {
     subtitle: "Fine Jewellery",
     title: "LUXURY CAN BE AFFORDABLE",
     img: slider_img_3,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  },
+ shopId : "Q2F0ZWdvcnk6NzA="
+    },
   {
     subtitle: "Fine Jewellery",
     title: "LUXURY CAN BE AFFORDABLE",
     img: slider_img_4,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  },
+  shopId: "Q2F0ZWdvcnk6NzM1"
+    },
 ];
 
 // slider nav data
@@ -58,6 +64,8 @@ const slider_nav_data = [
 const JewelryBanner = () => {
   const [slider1, setSlider1] = useState(null);
   const [slider2, setSlider2] = useState(null);
+
+  const router = useRouter();
 
   //  slider setting
   const main_slider_setting = {
@@ -153,12 +161,17 @@ const JewelryBanner = () => {
                       <h3 className="tp-slider-title-4">{item.title}</h3>
                       <p className="tp-slider-content-4">{item?.content}</p>
                       <div className="tp-slider-btn-4">
-                        <Link
-                          href="/shop"
+                        <button
+                          onClick={() => {
+                            router.push({
+                              pathname: "/shop",
+                              query: { categoryId: item.shopId }, // Your parameters
+                            });
+                          }}
                           className="tp-btn tp-btn-border tp-btn-border-white"
                         >
                           Discover Now
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>
