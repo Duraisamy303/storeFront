@@ -19,9 +19,11 @@ import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
 import { checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
+import { isPreOrderAndGiftCart } from "../../redux/features/cartSlice";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
+  const carts = useSelector((state) => state.cart);
 
   const [removeToCart, {}] = useRemoveToCartMutation();
 
@@ -77,11 +79,31 @@ const CartMiniSidebar = () => {
         lineId: fine?.id,
       });
       cartRefetch();
-      AllListChannelREfresh();
+      const res = await AllListChannelREfresh();
+      const checkIsPreOrderAndGiftCart = checkCollectionsAndCategory(
+        res?.data?.data?.checkout?.lines
+      );
+      dispatch(isPreOrderAndGiftCart(checkIsPreOrderAndGiftCart));
     } catch (error) {
       console.log(error);
     }
   };
+
+  function checkCollectionsAndCategory(products) {
+    return products.some((product) => {
+      const hasPreOrderCollection = product.variant.product.collections.some(
+        (collection) => collection.name === "Pre Orders"
+      );
+      const isGiftCartCategory =
+        product.variant.product.category.name === "Gift Card";
+      if (hasPreOrderCollection) {
+        return true;
+      }
+      if (isGiftCartCategory) {
+        return true;
+      }
+    });
+  }
 
   // handle close cart mini
   const handleCloseCartMini = () => {

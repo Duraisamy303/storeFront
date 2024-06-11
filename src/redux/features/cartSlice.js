@@ -9,7 +9,8 @@ const initialState = {
   cart_list: [],
   compare_list: [],
   checkout_token: "",
-  userMiniOpen:false
+  userMiniOpen: false,
+  isPreOrderAndGiftCart: false,
 };
 
 export const cartSlice = createSlice({
@@ -66,12 +67,16 @@ export const cartSlice = createSlice({
       state.compare_list = payload; // Return new state object with updated cart_products
     },
 
-   compare_list: (state, { payload }) => {
+    compare_list: (state, { payload }) => {
       state.compare_list = payload; // Return new state object with updated cart_products
     },
 
     checkout_token: (state, { payload }) => {
       state.checkout_token = payload; // Return new state object with updated cart_products
+    },
+
+    isPreOrderAndGiftCart: (state, { payload }) => {
+      state.isPreOrderAndGiftCart = payload; // Return new state object with updated cart_products
     },
 
     increment: (state, { payload }) => {
@@ -124,7 +129,7 @@ export const cartSlice = createSlice({
     },
 
     openUserSidebar: (state, { payload }) => {
-      console.log('clicked')
+      console.log("clicked");
       state.userMiniOpen = true;
     },
     closeUserSidebar: (state, { payload }) => {
@@ -149,7 +154,7 @@ export const {
   openCartMini,
   checkout_token,
   openUserSidebar,
-  closeUserSidebar
-
+  closeUserSidebar,
+  isPreOrderAndGiftCart
 } = cartSlice.actions;
 export default cartSlice.reducer;

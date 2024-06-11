@@ -181,7 +181,6 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
     }
   };
 
-  console.log("cartLoader: ", cartLoader);
 
   const addToCartProductUSD = async () => {
     setCartLoader(true);

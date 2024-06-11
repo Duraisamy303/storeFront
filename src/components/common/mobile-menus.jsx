@@ -117,7 +117,7 @@ const MobileMenus = () => {
         </li>
 
         <li>
-          <Link href="/coupon" style={{ fontWeight: "500" }}>
+          <Link href="/giftCart" style={{ fontWeight: "500" }}>
             GIFT CARD
           </Link>
         </li>

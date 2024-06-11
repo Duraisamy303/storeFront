@@ -35,6 +35,7 @@ import {
 } from "@/redux/features/productApi";
 import { Filter } from "@/svg";
 import {
+  useGetCartAllListQuery,
   useGetCheckoutDetailsQuery,
   useUpdateShippingAddressMutation,
 } from "../../redux/features/card/cardApi";
@@ -254,31 +255,31 @@ const CheckoutBillingArea = ({ register, errors }) => {
     state.total,
   ]);
 
-  useEffect(() => {
-    const hasPreOrders = state.orderData?.lines?.some((line) =>
-      line?.variant?.product?.collections?.some(
-        (collection) => collection.name === "Pre Orders"
-      )
-    );
+  // useEffect(() => {
+  //   const hasPreOrders = state.orderData?.lines?.some((line) =>
+  //     line?.variant?.product?.collections?.some(
+  //       (collection) => collection.name === "Pre Orders"
+  //     )
+  //   );
 
-    const hasGiftCard = state.orderData?.lines?.some(
-      (line) => line?.variant?.product?.category.name === "Gift Card"
-    );
+  //   const hasGiftCard = state.orderData?.lines?.some(
+  //     (line) => line?.variant?.product?.category.name === "Gift Card"
+  //   );
 
-    if (hasPreOrders) {
-      setState({ preOrderMsg: true });
-    }
-    if (hasGiftCard) {
-      setState({ preOrderMsg: true });
-    }
-  }, [
-    state.orderData,
-    state.selectedCountry1,
-    state.selectedCountry,
-    state.diffAddress,
-    state.postalCode1,
-    state.postalCode,
-  ]);
+  //   if (hasPreOrders) {
+  //     setState({ preOrderMsg: true });
+  //   }
+  //   if (hasGiftCard) {
+  //     setState({ preOrderMsg: true });
+  //   }
+  // }, [
+  //   state.orderData,
+  //   state.selectedCountry1,
+  //   state.selectedCountry,
+  //   state.diffAddress,
+  //   state.postalCode1,
+  //   state.postalCode,
+  // ]);
 
   const enableCOD = async () => {
     try {
@@ -1758,10 +1759,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </>
                   )}
                 </li>
-                <div className=" text-danger">
-                  {state.preOrderMsg &&
-                    "Cash on Delivery is not applicable on Pre-order and gift cart products"}
-                </div>
+              
 
                 <div className="flex w-full flex-row justify-between">
                   <div>
@@ -1827,6 +1825,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     {state.errors.paymentType && (
                       <ErrorMsg msg={state.errors.paymentType} />
                     )}
+                      <div className=" text-grey">
+                    Cash on Delivery is not applicable on Pre-order and gift cart products
+                </div>
                   </div>
                   {state.isGiftWrap && (
                     <div>
