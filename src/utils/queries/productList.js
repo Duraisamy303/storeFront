@@ -15,6 +15,11 @@ export const PRODUCT_LIST = ({ channel, first }) => {
         edges {
           node {
             ...ProductListItem
+            variants {
+              id
+              name
+              sku
+            }
           }
           cursor
         }
@@ -125,6 +130,19 @@ export const ORDER_LIST = ({ orderId }) => {
             currency
           }
         }
+        giftCards {
+          currentBalance {
+            amount
+            currency
+          }
+          id
+          code
+          initialBalance {
+            amount
+            currency
+          }
+        }
+
       }
     }
     `,
