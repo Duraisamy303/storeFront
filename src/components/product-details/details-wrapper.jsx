@@ -132,7 +132,7 @@ const DetailsWrapper = ({
   let isAddedToCart = false;
   if (datacartList?.data?.checkout?.lines?.length > 0) {
     isAddedToCart = datacartList?.data?.checkout?.lines?.some(
-      (prd) => prd.variant.product.id === productItem.id
+      (prd) => prd.variant.product.id === productItem?.id
     );
   }
 
@@ -173,7 +173,7 @@ const DetailsWrapper = ({
   }, []);
 
   useEffect(() => {
-    const whislist = checkWishlist(wishlist, productItem.id);
+    const whislist = checkWishlist(wishlist, productItem?.id);
     setWishlist(whislist);
   }, [wishlist]);
 
@@ -724,7 +724,7 @@ const DetailsWrapper = ({
           <div className="flex flex-wrap gap-3">
             <div
               className="text-bold text-lg"
-              style={{ color: "grey", fontSize: "20px" }}
+              style={{ fontSize: "16px", color:"black" }}
             >
               <span> Product variants:</span>
             </div>
@@ -778,7 +778,7 @@ const DetailsWrapper = ({
         </div>
       )} */}
       <div className="mt-2">
-        <p style={{ color: "grey", fontSize: "20px" }}>
+        <p style={{fontSize: "16px", color: "black" }}>
           {productItem?.defaultVariant?.quantityAvailable} in stock
         </p>
       </div>

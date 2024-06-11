@@ -41,7 +41,9 @@ const RegisterForm = () => {
         notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {
         notifySuccess("Register successfully");
-        router.push( "/login");
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       }
     });
     // reset();
