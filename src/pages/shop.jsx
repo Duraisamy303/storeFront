@@ -39,9 +39,7 @@ const ShopPage = () => {
     sortBy: { direction: "ASC", field: "ORDER_NO" },
   });
 
-  const { data: newData, refetch: getProductRefetch } = useGetAllProductsQuery({
-    sortBy: { direction: "ASC", field: "ORDER_NO" },
-  });
+  const { data: newData, refetch: getProductRefetch } = useGetAllProductsQuery();
 
   const [getCategoryName] = useGetCategoryNameMutation();
 
@@ -203,6 +201,9 @@ const ShopPage = () => {
   };
 
   const selectHandleFilter = async (e) => {
+    console.log("e: ", e.value);
+    setSelectValue(e.value);
+
     // try {
     //   let sortBy = {};
     //   if ((e = "Default Sorting")) {
@@ -229,7 +230,6 @@ const ShopPage = () => {
     //   console.log("error: ", error);
     // }
     // console.log("e: ", e.value);
-    setSelectValue(e.value);
   };
 
   const otherProps = {

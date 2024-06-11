@@ -28,7 +28,7 @@ import {
   WISHLIST_LIST,
   ORDER_CANCEL,
   UPDATE_BILLING_ADDRESS_ADDRESS_SECTION,
-  UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION
+  UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -43,14 +43,17 @@ import {
   STONE_LIST,
   STATE_LIST,
 } from "../../utils/queries/productList";
-import { GET_WISHLIST_LIST, UPDATE_BILLING_ADDRESS } from "@/utils/queries/cart/addToCart";
+import {
+  GET_WISHLIST_LIST,
+  UPDATE_BILLING_ADDRESS,
+} from "@/utils/queries/cart/addToCart";
 import { checkChannel } from "@/utils/functions";
 
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ first,direction }) => {
+      query: ({ first, direction }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -58,7 +61,7 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_LIST({ channel, first:500 ,direction}));
+        return configuration(PRODUCT_LIST({ channel, first: 500, direction }));
       },
 
       providesTags: ["Products"],
@@ -329,7 +332,7 @@ export const productApi = apiSlice.injectEndpoints({
 
     //filters
     priceFilter: builder.mutation({
-      query: ({ filter }) => {
+      query: ({  sortByField, sortByDirection }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -339,10 +342,11 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(
           PRODUCT_FILTER({
-            channel,
-            first: 100,
+            channel: checkChannel(),
+            first: 500,
             after: null,
-            filter,
+            sortByField,
+            sortByDirection,
           })
         );
       },
@@ -425,8 +429,8 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getCategoryName: builder.mutation({
-      query: ({categoryid}) => {
-        return configuration(CATEGORY_NAME({categoryid}));
+      query: ({ categoryid }) => {
+        return configuration(CATEGORY_NAME({ categoryid }));
       },
       providesTags: ["Products"],
     }),
@@ -460,7 +464,6 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
-
     updateAddress: builder.mutation({
       query: ({ addressId, input }) => {
         console.log("addressId,input: ", addressId, input);
@@ -493,12 +496,8 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
-
-
   }),
 });
-
-
 
 export const {
   useGetAllProductsQuery,
@@ -538,7 +537,6 @@ export const {
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSubCatListMutation,
-  useGetCategoryNameMutation  ,
-  useOrderCancelMutation
-
+  useGetCategoryNameMutation,
+  useOrderCancelMutation,
 } = productApi;

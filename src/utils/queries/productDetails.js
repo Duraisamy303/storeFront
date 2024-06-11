@@ -26,7 +26,7 @@ fragment ProductListItem on Product {
     id
     name
   }
-  thumbnail(size: 1024, format: WEBP) {
+  thumbnail(size: 1024) {
     url
     alt
   }
