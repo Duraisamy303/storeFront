@@ -150,7 +150,7 @@ const ShopPage = () => {
   const [currPage, setCurrPage] = useState(1);
 
   const [catName, setCatName] = useState("");
-
+  const [parentCatName, setParentCatName] = useState("");
   useEffect(() => {
     if (router?.query?.categoryId) {
       filterByCategoryName();
@@ -368,13 +368,20 @@ const ShopPage = () => {
       });
       const list = res?.data?.data?.category?.name;
       setCatName(list);
+
+      if (res?.data?.data?.category?.parent?.name) {
+        setParentCatName(res?.data?.data?.category?.parent?.name);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
   const shopTitle =
-    router.query && router.query.categoryId ? `Shop / ${catName}` : "Shop";
+    router.query && router.query.categoryId
+      ? `Shop /
+    ${parentCatName ? `${parentCatName} / ` : ""} ${catName}`
+      : "Shop";
 
   return (
     <Wrapper>

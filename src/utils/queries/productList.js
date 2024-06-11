@@ -649,6 +649,7 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
         id
         quantityAvailable
         costPrice
+        sku
       }
     }
     
@@ -1027,6 +1028,7 @@ export const PRODUCT_20_PERCENTAGE = ({
         id
         quantityAvailable
         costPrice
+        sku 
       }
       images {
         id
@@ -1070,10 +1072,14 @@ export const CATEGORY_NAME = ({ categoryid }) => {
   return JSON.stringify({
     query: `
     query GetCategoryName($categoryid: ID!) {
-      category(id:$categoryid){
-        name    
-      }
+  category(id: $categoryid) {
+    name
+    parent {
+      id
+      name
     }
+  }
+}
       `,
     variables: { categoryid },
   });
