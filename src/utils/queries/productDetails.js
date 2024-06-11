@@ -39,6 +39,7 @@ fragment ProductListItem on Product {
     id
     quantityAvailable
     costPrice
+    sku
   }
   media {
     id
