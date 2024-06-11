@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const Success = ({ data }) => {
-  const Router = useRouter();
+  const router = useRouter();
 
   const OrderDetails = data?.data?.order?.lines;
   const SubTotal = data?.data?.order?.subtotal.gross.amount;
@@ -166,14 +166,13 @@ const Success = ({ data }) => {
               </ul>
             </div>
             <div className="mt-20">
-              <Link
-                // href="http://www1.prade.in/shop"
-                onClick={() => Router.push("/shop")}
+              <button
+                onClick={() => router.push("/shop")}
                 className="tp-cart-update-btn "
                 style={{ background: "rgb(194, 136, 43)", color: "white" }}
               >
                 Continue Shopping
-              </Link>
+              </button>
             </div>
           </div>
         </div>
