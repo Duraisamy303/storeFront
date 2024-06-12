@@ -21,13 +21,13 @@ const MyOrderDetails = ({ data }) => {
           <span style={{ color: "black" }}>{Data?.statusDisplay}</span>.
         </p>
         <div className="pb-20 pt-20">
-          <h3 style={{ fontWeight: "300" }}>ORDER UPDATES</h3>
+          <h3 style={{ fontWeight: "400", fontSize: "18px" }}>ORDER UPDATES</h3>
           <p style={{ color: "gray", marginBottom: "5px" }}>
             Monday 22nd of April 2024, 03:38pm
           </p>
           {/* <p style={{ color: "gray" }}>hi mam</p> */}
         </div>
-        <h3 style={{ fontWeight: "300" }}>ORDER DETAILS</h3>
+        <h3 style={{ fontWeight: "400", fontSize: "18px" }}>ORDER DETAILS</h3>
         <div className="responsive-table">
           <table className="table">
             <thead>
@@ -95,7 +95,7 @@ const MyOrderDetails = ({ data }) => {
         </div>
         <div className="row pt-50">
           <div className="col-md-6">
-            <h4 style={{ fontWeight: "300" }}>BILLING ADDRESS</h4>
+            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>BILLING ADDRESS</h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.billingAddress?.firstName} {Data?.billingAddress?.lastName}
             </p>
@@ -118,7 +118,7 @@ const MyOrderDetails = ({ data }) => {
             <p></p>
           </div>
           <div className="col-md-6">
-            <h4 style={{ fontWeight: "300" }}>SHIPPING ADDRESS</h4>
+            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>SHIPPING ADDRESS</h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.shippingAddress?.firstName}{" "}
               {Data?.shippingAddress?.lastName}
