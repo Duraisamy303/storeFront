@@ -49,6 +49,7 @@ import Image from "next/image";
 const DetailsWrapper = ({
   productItem,
   handleImageActive,
+  productRefetch,
   activeImg,
   detailsBottom = false,
 }) => {
@@ -241,7 +242,6 @@ const DetailsWrapper = ({
   // handle add product
 
   const addToCartProductINR = async () => {
-    
     try {
       setCartLoader(true);
       let variantID = "";
@@ -474,6 +474,18 @@ const DetailsWrapper = ({
     }
   };
 
+  const [variantDetails, setVariantDetails] = useState();
+  const variantsChange = (e) => {
+    setVariantId(e.target.value);
+    productRefetch();
+    const variantDetails = productItem?.variants?.find(
+      (variant) => variant?.id == e.target.value
+    );
+    setVariantDetails(variantDetails);
+  };
+
+  console.log("variantDetails: ", variantDetails);
+
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -508,7 +520,14 @@ const DetailsWrapper = ({
               >
                 <div style={{ display: "flex" }}>
                   <div style={{ paddingRight: "10px", width: "50%" }}>
-                    <Image
+                    {/* <Image
+                      style={{ width: "100%" }}
+                      height={100}
+                      width={100}
+                      src={profilePic(previousProduct?.thumbnail?.url)}
+                    /> */}
+
+                    <img
                       style={{ width: "100%" }}
                       height={100}
                       width={100}
@@ -578,7 +597,14 @@ const DetailsWrapper = ({
               >
                 <div style={{ display: "flex" }}>
                   <div style={{ paddingRight: "10px", width: "50%" }}>
-                    <Image
+                    {/* <Image
+                      style={{ width: "100%" }}
+                      width={100}
+                      height={100}
+                      src={profilePic(nextProduct?.thumbnail?.url)}
+                    /> */}
+
+                    <img
                       style={{ width: "100%" }}
                       width={100}
                       height={100}
@@ -637,14 +663,25 @@ const DetailsWrapper = ({
                 className="pr-5"
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
-                &#8377;{roundOff(productItem?.defaultVariant?.costPrice)}
+                {variantDetails ? (
+                  <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                ) : (
+                  <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
+                )}
               </span>
             )}
             <span className="tp-product-price-2 new-price">
-              &#8377;
-              {roundOff(
-                productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              {variantDetails ? (
+                <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+              ) : (
+                <>
+                  &#8377;{" "}
+                  {roundOff(
+                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                      productItem?.node?.pricing?.priceRange?.start?.gross
+                        ?.amount
+                  )}
+                </>
               )}
             </span>
           </div>
@@ -658,15 +695,33 @@ const DetailsWrapper = ({
                 className="pr-5"
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
-                {"$"}
-                {roundOff(productItem?.defaultVariant?.costPrice)}
+                {variantDetails ? (
+                  <>
+                    {"$"} {variantDetails?.pricing?.price?.gross?.amount}
+                  </>
+                ) : (
+                  <>
+                    {"$"}
+                    {roundOff(productItem?.defaultVariant?.costPrice)}
+                  </>
+                )}
               </span>
             )}
             <span className="tp-product-price-2 new-price">
-              {"$"}
-              {roundOff(
-                productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              {variantDetails ? (
+                <>
+                  {"$"}
+                  {variantDetails?.pricing?.price?.gross?.amount}
+                </>
+              ) : (
+                <>
+                  {"$"}{" "}
+                  {roundOff(
+                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                      productItem?.node?.pricing?.priceRange?.start?.gross
+                        ?.amount
+                  )}
+                </>
               )}
             </span>
           </div>
@@ -724,7 +779,7 @@ const DetailsWrapper = ({
           <div className="flex flex-wrap gap-3">
             <div
               className="text-bold text-lg"
-              style={{ fontSize: "16px", color:"black" }}
+              style={{ fontSize: "16px", color: "black" }}
             >
               <span> Product variants:</span>
             </div>
@@ -734,7 +789,9 @@ const DetailsWrapper = ({
               id="country"
               value={variantId}
               className="nice-select"
-              onChange={(e) => setVariantId(e.target.value)}
+              onChange={(e) => {
+                variantsChange(e);
+              }}
             >
               <option value="">Select variant</option>
               {productItem?.variants?.map((item) => (
@@ -778,8 +835,13 @@ const DetailsWrapper = ({
         </div>
       )} */}
       <div className="mt-2">
-        <p style={{fontSize: "16px", color: "black" }}>
-          {productItem?.defaultVariant?.quantityAvailable} in stock
+        <p style={{ fontSize: "16px", color: "black" }}>
+          {variantDetails ? (
+            <>{variantDetails?.quantityAvailable}</>
+          ) : (
+            <>{productItem?.defaultVariant?.quantityAvailable}</>
+          )}
+          in stock
         </p>
       </div>
 
@@ -1058,6 +1120,82 @@ const DetailsWrapper = ({
                 </li>
               </ul>
             )}
+
+            {productItem?.productItemtype?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
+                <li>
+                  {productItem?.productItemtype?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productItemtype.length - 1
+                        ? ", "
+                        : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+
+            {productItem?.productSize?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
+                <li>
+                  {productItem?.productSize?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productSize.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
+
+            {productItem?.productStonecolor?.length > 0 && (
+              <ul
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  listStyleType: "none",
+                  paddingTop: "20px",
+                }}
+              >
+                <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
+                <li>
+                  {productItem?.productStonecolor?.map((finish, index) => (
+                    <span
+                      key={finish?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                    >
+                      {finish?.name}
+                      {index < productItem.productStonecolor.length - 1
+                        ? ", "
+                        : ""}
+                    </span>
+                  ))}
+                </li>
+              </ul>
+            )}
           </>
         )}
       </div>
@@ -1190,7 +1328,10 @@ const DetailsWrapper = ({
 
       <div>
         <p style={{ color: "#55585b" }}>
-          <b>SKU:</b> {productItem?.defaultVariant?.sku}
+          <b>SKU:</b>{" "}
+          {variantDetails
+            ? variantDetails?.sku
+            : productItem?.defaultVariant?.sku}
         </p>
         <p
           style={{ color: "#55585b", cursor: "pointer" }}

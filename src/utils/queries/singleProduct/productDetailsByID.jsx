@@ -1,102 +1,114 @@
 export const SINGLE_PRODUCT = ({ productId, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($productId: ID!, $channel: String!) {
-      product(id: $productId, channel: $channel) {
-        id
-        name
-        slug
-        pricing {
-          priceRange {
-            start {
-              gross {
-                amount
-                currency
-              }
-            }
-            stop {
-              gross {
-                amount
-                currency
-              }
-            }
-          }
-          discount {
+   query MyQuery($productId: ID!, $channel: String!) {
+  product(id: $productId, channel: $channel) {
+    id
+    name
+    slug
+    pricing {
+      priceRange {
+        start {
+          gross {
+            amount
             currency
           }
         }
-        category {
-          id
-          name
-        }
-        thumbnail(size: 1024, format: WEBP) {
-          url
-          alt
-        }
-        images {
-          url
-          alt
-        }
-        variants {
-          id
-          quantityAvailable
-          name
-          pricing {
-            price {
-              gross {
-                amount
-                currency
-              }
-            }
-            costPrice {
-              gross {
-                amount
-                currency
-              }
-            }
+        stop {
+          gross {
+            amount
+            currency
           }
-          
         }
-        created
-        description
-        images {
-          url
-        }
-        defaultVariant {
-          id
-          name
-          quantityAvailable
-          sku
-          costPrice
-        }
-        metadata {
-          key
-          value
-        }
-        tags {
-          name
-          id
-        }
-        productFinish {
-          id
-          name
-        }
-        productstyle {
-          id
-          name
-        }
-        prouctDesign {
-          id
-          name
-        }
-        productStoneType {
-          id
-          name
-        }
-        nextProduct
-        previousProduct
+      }
+      discount {
+        currency
       }
     }
+    category {
+      id
+      name
+    }
+    thumbnail(size: 1024, format: WEBP) {
+      url
+      alt
+    }
+    images {
+      url
+      alt
+    }
+    variants {
+      id
+      quantityAvailable
+      name
+      pricing {
+        price {
+          gross {
+            amount
+            currency
+          }
+        }
+        costPrice {
+          gross {
+            amount
+            currency
+          }
+        }
+      }
+        sku
+    }
+    created
+    description
+    images {
+      url
+    }
+    defaultVariant {
+      id
+      name
+      quantityAvailable
+      sku
+      costPrice
+    }
+    metadata {
+      key
+      value
+    }
+    tags {
+      name
+      id
+    }
+    productFinish {
+      id
+      name
+    }
+    productstyle {
+      id
+      name
+    }
+    prouctDesign {
+      id
+      name
+    }
+    productStoneType {
+      id
+      name
+    }
+    nextProduct
+    previousProduct
+    productSize {
+      id
+      name
+    }
+    productStonecolor {
+      id
+      name
+    }
+    productItemtype {
+      id
+      name
+    }
+  }
+}
     `,
     variables: { productId, channel },
   });

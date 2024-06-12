@@ -130,7 +130,16 @@ const WishlistItem = ({ product, refetchWishlist }) => {
     <tr>
       <td className="tp-cart-img">
         <Link href={`/product-details/${variant}`}>
-          <Image
+          {/* <Image
+            src={
+              profilePic(product?.product?.media[0]?.url) ||
+              profilePic(data?.media[0]?.url)
+            }
+            width={70}
+            height={100}
+          /> */}
+
+<img
             src={
               profilePic(product?.product?.media[0]?.url) ||
               profilePic(data?.media[0]?.url)

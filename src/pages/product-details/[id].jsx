@@ -18,7 +18,7 @@ const ProductDetailsPage = ({ query }) => {
   const {
     data: productData,
     isLoading,
-    isError,
+    isError,refetch:detailProductRefetch
   } = useGetProductQuery({ productId: query.id });
   console.log("productData: ", productData);
 
@@ -80,7 +80,7 @@ const ProductDetailsPage = ({ query }) => {
     content = (
       <>
         {/* <ProductDetailsBreadcrumb category={product.category.name} title={product.title} /> */}
-        <ProductDetailsArea productItem={product} />
+        <ProductDetailsArea productItem={product} detailsRefetch={detailProductRefetch}/>
       </>
     );
   }

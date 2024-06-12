@@ -116,7 +116,14 @@ const CartItem = ({
                 router.push(`/product-details/${product?.variant?.product?.id}`)
               }
             >
-              <Image
+              {/* <Image
+                src={profilePic(img)}
+                alt="product img"
+                width={70}
+                height={100}
+              /> */}
+
+<img
                 src={profilePic(img)}
                 alt="product img"
                 width={70}

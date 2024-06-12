@@ -112,12 +112,11 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-const [token, setToken] = useState("");
+  const [token, setToken] = useState("");
   useEffect(() => {
     const Token = localStorage.getItem("checkoutToken");
     setToken(Token);
   }, []);
-
 
   // handle wishlist product
 
@@ -141,7 +140,7 @@ const [token, setToken] = useState("");
       } else {
         notifyError(
           "Only logged-in users can add items to their wishlist or view it"
-        )
+        );
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
@@ -174,7 +173,14 @@ const [token, setToken] = useState("");
     >
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
         <Link href={`/product-details/${id}`}>
-          <Image
+          {/* <Image
+            src={profilePic(thumbnail?.url)}
+            alt="product image"
+            width={282}
+            height={320}
+          /> */}
+
+          <img
             src={profilePic(thumbnail?.url)}
             alt="product image"
             width={282}
@@ -212,24 +218,26 @@ const [token, setToken] = useState("");
         </div>
 
         <div
-                className={`${
-                  product?.defaultVariant?.quantityAvailable == 0 ?"tp-product-badge": "tp-product-badge-2"
-                }`}
-              >
-                {product?.metadata?.filter((item) => item.key === "label")
-                  .length > 0 &&
-                  product.metadata
-                    .filter((item) => item.key === "label")
-                    .map((item, index) => (
-                      <span
-                        key={index}
-                        className="product-trending text-center"
-                        style={{ padding: "18px 12px", textTransform: "capitalize" }}
-                      >
-                        {item.value}
-                      </span>
-                    ))}
-              </div>
+          className={`${
+            product?.defaultVariant?.quantityAvailable == 0
+              ? "tp-product-badge"
+              : "tp-product-badge-2"
+          }`}
+        >
+          {product?.metadata?.filter((item) => item.key === "label").length >
+            0 &&
+            product.metadata
+              .filter((item) => item.key === "label")
+              .map((item, index) => (
+                <span
+                  key={index}
+                  className="product-trending text-center"
+                  style={{ padding: "18px 12px", textTransform: "capitalize" }}
+                >
+                  {item.value}
+                </span>
+              ))}
+        </div>
 
         {/* <div className="tp-product-badge-2">
           <span className="product-hot">HOT</span>
@@ -263,15 +271,17 @@ const [token, setToken] = useState("");
                       isAddedToCart ? "active" : ""
                     } tp-product-add-cart-btn`}
                     disabled={status === "out-of-stock"}
-                  >{
-                    cartLoader ? <ButtonLoader loader={cartLoader} /> :<>
-                    <Cart />
-                    <span className="tp-product-tooltip tp-product-tooltip-top">
-                      Add to Cart
-                    </span>
-                    </>
-                  }
-                    
+                  >
+                    {cartLoader ? (
+                      <ButtonLoader loader={cartLoader} />
+                    ) : (
+                      <>
+                        <Cart />
+                        <span className="tp-product-tooltip tp-product-tooltip-top">
+                          Add to Cart
+                        </span>
+                      </>
+                    )}
                   </button>
                 )}
               </>

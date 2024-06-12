@@ -15,7 +15,11 @@ import {
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
-import { RegularPrice, capitalizeFLetter } from "@/utils/functions";
+import {
+  RegularPrice,
+  capitalizeFLetter,
+  checkChannel,
+} from "@/utils/functions";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
@@ -42,9 +46,10 @@ import { Tooltip } from "antd";
 import { profilePic } from "@/utils/constant";
 import Image from "next/image";
 
-const DetailsWrapperQuick = ({
+const DetailsWrapper = ({
   productItem,
   handleImageActive,
+  productRefetch,
   activeImg,
   detailsBottom = false,
 }) => {
@@ -68,6 +73,7 @@ const DetailsWrapperQuick = ({
   const [channel, setChannel] = useState("india-channel");
   const [cartLoader, setCartLoader] = useState(false);
   const [wishlistLoader, setWishlistLoader] = useState(false);
+  const [index, setIndex] = useState(0);
   const [variantId, setVariantId] = useState("");
 
   const [visibility, setVisibility] = useState({
@@ -127,7 +133,7 @@ const DetailsWrapperQuick = ({
   let isAddedToCart = false;
   if (datacartList?.data?.checkout?.lines?.length > 0) {
     isAddedToCart = datacartList?.data?.checkout?.lines?.some(
-      (prd) => prd.variant.product.id === productItem.id
+      (prd) => prd.variant.product.id === productItem?.id
     );
   }
 
@@ -168,7 +174,7 @@ const DetailsWrapperQuick = ({
   }, []);
 
   useEffect(() => {
-    const whislist = checkWishlist(wishlist, productItem.id);
+    const whislist = checkWishlist(wishlist, productItem?.id);
     setWishlist(whislist);
   }, [wishlist]);
 
@@ -327,57 +333,158 @@ const DetailsWrapperQuick = ({
     }
   }, []);
 
-  //   const [previousHovered, setPreviousHovered] = useState(false);
-  //   const [nextHovered, setNextHovered] = useState(false);
-  //   const [nextProduct, setNextProduct] = useState();
-  //   const [previousProduct, setPreviousProduct] = useState();
+  const [previousHovered, setPreviousHovered] = useState(false);
+  const [nextHovered, setNextHovered] = useState(false);
+  const [nextProduct, setNextProduct] = useState();
+  const [previousProduct, setPreviousProduct] = useState();
 
-  //   const PreviousMouseEnter = () => {
-  //     setPreviousHovered(true);
-  //   };
+  const PreviousMouseEnter = () => {
+    setPreviousHovered(true);
+  };
 
-  //   const PreviousMouseLeave = () => {
-  //     setPreviousHovered(false);
-  //   };
+  const PreviousMouseLeave = () => {
+    setPreviousHovered(false);
+  };
 
-  //   const NextMouseEnter = () => {
-  //     setNextHovered(true);
-  //   };
+  const NextMouseEnter = () => {
+    setNextHovered(true);
+  };
 
-  //   const NextMouseLeave = () => {
-  //     setNextHovered(false);
-  //   };
+  const NextMouseLeave = () => {
+    setNextHovered(false);
+  };
 
-  //   const PreviousProductClick = () => {
-  //     router.push(`/product-details/${productItem?.previousProduct}`);
-  //   };
-  //   const NextProductClick = () => {
-  //     router.push(`/product-details/${productItem?.nextProduct}`);
-  //   };
+  const PreviousProductClick = () => {
+    router.push(`/product-details/${productItem?.previousProduct}`);
+  };
+  const NextProductClick = () => {
+    router.push(`/product-details/${productItem?.nextProduct}`);
+  };
 
-  //   const {
-  //     data: nextProductData,
-  //     isNextLoadings,
-  //     isNextErrors,
-  //   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
+  const {
+    data: nextProductData,
+    isNextLoadings,
+    isNextErrors,
+  } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-  //   const {
-  //     data: prevProductData,
-  //     isPreviousLoadings,
-  //     isPreviousErrors,
-  //   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
+  const {
+    data: prevProductData,
+    isPreviousLoadings,
+    isPreviousErrors,
+  } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
-  // useEffect(() => {
-  //   if (prevProductData) {
-  //     setPreviousProduct(prevProductData?.data?.product);
-  //   }
-  // }, [prevProductData]);
+  useEffect(() => {
+    if (prevProductData) {
+      setPreviousProduct(prevProductData?.data?.product);
+    }
+  }, [prevProductData]);
 
-  //   useEffect(() => {
-  //     if (nextProductData) {
-  //       setNextProduct(nextProductData?.data?.product);
-  //     }
-  //   }, [nextProductData]);
+  useEffect(() => {
+    if (nextProductData) {
+      setNextProduct(nextProductData?.data?.product);
+    }
+  }, [nextProductData]);
+
+  const multiVariantPrice = () => {
+    if (checkChannel() == "india-channel") {
+      if (productItem?.variants?.length > 1) {
+        {
+          RegularPrice(
+            productItem?.variants[0]?.costPrice,
+            productItem?.pricing?.price?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              &#8377;
+              {roundOff(productItem?.variants[0]?.costPrice?.gross?.amount)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          &#8377;
+          {roundOff(productItem?.pricing?.price?.gross?.amount)}
+        </span>;
+      } else {
+        {
+          RegularPrice(
+            productItem?.defaultVariant?.costPrice,
+            productItem?.pricing?.priceRange?.start?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              &#8377;{roundOff(productItem?.defaultVariant?.costPrice)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          &#8377;
+          {roundOff(
+            productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+          )}
+        </span>;
+      }
+    } else {
+      if (productItem?.variants?.length > 1) {
+        {
+          RegularPrice(
+            productItem?.variants[0]?.costPrice,
+            productItem?.pricing?.price?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              {"$"}
+              {roundOff(productItem?.variants[0]?.costPrice?.gross?.amount)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          {"$"}
+          {roundOff(productItem?.pricing?.price?.gross?.amount)}
+        </span>;
+      } else {
+        {
+          RegularPrice(
+            productItem?.defaultVariant?.costPrice,
+            productItem?.pricing?.priceRange?.start?.gross?.amount
+          ) && (
+            <span
+              className="pr-5"
+              style={{ textDecoration: "line-through", color: "gray" }}
+            >
+              {"$"}
+              {roundOff(productItem?.defaultVariant?.costPrice)}
+            </span>
+          );
+        }
+        <span className="tp-product-price-2 new-price">
+          {"$"}
+          {roundOff(
+            productItem?.pricing?.priceRange?.start?.gross?.amount ||
+              productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+          )}
+        </span>;
+      }
+    }
+  };
+
+  const [variantDetails, setVariantDetails] = useState();
+  const variantsChange = (e) => {
+    setVariantId(e.target.value);
+    productRefetch();
+    const variantDetails = productItem?.variants?.find(
+      (variant) => variant?.id == e.target.value
+    );
+    setVariantDetails(variantDetails);
+  };
+
+  console.log("variantDetails: ", variantDetails);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -388,7 +495,7 @@ const DetailsWrapperQuick = ({
             title={productItem?.name}
           />
         </div>
-        {/* <div style={{ paddingRight: "10px", display: "flex" }}>
+        <div style={{ paddingRight: "10px", display: "flex" }}>
           <div
             style={{ position: "relative" }}
             onMouseEnter={PreviousMouseEnter}
@@ -413,7 +520,14 @@ const DetailsWrapperQuick = ({
               >
                 <div style={{ display: "flex" }}>
                   <div style={{ paddingRight: "10px", width: "50%" }}>
-                    <Image
+                    {/* <Image
+                      style={{ width: "100%" }}
+                      height={100}
+                      width={100}
+                      src={profilePic(previousProduct?.thumbnail?.url)}
+                    /> */}
+
+                    <img
                       style={{ width: "100%" }}
                       height={100}
                       width={100}
@@ -430,7 +544,7 @@ const DetailsWrapperQuick = ({
                   >
                     <div>
                       <p style={{ color: "gray", marginBottom: "0px" }}>
-                       {previousProduct?.name}
+                        {previousProduct?.name}
                       </p>
                       <p
                         style={{
@@ -438,7 +552,9 @@ const DetailsWrapperQuick = ({
                           marginBottom: "0px",
                         }}
                       >
-                        {channel === "india-channel" ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}` : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                        {channel === "india-channel"
+                          ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                          : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
                       </p>
                     </div>
                   </div>
@@ -481,7 +597,14 @@ const DetailsWrapperQuick = ({
               >
                 <div style={{ display: "flex" }}>
                   <div style={{ paddingRight: "10px", width: "50%" }}>
-                    <Image
+                    {/* <Image
+                      style={{ width: "100%" }}
+                      width={100}
+                      height={100}
+                      src={profilePic(nextProduct?.thumbnail?.url)}
+                    /> */}
+
+                    <img
                       style={{ width: "100%" }}
                       width={100}
                       height={100}
@@ -516,7 +639,7 @@ const DetailsWrapperQuick = ({
               </div>
             )}
           </div>
-        </div> */}
+        </div>
       </div>
       {/* <div className="tp-product-details-category">
         <span>
@@ -540,14 +663,25 @@ const DetailsWrapperQuick = ({
                 className="pr-5"
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
-                &#8377;{roundOff(productItem?.defaultVariant?.costPrice)}
+                {variantDetails ? (
+                  <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                ) : (
+                  <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
+                )}
               </span>
             )}
             <span className="tp-product-price-2 new-price">
-              &#8377;
-              {roundOff(
-                productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              {variantDetails ? (
+                <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+              ) : (
+                <>
+                  &#8377;{" "}
+                  {roundOff(
+                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                      productItem?.node?.pricing?.priceRange?.start?.gross
+                        ?.amount
+                  )}
+                </>
               )}
             </span>
           </div>
@@ -561,15 +695,33 @@ const DetailsWrapperQuick = ({
                 className="pr-5"
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
-                {"$"}
-                {roundOff(productItem?.defaultVariant?.costPrice)}
+                {variantDetails ? (
+                  <>
+                    {"$"} {variantDetails?.pricing?.price?.gross?.amount}
+                  </>
+                ) : (
+                  <>
+                    {"$"}
+                    {roundOff(productItem?.defaultVariant?.costPrice)}
+                  </>
+                )}
               </span>
             )}
             <span className="tp-product-price-2 new-price">
-              {"$"}
-              {roundOff(
-                productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                  productItem?.node?.pricing?.priceRange?.start?.gross?.amount
+              {variantDetails ? (
+                <>
+                  {"$"}
+                  {variantDetails?.pricing?.price?.gross?.amount}
+                </>
+              ) : (
+                <>
+                  {"$"}{" "}
+                  {roundOff(
+                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                      productItem?.node?.pricing?.priceRange?.start?.gross
+                        ?.amount
+                  )}
+                </>
               )}
             </span>
           </div>
@@ -622,13 +774,12 @@ const DetailsWrapperQuick = ({
         imperfections add characteristics to the stones making it distinct and
         unique.
       </p> */}
-
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
           <div className="flex flex-wrap gap-3">
             <div
               className="text-bold text-lg"
-              style={{ color: "grey", fontSize: "20px" }}
+              style={{ fontSize: "16px", color: "black" }}
             >
               <span> Product variants:</span>
             </div>
@@ -638,7 +789,9 @@ const DetailsWrapperQuick = ({
               id="country"
               value={variantId}
               className="nice-select"
-              onChange={(e) => setVariantId(e.target.value)}
+              onChange={(e) => {
+                variantsChange(e);
+              }}
             >
               <option value="">Select variant</option>
               {productItem?.variants?.map((item) => (
@@ -651,9 +804,44 @@ const DetailsWrapperQuick = ({
         )}
       </div>
 
+      {/* {productItem?.variants?.length > 1 && (
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+          }}
+        >
+          {productItem?.variants?.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setVariantId(item?.id);
+                setIndex(i);
+              }}
+              type="button"
+              style={{
+                borderWidth: 1,
+                borderColor: "grey",
+                padding: 10,
+                borderStyle: "solid",
+                borderRadius: 10,
+                backgroundColor: index == i ? "black" : "white",
+                color: index == i ? "white" : "black",
+              }}
+            >
+              {item?.name}
+            </button>
+          ))}
+        </div>
+      )} */}
       <div className="mt-2">
-        <p style={{ color: "grey", fontSize: "20px" }}>
-          {productItem?.defaultVariant?.quantityAvailable} in stock
+        <p style={{ fontSize: "16px", color: "black" }}>
+          {variantDetails ? (
+            <>{variantDetails?.quantityAvailable}</>
+          ) : (
+            <>{productItem?.defaultVariant?.quantityAvailable}</>
+          )}
+          in stock
         </p>
       </div>
 
@@ -671,7 +859,7 @@ const DetailsWrapperQuick = ({
                 // }
               }}
               disabled={status === "out-of-stock"}
-              className="tp-btn tp-btn-border"
+              className={`tp-btn tp-btn-border`}
             >
               {cartLoader ? (
                 <ButtonLoader loader={cartLoader} />
@@ -743,12 +931,20 @@ const DetailsWrapperQuick = ({
             {wishlistLoader ? "Loading..." : "Add To Wishlist"}
           </button>
         )}
+
+        {/* <button type="button" className="tp-product-details-action-sm-btn">
+          <AskQuestion />
+          Ask a question
+        </button> */}
       </div>
       {/* product-details-action-sm end */}
 
       <div>
         <p style={{ color: "#55585b" }}>
-          <b>SKU:</b> {productItem?.defaultVariant?.sku}
+          <b>SKU:</b>{" "}
+          {variantDetails
+            ? variantDetails?.sku
+            : productItem?.defaultVariant?.sku}
         </p>
         <p
           style={{ color: "#55585b", cursor: "pointer" }}
@@ -785,35 +981,14 @@ const DetailsWrapperQuick = ({
         )}
       </div>
 
+      {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && (
         <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />
       )}
+      {/* if ProductDetailsCountdown true end */}
 
-      <div className="tp-product-details-action-wrapper">
-        {/* <h3 className="tp-product-details-action-title">Quantity</h3> */}
-        {/* <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
-         
-          <div className="tp-product-details-add-to-cart mb-15 w-100">
-            <button
-              onClick={() => {
-                if (isAddedToCart) {
-                  dispatch(handleModalClose());
-                  router.push("/cart");
-                } else {
-                  handleAddProduct(productItem);
-                }
-              }}
-              disabled={status === "out-of-stock"}
-              className="tp-product-details-add-to-cart-btn w-100"
-            >
-              {isAddedToCart ? "View Cart" : "Add To Cart"}
-            </button>
-          </div>
-        </div> */}
-        {/* <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
-          <button className="tp-btn tp-btn-border ">SHARE THIS PAGE</button>
-        </Link> */}
-      </div>
+      {/* actions */}
+      <div className="tp-product-details-action-wrapper"></div>
 
       {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />
@@ -822,4 +997,4 @@ const DetailsWrapperQuick = ({
   );
 };
 
-export default DetailsWrapperQuick;
+export default DetailsWrapper;

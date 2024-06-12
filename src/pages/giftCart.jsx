@@ -14,6 +14,7 @@ export default function GiftCart() {
     data: productData,
     isLoading,
     isError,
+    refetch: productRefetch,
   } = useGetProductQuery({ productId: "UHJvZHVjdDo1NTI3" });
   const product = productData?.data?.product;
   console.log("product: ", product);
@@ -44,7 +45,10 @@ export default function GiftCart() {
         subtitle="Gift Cart"
         BgImage={banner}
       />
-      <ProductDetailsArea productItem={product} />
+      <ProductDetailsArea
+        productItem={product}
+        detailsRefetch={productRefetch}
+      />
       <FooterTwo primary_style={true} />
     </Wrapper>
   );

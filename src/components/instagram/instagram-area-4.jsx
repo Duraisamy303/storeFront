@@ -313,13 +313,21 @@ const InstagramAreaFour = () => {
                           </li>
                         </ul>
                       </div>
-                      <Image
+                      {/* <Image
                         src={profilePic(item?.thumbnail?.url)}
                         width={300}
                         height={320}
                         alt="instagram img"
                         className="actor-image"
-                      />
+                      /> */}
+
+                      <img
+                      src={profilePic(item?.thumbnail?.url)}
+                      width={300}
+                      height={320}
+                      alt="instagram img"
+                      className="actor-image"
+                    />
                       <div className="tp-instagram-icon-2 text-center">
                         <p
                           className="actor-hov-para"

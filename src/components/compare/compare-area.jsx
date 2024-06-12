@@ -199,7 +199,15 @@ const CompareArea = () => {
                               style={{ minWidth: "300px" }}
                             >
                               <div className="tp-compare-thumb p-relative z-index-1">
-                                <Image
+                                {/* <Image
+                                  src={profilePic(item?.node?.thumbnail?.url)}
+                                  alt="compare"
+                                  width={500}
+                                  height={500}
+                                  className=""
+                                /> */}
+
+                                <img
                                   src={profilePic(item?.node?.thumbnail?.url)}
                                   alt="compare"
                                   width={500}
@@ -351,7 +359,7 @@ const CompareArea = () => {
                         {compareData?.map((item) => (
                           <td key={item?.node?.id}>
                             <div className="tp-compare-add-to-cart">
-                              <span  style={{color:"gray"}}>
+                              <span style={{ color: "gray" }}>
                                 {description(item?.node?.description)}
                               </span>
                             </div>
@@ -364,7 +372,9 @@ const CompareArea = () => {
                         {compareData.map((item) => (
                           <td key={item?.node?.id}>
                             <div className="tp-compare-add-to-cart">
-                              <span  style={{color:"gray"}}>{item?.node?.variants[0]?.sku}</span>
+                              <span style={{ color: "gray" }}>
+                                {item?.node?.variants[0]?.sku}
+                              </span>
                             </div>
                           </td>
                         ))}
@@ -382,7 +392,7 @@ const CompareArea = () => {
                               )}
                             </div> */}
                             <div className="tp-compare-add-to-cart">
-                              <span style={{color:"gray"}}>
+                              <span style={{ color: "gray" }}>
                                 {item?.node?.defaultVariant?.quantityAvailable}
                               </span>
                             </div>

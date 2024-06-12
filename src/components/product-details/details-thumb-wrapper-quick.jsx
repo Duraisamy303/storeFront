@@ -64,7 +64,15 @@ const DetailsThumbWrapperQuick = ({
                 id={`image-${i}`}
                 style={{ border: "none", background: "none", padding: 0 }}
               >
-                <Image
+                {/* <Image
+                  src={profilePic(item)}
+                  alt="thumbnail"
+                  width={78}
+                  height={100}
+                  style={{ width: "100%", height: "100%" }}
+                /> */}
+
+<img
                   src={profilePic(item)}
                   alt="thumbnail"
                   width={78}
@@ -116,12 +124,19 @@ const DetailsThumbWrapperQuick = ({
               {loading ? (
                 <Loader />
               ) : (
-                <Image
-                  src={profilePic(activeImg)}
-                  alt="product img"
-                  width={imgWidth}
-                  height={imgHeight}
-                />
+                // <Image
+                //   src={profilePic(activeImg)}
+                //   alt="product img"
+                //   width={imgWidth}
+                //   height={imgHeight}
+                // />
+
+                <img
+                src={profilePic(activeImg)}
+                alt="product img"
+                width={imgWidth}
+                height={imgHeight}
+              />
               )}
 
               <div className="tp-product-badge">

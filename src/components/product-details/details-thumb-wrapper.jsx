@@ -117,7 +117,15 @@ const DetailsThumbWrapper = ({
                     height: imageUrls?.length > 3 ? "180px" : "250px",
                   }}
                 >
-                  <Image
+                  {/* <Image
+                    src={item}
+                    alt="image"
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%" }}
+                  /> */}
+
+                  <img
                     src={item}
                     alt="image"
                     width={78}
@@ -336,7 +344,20 @@ const DetailsThumbWrapper = ({
           >
             &lt;
           </button>
-          <Image
+          {/* <Image
+            src={imageUrls[selectedImageIndex]}
+            alt="Lightbox"
+            width={imgWidth}
+            height={imgHeight}
+            style={{
+              width: "100%",
+              maxWidth: "90%",
+              maxHeight: "90%",
+              objectFit: "contain",
+            }}
+          /> */}
+
+          <img
             src={imageUrls[selectedImageIndex]}
             alt="Lightbox"
             width={imgWidth}

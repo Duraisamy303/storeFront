@@ -156,7 +156,17 @@ const CartMiniSidebar = () => {
                                 );
                               }}
                             >
-                              <Image
+                              {/* <Image
+                                src={profilePic(
+                                  item?.variant?.product?.thumbnail?.url ||
+                                    item?.node?.thumbnail?.url
+                                )}
+                                width={70}
+                                height={60}
+                                alt="product img"
+                              /> */}
+
+<img
                                 src={profilePic(
                                   item?.variant?.product?.thumbnail?.url ||
                                     item?.node?.thumbnail?.url
