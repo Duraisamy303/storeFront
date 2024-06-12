@@ -484,8 +484,6 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
-  console.log("variantDetails: ", variantDetails);
-
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>

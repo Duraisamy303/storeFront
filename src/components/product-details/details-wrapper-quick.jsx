@@ -67,7 +67,6 @@ const DetailsWrapper = ({
     offerDate,
   } = productItem || {};
 
-  console.log("productItem: ", productItem);
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
   const [channel, setChannel] = useState("india-channel");
@@ -85,13 +84,12 @@ const DetailsWrapper = ({
 
   const {
     data: productData,
-    isLoading:productLoading,
-    isError:productError,refetch:productRefetch
+    isLoading: productLoading,
+    isError: productError,
+    refetch: productRefetch,
   } = useGetProductQuery({ productId: productItem?.id });
 
-  const ProductData = productData?.data?.product
-
-
+  const ProductData = productData?.data?.product;
 
   const toggleVisibility = (section) => {
     setVisibility((prevState) => {
@@ -343,8 +341,6 @@ const DetailsWrapper = ({
     }
   }, []);
 
- 
-
   const multiVariantPrice = () => {
     if (checkChannel() == "india-channel") {
       if (productItem?.variants?.length > 1) {
@@ -444,7 +440,6 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
-  console.log("variantDetails: ", variantDetails);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -455,7 +450,6 @@ const DetailsWrapper = ({
             title={productItem?.name}
           />
         </div>
-        
       </div>
       {/* <div className="tp-product-details-category">
         <span>

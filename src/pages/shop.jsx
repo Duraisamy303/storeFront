@@ -79,7 +79,6 @@ const ShopPage = () => {
         sortByField: "CREATED_AT",
         sortByDirection: "DESC",
       });
-      console.log("res: ", res);
       setProductList(res?.data?.data?.products?.edges);
     } catch (error) {
       console.log("error: ", error);
@@ -300,7 +299,6 @@ const ShopPage = () => {
       tag: router?.query?.tag,
       // tag:"VGFnOjg="
     };
-    console.log("✌️datas --->", datas);
 
     priceFilter({
       filter: datas,

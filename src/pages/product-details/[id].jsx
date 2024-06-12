@@ -20,7 +20,6 @@ const ProductDetailsPage = ({ query }) => {
     isLoading,
     isError,refetch:detailProductRefetch
   } = useGetProductQuery({ productId: query.id });
-  console.log("productData: ", productData);
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
