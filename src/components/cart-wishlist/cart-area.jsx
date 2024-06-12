@@ -141,12 +141,8 @@ const CartArea = () => {
                               item?.variant?.quantityAvailable ||
                               item?.node?.quantityAvailable
                             }
-                            incQuantity={(quantity) =>
-                             Quantity(quantity, item)
-                            }
-                            decQuantity={(quantity) =>
-                             Quantity(quantity, item)
-                            }
+                            incQuantity={(quantity) => Quantity(quantity, item)}
+                            decQuantity={(quantity) => Quantity(quantity, item)}
                             quantityCount={item.quantity}
                             refetch={() => refetch()}
                           />
@@ -158,14 +154,24 @@ const CartArea = () => {
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
                     <div className="col-xl-12 col-md-12">
-                      <div className="tp-cart-coupon">
-                        <Link href="/checkout" >Apply Coupon Code in Checkout</Link>
-                        </div>
+                      
+                      <div className="tp-checkout-verify-item mr-30">
+                        <p className="tp-checkout-verify-reveal">
+                          Have a coupon?{" "}
+                          <Link
+                          href="/checkout"
+                            type="button" style={{color:"#c3935b"}}
+                            className="tp-checkout-coupon-form-reveal-btn"
+                          >
+                              Apply Coupon Code in Checkout
+                          </Link>
+                        </p>
+                      </div>
                       <div className="tp-cart-update text-md-end mr-30">
                         <button
-                          onClick={() => updateCart()}
                           type="button"
-                          className="tp-cart-update-btn " style={{background:"#ececec"}}
+                          className="tp-cart-update-btn "
+                          style={{ background: "#ececec" }}
                         >
                           UPDATE CART
                         </button>
