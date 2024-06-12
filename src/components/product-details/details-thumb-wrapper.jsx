@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useState } from "react";
 import PopupVideo from "../common/popup-video";
 import Loader from "../loader/loader";
@@ -25,6 +24,9 @@ const DetailsThumbWrapper = ({
   // lightbox state
   const [showLightbox, setShowLightbox] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Calculate adjusted image height
+  const adjustedImgHeight = imgHeight < 740 ? 740 : imgHeight;
 
   const handleImageActive = (item, index) => {
     setActiveImg(item);
@@ -78,24 +80,27 @@ const DetailsThumbWrapper = ({
   const handleNavigationClicking = (direction) => {
     const currentIndex = imageUrls.indexOf(activeImg);
     let newIndex;
-
+  
     if (direction === "prev") {
       newIndex = currentIndex === 0 ? imageUrls.length - 1 : currentIndex - 1;
     } else {
       newIndex = currentIndex === imageUrls.length - 1 ? 0 : currentIndex + 1;
     }
-
+  
     const newActiveImage = imageUrls[newIndex];
-    handleImageActive(newActiveImage);
-
+    handleImageActive(newActiveImage, newIndex); // Pass newIndex to handleImageActive
+  
     // Scroll into view
-    document.getElementById(`image-${newIndex}`)?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "start",
-    });
+    const element = document.getElementById(`image-${newIndex}`);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
   };
-
+  
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
@@ -113,18 +118,11 @@ const DetailsThumbWrapper = ({
                   key={i}
                   className={`nav-link ${item === activeImg ? "active" : ""}`}
                   onClick={() => handleImageActive(item, i)}
+                  id={`image-${i}`}
                   style={{
                     height: imageUrls?.length > 3 ? "180px" : "250px",
                   }}
                 >
-                  {/* <Image
-                    src={item}
-                    alt="image"
-                    width={78}
-                    height={100}
-                    style={{ width: "100%", height: "100%" }}
-                  /> */}
-
                   <img
                     src={item}
                     alt="image"
@@ -188,7 +186,7 @@ const DetailsThumbWrapper = ({
                   style={{
                     position: "relative",
                     width: `${imgWidth}px`,
-                    height: `${imgHeight}px`,
+                    height: `${adjustedImgHeight}px`,
                   }}
                 >
                   <div
@@ -201,25 +199,11 @@ const DetailsThumbWrapper = ({
                     onMouseMove={handleMouseMove}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-                    // onClick={() => handleImageClick(selectedImageIndex)}
                   >
-                    {/* <Image
-                      src={profilePic(activeImg)}
-                      alt="product img"
-                      width={imgWidth}
-                      height={imgHeight}
-                      className="imageHover"
-                      style={{
-                        cursor: "pointer",
-                        transform: isZoomed ? "scale(2)" : "scale(1)",
-                        transformOrigin: backgroundPosition,
-                        transition: "transform 0.1s ease-in-out",
-                      }}
-                    /> */}
                     <img
                       src={profilePic(activeImg)}
                       width={imgWidth}
-                      height={imgHeight}
+                      height={adjustedImgHeight}
                       className="imageHover"
                       style={{
                         cursor: "pointer",
@@ -344,24 +328,11 @@ const DetailsThumbWrapper = ({
           >
             &lt;
           </button>
-          {/* <Image
-            src={imageUrls[selectedImageIndex]}
-            alt="Lightbox"
-            width={imgWidth}
-            height={imgHeight}
-            style={{
-              width: "100%",
-              maxWidth: "90%",
-              maxHeight: "90%",
-              objectFit: "contain",
-            }}
-          /> */}
-
           <img
             src={imageUrls[selectedImageIndex]}
             alt="Lightbox"
             width={imgWidth}
-            height={imgHeight}
+            height={adjustedImgHeight}
             style={{
               width: "100%",
               maxWidth: "90%",
