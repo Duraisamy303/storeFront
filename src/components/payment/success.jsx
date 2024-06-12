@@ -17,6 +17,7 @@ const Success = ({ data }) => {
   const ShippingAmount = data?.data?.order?.shippingPrice?.gross.amount;
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
+  const GiftCard = data?.data?.order?.giftCards;
 
   return (
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
@@ -93,6 +94,20 @@ const Success = ({ data }) => {
                       </>
                     )}
                   </tr>
+
+
+                  {
+                GiftCard && GiftCard.length > 0 && (
+                  <tr>
+                  <td>
+                    Gift Card
+                  </td>
+                  <td>{GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
+                    { GiftCard[0]?.initialBalance?.amount}
+                  </td>
+                </tr>
+                )
+              }
 
                   <tr>
                     <td>Payment Method</td>

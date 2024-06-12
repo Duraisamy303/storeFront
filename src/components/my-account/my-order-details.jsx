@@ -8,6 +8,7 @@ const MyOrderDetails = ({ data }) => {
   const Total = data?.data?.order?.total.gross;
   const Tax = data?.data?.order?.total.tax;
   const ShippingAmount = data?.data?.order?.shippingPrice;
+  const GiftCard = data?.data?.order?.giftCards;
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -66,6 +67,15 @@ const MyOrderDetails = ({ data }) => {
                   {roundOff(ShippingAmount?.gross?.amount)}
                 </td>
               </tr>
+              {GiftCard && GiftCard.length > 0 && (
+                <tr>
+                  <td>Gift Card</td>
+                  <td>
+                    {GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
+                    {GiftCard[0]?.initialBalance?.amount}
+                  </td>
+                </tr>
+              )}
 
               <tr>
                 <td style={{ fontSize: "20px" }}>TOTAL:</td>

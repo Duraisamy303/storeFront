@@ -20,6 +20,7 @@ const Failed = ({ data, orderId }) => {
   const status = data?.data?.order?.paymentStatus;
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
+  const GiftCard = data?.data?.order?.giftCards;
 
   const [Razorpay] = useRazorpay();
 
@@ -178,6 +179,19 @@ const Failed = ({ data, orderId }) => {
 
                     <td>{status}</td>
                   </tr>
+
+                  {
+                GiftCard && GiftCard.length > 0 && (
+                  <tr>
+                  <td>
+                    Gift Card
+                  </td>
+                  <td>{GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
+                    { GiftCard[0]?.initialBalance?.amount}
+                  </td>
+                </tr>
+                )
+              }
 
                   <tr>
                     <td style={{ color: "black", fontWeight: "600" }}>Total</td>

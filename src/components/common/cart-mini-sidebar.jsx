@@ -304,8 +304,8 @@ const CartMiniSidebar = () => {
                   <div
                     style={{
                       fontWeight: "400",
-                      fontSize: "14px",
-                      justifyContent: "flex-end",
+                      fontSize: "12px",
+                     textAlign: "right",
                     }}
                   >
                     (includes &#8377;
