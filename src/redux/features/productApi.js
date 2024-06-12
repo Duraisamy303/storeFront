@@ -332,7 +332,7 @@ export const productApi = apiSlice.injectEndpoints({
 
     //filters
     priceFilter: builder.mutation({
-      query: ({  sortByField, sortByDirection }) => {
+      query: ({  sortByField, sortByDirection, filter}) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -347,6 +347,7 @@ export const productApi = apiSlice.injectEndpoints({
             after: null,
             sortByField,
             sortByDirection,
+            filter
           })
         );
       },

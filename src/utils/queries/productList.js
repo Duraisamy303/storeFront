@@ -358,6 +358,7 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
 };
 
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
+  console.log("✌️filter --->", filter);
   return JSON.stringify({
     query: `
     query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
@@ -382,12 +383,13 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
               }
             }
             
+          
+          }
+        }
             defaultVariant {
               id
               sku
             }
-          }
-        }
         category {
           id
           name

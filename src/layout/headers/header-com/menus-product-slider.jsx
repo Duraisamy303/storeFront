@@ -215,7 +215,6 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
               // backgroundPosition: "0px -80px",
             }}
           ></div>
-          <img src={profilePic(img)} />
           <div className="tp-product-badge-2">
             {RelatedProduct?.defaultVariant?.quantityAvailable == 0 && (
               <span

@@ -162,6 +162,7 @@ const CategoryComponent = ({
     setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
 
     priceFilter({ filter: { categories: categoryId } }).then((res) => {
+console.log('✌️res --->', res);
       const list = res?.data?.data?.products?.edges?.slice(0, 11);
       setProductList(list);
     });
