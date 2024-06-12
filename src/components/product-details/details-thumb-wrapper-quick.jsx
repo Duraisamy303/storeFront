@@ -111,7 +111,7 @@ const DetailsThumbWrapperQuick = ({
                   color: "black",
                   position: "absolute",
                   left: "70px",
-                  bottom: "20px",
+                  bottom: "80px",
                   opacity: "0.8",
                 }}
               />
