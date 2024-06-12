@@ -168,9 +168,9 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
         checkoutToken: checkoutTokenINR,
         variantId: product?.node?.defaultVariant?.id,
       });
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        // notifyError(err);
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0 || response.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message || response.data?.checkoutLinesAdd?.errors[0]?.message
+        notifyError(err);
       } else {
         notifySuccess(`${product.node.name} added to cart successfully`);
         cartRefetch();
