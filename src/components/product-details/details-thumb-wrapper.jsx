@@ -195,9 +195,21 @@ const DetailsThumbWrapper = ({
                     onMouseLeave={handleMouseLeave}
                     // onClick={() => handleImageClick(selectedImageIndex)}
                   >
-                    <Image
+                    {/* <Image
                       src={profilePic(activeImg)}
                       alt="product img"
+                      width={imgWidth}
+                      height={imgHeight}
+                      className="imageHover"
+                      style={{
+                        cursor: "pointer",
+                        transform: isZoomed ? "scale(2)" : "scale(1)",
+                        transformOrigin: backgroundPosition,
+                        transition: "transform 0.1s ease-in-out",
+                      }}
+                    /> */}
+                    <img
+                      src={profilePic(activeImg)}
                       width={imgWidth}
                       height={imgHeight}
                       className="imageHover"

@@ -84,7 +84,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     dispatch(compare_list(arr));
   }, [dispatch]);
 
-  
   const [token, setToken] = useState("");
 
   useEffect(() => {
@@ -157,7 +156,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       } else {
         notifyError(
           "Only logged-in users can add items to their wishlist or view it"
-        )
+        );
         // const addedWishlist = handleWishlistProduct(prd);
         // dispatch(add_to_wishlist(addedWishlist));
       }
@@ -216,13 +215,15 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     >
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
         <Link href={`/product-details/${product?.id}`}>
-          <Image
+          {/* <Image
             // src={img}
             src={profilePic(img)}
             alt="product img"
             width={284}
             height={302}
-          />
+          /> */}
+
+          <img src={profilePic(img)} width={284} height={302} />
         </Link>
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (
@@ -238,7 +239,6 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           )}
         </div>
 
-
         {/* <div className="tp-product-badge-2">
           {product?.defaultVariant?.quantityAvailable == 0 && (
             <span className="product-hot">HOT</span>
@@ -249,38 +249,38 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           {product?.defaultVariant?.quantityAvailable == 0 && (
             <span
               className="product-hot text-center"
-              style={{ padding: "15px 12px ", fontSize:"12px" }}
+              style={{ padding: "15px 12px ", fontSize: "12px" }}
             >
               SOLD
               <br /> OUT
             </span>
           )}
         </div>
-       
+
         <div
-            className={`${
-              product?.defaultVariant?.quantityAvailable == 0 
-                ? "tp-product-badge"
-                : "tp-product-badge-2"
-            }`}
-          >
-            {product?.metadata?.filter((item) => item.key === "label")
-              .length > 0 &&
-              product.metadata
-                .filter((item) => item.key === "label")
-                .map((item, index) => (
-                  <span
-                    key={index}
-                    className="product-trending text-center"
-                    style={{
-                      padding: "18px 12px",
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    {item.value}
-                  </span>
-                ))}
-          </div>
+          className={`${
+            product?.defaultVariant?.quantityAvailable == 0
+              ? "tp-product-badge"
+              : "tp-product-badge-2"
+          }`}
+        >
+          {product?.metadata?.filter((item) => item.key === "label").length >
+            0 &&
+            product.metadata
+              .filter((item) => item.key === "label")
+              .map((item, index) => (
+                <span
+                  key={index}
+                  className="product-trending text-center"
+                  style={{
+                    padding: "18px 12px",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {item.value}
+                </span>
+              ))}
+        </div>
 
         {/* product action */}
         <div className="tp-product-action-2 tp-product-action-blackStyle">
@@ -362,13 +362,13 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
               <button
                 style={{ marginRight: "5px" }}
                 disabled={status === "out-of-stock"}
-                onClick={() =>{
-                  if(token){
+                onClick={() => {
+                  if (token) {
                     router.push("/wishlist");
-                  }else{
+                  } else {
                     notifyError(
                       "Only logged-in users can add items to their wishlist or view it"
-                    )
+                    );
                   }
                 }}
                 // onClick={() => addWishlistProduct(product)}
