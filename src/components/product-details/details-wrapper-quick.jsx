@@ -584,12 +584,6 @@ const DetailsWrapper = ({
         </div>
       )}
 
-      {/* <p style={{ color: "gray" }}>
-        Note : The stones we use are either natural or glass stones, the
-        imperfections found on them are natural and inevitable. These
-        imperfections add characteristics to the stones making it distinct and
-        unique.
-      </p> */}
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
           <div className="flex flex-wrap gap-3">

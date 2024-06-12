@@ -62,7 +62,7 @@ const DetailsThumbWrapperQuick = ({
                 className={`nav-link ${item === activeImg ? "active" : ""}`}
                 onClick={() => handleImageActive(item)}
                 id={`image-${i}`}
-                style={{ border: "none", background: "none", padding: 0 }}
+                style={{ border: "none", background: "none", padding: 0, width:'175px', height:'205px' }}
               >
                 {/* <Image
                   src={profilePic(item)}
@@ -82,7 +82,7 @@ const DetailsThumbWrapperQuick = ({
               </button>
             ))}
           </div>
-          {imageUrls?.length > 4 && (
+          {imageUrls?.length > 2 && (
             <>
               {" "}
               <UpOutlined
@@ -111,7 +111,7 @@ const DetailsThumbWrapperQuick = ({
                   color: "black",
                   position: "absolute",
                   left: "70px",
-                  bottom: "80px",
+                  bottom: "20px",
                   opacity: "0.8",
                 }}
               />
