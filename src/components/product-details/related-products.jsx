@@ -10,7 +10,7 @@ import { HomeNewArrivalPrdLoader } from "../loader";
 // slider setting
 const slider_setting = {
   slidesPerView: 4,
-  spaceBetween: 24,
+  spaceBetween: 10,
   navigation: {
     nextEl: ".tp-related-slider-button-next",
     prevEl: ".tp-related-slider-button-prev",
@@ -29,6 +29,9 @@ const slider_setting = {
       slidesPerView: 2,
     },
     576: {
+      slidesPerView: 2,
+    },
+    350: {
       slidesPerView: 2,
     },
     0: {
