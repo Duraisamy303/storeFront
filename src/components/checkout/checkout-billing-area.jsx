@@ -134,6 +134,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     checkedGiftwrap: false,
     isGiftWrap: false,
     preOrderMsg: false,
+    notes: "",
   });
 
   useEffect(() => {
@@ -304,8 +305,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       const arr = [{ id: 1, name: "Razorpay", checked: false }];
 
-      console.log("state.orderData.: ", state.orderData);
-
       const hasPreOrders = state.orderData?.lines?.some((line) =>
         line?.variant?.product?.collections?.some(
           (collection) => collection.name === "Pre Orders"
@@ -436,6 +435,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           postalCode: state.postalCode1,
         };
       } else {
+        // shippingAddress = { ...sample, notes: state.notes };
         shippingAddress = sample;
       }
 
@@ -539,7 +539,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
   const handlePayment = useCallback(
     async (orderId, total) => {
-      console.log("orderId: ", orderId);
       try {
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
@@ -574,8 +573,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
               localStorage.removeItem("checkoutTokenINR");
               dispatch(cart_list([]));
               router.push(`/order-success/${orderId}`);
-
-              console.log("data: ", data);
             }
 
             setState((prevState) => ({
@@ -647,7 +644,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           const total = response?.totalPrice?.gross?.amount;
           const tax = response?.totalPrice?.tax?.amount;
           const shippingCost = response?.shippingPrice?.gross?.amount;
-          console.log("shippingCost: ", shippingCost);
           setState({ shippingCost, tax, total });
           // handlePayment(checkoutId);
         }
@@ -659,7 +655,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
   };
 
   const handleSelectChange = async (e) => {
-    console.log("handleSelectChange: ");
     try {
       setState({ selectedCountry: e.target.value, selectedState: "" });
       stateRefetch();
@@ -672,7 +667,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
             country: e.target.value,
           },
         });
-        console.log("res: ", res);
         updateDelivertMethod(e.target.value);
       }
     } catch (error) {
@@ -699,7 +693,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("e: ", e);
     }
   };
-  console.log("state.selectedPaymentType: ", state.selectedPaymentType);
 
   const validateInputs = () => {
     const fieldsToValidate = [
@@ -783,8 +776,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         login(user.email, state.password);
         await commonFunction();
       }
-
-      console.log("body: ", body);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -887,7 +878,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     });
     updatePaymentMethod(checkedOption);
   };
-  console.log("selectedPaymentType: ", state.selectedPaymentType);
 
   const updatePaymentMethod = async (option) => {
     try {
@@ -968,7 +958,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const data = res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
       //Reduce 50 repee if giftwrap true
       let shippingCost = "";
-      console.log("checked: ", checked);
 
       if (checked) {
         shippingCost = data?.shippingPrice?.gross?.amount - 50;
@@ -981,7 +970,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         tax: data?.totalPrice?.tax?.amount,
         shippingCost,
       });
-      console.log("GIFT: ", data?.totalPrice?.gross?.amount);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -1759,7 +1747,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </>
                   )}
                 </li>
-              
 
                 <div className="flex w-full flex-row justify-between">
                   <div>
@@ -1825,9 +1812,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     {state.errors.paymentType && (
                       <ErrorMsg msg={state.errors.paymentType} />
                     )}
-                      <div className=" text-grey">
-                    Cash on Delivery is not applicable on Pre-order and gift cart products
-                </div>
+                    <div className=" text-grey">
+                      Cash on Delivery is not applicable on Pre-order and gift
+                      cart products
+                    </div>
                   </div>
                   {state.isGiftWrap && (
                     <div>
@@ -1840,7 +1828,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           type="checkbox"
                           checked={state.checkedGiftwrap}
                           onChange={(e) => {
-                            console.log("e.target.checked: ", e.target.checked);
                             checkoutGiftWrapUpdate(e.target.checked);
                             handleGiftWrapChanged(e.target.checked);
                           }}
