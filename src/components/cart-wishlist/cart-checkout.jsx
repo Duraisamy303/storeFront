@@ -117,7 +117,7 @@ const CartCheckout = ({ cartData }) => {
         <span>TOTAL</span>
         {checkChannel() === "india-channel" ? (
           <>
-            <span style={{ color: "#c3935b", fontSize: "16px" }}>
+            <span style={{ color: "#c3935b", fontSize: "16px", textAlign:"end" }}>
               &#8377;{roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
               <br />
               <span style={{ fontSize: "14px" }}>

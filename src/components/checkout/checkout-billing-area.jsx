@@ -1049,7 +1049,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         </div>
       </section>
 
-      <div className="row">
+      <div className="row no-gutter">
         <div className="col-lg-7">
           <div className="tp-checkout-bill-area">
             <h3 className="tp-checkout-bill-title">Billing Details</h3>

@@ -184,7 +184,7 @@ const Failed = ({ data, orderId }) => {
                 GiftCard && GiftCard.length > 0 && (
                   <tr>
                   <td>
-                    Gift Card
+                    Coupon
                   </td>
                   <td>{GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
                     { GiftCard[0]?.initialBalance?.amount}

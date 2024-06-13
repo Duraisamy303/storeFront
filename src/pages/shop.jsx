@@ -8,6 +8,7 @@ import {
   useGetAllProductsQuery,
   useGetCategoryNameMutation,
   useGetParentCategoryListQuery,
+  useGetTagNameMutation,
   usePriceFilterMutation,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
@@ -39,9 +40,11 @@ const ShopPage = () => {
     sortBy: { direction: "ASC", field: "ORDER_NO" },
   });
 
-  const { data: newData, refetch: getProductRefetch } = useGetAllProductsQuery();
+  const { data: newData, refetch: getProductRefetch } =
+    useGetAllProductsQuery();
 
   const [getCategoryName] = useGetCategoryNameMutation();
+  const [getTagName] = useGetTagNameMutation();
 
   const router = useRouter();
 
@@ -148,11 +151,20 @@ const ShopPage = () => {
 
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
+  const [tagName, setTagName] = useState("");
   useEffect(() => {
     if (router?.query?.categoryId) {
       filterByCategoryName();
     }
   }, [router]);
+
+  useEffect(() => {
+    if (router?.query?.tag) {
+      filterByTagName();
+    }
+  }, [router]);
+
+  console.log("router?.query: ", router?.query);
 
   useEffect(() => {
     if (!isLoading && !isError && products?.length > 0) {
@@ -375,11 +387,31 @@ const ShopPage = () => {
     }
   };
 
-  const shopTitle =
-    router.query && router.query.categoryId
-      ? `Shop /
-    ${parentCatName ? `${parentCatName} / ` : ""} ${catName}`
-      : "Shop";
+  const filterByTagName = async () => {
+    try {
+      const res = await getTagName({
+        id: router?.query?.tag,
+      });
+      console.log("✌️res --->", res);
+      const list = res?.data?.data?.tagById?.name;
+      setTagName(list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  const { categoryId, tag } = router?.query || {};
+let shopTitle = "Shop";
+
+if (categoryId) {
+    shopTitle = `Shop / ${parentCatName ? `${parentCatName} / ` : ""}${catName}`;
+} else if (tag) {
+    shopTitle = `Shop / ${tagName}`;
+}
+
+console.log(shopTitle);
+
 
   return (
     <Wrapper>

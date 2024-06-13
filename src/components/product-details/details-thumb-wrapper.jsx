@@ -26,7 +26,7 @@ const DetailsThumbWrapper = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Calculate adjusted image height
-  const adjustedImgHeight = imgHeight < 740 ? 740 : imgHeight;
+  const adjustedImgHeight = imgHeight < 740 ? imgHeightMobile : imgHeight;
 
   const handleImageActive = (item, index) => {
     setActiveImg(item);
@@ -182,7 +182,7 @@ const DetailsThumbWrapper = ({
               {loading ? (
                 <Loader />
               ) : (
-                <div
+                <div className="details-image-outer"
                   style={{
                     position: "relative",
                     width: `${imgWidth}px`,

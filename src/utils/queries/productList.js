@@ -1105,6 +1105,21 @@ export const CATEGORY_NAME = ({ categoryid }) => {
   });
 };
 
+export const TAG_NAME = ({ id }) => {
+  return JSON.stringify({
+    query: `
+  query GetTagName($id: ID!) {
+  tagById(id: $id) {
+    id
+    name
+    slug
+  }
+}
+      `,
+    variables: { id },
+  });
+};
+
 // address section
 
 export const ADDRESS_LIST = () => {

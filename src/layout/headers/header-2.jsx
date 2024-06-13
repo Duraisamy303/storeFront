@@ -368,7 +368,15 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                         height: "50px",
                                       }}
                                     >
-                                      <Image
+                                      {/* <Image
+                                        src={item?.img}
+                                        alt="Product Image"
+                                        width={50}
+                                        height={50}
+                                        style={{ borderRadius: "50%" }}
+                                      /> */}
+
+<img
                                         src={item?.img}
                                         alt="Product Image"
                                         width={50}

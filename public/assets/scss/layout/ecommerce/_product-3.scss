@@ -407,3 +407,12 @@
         }
     }
 }
+
+
+@media (max-width: 400px) and (min-width: 349px) {
+    .tp-product-action-btn-3 {   
+        height: 30px;
+        width: 30px;
+        line-height: 31px;
+    }
+}
