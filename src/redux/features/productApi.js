@@ -29,6 +29,7 @@ import {
   ORDER_CANCEL,
   UPDATE_BILLING_ADDRESS_ADDRESS_SECTION,
   UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION,
+  TAG_NAME,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -436,6 +437,13 @@ export const productApi = apiSlice.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    getTagName: builder.mutation({
+      query: ({ id }) => {
+        return configuration(TAG_NAME({ id }));
+      },
+      providesTags: ["Products"],
+    }),
+
     getAddressList: builder.query({
       query: () => {
         return configuration(ADDRESS_LIST());
@@ -539,5 +547,6 @@ export const {
   useDeleteAddressMutation,
   useSubCatListMutation,
   useGetCategoryNameMutation,
+  useGetTagNameMutation,
   useOrderCancelMutation,
 } = productApi;
