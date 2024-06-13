@@ -514,6 +514,14 @@ font-weight:400;
 	border: none;
 }
 
+.no-gutter {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+	    margin-right: 0px; 
+     margin-left:0px;
+}
+
+
 
 
 :where(.css-dev-only-do-not-override-1ae8k9u).ant-select-single {
@@ -536,3 +544,5 @@ font-weight:400;
 :where(.css-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-item, :where(.css-1ae8k9u).ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
     padding-left: 35px;
 }
+
+
