@@ -706,14 +706,16 @@ export const UPDATE_SHIPPING_ADDRESS = ({
   checkoutId,
   shippingAddress,
   validationRules,
+  note
 }) => {
   return {
     query: `
-    mutation checkoutShippingAddressUpdate($checkoutId: ID!, $shippingAddress: AddressInput!, $validationRules: CheckoutAddressValidationRules) {
+    mutation checkoutShippingAddressUpdate($checkoutId: ID!, $shippingAddress: AddressInput!, $validationRules: CheckoutAddressValidationRules,$note:String!) {
       checkoutShippingAddressUpdate(
         id: $checkoutId
         shippingAddress: $shippingAddress
         validationRules: $validationRules
+         note: $note
       ) {
         errors {
           ...CheckoutErrorFragment
@@ -735,6 +737,7 @@ export const UPDATE_SHIPPING_ADDRESS = ({
       checkoutId,
       shippingAddress,
       validationRules,
+      note
     },
   };
 };

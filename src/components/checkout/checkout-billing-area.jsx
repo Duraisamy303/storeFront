@@ -435,7 +435,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           postalCode: state.postalCode1,
         };
       } else {
-        // shippingAddress = { ...sample, notes: state.notes };
         shippingAddress = sample;
       }
 
@@ -455,6 +454,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           const response = await checkoutShippingAddressUpdate({
             checkoutId,
             shippingAddress,
+            note:state.notes
           });
 
           if (
@@ -666,6 +666,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           shippingAddress: {
             country: e.target.value,
           },
+          note:state.notes
         });
         updateDelivertMethod(e.target.value);
       }
@@ -687,6 +688,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         shippingAddress: {
           country: e.target.value,
         },
+        note:state.notes
       });
       updateDelivertMethod(e.target.value);
     } catch (e) {
