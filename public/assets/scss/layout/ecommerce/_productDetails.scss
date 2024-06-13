@@ -33,9 +33,9 @@
     &-nav-main-thumb{
         position: relative;
         background-color:#F5F6F8;
-        & img{
-            object-fit: cover;
-        }
+        // & img{
+        //     object-fit: cover;
+        // }
     }
     &-thumb{
         &-wrapper{
@@ -1688,4 +1688,17 @@ height: 740px;
 
 .imageHover:hover {
   height: auto !important;
+}
+
+@media(max-width:500px) {
+
+    .imageHover{
+        width: 100%;
+        height: 450px !important;
+    }  
+    
+    .details-image-outer{
+        width: 100%;
+        height: 450px !important;
+    }
 }

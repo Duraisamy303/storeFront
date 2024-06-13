@@ -35,7 +35,7 @@ const ProductDetailsArea = ({ productItem, detailsRefetch }) => {
                 product={productItem}
                 imgWidth={800}
                 imgHeight={740}
-                imgHeightMobile={450}
+                imgHeightMobile={540}
                 videoId={videoId}
                 status={status}
               />
