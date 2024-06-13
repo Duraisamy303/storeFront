@@ -69,7 +69,7 @@ const MyOrderDetails = ({ data }) => {
               </tr>
               {GiftCard && GiftCard.length > 0 && (
                 <tr>
-                  <td>Gift Card</td>
+                  <td>Coupon</td>
                   <td>
                     {GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
                     {GiftCard[0]?.initialBalance?.amount}
