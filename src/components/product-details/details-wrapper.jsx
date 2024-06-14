@@ -44,7 +44,7 @@ import {
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { profilePic } from "@/utils/constant";
-import Image from "next/image";
+import { RWebShare } from "react-web-share";
 
 const DetailsWrapper = ({
   productItem,
@@ -1394,9 +1394,22 @@ const DetailsWrapper = ({
             </button>
           </div>
         </div> */}
-        <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
+        {/* <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
           <button className="tp-btn tp-btn-border ">SHARE THIS PAGE</button>
-        </Link>
+        </Link> */}
+
+        <div>
+          <RWebShare
+            data={{
+              text: productItem.name,
+              url: window.location.href,
+              title: "PraDe",
+            }}
+            onClick={() => console.log("shared successfully!")}
+          >
+            <button className="tp-btn tp-btn-border ">SHARE THIS PAGE</button>
+          </RWebShare>
+        </div>
       </div>
 
       {detailsBottom && (
