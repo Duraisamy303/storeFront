@@ -5,6 +5,8 @@ import HeaderTwo from "@/layout/headers/header-2";
 import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
 import {
+  useGetAllProductMutation,
+  useGetAllProductsMutation,
   useGetAllProductsQuery,
   useGetCategoryNameMutation,
   useGetParentCategoryListQuery,
@@ -36,12 +38,15 @@ const ShopPage = () => {
     data: productsData,
     isError,
     isLoading,
+    refetch: getProductRefetch,
   } = useGetAllProductsQuery({
-    sortBy: { direction: "ASC", field: "ORDER_NO" },
+    sortBy: { direction: "DESC", field: "CREATED_AT" },
   });
 
-  const { data: newData, refetch: getProductRefetch } =
-    useGetAllProductsQuery();
+  const [getAllProducts] = useGetAllProductMutation();
+
+  // const { data: newData, refetch: getProductRefetch } =
+  //   useGetAllProductsQuery();
 
   const [getCategoryName] = useGetCategoryNameMutation();
   const [getTagName] = useGetTagNameMutation();
@@ -69,24 +74,23 @@ const ShopPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    getProductList();
-  }, []);
+  // useEffect(() => {
+  //   getProductList();
+  // }, []);
 
-  const getProductList = async () => {
-    try {
-      const res = await getProductRefetch({
-        first: 500,
-        after: null,
-        channel: checkChannel(),
-        sortByField: "CREATED_AT",
-        sortByDirection: "DESC",
-      });
-      setProductList(res?.data?.data?.products?.edges);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
+  // const getProductList = async () => {
+  //   try {
+  //     const res = await getAllProducts({
+  //       sortBy: {
+  //         direction: "DESC",
+  //         field: "CREATED_AT",
+  //       },
+  //     });
+  //     setProductList(res?.data?.data?.products?.edges);
+  //   } catch (error) {
+  //     console.log("error: ", error);
+  //   }
+  // };
 
   const createCheckoutTokenINR = async () => {
     try {
@@ -164,8 +168,6 @@ const ShopPage = () => {
     }
   }, [router]);
 
-  console.log("router?.query: ", router?.query);
-
   useEffect(() => {
     if (!isLoading && !isError && products?.length > 0) {
       const maxPrice = products?.reduce((max, item) => {
@@ -215,32 +217,31 @@ const ShopPage = () => {
     console.log("e: ", e.value);
     setSelectValue(e.value);
 
-    // try {
-    //   let sortBy = {};
-    //   if ((e = "Default Sorting")) {
-    //     sortBy = { direction: "ASC", field: "ORDER_NO" };
-    //   } else if (e == "Low to High") {
-    //     sortBy = { direction: "ASC", field: "PRICE" };
-    //   } else if (e == "High to Low") {
-    //     sortBy = { direction: "DESC", field: "PRICE" };
-    //   } else if (e == "New Added") {
-    //     sortBy = { direction: "DESC", field: "CREATED_AT" };
-    //   }
-    //   console.log("sortBy: ", sortBy);
+    try {
+      let sortBy = {};
+      if (e.value == "Default Sorting") {
+        sortBy = { direction: "ASC", field: "ORDER_NO" };
+      }
+      if (e.value == "Low to High") {
+        sortBy = { direction: "ASC", field: "PRICE" };
+      }
+      if (e.value == "High to Low") {
+        sortBy = { direction: "DESC", field: "PRICE" };
+      }
+      if (e.value == "New Added") {
+        sortBy = { direction: "DESC", field: "CREATED_AT" };
+      }
+      console.log("sortBy: ", sortBy);
 
-    //   const res = await getProductRefetch({
-    //     first: 500,
-    //     after: null,
-    //     channel: checkChannel(),
-    //     sortByField: sortBy.field,
-    //     sortByDirection: sortBy.direction,
-    //   });
-    //   console.log("selectHandleFilter: ", res);
-    //   setProductList(res?.data?.data?.products?.edges);
-    // } catch (error) {
-    //   console.log("error: ", error);
-    // }
-    // console.log("e: ", e.value);
+      const res = await getAllProducts({
+        sortBy: sortBy,
+      });
+      console.log("selectHandleFilter: ", res);
+      setProductList(res?.data?.data?.products?.edges);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+    console.log("e: ", e.value);
   };
 
   const otherProps = {
@@ -400,18 +401,18 @@ const ShopPage = () => {
     }
   };
 
-
   const { categoryId, tag } = router?.query || {};
-let shopTitle = "Shop";
+  let shopTitle = "Shop";
 
-if (categoryId) {
-    shopTitle = `Shop / ${parentCatName ? `${parentCatName} / ` : ""}${catName}`;
-} else if (tag) {
+  if (categoryId) {
+    shopTitle = `Shop / ${
+      parentCatName ? `${parentCatName} / ` : ""
+    }${catName}`;
+  } else if (tag) {
     shopTitle = `Shop / ${tagName}`;
-}
+  }
 
-console.log(shopTitle);
-
+  console.log(shopTitle);
 
   return (
     <Wrapper>

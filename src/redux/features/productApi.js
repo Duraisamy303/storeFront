@@ -53,8 +53,10 @@ import { checkChannel } from "@/utils/functions";
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getAllProducts: builder.query({
-      query: ({ first, direction }) => {
+
+
+    getAllProduct: builder.mutation({
+      query: ({  sortBy }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -62,11 +64,28 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_LIST({ channel, first: 500, direction }));
+        return configuration(PRODUCT_LIST({ channel, first: 500, sortBy }));
       },
 
       providesTags: ["Products"],
     }),
+
+    getAllProducts: builder.query({
+      query: ({  sortBy }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(PRODUCT_LIST({ channel, first: 500, sortBy }));
+      },
+
+      providesTags: ["Products"],
+    }),
+
+
     getProductType: builder.query({
       query: ({ first }) => {
         let channel = "";
@@ -509,6 +528,7 @@ export const productApi = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetAllProductMutation,
   useGetAllProductsQuery,
   useGetProductTypeQuery,
   useGetOfferProductsQuery,

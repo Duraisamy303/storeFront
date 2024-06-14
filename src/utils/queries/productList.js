@@ -1,15 +1,15 @@
 import { PRODUCT_LIST_ITEM_FRAGMENT } from "./productDetails";
 
-export const PRODUCT_LIST = ({ channel, first }) => {
+export const PRODUCT_LIST = ({ channel, first,sortBy }) => {
   return JSON.stringify({
     query: `
-    query ProductListPaginated($first: Int!, $after: String, $channel: String!) {
+    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy:ProductOrder) {
       products(
         first: $first
         after: $after
         channel: $channel
         filter: {isPublished: true}
-        sortBy: {direction: DESC, field: CREATED_AT}
+        sortBy: $sortBy
       ) {
         totalCount
         edges {
@@ -34,7 +34,7 @@ export const PRODUCT_LIST = ({ channel, first }) => {
     
       ${PRODUCT_LIST_ITEM_FRAGMENT}
     `,
-    variables: { channel, first },
+    variables: { channel, first, sortBy },
   });
 };
 
