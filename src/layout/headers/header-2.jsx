@@ -596,7 +596,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                   Compare
                                 </Link>
                                 <Link
-                                  href="/giftCart"
+                                  href="/gift-card"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   Gift Cards

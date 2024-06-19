@@ -101,7 +101,7 @@ const menu_data = [
     id: 4,
     single_link: true,
     title: 'Gift Card',
-    link: '/giftCart',
+    link: '/gift-card',
   },
   {
     id: 4,

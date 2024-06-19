@@ -263,7 +263,7 @@ const PreOrders = () => {
 
   return (
     <Wrapper>
-      <SEO pageTitle="Shop" />
+      <SEO pageTitle="Sale" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
         title="Sale"

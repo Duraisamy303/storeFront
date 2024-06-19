@@ -485,8 +485,7 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
-
- 
+  console.log("router: ", router?.route);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -497,151 +496,164 @@ const DetailsWrapper = ({
             title={productItem?.name}
           />
         </div>
-        <div style={{ paddingRight: "10px", display: "flex" }}>
-          <div
-            style={{ position: "relative" }}
-            onMouseEnter={PreviousMouseEnter}
-            onMouseLeave={PreviousMouseLeave}
-          >
-            <LeftOutlined
-              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
-              onClick={PreviousProductClick}
+
+        {router?.route == "/gift-card" ? (
+          <></>
+        ) : (
+          <div style={{ paddingRight: "10px", display: "flex" }}>
+            <div
+              style={{ position: "relative" }}
               onMouseEnter={PreviousMouseEnter}
               onMouseLeave={PreviousMouseLeave}
-            />
-            {previousHovered && (
-              <div
+            >
+              <LeftOutlined
                 style={{
-                  position: "absolute",
-                  top: "25",
-                  right: "-35px",
-                  background: "white",
-                  padding: "0 5px 0 0",
-                  width: "250px",
+                  color: "gray",
+                  paddingRight: "5px",
+                  cursor: "pointer",
                 }}
-              >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingRight: "10px", width: "50%" }}>
-                    {/* <Image
+                onClick={PreviousProductClick}
+                onMouseEnter={PreviousMouseEnter}
+                onMouseLeave={PreviousMouseLeave}
+              />
+              {previousHovered && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "25",
+                    right: "-35px",
+                    background: "white",
+                    padding: "0 5px 0 0",
+                    width: "250px",
+                  }}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div style={{ paddingRight: "10px", width: "50%" }}>
+                      {/* <Image
                       style={{ width: "100%" }}
                       height={100}
                       width={100}
                       src={profilePic(previousProduct?.thumbnail?.url)}
                     /> */}
 
-                    <img
-                      style={{ width: "100%" }}
-                      height={100}
-                      width={100}
-                      src={profilePic(previousProduct?.thumbnail?.url)}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      width: "50%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div>
-                      <p style={{ color: "gray", marginBottom: "0px" }}>
-                        {previousProduct?.name}
-                      </p>
-                      <p
-                        style={{
-                          color: "rgb(195,147,91)",
-                          marginBottom: "0px",
-                        }}
-                      >
-                        {channel === "india-channel"
-                          ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
-                          : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
-                      </p>
+                      <img
+                        style={{ width: "100%" }}
+                        height={100}
+                        width={100}
+                        src={profilePic(previousProduct?.thumbnail?.url)}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "50%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <div>
+                        <p style={{ color: "gray", marginBottom: "0px" }}>
+                          {previousProduct?.name}
+                        </p>
+                        <p
+                          style={{
+                            color: "rgb(195,147,91)",
+                            marginBottom: "0px",
+                          }}
+                        >
+                          {channel === "india-channel"
+                            ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                            : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-          <div>
-            <Tooltip title="Back to product">
-              <Link href="/shop">
-                <AppstoreOutlined
-                  style={{ color: "gray", paddingRight: "5px" }}
-                />
-              </Link>
-            </Tooltip>
-          </div>
-          <div
-            style={{ position: "relative" }}
-            onMouseEnter={NextMouseEnter}
-            onMouseLeave={NextMouseLeave}
-          >
-            <RightOutlined
-              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
-              onClick={NextProductClick}
+              )}
+            </div>
+            <div>
+              <Tooltip title="Back to product">
+                <Link href="/shop">
+                  <AppstoreOutlined
+                    style={{ color: "gray", paddingRight: "5px" }}
+                  />
+                </Link>
+              </Tooltip>
+            </div>
+            <div
+              style={{ position: "relative" }}
               onMouseEnter={NextMouseEnter}
               onMouseLeave={NextMouseLeave}
-            />{" "}
-            {nextHovered && (
-              <div
+            >
+              <RightOutlined
                 style={{
-                  position: "absolute",
-                  top: "25",
-                  right: "0px",
-                  background: "white",
-                  padding: "0 10px 0 0",
-                  width: "250px",
+                  color: "gray",
+                  paddingRight: "5px",
+                  cursor: "pointer",
                 }}
+                onClick={NextProductClick}
                 onMouseEnter={NextMouseEnter}
                 onMouseLeave={NextMouseLeave}
-              >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingRight: "10px", width: "50%" }}>
-                    {/* <Image
+              />{" "}
+              {nextHovered && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "25",
+                    right: "0px",
+                    background: "white",
+                    padding: "0 10px 0 0",
+                    width: "250px",
+                  }}
+                  onMouseEnter={NextMouseEnter}
+                  onMouseLeave={NextMouseLeave}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div style={{ paddingRight: "10px", width: "50%" }}>
+                      {/* <Image
                       style={{ width: "100%" }}
                       width={100}
                       height={100}
                       src={profilePic(nextProduct?.thumbnail?.url)}
                     /> */}
 
-                    <img
-                      style={{ width: "100%" }}
-                      width={100}
-                      height={100}
-                      src={profilePic(nextProduct?.thumbnail?.url)}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      width: "50%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div>
-                      <p style={{ color: "gray", marginBottom: "0px" }}>
-                        {nextProduct?.name}
-                      </p>
-                      <p
-                        style={{
-                          color: "rgb(195,147,91)",
-                          marginBottom: "0px",
-                        }}
-                      >
-                        {channel === "india-channel"
-                          ? `₹${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`
-                          : `$${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`}
-                      </p>
+                      <img
+                        style={{ width: "100%" }}
+                        width={100}
+                        height={100}
+                        src={profilePic(nextProduct?.thumbnail?.url)}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "50%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <div>
+                        <p style={{ color: "gray", marginBottom: "0px" }}>
+                          {nextProduct?.name}
+                        </p>
+                        <p
+                          style={{
+                            color: "rgb(195,147,91)",
+                            marginBottom: "0px",
+                          }}
+                        >
+                          {channel === "india-channel"
+                            ? `₹${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                            : `$${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {/* <div className="tp-product-details-category">
         <span>

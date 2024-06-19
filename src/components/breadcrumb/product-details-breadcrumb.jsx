@@ -58,7 +58,7 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
                     <span
                       onClick={() => {
                         if (categories[1] === "Gift Card") {
-                          router.push("/giftCart");
+                          router.push("/gift-card");
                         } else {
                           router.push({
                             pathname: "/shop",

@@ -4,8 +4,11 @@ import DetailsWrapper from "./details-wrapper";
 import { useDispatch } from "react-redux";
 import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
+import { useRouter } from "next/router";
 
-const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
+const ProductDetailsArea = ({ productItem, pageTitle, detailsRefetch }) => {
+  const router = useRouter();
+  console.log("✌️productItem --->", productItem);
   const { images, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
@@ -21,6 +24,7 @@ const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
 
   const imageUrls = productItem?.images?.map((item) => item?.url);
 
+  console.log("router", router);
   return (
     <section
       className="tp-product-details-area pt-50"
@@ -29,7 +33,10 @@ const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
       <div className="tp-product-details-top">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-8 col-lg-7" style={{ maxWidth: "100%" , overflow: "hidden"}}>
+            <div
+              className="col-xl-8 col-lg-7"
+              style={{ maxWidth: "100%", overflow: "hidden" }}
+            >
               {/* product-details-thumb-wrapper start */}
               <DetailsThumbWrapper
                 product={productItem}
@@ -45,7 +52,7 @@ const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}
-                productRefetch = {detailsRefetch}
+                productRefetch={detailsRefetch}
                 handleImageActive={handleImageActive}
                 activeImg={productItem?.images[0]?.url}
                 detailsBottom={false}
@@ -69,21 +76,28 @@ const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
       </div>
       {/* product details description */}
 
-      {/* related products start */}
-      {productItem?.category?.id && (
-        <section className="tp-related-product pt-50 pb-50">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="tp-section-title-wrapper-6 mb-40">
-                {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
-                <h3 className="tp-section-title-6">Related Products</h3>
+      {router.route == "/gift-card" ? (
+        <></>
+      ) : (
+        <>
+          {/* related products start */}
+          {productItem?.category?.id && (
+            <section className="tp-related-product pt-50 pb-50">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="tp-section-title-wrapper-6 mb-40">
+                    {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
+                    <h3 className="tp-section-title-6">Related Products</h3>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <RelatedProducts id={productItem?.category?.id} />
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <RelatedProducts id={productItem?.category?.id} />
-            </div>
-          </div>
-        </section>
+            </section>
+          )}
+        </>
       )}
 
       {/* related products end */}
