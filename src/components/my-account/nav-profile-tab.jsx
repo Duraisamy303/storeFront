@@ -1,103 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import * as Yup from "yup";
 // internal
-import { Box, DeliveryTwo, Processing, Truck } from "@/svg";
-import { userLoggedOut } from "@/redux/features/auth/authSlice";
-import Location from "@assets/img/location.png"
-import Wishlist from "@assets/img/whislist.png"
-import Order from "@assets/img/order.png"
-import ChangePassword from "@assets/img/change-passwprd.png";
+import ErrorMsg from "../common/error-msg";
+import { EmailTwo, LocationTwo, PhoneThree, UserThree } from "@/svg";
+import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
+import { notifyError, notifySuccess } from "@/utils/toast";
+import ProfileImage from "@assets/img/profile-1.webp";
 import Image from "next/image";
-const NavProfileTab = ({ orderData }) => {
-  const {user} = useSelector(state => state.auth)
-  const dispatch = useDispatch();
-  const router = useRouter();
 
-const [ userName, setUserName] = useState("");
+const ProfileInfo = () => {
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
-  // handle logout
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    router.push('/login')
-  }
   useEffect(() => {
-
     const user = localStorage.getItem("userInfo");
     const JsonUSer = JSON.parse(user);
-    const UserName = JsonUSer?.user?.firstName;
-    setUserName(UserName);
+
+    const UserFirstName = JsonUSer?.user?.firstName;
+    setUserFirstName(UserFirstName);
+
+    const UserLastName = JsonUSer?.user?.lastName;
+    setUserLastName(UserLastName);
+
+    const UserEmail = JsonUSer?.user?.email;
+    setUserEmail(UserEmail);
   }, []);
 
+  console.log(userFirstName, "userFirstName");
+
   return (
-    <div className="profile__main">
-      <div className="profile__main-top pb-80">
-        <div className="row align-items-center">
-          <div className="col-md-6">
-            <div className="profile__main-inner d-flex flex-wrap align-items-center">
-              <div className="profile__main-content">
-                <h4 className="profile__main-title">Welcome {userName}</h4>
-              </div>
-            </div>
+    <div className="profile__info">
+      <h3 className="profile__info-title">Personal Details</h3>
+      <div className="profile__info-content">
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ width: "50%" }}>
+            <img
+              src="assets/img/profile-1.webp"
+              alt="profile"
+              style={{ width: "50%" }}
+            />
           </div>
-          <div className="col-md-6">
-            <div className="profile__main-logout text-sm-end">
-              <a onClick={handleLogout} className="cursor-pointer tp-logout-btn">
-                Logout
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="profile__main-info">
-        <div className="row gx-3">
-          <div className="col-md-3 col-sm-6">
-            <div className="profile__main-info-item">
-              <div className="profile__main-info-icon">
-                <span>
-                  {/* <span className="profile-icon-count profile-download">{orderData?.totalDoc}</span> */}
-                  <Image src={Location} alt="location" height={60} width={60} />
-                </span>
-              </div>
-              <h4 className="profile__main-info-title">Address</h4>
-            </div>
-          </div>
-          <div className="col-md-3 col-sm-6">
-            <div className="profile__main-info-item">
-              <div className="profile__main-info-icon">
-                <span>
-                  {/* <span className="profile-icon-count profile-order">{orderData?.pending}</span> */}
-                  <Image src={Wishlist} alt="location" height={60} width={60} />                
-                  </span>
-              </div>
-              <h4 className="profile__main-info-title">Wishlist</h4>
-            </div>
-          </div>
-          <div className="col-md-3 col-sm-6">
-            <div className="profile__main-info-item">
-              <div className="profile__main-info-icon">
-                <span>
-                  {/* <span className="profile-icon-count profile-wishlist">
-                    {orderData?.processing}
-                  </span> */}
-                  <Image src={Order} alt="location" height={60} width={60} />   
-                </span>
-              </div>
-              <h4 className="profile__main-info-title">My Orders</h4>
-            </div>
-          </div>
-          <div className="col-md-3 col-sm-6">
-            <div className="profile__main-info-item">
-              <div className="profile__main-info-icon">
-                <span>
-                  {/* <span className="profile-icon-count profile-wishlist">
-                    {orderData?.delivered}
-                  </span> */}
-                  <Image src={ChangePassword} alt="location" height={60} width={60} />   
-                  </span>
-              </div>
-              <h4 className="profile__main-info-title">Change Password</h4>
-            </div>
+          <div style={{ width: "50%" }}>
+            <p
+              className="profile__info-text"
+              style={{ color: "gray", fontWeight: "500" }}
+            >
+              First Name : {userFirstName}
+            </p>
+            <p
+              className="profile__info-text"
+              style={{ color: "gray", fontWeight: "500" }}
+            >
+              Last Name : {userLastName}{" "}
+            </p>
+            <p
+              className="profile__info-text"
+              style={{ color: "gray", fontWeight: "500" }}
+            >
+              Email : {userEmail}
+            </p>
           </div>
         </div>
       </div>
@@ -105,4 +70,4 @@ const [ userName, setUserName] = useState("");
   );
 };
 
-export default NavProfileTab;
+export default ProfileInfo;

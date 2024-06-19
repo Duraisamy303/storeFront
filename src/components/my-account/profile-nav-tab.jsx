@@ -39,14 +39,14 @@ const ProfileNavTab = () => {
         <SingleNav
           active={true}
           id="profile"
-          title="Dashboard"
+          title="Account Details"
           icon="fa-regular fa-circle-info"
         />
-        <SingleNav
+        {/* <SingleNav
           id="information"
           title="Account Details"
           icon="fa-regular fa-user-pen"
-        />
+        /> */}
         <SingleNav
           id="address"
           title="Address"
