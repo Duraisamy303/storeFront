@@ -585,7 +585,7 @@ const DetailsWrapper = ({
               className="text-bold text-lg"
               style={{ fontSize: "16px", color: "black" }}
             >
-              <span> Product variants:</span>
+              <span> Gift Card Amount</span>
             </div>
 
             <select
@@ -597,7 +597,7 @@ const DetailsWrapper = ({
                 variantsChange(e);
               }}
             >
-              <option value="">Select variant</option>
+              <option value="">Select Amount</option>
               {productItem?.variants?.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item?.name}

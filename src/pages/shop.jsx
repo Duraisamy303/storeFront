@@ -413,6 +413,7 @@ const ShopPage = () => {
   }
 
   console.log(shopTitle);
+console.log('✌️shopTitle --->', shopTitle);
 
   return (
     <Wrapper>
@@ -423,7 +424,7 @@ const ShopPage = () => {
         // title="Shop"
         subtitle="Shop"
         bgImage={shopBanner}
-        catList={categoryList}
+        catList={categoryList} product={productList}
       />
       {/* {isLoading ? (
         <ShopLoader loading={isLoading} />

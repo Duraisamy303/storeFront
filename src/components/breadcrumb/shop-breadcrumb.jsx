@@ -1,10 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { capitalizeFLetter } from "../../utils/functions";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { useGetCategoryNameMutation } from "@/redux/features/productApi";
 
-const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
+const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
   const router = useRouter();
+  const categories = title.split(" / ");
 
+  const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
+
+  // Initialize ParentCategoryId
+  useEffect(() => {
+    let ParentCategoryId = "";
+
+    // Set ParentCategoryId based on categories[1]
+    if (categories[1] === "Earrings") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NQ==";
+    }
+    if (categories[1] === "Necklaces") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NzA=";
+    }
+    if (categories[1] === "Bangles & Bracelets") {
+      ParentCategoryId = "Q2F0ZWdvcnk6Njc=";
+    }
+    if (categories[1] === "Finger Rings") {
+      ParentCategoryId = "Q2F0ZWdvcnk6MTIwNw==";
+    }
+    if (categories[1] === "Anklets data") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
+    }if(categories[1] === "Other Accessories") {
+      ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+    }
+    setCategoryId(ParentCategoryId);
+
+    if (ParentCategoryId) {
+      filterByCategoryName();
+    }
+
+  },[categories[1]]);
+
+  const [getCategoryName] = useGetCategoryNameMutation();
+const [catName, setCatName] = useState([]);
+
+  const filterByCategoryName = async () => {
+    const categoryId = product?.category?.id;
+    try {
+      const res = await getCategoryName({
+        categoryid: categoryId,
+      });
+      console.log("✌️res --->", res);
+
+      const list = res?.data?.data?.category?.name;
+      setCatName(list);
+
+   
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log("categoryId: ", categoryId);
   return (
     <>
       <section
@@ -15,7 +70,25 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList }) => {
           <div className="row">
             <div className="col-xxl-12">
               <div className="breadcrumb__content p-relative z-index-1">
-                <h3 className="breadcrumb__title shop-banner-title">{title}</h3>
+                <h3 className="breadcrumb__title shop-banner-title">
+                  <Link href="/shop">{categories[0]}</Link>{" "}
+                  {categories[1] && (
+                    <span
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { categoryId: categoryId }, // Your parameters
+                        });
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      / {categories[1]}
+                    </span>
+                  )}
+                  {categories[2] && (
+                    <span style={{ cursor: "pointer" }}>/ {categories[2]}</span>
+                  )}
+                </h3>
                 {/* <div className="breadcrumb__list">
                   <span><a href="#">Home</a></span>
                   <span>{subtitle}</span>

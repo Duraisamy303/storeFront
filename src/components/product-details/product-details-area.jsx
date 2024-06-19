@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
 
-const ProductDetailsArea = ({ productItem, detailsRefetch }) => {
+const ProductDetailsArea = ({ productItem,pageTitle, detailsRefetch }) => {
   const { images, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const ProductDetailsArea = ({ productItem, detailsRefetch }) => {
                 handleImageActive={handleImageActive}
                 activeImg={productItem?.images[0]?.url}
                 detailsBottom={false}
+                pageTitle={pageTitle}
               />
               {/* product-details-wrapper end */}
             </div>

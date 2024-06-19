@@ -14,6 +14,7 @@ import ResetButton from "./shop-filter/reset-button";
 import { useDispatch, useSelector } from "react-redux";
 import { filterData } from "@/redux/features/shop-filter-slice";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const ShopArea = ({
   all_products,
@@ -31,6 +32,8 @@ const ShopArea = ({
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const dispatch = useDispatch();
+
+  const router = useRouter();
 
   const [filteredRows, setFilteredRows] = useState([]);
   const [pageStart, setPageStart] = useState(0);
@@ -86,14 +89,14 @@ const ShopArea = ({
 
   const [loading, setLoading] = useState(false);
 
- useEffect(() => {
-   if(products?.length > 0) {
-    setLoading(false);
-   }else{
-    setLoading(true);
-   }
-  }, [])
-  
+  useEffect(() => {
+    if (products?.length > 0) {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, []);
+
   function CommonLoader({ loading, spinner }) {
     return (
       <div
@@ -104,10 +107,39 @@ const ShopArea = ({
           alignItems: "center",
         }}
       >
-         <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
+        <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
       </div>
     );
   }
+
+  const categories = subtitle.split(" / ");
+  console.log("✌️categories --->", categories[0]);
+  const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
+
+  // Initialize ParentCategoryId
+  useEffect(() => {
+    let ParentCategoryId = "";
+
+    // Set ParentCategoryId based on categories[1]
+    if (categories[1] === "Earrings") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NQ==";
+    }
+    if (categories[1] === "Necklaces") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NzA=";
+    }
+    if (categories[1] === "Bangles & Bracelets") {
+      ParentCategoryId = "Q2F0ZWdvcnk6Njc=";
+    }
+    if (categories[1] === "Finger Rings") {
+      ParentCategoryId = "Q2F0ZWdvcnk6MTIwNw==";
+    }
+    if (categories[1] === "Anklets data") {
+      ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
+    }
+    setCategoryId(ParentCategoryId);
+  },[categories[1]]);
+
+  console.log("categoryId: ", categoryId);
 
   return (
     <>
@@ -126,7 +158,23 @@ const ShopArea = ({
               </span>{" "}
               /{" "}
               <span style={{ color: "black", fontWeight: "600" }}>
-                {subtitle}
+                <Link href="/shop">{categories[0]}</Link>{" "}
+                {categories[1] && (
+                  <span
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: categoryId }, // Your parameters
+                      });
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    / {categories[1]}
+                  </span>
+                )}
+                {categories[2] && (
+                  <span style={{ cursor: "pointer" }}>/ {categories[2]}</span>
+                )}
               </span>
             </div>
           </div>
@@ -222,7 +270,7 @@ const ShopArea = ({
                     </div>
                   </div>
                 )}
-                {products?.length === 0 &&  <CommonLoader loading={loading} />}
+                {products?.length === 0 && <CommonLoader loading={loading} />}
                 {products?.length > 0 && (
                   <div className="tp-shop-items-wrapper tp-shop-item-primary">
                     <div className="tab-content" id="productTabContent">

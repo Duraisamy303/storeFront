@@ -46,64 +46,77 @@ const slider_setting = {
   },
 };
 
-
-
 const CategoryContent = ({ title, commonImage, children, lists }) => {
   const router = useRouter();
   return (
-  <div className="row" style={{ paddingBottom: "30px" }}>
-    <div className="col-3" style={{ paddingLeft: "30px" }}>
-      <div style={{ paddingLeft: "25px" }}>
-        <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
-      </div>
-      <div>
-        <ul>
-          {lists?.slice(0, 12)?.map((item) => {
-            return (
-              <li style={{ paddingLeft:"25px", cursor: "pointer", marginBottom:"5px" }} key={item?.node?.id}
-                onClick={() => {
-                  router?.push({
-                    pathname: "/shop",
-                    query: { categoryId: item?.node?.id }, // Your parameters
-                  });
-                }}
-              >
-                <p style={{ fontWeight: "500", marginBottom: "0px", color:"gray" }}>{item?.node?.name}</p>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      {lists?.length > 3 ? (
-        <></>
-      ) : (
-        <div>
-          <div>
-            <Image
-              src={commonImage}
-              alt="category image"
-              style={{ width: "100%", height: "200px" }}
-            />
-          </div>
-          <div style={{ textAlign: "center", padding: "20px 0px" }}>
-            <h4 style={{ fontWeight: "400" }}>
-              Excepteur sint occaecat
-              <br /> cupidatat
-            </h4>
-            <button className="tp-btn tp-btn-border">
-              <Link href="/shop">Shop Now</Link>
-            </button>
-          </div>
+    <div className="row" style={{ paddingBottom: "30px" }}>
+      <div className="col-3" style={{ paddingLeft: "30px" }}>
+        <div style={{ paddingLeft: "25px" }}>
+          <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
         </div>
-      )}
-    </div>
-    <div className="col-9">
-      <div className="row" style={{ padding: "20px" }}>
-        {children}
+        <div>
+          <ul>
+            {lists?.slice(0, 12)?.map((item) => {
+              return (
+                <li
+                  style={{
+                    paddingLeft: "25px",
+                    cursor: "pointer",
+                    marginBottom: "5px",
+                  }}
+                  key={item?.node?.id}
+                  onClick={() => {
+                    router?.push({
+                      pathname: "/shop",
+                      query: { categoryId: item?.node?.id }, // Your parameters
+                    });
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "500",
+                      marginBottom: "0px",
+                      color: "gray",
+                    }}
+                  >
+                    {item?.node?.name}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        {lists?.length > 3 ? (
+          <></>
+        ) : (
+          <div>
+            <div>
+              <Image
+                src={commonImage}
+                alt="category image"
+                style={{ width: "100%", height: "200px" }}
+              />
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 0px" }}>
+              <h4 style={{ fontWeight: "400" }}>
+                Excepteur sint occaecat
+                <br /> cupidatat
+              </h4>
+              <button className="tp-btn tp-btn-border">
+                <Link href="/shop">Shop Now</Link>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="col-9">
+        <div className="row" style={{ padding: "20px" }}>
+          {children}
+        </div>
       </div>
     </div>
-  </div>
-);}
+  );
+};
 
 const CategoryComponent = ({
   commonImage,
@@ -153,6 +166,14 @@ const CategoryComponent = ({
       lastHoveredCategory === "Anklets"
     ) {
       categoryId = "Q2F0ZWdvcnk6NzM1";
+      console.log("hoveredCategoryAnklelts: ", hoveredCategory);
+    } else if (
+      hoveredCategory === "OtherAccessories" ||
+      lastHoveredCategory === "OtherAccessories"
+    ) {
+      categoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+      console.log("categoryId: ", categoryId);
+      console.log("hoveredCategory: ", hoveredCategory);
     }
 
     const SubCategory = await subCatList({
@@ -211,7 +232,11 @@ const CategoryComponent = ({
         );
       case "Necklaces":
         return (
-          <CategoryContent title="ALL NECKLACES" commonImage={CommonImage} lists={subCategoryLists}>
+          <CategoryContent
+            title="ALL NECKLACES"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+          >
             {renderContent()}
           </CategoryContent>
         );
@@ -219,20 +244,39 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL BANGLES & BRACELETS"
-            commonImage={CommonImage} lists={subCategoryLists}
+            commonImage={CommonImage}
+            lists={subCategoryLists}
           >
             {renderContent()}
           </CategoryContent>
         );
       case "Rings":
         return (
-          <CategoryContent title="ALL RINGS" commonImage={CommonImage} lists={subCategoryLists}>
+          <CategoryContent
+            title="ALL RINGS"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+          >
             {renderContent()}
           </CategoryContent>
         );
       case "Anklets":
         return (
-          <CategoryContent title="ALL ANKLETS" commonImage={CommonImage} lists={subCategoryLists}>
+          <CategoryContent
+            title="ALL ANKLETS"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+          >
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "OtherAccessories":
+        return (
+          <CategoryContent
+            title="ALL OTHER ACCESSORIES"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+          >
             {renderContent()}
           </CategoryContent>
         );
@@ -436,6 +480,44 @@ const Menus = () => {
                     }`}
                   />
                 </li>
+
+                <li
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "OtherAccessories" ? "active" : ""
+                  }`}
+                  onMouseEnter={() =>
+                    setLastHoveredCategory("OtherAccessories")
+                  }
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingRight: "10px",
+                  }}
+                  onClick={() => {
+                    router?.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                    });
+                  }}
+                >
+                  <p
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "OtherAccessories" ? "active" : ""
+                    }`}
+                  >
+                    Other Accessories
+                  </p>
+                  <RightOutlined
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Other Accessories"
+                        ? "active"
+                        : ""
+                    }`}
+                  />
+                </li>
               </ul>
             </div>
             <div className="col-lg-10">
@@ -451,7 +533,6 @@ const Menus = () => {
         </div>
       </li>
 
-     
       <li>
         <Link href="/giftCart" style={{ fontWeight: "500" }}>
           GIFT CARD

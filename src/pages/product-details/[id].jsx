@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // internal
 import SEO from "@/components/seo";
 import HeaderTwo from "@/layout/headers/header-2";
 import Wrapper from "@/layout/wrapper";
 import ErrorMsg from "@/components/common/error-msg";
 import {
+  useGetCategoryNameMutation,
   useGetProductQuery,
   useGetRelatedProductsQuery,
 } from "@/redux/features/productApi";
@@ -13,12 +14,16 @@ import ProductDetailsArea from "@/components/product-details/product-details-are
 import PrdDetailsLoader from "@/components/loader/prd-details-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 import { useCreateCheckoutTokenWithoutEmailMutation } from "@/redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const ProductDetailsPage = ({ query }) => {
+  const router = useRouter();
+
   const {
     data: productData,
     isLoading,
-    isError,refetch:detailProductRefetch
+    isError,
+    refetch: detailProductRefetch,
   } = useGetProductQuery({ productId: query.id });
 
   const [createCheckoutTokenWithoutEmail] =
@@ -55,7 +60,7 @@ const ProductDetailsPage = ({ query }) => {
       const data = await createCheckoutTokenWithoutEmail({
         channel: "default-channel",
       });
-      
+
       localStorage.setItem(
         "checkoutTokenUSD",
         data?.data?.data?.checkoutCreate?.checkout?.token
@@ -66,6 +71,49 @@ const ProductDetailsPage = ({ query }) => {
   };
 
   const product = productData?.data?.product;
+  console.log("✌️product --->", product);
+
+
+  
+  const [getCategoryName] = useGetCategoryNameMutation();
+
+  const [catName, setCatName] = useState("");
+  const [parentCatName, setParentCatName] = useState("");
+
+  useEffect(() => {
+    if (product?.category?.id) {
+      filterByCategoryName();
+    }
+  }, [product?.category?.id]);
+
+  const filterByCategoryName = async () => {
+    const categoryID = product?.category?.id;
+    try {
+      const res = await getCategoryName({
+        categoryid: categoryID,
+      });
+
+      const list = res?.data?.data?.category?.name;
+      setCatName(list);
+
+      if (res?.data?.data?.category?.parent?.name) {
+        setParentCatName(res?.data?.data?.category?.parent?.name);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  let shopTitle = "Shop";
+
+  if (product?.category?.id) {
+    shopTitle = `Shop / ${
+      parentCatName ? `${parentCatName} / ` : ""
+    }${catName}`;
+  }
+
+  console.log("shopTitle: ", shopTitle);
+
 
   // decide what to render
   let content = null;
@@ -79,10 +127,15 @@ const ProductDetailsPage = ({ query }) => {
     content = (
       <>
         {/* <ProductDetailsBreadcrumb category={product.category.name} title={product.title} /> */}
-        <ProductDetailsArea productItem={product} detailsRefetch={detailProductRefetch}/>
+        <ProductDetailsArea
+          productItem={product} pageTitle={shopTitle}
+          detailsRefetch={detailProductRefetch}
+        />
       </>
     );
   }
+
+
   return (
     <Wrapper>
       <SEO pageTitle="Product Details" />
