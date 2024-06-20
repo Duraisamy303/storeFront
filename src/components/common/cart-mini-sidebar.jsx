@@ -166,7 +166,7 @@ const CartMiniSidebar = () => {
                                 alt="product img"
                               /> */}
 
-<img
+                              <img
                                 src={profilePic(
                                   item?.variant?.product?.thumbnail?.url ||
                                     item?.node?.thumbnail?.url
@@ -300,81 +300,85 @@ const CartMiniSidebar = () => {
               </div>
             )}
           </div>
-          <div className="cartmini__checkout">
-            <div className="cartmini__checkout-title mb-30">
-              <h4>Subtotal:</h4>
-              {channel == "india-channel" ? (
-                <>
+          {CartList?.length === 0 ? (
+            <></>
+          ) : (
+            <div className="cartmini__checkout">
+              <div className="cartmini__checkout-title mb-30">
+                <h4>Subtotal:</h4>
+                {channel == "india-channel" ? (
+                  <>
+                    <span>
+                      &#8377;
+                      {roundOff(
+                        cartList?.data?.checkout?.totalPrice?.gross?.amount
+                      )}
+                    </span>
+                    <div
+                      style={{
+                        fontWeight: "400",
+                        fontSize: "12px",
+                        textAlign: "right",
+                      }}
+                    >
+                      (includes &#8377;
+                      {roundOff(
+                        cartList?.data?.checkout?.totalPrice?.tax?.amount
+                      )}{" "}
+                      GST)
+                    </div>
+                  </>
+                ) : (
                   <span>
-                    &#8377;
+                    $
                     {roundOff(
                       cartList?.data?.checkout?.totalPrice?.gross?.amount
                     )}
+                    <div
+                      style={{
+                        fontWeight: "400",
+                        fontSize: "14px",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      (includes $
+                      {roundOff(
+                        cartList?.data?.checkout?.totalPrice?.tax?.amount
+                      )}{" "}
+                      GST)
+                    </div>
                   </span>
-                  <div
-                    style={{
-                      fontWeight: "400",
-                      fontSize: "12px",
-                     textAlign: "right",
-                    }}
-                  >
-                    (includes &#8377;
-                    {roundOff(
-                      cartList?.data?.checkout?.totalPrice?.tax?.amount
-                    )}{" "}
-                    GST)
-                  </div>
-                </>
-              ) : (
-                <span>
-                  $
-                  {roundOff(
-                    cartList?.data?.checkout?.totalPrice?.gross?.amount
-                  )}
-                  <div
-                    style={{
-                      fontWeight: "400",
-                      fontSize: "14px",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    (includes $
-                    {roundOff(
-                      cartList?.data?.checkout?.totalPrice?.tax?.amount
-                    )}{" "}
-                    GST)
-                  </div>
-                </span>
-              )}
-            </div>
-            <div className="cartmini__checkout-btn">
-              <Link
-                href="/cart"
-                onClick={handleCloseCartMini}
-                className="tp-btn mb-10 w-100"
-              >
-                {" "}
-                view cart
-              </Link>
-
-              {quantityDisable?.some((item) => item === false) ? (
-                <button
-                  style={{ cursor: "not-allowed" }}
-                  className="tp-btn tp-btn-border w-100"
-                >
-                  Checkout
-                </button>
-              ) : (
+                )}
+              </div>
+              <div className="cartmini__checkout-btn">
                 <Link
-                  href="/checkout"
+                  href="/cart"
                   onClick={handleCloseCartMini}
-                  className="tp-btn tp-btn-border w-100"
+                  className="tp-btn mb-10 w-100"
                 >
-                  Checkout
+                  {" "}
+                  view cart
                 </Link>
-              )}
+
+                {quantityDisable?.some((item) => item === false) ? (
+                  <button
+                    style={{ cursor: "not-allowed" }}
+                    className="tp-btn tp-btn-border w-100"
+                  >
+                    Checkout
+                  </button>
+                ) : (
+                  <Link
+                    href="/checkout"
+                    onClick={handleCloseCartMini}
+                    className="tp-btn tp-btn-border w-100"
+                  >
+                    Checkout
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       {/* overlay start */}
