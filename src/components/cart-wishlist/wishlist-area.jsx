@@ -63,7 +63,7 @@ const WishlistArea = () => {
                           PRODUCT NAME
                         </th>
                         <th className="tp-cart-header-price">PRICE</th>
-                        <th>ADD TO CARD</th>
+                        <th>ADD TO CART</th>
                         <th>ACTION</th>
                       </tr>
                     </thead>

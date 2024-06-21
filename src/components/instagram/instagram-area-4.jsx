@@ -425,8 +425,8 @@ const InstagramAreaFour = () => {
                               {cartList?.data?.checkout?.lines?.some(
                                 (prd) => prd?.variant?.product?.id == item?.id
                               )
-                                ? "View Card"
-                                : "Add To Card"}
+                                ? "View Cart"
+                                : "Add To Cart"}
                             </>
                           )}
                         </button>

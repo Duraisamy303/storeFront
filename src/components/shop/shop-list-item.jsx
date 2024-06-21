@@ -110,7 +110,7 @@ const ShopListItem = ({ product }) => {
           </p>
           <div className="tp-product-list-add-to-cart">
             <button onClick={() => handleAddProduct(product)} className="tp-product-list-add-to-cart-btn">
-              Add To Card
+              Add To Cart
             </button>
           </div>
         </div>

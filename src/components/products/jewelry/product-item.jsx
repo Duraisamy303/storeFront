@@ -54,7 +54,7 @@ const ProductItem = ({ product }) => {
                 disabled={status === 'out-of-stock'}
               >
                 <Cart />
-                <span className="tp-product-tooltip">Add to Card</span>
+                <span className="tp-product-tooltip">Add to Cart</span>
               </button>
             )}
             <button
@@ -93,7 +93,7 @@ const ProductItem = ({ product }) => {
             {isAddedToCart ? <Link href="/cart" className="tp-product-add-to-cart-4">
               <AddCart /> View Cart
             </Link> : <button disabled={status === 'out-of-stock'} onClick={()=> handleAddProduct(product)} className="tp-product-add-to-cart-4">
-              <AddCart /> Add to Card
+              <AddCart /> Add to Cart
             </button>}
           </div>
         </div>

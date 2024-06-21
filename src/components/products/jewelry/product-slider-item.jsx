@@ -292,7 +292,7 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
                       >
                         <Cart />
                         <span className="tp-product-tooltip tp-product-tooltip-top">
-                          Add to Card
+                          Add to Cart
                         </span>
                       </button>
                     )}
