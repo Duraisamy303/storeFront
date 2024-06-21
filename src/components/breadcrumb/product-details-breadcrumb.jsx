@@ -4,12 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const ProductDetailsBreadcrumb = ({ category, title }) => {
-  console.log("✌️category --->", category);
 
   const router = useRouter();
 
   const categories = category.split(" / ");
-  console.log("✌️categories --->", categories[0]);
   const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
 
   // Initialize ParentCategoryId
@@ -39,7 +37,6 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
     setCategoryId(ParentCategoryId);
   }, [categories[1]]);
 
-  console.log("categoryId: ", categoryId);
   return (
     <section className="breadcrumb__area breadcrumb__style-2 include-bg pb-20">
       <div className="container-fluid">
