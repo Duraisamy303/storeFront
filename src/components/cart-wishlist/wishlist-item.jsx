@@ -202,13 +202,13 @@ const WishlistItem = ({ product, refetchWishlist }) => {
           className="tp-btn tp-btn-2 tp-btn-blue"
         >
           {isAddToCart ? (
-            "View Cart"
+            "View Card"
           ) : (
             <>
               {cartLoader ? (
                 <ButtonLoader loader={cartLoader} />
               ) : (
-                "Add To Cart"
+                "Add To Card"
               )}
             </>
           )}

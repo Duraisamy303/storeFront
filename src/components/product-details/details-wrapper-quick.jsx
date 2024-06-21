@@ -668,7 +668,7 @@ const DetailsWrapper = ({
               {cartLoader ? (
                 <ButtonLoader loader={cartLoader} />
               ) : (
-                <>{"Add To Cart"}</>
+                <>{"Add To Card"}</>
               )}
             </button>
           )}

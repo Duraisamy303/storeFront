@@ -318,7 +318,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                       <>
                         <Cart />
                         <span className="tp-product-tooltip tp-product-tooltip-top">
-                          Add to Cart
+                          Add to Card
                         </span>
                       </>
                     )}

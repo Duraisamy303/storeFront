@@ -342,7 +342,7 @@ const CompareArea = () => {
                                           color: "white",
                                         }}
                                       >
-                                        Add to Cart
+                                        Add to Card
                                       </button>
                                     )}
                                   </div>

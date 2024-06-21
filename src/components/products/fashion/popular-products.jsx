@@ -107,7 +107,7 @@ const PopularProducts = () => {
                     onClick={() => handleAddProduct(item)}
                     className="tp-btn tp-btn-border cursor-pointer"
                   >
-                    Add to Cart
+                    Add to Card
                   </a>
                 )}
               </div>

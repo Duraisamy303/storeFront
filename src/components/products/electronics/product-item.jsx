@@ -81,7 +81,7 @@ const ProductItem = ({ product, offer_style = false }) => {
                 >
                   <Cart />
 
-                  <span className="tp-product-tooltip">Add to Cart</span>
+                  <span className="tp-product-tooltip">Add to Card</span>
                 </button>
               )}
               <button
