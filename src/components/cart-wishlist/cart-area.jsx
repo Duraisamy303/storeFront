@@ -12,8 +12,11 @@ import {
 } from "@/redux/features/card/cardApi";
 import { notifySuccess } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
+import { useRouter } from "next/router";
 
 const CartArea = () => {
+const router = useRouter();
+
   const cart = useSelector((state) => state.cart.cart_list);
 
   const { data: list, refetch } = useGetCartListQuery();
@@ -168,6 +171,15 @@ const CartArea = () => {
                         </p>
                       </div>
                       <div className="tp-cart-update text-md-end mr-30">
+                      <button
+                          type="button"
+                          className="tp-cart-update-btn mr-10"
+                          style={{ border: "1px solid #ececec" }} onClick={() => {
+                            router.push("shop")
+                          }}
+                        >
+                          Continue Shopping
+                        </button>
                         <button
                           type="button"
                           className="tp-cart-update-btn "
