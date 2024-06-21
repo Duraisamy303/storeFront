@@ -18,11 +18,11 @@ const ContactBreadcrumb = () => {
                 className="breadcrumb__title"
                 style={{ color: "white", fontSize: "70px" }}
               >
-                Keep In Touch with Us
+                Contact Us
               </h3>
               <div>
                 <span>
-                  <a href="#">Home</a>
+                  <a href="/">Home</a>
                 </span>{" "}
                 / <span>Contact</span>
               </div>

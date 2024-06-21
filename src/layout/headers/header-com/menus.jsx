@@ -46,8 +46,40 @@ const slider_setting = {
   },
 };
 
-const CategoryContent = ({ title, commonImage, children, lists }) => {
+const CategoryContent = ({
+  title,
+  commonImage,
+  children,
+  lists,
+  categoryName,
+}) => {
+  console.log("categoryName --->", categoryName);
   const router = useRouter();
+
+  useEffect(() => {
+    filterByCategory();
+  }, [categoryName]);
+  const [parentCategoryId, setParentCategoryId] =  useState("");
+
+  const filterByCategory = async () => {
+    let categoryId = "";
+    if (categoryName === "Earrings") {
+      categoryId = "Q2F0ZWdvcnk6NQ==";
+    } else if (categoryName === "Necklaces") {
+      categoryId = "Q2F0ZWdvcnk6NzA=";
+    } else if (categoryName === "Bangles") {
+      categoryId = "Q2F0ZWdvcnk6Njc=";
+    } else if (categoryName === "Rings") {
+      categoryId = "Q2F0ZWdvcnk6MTIwNw==";
+    } else if (categoryName === "Anklets") {
+      categoryId = "Q2F0ZWdvcnk6NzM1";
+    } else if (categoryName === "OtherAccessories") {
+      categoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+    }
+    console.log("categoryId: ", categoryId);
+    setParentCategoryId(categoryId);
+  };
+
   return (
     <div className="row" style={{ paddingBottom: "30px" }}>
       <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -102,8 +134,13 @@ const CategoryContent = ({ title, commonImage, children, lists }) => {
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border">
-                <Link href="/shop">Shop Now</Link>
+              <button className="tp-btn tp-btn-border"   onClick={() => {
+                    router?.push({
+                      pathname: "/shop",
+                      query: { categoryId: parentCategoryId }, // Your parameters
+                    });
+                  }}>
+               Shop Now
               </button>
             </div>
           </div>
@@ -166,7 +203,6 @@ const CategoryComponent = ({
       lastHoveredCategory === "Anklets"
     ) {
       categoryId = "Q2F0ZWdvcnk6NzM1";
-      console.log("hoveredCategoryAnklelts: ", hoveredCategory);
     } else if (
       hoveredCategory === "OtherAccessories" ||
       lastHoveredCategory === "OtherAccessories"
@@ -226,6 +262,7 @@ const CategoryComponent = ({
             title="ALL EARRINGS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -236,6 +273,7 @@ const CategoryComponent = ({
             title="ALL NECKLACES"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -246,6 +284,7 @@ const CategoryComponent = ({
             title="ALL BANGLES & BRACELETS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -256,6 +295,7 @@ const CategoryComponent = ({
             title="ALL RINGS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -266,6 +306,7 @@ const CategoryComponent = ({
             title="ALL ANKLETS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -276,6 +317,7 @@ const CategoryComponent = ({
             title="ALL OTHER ACCESSORIES"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>

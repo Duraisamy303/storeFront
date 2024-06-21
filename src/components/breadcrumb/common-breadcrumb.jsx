@@ -38,7 +38,7 @@ const CommonBreadcrumb = ({
               </h3>
               <div style={{ color: "white" }}>
                 <span>
-                  <a href="#">HOME</a>
+                  <a href="/">HOME</a>
                 </span>{" "}
                 / <span>{subtitle}</span>
               </div>

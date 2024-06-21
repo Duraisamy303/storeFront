@@ -49,7 +49,7 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
               <div>
                 <span className="breadcrumb-icon"></span>
                 <span>
-                  <a href="#">Home</a>
+                  <a href="/">Home</a>
                 </span>{" "}
                 /
                 <span>
