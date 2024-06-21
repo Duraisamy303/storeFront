@@ -94,7 +94,7 @@ const CartArea = () => {
             <div className="text-center pt-50">
               <h3>No Cart Items Found</h3>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">
-                Continue Shipping
+                Continue Shopping
               </Link>
             </div>
           )}

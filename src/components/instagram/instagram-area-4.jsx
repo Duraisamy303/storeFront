@@ -360,11 +360,10 @@ const InstagramAreaFour = () => {
                                     textDecoration: "line-through red  ",
                                   }}
                                 >
-                                  ₹ {roundOff(item?.defaultVariant?.costPrice)}
+                                  ₹{roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              <br /> ₹{" "}
-                              {roundOff(
+                              <br />₹{roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>
@@ -380,11 +379,10 @@ const InstagramAreaFour = () => {
                                     textDecoration: "line-through red  ",
                                   }}
                                 >
-                                  $ {roundOff(item?.defaultVariant?.costPrice)}
+                                  ${roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              ${" "}
-                              {roundOff(
+                              ${roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>

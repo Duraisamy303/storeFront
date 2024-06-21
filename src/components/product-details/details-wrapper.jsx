@@ -678,7 +678,7 @@ const DetailsWrapper = ({
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
                 {variantDetails ? (
-                  <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                  <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
                 ) : (
                   <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
                 )}
@@ -686,10 +686,10 @@ const DetailsWrapper = ({
             )}
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
-                <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
               ) : (
                 <>
-                  &#8377;{" "}
+                  &#8377;
                   {roundOff(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
@@ -724,13 +724,11 @@ const DetailsWrapper = ({
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
                 <>
-                  {"$"}
-                  {variantDetails?.pricing?.price?.gross?.amount}
+                  {"$"}{variantDetails?.pricing?.price?.gross?.amount}
                 </>
               ) : (
                 <>
-                  {"$"}{" "}
-                  {roundOff(
+                  {"$"}{roundOff(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
                         ?.amount
