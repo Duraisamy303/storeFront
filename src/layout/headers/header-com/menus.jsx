@@ -539,7 +539,7 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6Mzk0Nw==" }, // Your parameters
                     });
                   }}
                 >

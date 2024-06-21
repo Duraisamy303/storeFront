@@ -31,7 +31,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
           item.node.name === "Finger Rings" ||
           item.node.name === "Bangles & Bracelets" ||
           item.node.name === "Earrings" ||
-          item.node.name === "Pendants"
+          item.node.name === "Other Accessories"
       );
 
       const filteredNecklaces = catList.find(
@@ -87,7 +87,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6Mzg4OQ==" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6Mzk0Nw==" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -314,7 +314,7 @@ const JewelryShopBanner = () => {
                   <BannerItem
                     bg_clr="F3F7FF"
                     bg={banner_bg_4}
-                    title="PENDANTS"
+                    title="Other Accessories"
                     content={
                       <p style={{ fontSize: "14px" }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing

@@ -135,6 +135,8 @@ const ShopArea = ({
     }
     if (categories[1] === "Anklets data") {
       ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
+    }if (categories[1] === " Other Accessories") {
+      ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
     }
     setCategoryId(ParentCategoryId);
   },[categories[1]]);

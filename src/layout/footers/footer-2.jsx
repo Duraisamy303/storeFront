@@ -101,7 +101,7 @@ const FooterTwo = () => {
                             <Link href="/about">About</Link>
                           </li>
                           <li>
-                            <Link href="/contect">Contact Us</Link>
+                            <Link href="/contact">Contact Us</Link>
                           </li>
                           <li>
                             <Link href="/shop">Shop</Link>
