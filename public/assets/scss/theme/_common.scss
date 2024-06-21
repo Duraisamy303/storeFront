@@ -521,6 +521,22 @@ font-weight:400;
      margin-left:0px;
 }
 
+.swiper-button-prev:after{
+content: none !important;
+}
+
+.swiper-button-prev:after, .swiper-rtl .swiper-button-next:after{
+content: none !important;
+}
+
+.swiper-button-next:after{
+content: none !important;
+}
+
+.swiper-button-next, .swiper-button-prev{
+	top: var(--swiper-navigation-top-offset, 40%) !important;
+	background-color: rgb(162, 155, 155);
+}
 
 
 
