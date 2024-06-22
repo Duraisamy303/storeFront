@@ -454,7 +454,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           const response = await checkoutShippingAddressUpdate({
             checkoutId,
             shippingAddress,
-            note:state.notes
+            note: state.notes,
           });
 
           if (
@@ -666,7 +666,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           shippingAddress: {
             country: e.target.value,
           },
-          note:state.notes
+          note: state.notes,
         });
         updateDelivertMethod(e.target.value);
       }
@@ -688,7 +688,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         shippingAddress: {
           country: e.target.value,
         },
-        note:state.notes
+        note: state.notes,
       });
       updateDelivertMethod(e.target.value);
     } catch (e) {
@@ -984,7 +984,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       >
         <div className="container-fluid">
           {cartList?.data?.checkout?.lines?.length == 0 && (
-            <div className="text-center pt-50">
+            <div className="tp-checkout-empty">
               <h3 className="py-2">No items found in cart to checkout</h3>
               <Link href="/shop" className="tp-checkout-btn">
                 Return to shop
@@ -1050,71 +1050,71 @@ const CheckoutBillingArea = ({ register, errors }) => {
           )}
         </div>
       </section>
+      {cart?.length > 0 && (
+        <div className="row no-gutter">
+          <div className="col-lg-7">
+            <div className="tp-checkout-bill-area">
+              <h3 className="tp-checkout-bill-title">Billing Details</h3>
 
-      <div className="row no-gutter">
-        <div className="col-lg-7">
-          <div className="tp-checkout-bill-area">
-            <h3 className="tp-checkout-bill-title">Billing Details</h3>
+              <div className="tp-checkout-bill-form">
+                <div className="tp-checkout-bill-inner">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="tp-checkout-input">
+                        <label>
+                          First Name <span>*</span>
+                        </label>
+                        <input
+                          name="firstName"
+                          id="firstName"
+                          type="text"
+                          placeholder="First Name"
+                          value={state.firstName}
+                          onChange={(e) => handleInputChange(e, "firstName")}
 
-            <div className="tp-checkout-bill-form">
-              <div className="tp-checkout-bill-inner">
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>
-                        First Name <span>*</span>
-                      </label>
-                      <input
-                        name="firstName"
-                        id="firstName"
-                        type="text"
-                        placeholder="First Name"
-                        value={state.firstName}
-                        onChange={(e) => handleInputChange(e, "firstName")}
-
-                        // defaultValue={user?.firstName}
-                      />
-                      {state.errors.firstName && (
-                        <ErrorMsg msg={state.errors.firstName} />
-                      )}
+                          // defaultValue={user?.firstName}
+                        />
+                        {state.errors.firstName && (
+                          <ErrorMsg msg={state.errors.firstName} />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Last Name <span>*</span>
-                      </label>
-                      <input
-                        name="lastName"
-                        id="lastName"
-                        type="text"
-                        value={state.lastName}
-                        placeholder="Last Name"
-                        onChange={(e) => handleInputChange(e, "lastName")}
-                      />
-                      {state.errors.lastName && (
-                        <ErrorMsg msg={state.errors.lastName} />
-                      )}
+                    <div className="col-md-6">
+                      <div className="tp-checkout-input">
+                        <label>
+                          Last Name <span>*</span>
+                        </label>
+                        <input
+                          name="lastName"
+                          id="lastName"
+                          type="text"
+                          value={state.lastName}
+                          placeholder="Last Name"
+                          onChange={(e) => handleInputChange(e, "lastName")}
+                        />
+                        {state.errors.lastName && (
+                          <ErrorMsg msg={state.errors.lastName} />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>Company name (optional)</label>
-                      <input
-                        name="companyName"
-                        id="companyName"
-                        type="text"
-                        placeholder="Company name "
-                        value={state.companyName}
-                        onChange={(e) => handleInputChange(e, "companyName")}
-                      />
-                      {/* {state.errors.streetAddress1 && (
+                    <div className="col-md-12">
+                      <div className="tp-checkout-input">
+                        <label>Company name (optional)</label>
+                        <input
+                          name="companyName"
+                          id="companyName"
+                          type="text"
+                          placeholder="Company name "
+                          value={state.companyName}
+                          onChange={(e) => handleInputChange(e, "companyName")}
+                        />
+                        {/* {state.errors.streetAddress1 && (
                       <ErrorMsg msg={state.errors.streetAddress1} />
                     )} */}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* <div className="col-md-12">
+                    {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                     <label>
                       Country <span>*</span>
@@ -1133,58 +1133,58 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </div>
                 </div> */}
 
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label htmlFor="country">
-                        Country <span>*</span>
-                      </label>
-                      <select
-                        name="country"
-                        id="country"
-                        value={state.selectedCountry}
-                        className="nice-select w-100"
-                        onChange={(e) => handleSelectChange(e)}
-                      >
-                        <option value="">Select Country</option>
-                        {CountryList?.map((item) => (
-                          <option key={item.code} value={item.code}>
-                            {item.country}
-                          </option>
-                        ))}
-                      </select>
-                      {state.errors.selectedCountry && (
-                        <ErrorMsg msg={state.errors.selectedCountry} />
-                      )}
+                    <div className="col-md-6">
+                      <div className="tp-checkout-input">
+                        <label htmlFor="country">
+                          Country <span>*</span>
+                        </label>
+                        <select
+                          name="country"
+                          id="country"
+                          value={state.selectedCountry}
+                          className="nice-select w-100"
+                          onChange={(e) => handleSelectChange(e)}
+                        >
+                          <option value="">Select Country</option>
+                          {CountryList?.map((item) => (
+                            <option key={item.code} value={item.code}>
+                              {item.country}
+                            </option>
+                          ))}
+                        </select>
+                        {state.errors.selectedCountry && (
+                          <ErrorMsg msg={state.errors.selectedCountry} />
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label htmlFor="state">
-                        State <span>*</span>
-                      </label>
-                      <select
-                        name="state"
-                        id="state"
-                        value={state.selectedState}
-                        className="nice-select w-100"
-                        onChange={(e) =>
-                          setState({ selectedState: e.target.value })
-                        }
-                      >
-                        <option value="">Select State</option>
-                        {state.stateList?.map((item) => (
-                          <option key={item.raw} value={item.raw}>
-                            {item.raw}
-                          </option>
-                        ))}
-                      </select>
-                      {state.errors.selectedState && (
-                        <ErrorMsg msg={state.errors.selectedState} />
-                      )}
+                    <div className="col-md-6">
+                      <div className="tp-checkout-input">
+                        <label htmlFor="state">
+                          State <span>*</span>
+                        </label>
+                        <select
+                          name="state"
+                          id="state"
+                          value={state.selectedState}
+                          className="nice-select w-100"
+                          onChange={(e) =>
+                            setState({ selectedState: e.target.value })
+                          }
+                        >
+                          <option value="">Select State</option>
+                          {state.stateList?.map((item) => (
+                            <option key={item.raw} value={item.raw}>
+                              {item.raw}
+                            </option>
+                          ))}
+                        </select>
+                        {state.errors.selectedState && (
+                          <ErrorMsg msg={state.errors.selectedState} />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  {/* <div className="col-md-12">
+                    {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                   <label>
                       Country <span>*</span>
@@ -1205,344 +1205,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </div>
                 </div> */}
 
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>Street address</label>
-                      <input
-                        name="address"
-                        id="address"
-                        type="text"
-                        placeholder="House number and street name"
-                        value={state.streetAddress1}
-                        onChange={(e) => handleInputChange(e, "streetAddress1")}
-                      />
-                      {state.errors.streetAddress1 && (
-                        <ErrorMsg msg={state.errors.streetAddress1} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>Town / City</label>
-                      <input
-                        name="city"
-                        id="city"
-                        type="text"
-                        placeholder="City"
-                        value={state.city}
-                        onChange={(e) => handleInputChange(e, "city")}
-                      />
-                      {state.errors.city && (
-                        <ErrorMsg msg={state.errors.city} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Postcode ZIP <span>*</span>
-                      </label>
-                      <input
-                        name="zipCode"
-                        id="zipCode"
-                        type="text"
-                        placeholder="Postcode ZIP"
-                        value={state.postalCode}
-                        onChange={(e) => handleInputChange(e, "postalCode")}
-                      />
-                      {state.errors.postalCode && (
-                        <ErrorMsg msg={state.errors.postalCode} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Phone <span>*</span>
-                      </label>
-                      <input
-                        name="contactNo"
-                        id="contactNo"
-                        type="text"
-                        placeholder="Phone"
-                        value={state.phone}
-                        onChange={(e) => handleInputChange(e, "phone")}
-                      />
-                      {state.errors.phone && (
-                        <ErrorMsg msg={state.errors.phone} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>
-                        Email address <span>*</span>
-                      </label>
-                      <input
-                        name="email"
-                        id="email"
-                        type="email"
-                        placeholder="Email"
-                        value={state.email}
-                        onChange={(e) => handleInputChange(e, "email")}
-
-                        // defaultValue={user?.email}
-                      />
-                      {state.errors.email && (
-                        <ErrorMsg msg={state.errors.email} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>Order notes (optional)</label>
-                      <textarea
-                        name="orderNote"
-                        id="orderNote"
-                        placeholder="Notes about your order, e.g. special notes for delivery."
-                        value={state.notes}
-                        onChange={(e) => handleInputChange(e, "notes")}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {!validLoginAndReg() && (
-              <>
-                <div className="tp-login-remeber">
-                  <input
-                    id="remeber1"
-                    type="checkbox"
-                    checked={state.createAccount}
-                    onChange={(e) =>
-                      setState({ createAccount: e.target.checked })
-                    }
-                  />
-                  <label htmlFor="remeber1">Create an account?</label>
-                </div>
-                <>
-                  {state.createAccount && (
-                    <div className="tp-checkout-bill-form">
-                      <div className="tp-checkout-bill-inner">
-                        <div className="row pt-2">
-                          <div className="col-md-6">
-                            <div className="tp-checkout-input">
-                              <label>
-                                First Name <span>*</span>
-                              </label>
-                              <input
-                                name="loginFirstName"
-                                id="loginFirstName"
-                                type="text"
-                                placeholder="First Name "
-                                value={state.loginFirstName}
-                                onChange={(e) =>
-                                  handleInputChange(e, "loginFirstName")
-                                }
-                              />
-                              {state.errors.loginFirstName && (
-                                <ErrorMsg msg={state.errors.loginFirstName} />
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="tp-checkout-input">
-                              <label>
-                                Last Name <span>*</span>
-                              </label>
-                              <input
-                                name="loginLastName"
-                                id="loginLastName"
-                                type="text"
-                                placeholder="Last Name "
-                                value={state.loginLastName}
-                                onChange={(e) =>
-                                  handleInputChange(e, "loginLastName")
-                                }
-                              />
-                              {state.errors.loginLastName && (
-                                <ErrorMsg msg={state.errors.loginLastName} />
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="tp-checkout-input">
-                              <label>
-                                Email address <span>*</span>
-                              </label>
-                              <input
-                                name="email"
-                                id="email"
-                                type="email"
-                                placeholder="Email"
-                                value={state.loginEmail}
-                                onChange={(e) =>
-                                  handleInputChange(e, "loginEmail")
-                                }
-
-                                // defaultValue={user?.email}
-                              />
-                              {state.errors.loginEmail && (
-                                <ErrorMsg msg={state.errors.loginEmail} />
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="tp-checkout-input">
-                              <label>
-                                Password <span>*</span>
-                              </label>
-                              <input
-                                name="password"
-                                id="password"
-                                type="text"
-                                value={state.password}
-                                placeholder="Password"
-                                onChange={(e) =>
-                                  handleInputChange(e, "password")
-                                }
-                              />
-                              {state.errors.password && (
-                                <ErrorMsg msg={state.errors.password} />
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* <div className="tp-login-bottom">
-                      <button
-                        type="button"
-                        className="tp-login-btn w-100"
-                        onClick={() => createAccount()}
-                      >
-                        Submit
-                      </button>
-                    </div> */}
-                    </div>
-                  )}
-                </>
-              </>
-            )}
-            <div
-              className={`tp-login-remeber ${
-                state.createAccount ? "pt-3" : "pt-2"
-              } `}
-            >
-              <input
-                id="remeber"
-                type="checkbox"
-                checked={state.diffAddress}
-                onChange={(e) => setState({ diffAddress: e.target.checked })}
-              />
-              <label htmlFor="remeber">Ship to a different address?</label>
-            </div>
-            {state.diffAddress && (
-              <div className="tp-checkout-bill-form">
-                <div className="tp-checkout-bill-inner">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="tp-checkout-input">
-                        <label>
-                          First Name <span>*</span>
-                        </label>
-                        <input
-                          name="firstName"
-                          id="firstName1"
-                          type="text"
-                          placeholder="First Name"
-                          value={state.firstName1}
-                          onChange={(e) => handleInputChange(e, "firstName1")}
-
-                          // defaultValue={user?.firstName}
-                        />
-                        {state.errors.firstName1 && (
-                          <ErrorMsg msg={state.errors.firstName1} />
-                        )}
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="tp-checkout-input">
-                        <label>
-                          Last Name <span>*</span>
-                        </label>
-                        <input
-                          name="lastName"
-                          id="lastName1"
-                          type="text"
-                          value={state.lastName1}
-                          placeholder="Last Name"
-                          onChange={(e) => handleInputChange(e, "lastName1")}
-                        />
-                        {state.errors.lastName1 && (
-                          <ErrorMsg msg={state.errors.lastName1} />
-                        )}
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="tp-checkout-input">
-                        <label>Company name (optional)</label>
-                        <input
-                          name="companyName"
-                          id="companyName"
-                          type="text"
-                          placeholder="Company name"
-                          value={state.companyName1}
-                          onChange={(e) => handleInputChange(e, "companyName1")}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="tp-checkout-input">
-                        <label htmlFor="country">
-                          Country <span>*</span>
-                        </label>
-                        <select
-                          name="country"
-                          id="country"
-                          value={state.selectedCountry1}
-                          className="nice-select w-100"
-                          onChange={(e) => shippingCoutryChange(e)}
-                        >
-                          <option value="">Select Country</option>
-                          {CountryList?.map((item) => (
-                            <option key={item.code} value={item.code}>
-                              {item.country}
-                            </option>
-                          ))}
-                        </select>
-                        {state.errors.selectedCountry1 && (
-                          <ErrorMsg msg={state.errors.selectedCountry1} />
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="tp-checkout-input">
-                        <label htmlFor="state">
-                          State <span>*</span>
-                        </label>
-                        <select
-                          name="state"
-                          id="state"
-                          value={state.selectedState1}
-                          className="nice-select w-100"
-                          onChange={(e) =>
-                            setState({ selectedState1: e.target.value })
-                          }
-                        >
-                          <option value="">Select State</option>
-                          {state.stateList?.map((item) => (
-                            <option key={item.raw} value={item.raw}>
-                              {item.raw}
-                            </option>
-                          ))}
-                        </select>
-                        {state.errors.selectedState1 && (
-                          <ErrorMsg msg={state.errors.selectedState1} />
-                        )}
-                      </div>
-                    </div>
                     <div className="col-md-12">
                       <div className="tp-checkout-input">
                         <label>Street address</label>
@@ -1551,9 +1213,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           id="address"
                           type="text"
                           placeholder="House number and street name"
-                          value={state.streetAddress2}
+                          value={state.streetAddress1}
                           onChange={(e) =>
-                            handleInputChange(e, "streetAddress2")
+                            handleInputChange(e, "streetAddress1")
                           }
                         />
                         {state.errors.streetAddress1 && (
@@ -1565,31 +1227,33 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       <div className="tp-checkout-input">
                         <label>Town / City</label>
                         <input
-                          name="city1"
-                          id="city1"
+                          name="city"
+                          id="city"
                           type="text"
                           placeholder="City"
-                          value={state.city1}
-                          onChange={(e) => handleInputChange(e, "city1")}
+                          value={state.city}
+                          onChange={(e) => handleInputChange(e, "city")}
                         />
-                        {state.errors.city1 && (
-                          <ErrorMsg msg={state.errors.city1} />
+                        {state.errors.city && (
+                          <ErrorMsg msg={state.errors.city} />
                         )}
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
-                        <label>Postcode ZIP</label>
+                        <label>
+                          Postcode ZIP <span>*</span>
+                        </label>
                         <input
                           name="zipCode"
                           id="zipCode"
                           type="text"
                           placeholder="Postcode ZIP"
-                          value={state.postalCode1}
-                          onChange={(e) => handleInputChange(e, "postalCode1")}
+                          value={state.postalCode}
+                          onChange={(e) => handleInputChange(e, "postalCode")}
                         />
-                        {state.errors.postalCode1 && (
-                          <ErrorMsg msg={state.errors.postalCode1} />
+                        {state.errors.postalCode && (
+                          <ErrorMsg msg={state.errors.postalCode} />
                         )}
                       </div>
                     </div>
@@ -1603,11 +1267,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           id="contactNo"
                           type="text"
                           placeholder="Phone"
-                          value={state.phone1}
-                          onChange={(e) => handleInputChange(e, "phone1")}
+                          value={state.phone}
+                          onChange={(e) => handleInputChange(e, "phone")}
                         />
-                        {state.errors.phone1 && (
-                          <ErrorMsg msg={state.errors.phone1} />
+                        {state.errors.phone && (
+                          <ErrorMsg msg={state.errors.phone} />
                         )}
                       </div>
                     </div>
@@ -1621,247 +1285,597 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           id="email"
                           type="email"
                           placeholder="Email"
-                          value={state.email1}
-                          onChange={(e) => handleInputChange(e, "email1")}
+                          value={state.email}
+                          onChange={(e) => handleInputChange(e, "email")}
 
                           // defaultValue={user?.email}
                         />
-                        {state.errors.email1 && (
-                          <ErrorMsg msg={state.errors.email1} />
+                        {state.errors.email && (
+                          <ErrorMsg msg={state.errors.email} />
                         )}
+                      </div>
+                    </div>
+                    <div className="col-md-12">
+                      <div className="tp-checkout-input">
+                        <label>Order notes (optional)</label>
+                        <textarea
+                          name="orderNote"
+                          id="orderNote"
+                          placeholder="Notes about your order, e.g. special notes for delivery."
+                          value={state.notes}
+                          onChange={(e) => handleInputChange(e, "notes")}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+              {!validLoginAndReg() && (
+                <>
+                  <div className="tp-login-remeber">
+                    <input
+                      id="remeber1"
+                      type="checkbox"
+                      checked={state.createAccount}
+                      onChange={(e) =>
+                        setState({ createAccount: e.target.checked })
+                      }
+                    />
+                    <label htmlFor="remeber1">Create an account?</label>
+                  </div>
+                  <>
+                    {state.createAccount && (
+                      <div className="tp-checkout-bill-form">
+                        <div className="tp-checkout-bill-inner">
+                          <div className="row pt-2">
+                            <div className="col-md-6">
+                              <div className="tp-checkout-input">
+                                <label>
+                                  First Name <span>*</span>
+                                </label>
+                                <input
+                                  name="loginFirstName"
+                                  id="loginFirstName"
+                                  type="text"
+                                  placeholder="First Name "
+                                  value={state.loginFirstName}
+                                  onChange={(e) =>
+                                    handleInputChange(e, "loginFirstName")
+                                  }
+                                />
+                                {state.errors.loginFirstName && (
+                                  <ErrorMsg msg={state.errors.loginFirstName} />
+                                )}
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="tp-checkout-input">
+                                <label>
+                                  Last Name <span>*</span>
+                                </label>
+                                <input
+                                  name="loginLastName"
+                                  id="loginLastName"
+                                  type="text"
+                                  placeholder="Last Name "
+                                  value={state.loginLastName}
+                                  onChange={(e) =>
+                                    handleInputChange(e, "loginLastName")
+                                  }
+                                />
+                                {state.errors.loginLastName && (
+                                  <ErrorMsg msg={state.errors.loginLastName} />
+                                )}
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="tp-checkout-input">
+                                <label>
+                                  Email address <span>*</span>
+                                </label>
+                                <input
+                                  name="email"
+                                  id="email"
+                                  type="email"
+                                  placeholder="Email"
+                                  value={state.loginEmail}
+                                  onChange={(e) =>
+                                    handleInputChange(e, "loginEmail")
+                                  }
+
+                                  // defaultValue={user?.email}
+                                />
+                                {state.errors.loginEmail && (
+                                  <ErrorMsg msg={state.errors.loginEmail} />
+                                )}
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="tp-checkout-input">
+                                <label>
+                                  Password <span>*</span>
+                                </label>
+                                <input
+                                  name="password"
+                                  id="password"
+                                  type="text"
+                                  value={state.password}
+                                  placeholder="Password"
+                                  onChange={(e) =>
+                                    handleInputChange(e, "password")
+                                  }
+                                />
+                                {state.errors.password && (
+                                  <ErrorMsg msg={state.errors.password} />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* <div className="tp-login-bottom">
+                      <button
+                        type="button"
+                        className="tp-login-btn w-100"
+                        onClick={() => createAccount()}
+                      >
+                        Submit
+                      </button>
+                    </div> */}
+                      </div>
+                    )}
+                  </>
+                </>
+              )}
+              <div
+                className={`tp-login-remeber ${
+                  state.createAccount ? "pt-3" : "pt-2"
+                } `}
+              >
+                <input
+                  id="remeber"
+                  type="checkbox"
+                  checked={state.diffAddress}
+                  onChange={(e) => setState({ diffAddress: e.target.checked })}
+                />
+                <label htmlFor="remeber">Ship to a different address?</label>
+              </div>
+              {state.diffAddress && (
+                <div className="tp-checkout-bill-form">
+                  <div className="tp-checkout-bill-inner">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label>
+                            First Name <span>*</span>
+                          </label>
+                          <input
+                            name="firstName"
+                            id="firstName1"
+                            type="text"
+                            placeholder="First Name"
+                            value={state.firstName1}
+                            onChange={(e) => handleInputChange(e, "firstName1")}
+
+                            // defaultValue={user?.firstName}
+                          />
+                          {state.errors.firstName1 && (
+                            <ErrorMsg msg={state.errors.firstName1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label>
+                            Last Name <span>*</span>
+                          </label>
+                          <input
+                            name="lastName"
+                            id="lastName1"
+                            type="text"
+                            value={state.lastName1}
+                            placeholder="Last Name"
+                            onChange={(e) => handleInputChange(e, "lastName1")}
+                          />
+                          {state.errors.lastName1 && (
+                            <ErrorMsg msg={state.errors.lastName1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="tp-checkout-input">
+                          <label>Company name (optional)</label>
+                          <input
+                            name="companyName"
+                            id="companyName"
+                            type="text"
+                            placeholder="Company name"
+                            value={state.companyName1}
+                            onChange={(e) =>
+                              handleInputChange(e, "companyName1")
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label htmlFor="country">
+                            Country <span>*</span>
+                          </label>
+                          <select
+                            name="country"
+                            id="country"
+                            value={state.selectedCountry1}
+                            className="nice-select w-100"
+                            onChange={(e) => shippingCoutryChange(e)}
+                          >
+                            <option value="">Select Country</option>
+                            {CountryList?.map((item) => (
+                              <option key={item.code} value={item.code}>
+                                {item.country}
+                              </option>
+                            ))}
+                          </select>
+                          {state.errors.selectedCountry1 && (
+                            <ErrorMsg msg={state.errors.selectedCountry1} />
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label htmlFor="state">
+                            State <span>*</span>
+                          </label>
+                          <select
+                            name="state"
+                            id="state"
+                            value={state.selectedState1}
+                            className="nice-select w-100"
+                            onChange={(e) =>
+                              setState({ selectedState1: e.target.value })
+                            }
+                          >
+                            <option value="">Select State</option>
+                            {state.stateList?.map((item) => (
+                              <option key={item.raw} value={item.raw}>
+                                {item.raw}
+                              </option>
+                            ))}
+                          </select>
+                          {state.errors.selectedState1 && (
+                            <ErrorMsg msg={state.errors.selectedState1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="tp-checkout-input">
+                          <label>Street address</label>
+                          <input
+                            name="address"
+                            id="address"
+                            type="text"
+                            placeholder="House number and street name"
+                            value={state.streetAddress2}
+                            onChange={(e) =>
+                              handleInputChange(e, "streetAddress2")
+                            }
+                          />
+                          {state.errors.streetAddress1 && (
+                            <ErrorMsg msg={state.errors.streetAddress1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label>Town / City</label>
+                          <input
+                            name="city1"
+                            id="city1"
+                            type="text"
+                            placeholder="City"
+                            value={state.city1}
+                            onChange={(e) => handleInputChange(e, "city1")}
+                          />
+                          {state.errors.city1 && (
+                            <ErrorMsg msg={state.errors.city1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label>Postcode ZIP</label>
+                          <input
+                            name="zipCode"
+                            id="zipCode"
+                            type="text"
+                            placeholder="Postcode ZIP"
+                            value={state.postalCode1}
+                            onChange={(e) =>
+                              handleInputChange(e, "postalCode1")
+                            }
+                          />
+                          {state.errors.postalCode1 && (
+                            <ErrorMsg msg={state.errors.postalCode1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="tp-checkout-input">
+                          <label>
+                            Phone <span>*</span>
+                          </label>
+                          <input
+                            name="contactNo"
+                            id="contactNo"
+                            type="text"
+                            placeholder="Phone"
+                            value={state.phone1}
+                            onChange={(e) => handleInputChange(e, "phone1")}
+                          />
+                          {state.errors.phone1 && (
+                            <ErrorMsg msg={state.errors.phone1} />
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-12">
+                        <div className="tp-checkout-input">
+                          <label>
+                            Email address <span>*</span>
+                          </label>
+                          <input
+                            name="email"
+                            id="email"
+                            type="email"
+                            placeholder="Email"
+                            value={state.email1}
+                            onChange={(e) => handleInputChange(e, "email1")}
+
+                            // defaultValue={user?.email}
+                          />
+                          {state.errors.email1 && (
+                            <ErrorMsg msg={state.errors.email1} />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="col-lg-5">
-          <div className="tp-checkout-place white-bg">
-            <h3 className="tp-checkout-place-title">Your Order</h3>
+          <div className="col-lg-5">
+            <div className="tp-checkout-place white-bg">
+              <h3 className="tp-checkout-place-title">Your Order</h3>
 
-            <div className="tp-order-info-list">
-              <ul>
-                {/*  header */}
-                <li className="tp-order-info-list-header">
-                  <h4>PRODUCT</h4>
-                  <h4>SUBTOTAL</h4>
-                </li>
-
-                {/*  item list */}
-                {state.orderData?.lines?.map((item) => (
-                  <li key={item.id} className="tp-order-info-list-desc">
-                    <p className="para">
-                      {item?.variant?.product?.name}{" "}
-                      <span> x {item?.quantity}</span>
-                    </p>
-                    {state.channel == "india-channel" ? (
-                      <span>
-                        &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
-                      </span>
-                    ) : (
-                      <span>${roundOff(item?.totalPrice?.gross?.amount)}</span>
-                    )}
+              <div className="tp-order-info-list">
+                <ul>
+                  {/*  header */}
+                  <li className="tp-order-info-list-header">
+                    <h4>PRODUCT</h4>
+                    <h4>SUBTOTAL</h4>
                   </li>
-                ))}
 
-                {/* total */}
-                {state?.shippingCost && (
-                  <li className="tp-order-info-list-total">
-                    <span>Shipping</span>
-                    {checkChannel() == "india-channel" ? (
-                      <span>&#8377;{roundOff(state?.shippingCost)}</span>
-                    ) : (
-                      <span>
-                        <span>${roundOff(state?.shippingCost)}</span>
-                      </span>
-                    )}
-                  </li>
-                )}
-
-                {/* giftCards */}
-
-                {state?.giftCard?.length > 0 &&
-                  state?.giftCard?.map((item, i) => (
-                    <li className="tp-order-info-list-total" key={i}>
-                      <span className="para">Coupen code</span>
-                      {checkChannel() == "india-channel" ? (
+                  {/*  item list */}
+                  {state.orderData?.lines?.map((item) => (
+                    <li key={item.id} className="tp-order-info-list-desc">
+                      <p className="para">
+                        {item?.variant?.product?.name}{" "}
+                        <span> x {item?.quantity}</span>
+                      </p>
+                      {state.channel == "india-channel" ? (
                         <span>
-                          &#8377;
-                          {roundOff(item?.currentBalance?.amount)}
+                          &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
                         </span>
                       ) : (
                         <span>
-                          <span>${roundOff(item?.currentBalance?.amount)}</span>
+                          ${roundOff(item?.totalPrice?.gross?.amount)}
                         </span>
                       )}
                     </li>
                   ))}
 
-                {state.checkedGiftwrap && (
-                  <li className="tp-order-info-list-total">
-                    <span>Gift wrap</span>
-                    {checkChannel() == "india-channel" ? (
-                      <span>&#8377;{roundOff(50)}</span>
-                    ) : (
-                      <span>
-                        <span>${roundOff(50)}</span>
-                      </span>
-                    )}
-                  </li>
-                )}
-
-                <li className="tp-order-info-list-total">
-                  <span>Total</span>
-                  {checkChannel() === "india-channel" ? (
-                    <>
-                      <p
-                        style={{
-                          color: "black",
-                          fontWeight: "700",
-                          textAlign: "right",
-                        }}
-                      >
-                        {state?.total && <>&#8377;{roundOff(state?.total)}</>}
-                        <br />
-                        <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                          (includes &#8377;{roundOff(state?.tax)} GST)
+                  {/* total */}
+                  {state?.shippingCost && (
+                    <li className="tp-order-info-list-total">
+                      <span>Shipping</span>
+                      {checkChannel() == "india-channel" ? (
+                        <span>&#8377;{roundOff(state?.shippingCost)}</span>
+                      ) : (
+                        <span>
+                          <span>${roundOff(state?.shippingCost)}</span>
                         </span>
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p
-                        style={{
-                          color: "black",
-                          fontWeight: "700",
-                          textAlign: "right",
-                        }}
-                      >
-                        {state?.total && <>${roundOff(state?.total)}</>}
-
-                        <br />
-                        <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                          (includes ${roundOff(state?.tax)} GST)
-                        </span>
-                      </p>
-                    </>
+                      )}
+                    </li>
                   )}
-                </li>
 
-                <div className="flex w-full flex-row justify-between">
-                  <div>
-                    <div className="mt-3 mb-2">
-                      <h5>Payment Method</h5>
-                    </div>
+                  {/* giftCards */}
 
-                    {state.paymentType?.map((item) => (
-                      <div className="tp-login-remeber" key={item.id}>
-                        <input
-                          id={`payment-${item.id}`}
-                          type="checkbox"
-                          checked={item.checked}
-                          onChange={() => {
-                            handleCheckboxChange(item.id);
-                          }}
-                        />
-                        <label
-                          htmlFor={`payment-${item.id}`}
-                          style={{ color: "black" }}
-                        >
-                          {item.name}
-                        </label>
-                      </div>
+                  {state?.giftCard?.length > 0 &&
+                    state?.giftCard?.map((item, i) => (
+                      <li className="tp-order-info-list-total" key={i}>
+                        <span className="para">Coupen code</span>
+                        {checkChannel() == "india-channel" ? (
+                          <span>
+                            &#8377;
+                            {roundOff(item?.currentBalance?.amount)}
+                          </span>
+                        ) : (
+                          <span>
+                            <span>
+                              ${roundOff(item?.currentBalance?.amount)}
+                            </span>
+                          </span>
+                        )}
+                      </li>
                     ))}
 
-                    {state.selectedPaymentType == "Cash On delivery" && (
-                      <ol>
-                        <li>
-                          Cash On Delivery orders will be booked only if the pin
-                          code is serviceable for COD by our Logistics Partner
-                        </li>
-                        <li>
-                          In case of Cash on Delivery, confirmation will be
-                          taken from the recipient over the call.
-                        </li>
-                        <li>
-                          PraDe Jewels reserves the right to disable COD option
-                          for the User, If COD order is rejected. Only cash/UPI
-                          payments will be accepted while delivering the order
-                          under the COD format.
-                        </li>
-                        <li>
-                          Demand Draft/ Cheques will not be accepted for orders
-                          booked under the COD method of payment. It is strictly
-                          a cash/UPI payment method only.
-                        </li>
-                        <li>
-                          E-Gift Vouchers or store credit cannot be used for COD
-                          orders. Foreign currency cannot be used to make a COD
-                          payment.
-                        </li>
-                        <li>
-                          Cash on Delivery is not applicable on Pre-order
-                          products
-                        </li>
-                        <li>
-                          Cash on Delivery option is eligible on orders between
-                          3000 INR to 30,000 INR
-                        </li>
-                      </ol>
+                  {state.checkedGiftwrap && (
+                    <li className="tp-order-info-list-total">
+                      <span>Gift wrap</span>
+                      {checkChannel() == "india-channel" ? (
+                        <span>&#8377;{roundOff(50)}</span>
+                      ) : (
+                        <span>
+                          <span>${roundOff(50)}</span>
+                        </span>
+                      )}
+                    </li>
+                  )}
+
+                  <li className="tp-order-info-list-total">
+                    <span>Total</span>
+                    {checkChannel() === "india-channel" ? (
+                      <>
+                        <p
+                          style={{
+                            color: "black",
+                            fontWeight: "700",
+                            textAlign: "right",
+                          }}
+                        >
+                          {state?.total && <>&#8377;{roundOff(state?.total)}</>}
+                          <br />
+                          <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                            (includes &#8377;{roundOff(state?.tax)} GST)
+                          </span>
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p
+                          style={{
+                            color: "black",
+                            fontWeight: "700",
+                            textAlign: "right",
+                          }}
+                        >
+                          {state?.total && <>${roundOff(state?.total)}</>}
+
+                          <br />
+                          <span style={{ fontWeight: "400", fontSize: "14px" }}>
+                            (includes ${roundOff(state?.tax)} GST)
+                          </span>
+                        </p>
+                      </>
                     )}
-                    {state.errors.paymentType && (
-                      <ErrorMsg msg={state.errors.paymentType} />
-                    )}
-                    <div className=" text-grey">
-                      Cash on Delivery is not applicable on Pre-order and gift
-                      card products
-                    </div>
-                  </div>
-                  {state.isGiftWrap && (
+                  </li>
+
+                  <div className="flex w-full flex-row justify-between">
                     <div>
                       <div className="mt-3 mb-2">
-                        <h5>Gift wrap</h5>
+                        <h5>Payment Method</h5>
                       </div>
-                      <div className="tp-login-remeber">
-                        <input
-                          id={"giftWrap"}
-                          type="checkbox"
-                          checked={state.checkedGiftwrap}
-                          onChange={(e) => {
-                            checkoutGiftWrapUpdate(e.target.checked);
-                            handleGiftWrapChanged(e.target.checked);
-                          }}
-                        />
-                        <label htmlFor={`giftWrap`} style={{ color: "black" }}>
-                          {"gift wrap"}
-                        </label>
+
+                      {state.paymentType?.map((item) => (
+                        <div className="tp-login-remeber" key={item.id}>
+                          <input
+                            id={`payment-${item.id}`}
+                            type="checkbox"
+                            checked={item.checked}
+                            onChange={() => {
+                              handleCheckboxChange(item.id);
+                            }}
+                          />
+                          <label
+                            htmlFor={`payment-${item.id}`}
+                            style={{ color: "black" }}
+                          >
+                            {item.name}
+                          </label>
+                        </div>
+                      ))}
+
+                      {state.selectedPaymentType == "Cash On delivery" && (
+                        <ol>
+                          <li>
+                            Cash On Delivery orders will be booked only if the
+                            pin code is serviceable for COD by our Logistics
+                            Partner
+                          </li>
+                          <li>
+                            In case of Cash on Delivery, confirmation will be
+                            taken from the recipient over the call.
+                          </li>
+                          <li>
+                            PraDe Jewels reserves the right to disable COD
+                            option for the User, If COD order is rejected. Only
+                            cash/UPI payments will be accepted while delivering
+                            the order under the COD format.
+                          </li>
+                          <li>
+                            Demand Draft/ Cheques will not be accepted for
+                            orders booked under the COD method of payment. It is
+                            strictly a cash/UPI payment method only.
+                          </li>
+                          <li>
+                            E-Gift Vouchers or store credit cannot be used for
+                            COD orders. Foreign currency cannot be used to make
+                            a COD payment.
+                          </li>
+                          <li>
+                            Cash on Delivery is not applicable on Pre-order
+                            products
+                          </li>
+                          <li>
+                            Cash on Delivery option is eligible on orders
+                            between 3000 INR to 30,000 INR
+                          </li>
+                        </ol>
+                      )}
+                      {state.errors.paymentType && (
+                        <ErrorMsg msg={state.errors.paymentType} />
+                      )}
+                      <div className=" text-grey">
+                        Cash on Delivery is not applicable on Pre-order and gift
+                        card products
                       </div>
                     </div>
-                  )}
-                </div>
-
-                <li>
-                  <div className="tp-login-remeber">
-                    <input
-                      id="agree"
-                      type="checkbox"
-                      checked={state.isAgree}
-                      onChange={(e) =>
-                        setState({ isAgree: e.target.checked, pType: true })
-                      }
-                    />
-                    <label htmlFor="agree" style={{ color: "black" }}>
-                      I have read and agree to the website terms and conditions
-                      *
-                    </label>
+                    {state.isGiftWrap && (
+                      <div>
+                        <div className="mt-3 mb-2">
+                          <h5>Gift wrap</h5>
+                        </div>
+                        <div className="tp-login-remeber">
+                          <input
+                            id={"giftWrap"}
+                            type="checkbox"
+                            checked={state.checkedGiftwrap}
+                            onChange={(e) => {
+                              checkoutGiftWrapUpdate(e.target.checked);
+                              handleGiftWrapChanged(e.target.checked);
+                            }}
+                          />
+                          <label
+                            htmlFor={`giftWrap`}
+                            style={{ color: "black" }}
+                          >
+                            {"gift wrap"}
+                          </label>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </li>
-                {state.errors.isAgree && (
-                  <ErrorMsg msg={state.errors.isAgree} />
-                )}
-                {/* {state.paymentType.map((checkbox) => {
+
+                  <li>
+                    <div className="tp-login-remeber">
+                      <input
+                        id="agree"
+                        type="checkbox"
+                        checked={state.isAgree}
+                        onChange={(e) =>
+                          setState({ isAgree: e.target.checked, pType: true })
+                        }
+                      />
+                      <label htmlFor="agree" style={{ color: "black" }}>
+                        I have read and agree to the website terms and
+                        conditions *
+                      </label>
+                    </div>
+                  </li>
+                  {state.errors.isAgree && (
+                    <ErrorMsg msg={state.errors.isAgree} />
+                  )}
+                  {/* {state.paymentType.map((checkbox) => {
                 return (
                   <li>
                     <div key={checkbox.id} className="">
@@ -1895,9 +1909,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
               {state.errors.paymentType && (
                 <ErrorMsg msg={state.errors.paymentType} />
               )} */}
-              </ul>
-            </div>
-            {/* <div className="tp-checkout-payment">
+                </ul>
+              </div>
+              {/* <div className="tp-checkout-payment">
         <div className="tp-checkout-payment-item">
           <input
             {...register(`payment`, {
@@ -1955,26 +1969,27 @@ const CheckoutBillingArea = ({ register, errors }) => {
         </div>
       </div> */}
 
-            <div>
-              <p style={{ color: "black", paddingTop: "20px" }}>
-                Your personal data will be used to process your order, support
-                your experience throughout this website, and for other purposes
-                described in our <b>privacy policy</b>.
-              </p>
-            </div>
+              <div>
+                <p style={{ color: "black", paddingTop: "20px" }}>
+                  Your personal data will be used to process your order, support
+                  your experience throughout this website, and for other
+                  purposes described in our <b>privacy policy</b>.
+                </p>
+              </div>
 
-            <div className="tp-checkout-btn-wrapper pt-20">
-              <button
-                type="submit"
-                className="tp-checkout-btn w-100"
-                onClick={() => handleSubmit()}
-              >
-                {state.orderLoading ? <ButtonLoader /> : "Place Order"}
-              </button>
+              <div className="tp-checkout-btn-wrapper pt-20">
+                <button
+                  type="submit"
+                  className="tp-checkout-btn w-100"
+                  onClick={() => handleSubmit()}
+                >
+                  {state.orderLoading ? <ButtonLoader /> : "Place Order"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

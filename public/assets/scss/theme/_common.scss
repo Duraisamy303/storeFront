@@ -528,6 +528,12 @@ font-size: 12px;
 .tp-contact-area{
 	padding: 50px 0px;
 }
+.tp-checkout-empty{
+	text-align: center;
+	padding: 50px 0px;
+}
+
+
 @media(max-width:1200px) {
 	.about-section-logo{
 		width: 400px;
@@ -576,6 +582,10 @@ font-size: 12px;
 
 	.tp-contact-area{
 		padding: 20px 0px;
+	}
+	.tp-checkout-empty{
+		text-align: center;
+		padding: 0px;
 	}
 }
 
