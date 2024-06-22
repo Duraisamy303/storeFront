@@ -283,7 +283,7 @@ const ShopArea = ({
                         aria-labelledby="grid-tab"
                         tabIndex="0"
                       >
-                        <div className="row">
+                        <div className="row gx-1 gx-lg-3">
                           {filteredRows
                             ?.slice(pageStart, pageStart + countOfPage)
                             ?.map((item) => (
