@@ -425,7 +425,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
                 ${roundOff(RelatedProduct?.defaultVariant?.costPrice)}
               </span>
             )}
-            <span style={{ color: "#c2882b", margin: "0px", fontSize: "14px" }}>
+            <span style={{ color: "white", margin: "0px", fontSize: "14px", fontWeight:"500" }}>
               ${roundOff(Price)}
             </span>
           </>
