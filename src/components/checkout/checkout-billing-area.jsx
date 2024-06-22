@@ -1816,7 +1816,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                     <div className=" text-grey">
                       Cash on Delivery is not applicable on Pre-order and gift
-                      cart products
+                      card products
                     </div>
                   </div>
                   {state.isGiftWrap && (
