@@ -210,8 +210,7 @@ const CompareArea = () => {
                                 <img
                                   src={profilePic(item?.node?.thumbnail?.url)}
                                   alt="compare"
-                                  width={500}
-                                  height={500}
+                                
                                   className=""
                                 />
                                 <div className="tp-product-badge-2">
