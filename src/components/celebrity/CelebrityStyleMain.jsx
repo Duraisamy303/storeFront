@@ -41,7 +41,7 @@ const CelebrityStyleMain = () => {
             <div className="col-md-3" key={item?.id}>
               <div
                 style={{
-                  paddingTop: "50px",
+                  paddingTop: "30px",
                   height: "300px",
                   overflow: "hidden",
                   cursor: "pointer",
