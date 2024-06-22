@@ -301,6 +301,13 @@ color: white;
 	padding-bottom: 60px;
 }
 
+.other-banner-title{
+	text-align: center;
+	color: white;
+	font-size: 70px;
+	padding-bottom: 15px;
+}
+
 .shop-banner-categoryList{
 list-style: none;
 display: flex;
@@ -444,6 +451,15 @@ margin-right: 0px !important;
 	text-align: center;
 	padding:30px;
 	margin-top: 50px;
+	background: white;
+}
+
+.about-section-logo{
+	width: 400px;
+	position: absolute;
+	top: -80px;
+	left: 100px;
+	z-index: -1;
 }
 .about-section-brand:hover{
 	background-color: #c2882b;
@@ -495,16 +511,142 @@ font-weight:400;
 	margin-top: 25px;
 }
 
+.footer-spacing{
+	padding: 0px 50px;
+}
+
+
+.soldout-badge{
+padding: 15px 12px;
+font-size: 12px;
+}
+
+.tp-map-area{
+	padding-bottom: 50px;
+}
+
+.tp-contact-area{
+	padding: 50px 0px;
+}
+@media(max-width:1200px) {
+	.about-section-logo{
+		width: 400px;
+		left: 75px;
+	}
+}
+
+
+@media(max-width:1100px) {
+	.about-section-logo{
+		width: 400px;
+		left: 30px;
+	}
+}
+
+@media(max-width:1024px) {
+	.about-section-logo{
+		width: 350px;
+		left: 55px;
+		top: -60px;
+	}
+}
+
+@media(max-width:991px) {
+	.about-section-logo{
+		width: 300px;
+		left: 25px;
+		top: -50px;
+	}
+}
+
+
+
 @media(max-width:768px) {
 	.common-breadcrumb-content{
 		width: 70%;
 	}
+
+	.footer-spacing{
+		padding: 0px;
+	}
+	
+	.tp-map-area{
+		padding-bottom: 20px;
+	}
+
+	.tp-contact-area{
+		padding: 20px 0px;
+	}
 }
+
+@media(max-width:767px) {
+	.about-section-logo{
+		width: 350px;
+        left: 85px;
+        top: -60px;
+	}
+
+	.contact-section1{
+		padding-bottom: 30px;
+	}
+}
+
 @media(max-width:500px) {
 	.common-breadcrumb-content{
 		width: 90%;
 	}
+
+	.about-section-logo{
+		width: 350px;
+        left:65px;
+        top: -60px;
+	}
+
+	.soldout-badge{
+		padding: 10px 8px !important;
+		font-size: 10px;
+		}
+
+	// .tp-product-badge {
+	// 	position: absolute;
+	// 	top: 62px !important;
+	// 	left: 5px !important;
+	// 	z-index: 1;
+	// }
 }
+
+@media(max-width:425px) {
+	.about-section-logo{
+		width: 350px;
+        left:30px;
+        top: -60px;
+	}
+}
+
+@media(max-width:375px) {
+	.about-section-logo{
+		width: 350px;
+        left:0px;
+        top: -60px;
+	}
+}
+
+@media(max-width:350px) {
+	.about-section-logo{
+		width: 300px;
+        left:0px;
+        top: -50px;
+	}
+}
+
+@media(max-width:300px) {
+	.about-section-logo{
+		width: 250px;
+        left:0px;
+        top: -40px;
+	}
+}
+
 
 
 .order-view-btn{

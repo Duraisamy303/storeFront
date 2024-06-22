@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useGetCategoryNameMutation } from "@/redux/features/productApi";
 
 const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
+  console.log("✌️title --->", title);
   const router = useRouter();
   const categories = title.split(" / ");
 
@@ -29,7 +30,8 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
     }
     if (categories[1] === "Anklets data") {
       ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
-    }if(categories[1] === " Other Accessories") {
+    }
+    if (categories[1] === " Other Accessories") {
       ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
     }
     setCategoryId(ParentCategoryId);
@@ -37,11 +39,10 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
     if (ParentCategoryId) {
       filterByCategoryName();
     }
-
-  },[categories[1]]);
+  }, [categories[1]]);
 
   const [getCategoryName] = useGetCategoryNameMutation();
-const [catName, setCatName] = useState([]);
+  const [catName, setCatName] = useState([]);
 
   const filterByCategoryName = async () => {
     const categoryId = product?.category?.id;
@@ -53,8 +54,6 @@ const [catName, setCatName] = useState([]);
 
       const list = res?.data?.data?.category?.name;
       setCatName(list);
-
-   
     } catch (err) {
       console.log(err);
     }
@@ -63,14 +62,18 @@ const [catName, setCatName] = useState([]);
   return (
     <>
       <section
-        className="breadcrumb__area include-bg pt-50 pb-50 shop-bg"
+        className="breadcrumb__area include-bg pt-50 pb-50 "
         style={{ backgroundImage: `url(${bgImage?.src})` }}
       >
         <div className="container-fluid">
           <div className="row">
             <div className="col-xxl-12">
               <div className="breadcrumb__content p-relative z-index-1">
-                <h3 className="breadcrumb__title shop-banner-title">
+                <h3
+                  className={`breadcrumb__title ${
+                    title == "Shop" ? "shop-banner-title" : "other-banner-title"
+                  }`}
+                >
                   <Link href="/shop">{categories[0]}</Link>{" "}
                   {categories[1] && (
                     <span
@@ -89,31 +92,41 @@ const [catName, setCatName] = useState([]);
                     <span style={{ cursor: "pointer" }}>/ {categories[2]}</span>
                   )}
                 </h3>
+                {title !== "Shop" && (
+                  <div style={{ color: "white", textAlign: "center" }}>
+                    <span>
+                      <a href="/">HOME</a>
+                    </span>{" "}
+                    / <span>{subtitle}</span>
+                  </div>
+                )}
+
                 {/* <div className="breadcrumb__list">
                   <span><a href="#">Home</a></span>
                   <span>{subtitle}</span>
                 </div> */}
-                <ul className="container shop-banner-categoryList">
-                  {catList?.length > 0 &&
-                    catList?.map((item, index) => (
-                      <li key={index}>
-                        <h5
-                          className="shop-banner-categoryList-title cursor-pointer"
-                          onClick={() => {
-                            router.push({
-                              pathname: "/shop",
-                              query: { categoryId: item?.node?.id }, // Your parameters
-                            });
-                          }}
-                        >
-                          {item?.node?.name?.toUpperCase()}
-                        </h5>
-                        <p className="shop-banner-categoryList-count">
-                          {item?.node?.products?.totalCount} Products
-                        </p>
-                      </li>
-                    ))}
-                  {/* <li>
+                {title == "Shop" && (
+                  <ul className="container shop-banner-categoryList">
+                    {catList?.length > 0 &&
+                      catList?.map((item, index) => (
+                        <li key={index}>
+                          <h5
+                            className="shop-banner-categoryList-title cursor-pointer"
+                            onClick={() => {
+                              router.push({
+                                pathname: "/shop",
+                                query: { categoryId: item?.node?.id }, // Your parameters
+                              });
+                            }}
+                          >
+                            {item?.node?.name?.toUpperCase()}
+                          </h5>
+                          <p className="shop-banner-categoryList-count">
+                            {item?.node?.products?.totalCount} Products
+                          </p>
+                        </li>
+                      ))}
+                    {/* <li>
                     <h5 className="shop-banner-categoryList-title">
                       ANKLETS
                     </h5>
@@ -173,7 +186,8 @@ const [catName, setCatName] = useState([]);
                     </h5>
                     <p className="shop-banner-categoryList-count">41 Products</p>
                   </li> */}
-                </ul>
+                  </ul>
+                )}
               </div>
             </div>
           </div>

@@ -82,7 +82,7 @@ const ProductDetailsArea = ({ productItem, pageTitle, detailsRefetch }) => {
         <>
           {/* related products start */}
           {productItem?.category?.id && (
-            <section className="tp-related-product pt-50 pb-50">
+            <section className="tp-related-product pt-50">
               <div className="container-fluid">
                 <div className="row">
                   <div className="tp-section-title-wrapper-6 mb-40">

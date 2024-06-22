@@ -218,8 +218,7 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
           <div className="tp-product-badge-2">
             {RelatedProduct?.defaultVariant?.quantityAvailable == 0 && (
               <span
-                className="product-hot text-center"
-                style={{ padding: "15px 12px " }}
+                className="product-hot text-center soldout-badge"
               >
                 SOLD
                 <br /> OUT

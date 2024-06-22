@@ -70,7 +70,7 @@ const FooterTwo = () => {
         >
           <div className="tp-footer-top pt-50">
             <div className="container-fluid">
-              <div style={{ padding: "0px 50px" }}>
+              <div className="footer-spacing">
                 <div className="row">
                   <div className="col-lg-3 col-md-6 col-sm-6">
                     <div className="tp-footer-widget footer-col-4-1 mb-50">
@@ -252,7 +252,7 @@ const FooterTwo = () => {
           </div>
           <div className="tp-footer-bottom">
             <div className="container-fluid">
-              <div style={{ padding: "0px 50px" }}>
+              <div  className="footer-spacing">
                 <div className="tp-footer-bottom-wrapper">
                   <div className="row align-items-center">
                     <div className="col-md-12">

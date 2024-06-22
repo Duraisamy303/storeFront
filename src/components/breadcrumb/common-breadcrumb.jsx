@@ -12,7 +12,7 @@ const CommonBreadcrumb = ({
     <section
       className={`breadcrumb__area ${
         center ? "text-center" : ""
-      } include-bg pt-50 pb-20`}
+      } include-bg pt-50 pb-50`}
       style={{
         backgroundImage: `url(${BgImage?.src})`,
         display: "flex",
@@ -42,11 +42,11 @@ const CommonBreadcrumb = ({
                 </span>{" "}
                 / <span>{subtitle}</span>
               </div>
-              <div className="d-flex justify-content-center mt-30">
-                <p className="common-breadcrumb-content">
-                  {content}
-                </p>
-              </div>
+              {content && (
+                <div className="d-flex justify-content-center mt-30">
+                  <p className="common-breadcrumb-content">{content}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
