@@ -184,6 +184,7 @@ const router = useRouter();
                           type="button"
                           className="tp-cart-update-btn "
                           style={{ background: "#ececec" }}
+                          onClick={() => updateCart()}
                         >
                           UPDATE CART
                         </button>
