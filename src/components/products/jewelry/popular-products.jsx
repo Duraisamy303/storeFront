@@ -127,7 +127,7 @@ const PopularProducts = () => {
   return (
     <>
       <section
-        className="tp-category-area pt-50 pb-105 tp-category-plr-85"
+        className="tp-category-area pt-50 pb-50 tp-category-plr-85"
         style={{ backgroundColor: `#EFF1F5` }}
       >
         <div className="container-fluid">

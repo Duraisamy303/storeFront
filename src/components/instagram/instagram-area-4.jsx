@@ -217,7 +217,7 @@ const InstagramAreaFour = () => {
               </p>
             </div>
             <div className="col-md-8">
-              <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-1 gy-1 gy-lg-0">
+              <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-2 gx-1 gy-1 gy-lg-0">
                 {productList?.map((item, i) => (
                   <div className="col col-content-container" key={i}>
                     <div className="tp-instagram-item-2 w-img">
