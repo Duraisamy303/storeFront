@@ -294,9 +294,15 @@ const CartMiniSidebar = () => {
               <div className="cartmini__empty text-center">
                 <Image src={empty_cart_img} alt="empty-cart-img" />
                 <p>Your Cart is empty</p>
-                <Link href="/shop" className="tp-btn">
+                <button
+                  onClick={() => {
+                    router.push("/shop");
+                    handleCloseCartMini();
+                  }}
+                  className="tp-btn"
+                >
                   Go to Shop
-                </Link>
+                </button>
               </div>
             )}
           </div>

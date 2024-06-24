@@ -52,8 +52,7 @@
     &-filter{
         margin-left: 16px;
         @media #{$xs}{
-            margin-left: 0;
-            margin-top: 15px;
+            margin-top: 0px;
         }
     }
     &-result{
@@ -112,5 +111,12 @@
     }
     .tp-product-tag-2 a::after {
         background-color: #c3935b;
+    }
+}
+
+
+@media(max-width: 350px){
+    .tp-shop-top-select .nice-select {
+        min-width: 150px;
     }
 }

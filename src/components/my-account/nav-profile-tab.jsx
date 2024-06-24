@@ -49,19 +49,19 @@ const ProfileInfo = () => {
               className="profile__info-text"
               style={{ color: "gray", fontWeight: "500" }}
             >
-              First Name : {userFirstName}
+              <b>First Name</b> : {userFirstName}
             </p>
             <p
               className="profile__info-text"
               style={{ color: "gray", fontWeight: "500" }}
             >
-              Last Name : {userLastName}{" "}
+              <b>Last Name</b> : {userLastName}{" "}
             </p>
             <p
               className="profile__info-text"
               style={{ color: "gray", fontWeight: "500" }}
             >
-              Email : {userEmail}
+              <b>Email</b> : {userEmail}
             </p>
           </div>
         </div>

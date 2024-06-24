@@ -30,7 +30,6 @@ const CommonBreadcrumb = ({
                 className="breadcrumb__title"
                 style={{
                   color: "white",
-                  fontSize: "70px",
                   paddingBottom: "15px",
                 }}
               >
