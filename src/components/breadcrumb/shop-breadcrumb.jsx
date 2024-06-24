@@ -3,13 +3,15 @@ import { capitalizeFLetter } from "../../utils/functions";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useGetCategoryNameMutation } from "@/redux/features/productApi";
+import { DownOutlined } from '@ant-design/icons';
+
 
 const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
-  console.log("✌️title --->", title);
   const router = useRouter();
   const categories = title.split(" / ");
 
   const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
+  const [categoryopen, setCategoryOpen] = useState(false);
 
   // Initialize ParentCategoryId
   useEffect(() => {
@@ -106,87 +108,73 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                   <span>{subtitle}</span>
                 </div> */}
                 {title == "Shop" && (
-                  <ul className="container shop-banner-categoryList">
-                    {catList?.length > 0 &&
-                      catList?.map((item, index) => (
-                        <li key={index}>
-                          <h5
-                            className="shop-banner-categoryList-title cursor-pointer"
-                            onClick={() => {
-                              router.push({
-                                pathname: "/shop",
-                                query: { categoryId: item?.node?.id }, // Your parameters
-                              });
-                            }}
-                          >
-                            {item?.node?.name?.toUpperCase()}
-                          </h5>
-                          <p className="shop-banner-categoryList-count">
-                            {item?.node?.products?.totalCount} Products
-                          </p>
-                        </li>
-                      ))}
-                    {/* <li>
-                    <h5 className="shop-banner-categoryList-title">
-                      ANKLETS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">3 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                      BANGLES & BRACELETS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">121 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                      EARRINGS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">383 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                      FINGER RINGS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">95 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  GIFT CARD
-                    </h5>
-                    <p className="shop-banner-categoryList-count">1 Product</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  NECKLACES
-                    </h5>
-                    <p className="shop-banner-categoryList-count">860 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  NEW ARRIVALS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">1,360 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  PENDANTS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">21 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  PRE-ORDERS
-                    </h5>
-                    <p className="shop-banner-categoryList-count">33 Products</p>
-                  </li>
-                  <li>
-                  <h5 className="shop-banner-categoryList-title">
-                  SALE
-                    </h5>
-                    <p className="shop-banner-categoryList-count">41 Products</p>
-                  </li> */}
-                  </ul>
+                  <>
+                    <ul className="container shop-banner-categoryList d-none d-sm-flex">
+                      {catList?.length > 0 &&
+                        catList?.map((item, index) => (
+                          <li key={index}>
+                            <h5
+                              className="shop-banner-categoryList-title cursor-pointer"
+                              onClick={() => {
+                                router.push({
+                                  pathname: "/shop",
+                                  query: { categoryId: item?.node?.id }, // Your parameters
+                                });
+                              }}
+                            >
+                              {item?.node?.name?.toUpperCase()}
+                            </h5>
+                            <p className="shop-banner-categoryList-count">
+                              {item?.node?.products?.totalCount} Products
+                            </p>
+                          </li>
+                        ))}
+                    </ul>
+                    <div className=" d-sm-none">
+                      <p
+                        className="text-white text-center"
+                        style={{
+                          fontWeight: "500",
+                          fontSize: "18px",
+                          cursor: "pointer", marginBottom:"0px"
+                        }}
+                        onClick={() => setCategoryOpen(!categoryopen)}
+                      >
+                        Categories <DownOutlined style={{ fontSize: "14px" }} />
+                      </p>
+
+                      {categoryopen && (
+                        <div
+                          style={{
+                            backgroundColor: "rgb(0 0 0 / 40%)",
+                            padding: "20px 0px",
+                          }}
+                        >
+                          <ul className="container shop-banner-categoryList ">
+                            {catList?.length > 0 &&
+                              catList?.map((item, index) => (
+                                <li key={index}>
+                                  <h5
+                                    className="shop-banner-categoryList-title cursor-pointer"
+                                    onClick={() => {
+                                      router.push({
+                                        pathname: "/shop",
+                                        query: { categoryId: item?.node?.id }, // Your parameters
+                                      });
+                                    }}
+                                  >
+                                    {item?.node?.name?.toUpperCase()}
+                                  </h5>
+                                  <p className="shop-banner-categoryList-count">
+                                    {item?.node?.products?.totalCount} Products
+                                  </p>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             </div>
