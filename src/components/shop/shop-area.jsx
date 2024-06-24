@@ -135,11 +135,12 @@ const ShopArea = ({
     }
     if (categories[1] === "Anklets data") {
       ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
-    }if (categories[1] === " Other Accessories") {
+    }
+    if (categories[1] === " Other Accessories") {
       ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
     }
     setCategoryId(ParentCategoryId);
-  },[categories[1]]);
+  }, [categories[1]]);
 
   console.log("categoryId: ", categoryId);
 
@@ -272,7 +273,12 @@ const ShopArea = ({
                     </div>
                   </div>
                 )}
-                {products?.length === 0 && <CommonLoader loading={loading} />}
+                {products?.length === 0 && (
+                  <div className="text-center">
+                    <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
+                    <p className="mt-20" style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}>No Product Found</p>
+                  </div>
+                )}
                 {products?.length > 0 && (
                   <div className="tp-shop-items-wrapper tp-shop-item-primary">
                     <div className="tab-content" id="productTabContent">
