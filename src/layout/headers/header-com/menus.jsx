@@ -26,7 +26,7 @@ const slider_setting = {
   },
   breakpoints: {
     1400: {
-      slidesPerView: 5,
+      slidesPerView: 4,
     },
     1200: {
       slidesPerView: 4,
@@ -59,7 +59,7 @@ const CategoryContent = ({
   useEffect(() => {
     filterByCategory();
   }, [categoryName]);
-  const [parentCategoryId, setParentCategoryId] =  useState("");
+  const [parentCategoryId, setParentCategoryId] = useState("");
 
   const filterByCategory = async () => {
     let categoryId = "";
@@ -134,13 +134,16 @@ const CategoryContent = ({
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border"   onClick={() => {
-                    router?.push({
-                      pathname: "/shop",
-                      query: { categoryId: parentCategoryId }, // Your parameters
-                    });
-                  }}>
-               Shop Now
+              <button
+                className="tp-btn tp-btn-border"
+                onClick={() => {
+                  router?.push({
+                    pathname: "/shop",
+                    query: { categoryId: parentCategoryId }, // Your parameters
+                  });
+                }}
+              >
+                Shop Now
               </button>
             </div>
           </div>
@@ -238,14 +241,7 @@ const CategoryComponent = ({
             style={{ padding: "0px 8px 0px 0px", width: "250px" }}
             key={item?.id}
           >
-            <SwiperSlide
-              style={{
-                width: "100%",
-                minWidth: "222px",
-                maxWidth: "222px",
-                marginRight: "10px !important",
-              }}
-            >
+            <SwiperSlide>
               <MenusProductSlider product={item} />
             </SwiperSlide>
           </div>
