@@ -71,7 +71,7 @@ const WeeksFeatured = () => {
                     <>
                       <span className="tp-featured-price new-price">${price}</span>
                       <span className="tp-featured-price old-price">
-                        {" "} $ {(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
+                        {" "} ${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
                       </span>
                     </>
                   ) : (

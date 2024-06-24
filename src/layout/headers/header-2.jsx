@@ -376,7 +376,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                         style={{ borderRadius: "50%" }}
                                       /> */}
 
-<img
+                                      <img
                                         src={item?.img}
                                         alt="Product Image"
                                         width={50}
@@ -478,15 +478,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                             <span className="tp-header-action-badge">
                               {cart?.length || 0}
                             </span>
-                          </button>
-                        </div>
-                        <div className="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">
-                          <button
-                            onClick={() => setIsCanvasOpen(true)}
-                            type="button"
-                            className="tp-offcanvas-open-btn"
-                          >
-                            <Menu />
                           </button>
                         </div>
                         {/* {token && ( */}
@@ -596,7 +587,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                   Compare
                                 </Link>
                                 <Link
-                                  href="/giftCart"
+                                  href="/gift-card"
                                   style={{ paddingBottom: "5px" }}
                                 >
                                   Gift Cards
@@ -606,6 +597,15 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                           )}
                         </div>
                         {/* )} */}
+                        <div className="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">
+                          <button
+                            onClick={() => setIsCanvasOpen(true)}
+                            type="button"
+                            className="tp-offcanvas-open-btn"
+                          >
+                            <Menu />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

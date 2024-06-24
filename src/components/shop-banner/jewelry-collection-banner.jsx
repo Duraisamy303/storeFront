@@ -108,28 +108,30 @@ const JewelryCollectionBanner = () => {
               </div>
               <div className="col-xl-6 col-lg-6 gx-0 gy-0 actors-outer">
                 <div className='row'>
-                  <div className='col-4 gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6  gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor1} alt='actor1' className='actor-img'/>
                   </div>
-                  <div className='col-4 gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6 gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor2} alt='actor2' className='actor-img' />
                   </div>
-                  <div className='col-4 gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6 gx-1 gy-1'  onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor3} alt='actor3' className='actor-img' />
                   </div>
-                </div>
 
-                <div className='row'>
-                  <div className='col-4 gx-1 gy-1'onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6 gx-1 gy-1'onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor4} alt='actor4' className='actor-img'/>
                   </div>
-                  <div className='col-4 gx-1 gy-1' onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6 gx-1 gy-1' onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor5} alt='actor5' className='actor-img'/>
                   </div>
-                  <div className='col-4 gx-1 gy-1' onClick={() => Router.push("/celebrity-style")}>
+                  <div className='col-md-4 col-6 gx-1 gy-1' onClick={() => Router.push("/celebrity-style")}>
                       <Image src={actor6} alt='actor6' className='actor-img'/>
                   </div>
                 </div>
+
+                {/* <div className='row'>
+                 
+                </div> */}
               </div>
             </div>
           </div>

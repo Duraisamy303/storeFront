@@ -114,7 +114,7 @@ const ProductDetailsPage = ({ query }) => {
 
   console.log("shopTitle: ", shopTitle);
 
-
+console.log("product[id]: ", product);
   // decide what to render
   let content = null;
   if (isLoading) {

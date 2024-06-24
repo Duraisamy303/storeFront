@@ -138,3 +138,9 @@
         }
     }
 }
+
+@media(max-width: 500px){
+    .breadcrumb__title {
+        font-size: 28px;
+    }
+}

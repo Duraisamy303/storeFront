@@ -62,7 +62,7 @@ const YoutubeIcon = () => (
 const ContactArea = () => {
   return (
     <>
-      <section className="tp-contact-area pt-50 pb-100">
+      <section className="tp-contact-area">
         <div className="container">
           <div className="tp-contact-inner">
             {/* <div className="row">
@@ -143,7 +143,7 @@ const ContactArea = () => {
 
             <div className="row">
               <div
-                className="col-md-6"
+                className="col-md-6 contact-section1"
                 style={{ borderRight: "1px solid #ccc" }}
               >
                 <div style={{ marginBottom: "50px" }}>
@@ -159,13 +159,7 @@ const ContactArea = () => {
                     CONTACT US
                   </h4>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-
-                    marginBottom: "50px",
-                  }}
-                >
+                <div className="contacr-social-links">
                   <div
                     style={{
                       width: "50px",
@@ -183,13 +177,7 @@ const ContactArea = () => {
                     <Link href="mailto:support@prade.in">support@prade.in</Link>
                   </p>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-
-                    marginBottom: "50px",
-                  }}
-                >
+                <div className="contacr-social-links">
                   <div
                     style={{
                       width: "50px",
@@ -217,13 +205,7 @@ const ContactArea = () => {
                   </p>
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-
-                    marginBottom: "50px",
-                  }}
-                >
+                <div className="contacr-social-links">
                   <div
                     style={{
                       width: "50px",
@@ -243,7 +225,15 @@ const ContactArea = () => {
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <h5 style={{ marginBottom: "0px", paddingRight:"15px", color:"gray" }}>Follow Us</h5>
+                  <h5
+                    style={{
+                      marginBottom: "0px",
+                      paddingRight: "15px",
+                      color: "gray",
+                    }}
+                  >
+                    Follow Us
+                  </h5>
                   <div style={{ display: "flex" }}>
                     <div style={{ paddingRight: "15px" }}>
                       <Link
@@ -261,7 +251,10 @@ const ContactArea = () => {
                         <InstagramIcon />
                       </Link>
                     </div>
-                    <div className="printer-outline " style={{backgroundColor:"gray"}}>
+                    <div
+                      className="printer-outline "
+                      style={{ backgroundColor: "gray" }}
+                    >
                       <Link href="https://pin.it/2RQl6pL" target="_blank">
                         <PinterestOutlined />
                       </Link>
@@ -269,7 +262,7 @@ const ContactArea = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 ">
                 <Image
                   src={ContactSideImage}
                   alt="mail"

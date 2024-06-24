@@ -271,3 +271,15 @@
         }
     }
 }
+
+
+.contacr-social-links{
+    display: flex;
+    margin-bottom: 50px;
+}
+
+@media(max-width:768px){
+    .contacr-social-links{
+       margin-bottom: 30px;
+    }
+}

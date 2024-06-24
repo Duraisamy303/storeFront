@@ -136,8 +136,11 @@ const ShopArea = ({
     if (categories[1] === "Anklets data") {
       ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
     }
+    if (categories[1] === " Other Accessories") {
+      ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+    }
     setCategoryId(ParentCategoryId);
-  },[categories[1]]);
+  }, [categories[1]]);
 
   console.log("categoryId: ", categoryId);
 
@@ -185,7 +188,7 @@ const ShopArea = ({
               <div className="tp-shop-main-wrapper">
                 <div className="tp-shop-top mb-45">
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-md-6">
                       <ShopTopLeft
                         showing={
                           products?.length === 0
@@ -209,7 +212,7 @@ const ShopArea = ({
                         total={all_products?.length}
                       /> */}
                     </div>
-                    <div className="col-xl-6">
+                    <div className="col-md-6">
                       <ShopTopRight selectHandleFilter={selectHandleFilter} />
                     </div>
                   </div>
@@ -270,7 +273,12 @@ const ShopArea = ({
                     </div>
                   </div>
                 )}
-                {products?.length === 0 && <CommonLoader loading={loading} />}
+                {products?.length === 0 && (
+                  <div className="text-center">
+                    <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
+                    <p className="mt-20" style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}>No Product Found</p>
+                  </div>
+                )}
                 {products?.length > 0 && (
                   <div className="tp-shop-items-wrapper tp-shop-item-primary">
                     <div className="tab-content" id="productTabContent">
@@ -281,7 +289,7 @@ const ShopArea = ({
                         aria-labelledby="grid-tab"
                         tabIndex="0"
                       >
-                        <div className="row">
+                        <div className="row gx-1 gx-lg-3">
                           {filteredRows
                             ?.slice(pageStart, pageStart + countOfPage)
                             ?.map((item) => (
@@ -321,7 +329,7 @@ const ShopArea = ({
                   </div>
                 )}
                 {products?.length > 0 && (
-                  <div className="tp-shop-pagination mt-20">
+                  <div className="tp-shop-pagination mt-20 mb-20">
                     <div className="tp-pagination">
                       <Pagination
                         items={products}

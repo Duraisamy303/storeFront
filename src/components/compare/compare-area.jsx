@@ -178,7 +178,7 @@ const CompareArea = () => {
           <div className="row">
             <div className="col-xl-12">
               {compareData?.length === 0 && (
-                <div className="text-center pt-50">
+                <div className="text-center pt-0 pb-0 pt-md-50 pb-md-50 ">
                   <h3>No Compare Items Found</h3>
                   <Link href="/shop" className="tp-cart-checkout-btn mt-20">
                     Continue Shipping
@@ -210,8 +210,7 @@ const CompareArea = () => {
                                 <img
                                   src={profilePic(item?.node?.thumbnail?.url)}
                                   alt="compare"
-                                  width={500}
-                                  height={500}
+                                
                                   className=""
                                 />
                                 <div className="tp-product-badge-2">

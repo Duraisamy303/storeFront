@@ -117,8 +117,8 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
 export const NEXT_PRODUCT = ({ nextProductId, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($nextProductId:ID!,$channel:String!) {
-      product(id: $nextProductId, channel: $channel) {
+    query MyQuery($nextProductId:String!,$channel:String!) {
+      product(slug: $nextProductId, channel: $channel) {
         id
         name
         thumbnail {
@@ -146,8 +146,8 @@ export const NEXT_PRODUCT = ({ nextProductId, channel }) => {
 export const PREV_PRODUCT = ({ prevProductId, channel }) => {
   return JSON.stringify({
     query: `
-    query MyQuery($prevProductId:ID!,$channel:String!) {
-      product(id: $prevProductId, channel: $channel) {
+    query MyQuery($prevProductId:String!,$channel:String!) {
+      product(slug: $prevProductId, channel: $channel) {
         id
         name
         thumbnail {

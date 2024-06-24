@@ -1,19 +1,19 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar, Navigation,Autoplay } from "swiper";
-// internal
+import { Scrollbar, Navigation, Autoplay } from "swiper";
 import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
 import ProductItem from "../products/beauty/product-item";
 import ErrorMsg from "../common/error-msg";
 import { HomeNewArrivalPrdLoader } from "../loader";
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import 'swiper/swiper-bundle.min.css';
 
-// slider setting
 const slider_setting = {
   slidesPerView: 4,
   spaceBetween: 10,
   navigation: {
-    nextEl: ".tp-related-slider-button-next",
-    prevEl: ".tp-related-slider-button-prev",
+    prevEl: '.tp-related-slider-button-prev',
+    nextEl: '.tp-related-slider-button-next',
   },
   autoplay: {
     delay: 5000,
@@ -40,24 +40,19 @@ const slider_setting = {
   },
 };
 
-const RelatedProducts = ({id}) => {
+const RelatedProducts = ({ id }) => {
+  const { data: related_product, isError, isLoading } = useGetRelatedProductsQuery({ id });
+  const products = related_product?.data?.category?.products?.edges;
 
-  const { data: related_product, isError, isLoading} = useGetRelatedProductsQuery({id});
-  const products=related_product?.data?.category?.products?.edges
-
-  // decide what to render
   let content = null;
 
   if (isLoading) {
-    content = <HomeNewArrivalPrdLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
+    content = <HomeNewArrivalPrdLoader loading={isLoading} />;
+  } else if (isError) {
     content = <ErrorMsg msg="There was an error" />;
-  }
-  if (!isLoading && !isError && products?.length === 0) {
+  } else if (!isLoading && products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.length > 0) {
+  } else if (!isLoading && products?.length > 0) {
     content = (
       <Swiper
         {...slider_setting}
@@ -69,14 +64,17 @@ const RelatedProducts = ({id}) => {
             <ProductItem product={item?.node} primary_style={true} data={products} />
           </SwiperSlide>
         ))}
+        <div className="tp-related-slider-button-prev swiper-button-prev">
+          <LeftOutlined />
+        </div>
+        <div className="tp-related-slider-button-next swiper-button-next">
+          <RightOutlined />
+        </div>
       </Swiper>
     );
   }
-  return (
-    <div className="tp-product-related-slider">
-      {content}
-    </div>
-  );
+
+  return <div className="tp-product-related-slider">{content}</div>;
 };
 
 export default RelatedProducts;

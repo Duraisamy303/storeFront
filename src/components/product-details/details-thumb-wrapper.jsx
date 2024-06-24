@@ -2,8 +2,13 @@ import { useState } from "react";
 import PopupVideo from "../common/popup-video";
 import Loader from "../loader/loader";
 import { profilePic } from "@/utils/constant";
-import { FullscreenOutlined } from "@ant-design/icons";
-import { UpOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  FullscreenOutlined,
+  UpOutlined,
+  DownOutlined,
+  PlusOutlined,
+  MinusOutlined,
+} from "@ant-design/icons";
 
 const DetailsThumbWrapper = ({
   imgWidth,
@@ -24,6 +29,9 @@ const DetailsThumbWrapper = ({
   // lightbox state
   const [showLightbox, setShowLightbox] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Zoom state for lightbox
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   // Calculate adjusted image height
   const adjustedImgHeight = imgHeight < 740 ? imgHeightMobile : imgHeight;
@@ -58,6 +66,7 @@ const DetailsThumbWrapper = ({
   const handleLightboxClose = () => {
     setShowLightbox(false);
     setSelectedImageIndex(0); // Reset the selected image index
+    setZoomLevel(1); // Reset zoom level
   };
 
   const navigateImage = (direction) => {
@@ -80,16 +89,16 @@ const DetailsThumbWrapper = ({
   const handleNavigationClicking = (direction) => {
     const currentIndex = imageUrls.indexOf(activeImg);
     let newIndex;
-  
+
     if (direction === "prev") {
       newIndex = currentIndex === 0 ? imageUrls.length - 1 : currentIndex - 1;
     } else {
       newIndex = currentIndex === imageUrls.length - 1 ? 0 : currentIndex + 1;
     }
-  
+
     const newActiveImage = imageUrls[newIndex];
     handleImageActive(newActiveImage, newIndex); // Pass newIndex to handleImageActive
-  
+
     // Scroll into view
     const element = document.getElementById(`image-${newIndex}`);
     if (element) {
@@ -100,7 +109,15 @@ const DetailsThumbWrapper = ({
       });
     }
   };
-  
+
+  const zoomIn = () => {
+    setZoomLevel((prevZoomLevel) => Math.min(prevZoomLevel + 0.2, 3)); // Max zoom level 3
+  };
+
+  const zoomOut = () => {
+    setZoomLevel((prevZoomLevel) => Math.max(prevZoomLevel - 0.2, 1)); // Min zoom level 1
+  };
+
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
@@ -182,7 +199,8 @@ const DetailsThumbWrapper = ({
               {loading ? (
                 <Loader />
               ) : (
-                <div className="details-image-outer"
+                <div
+                  className="details-image-outer"
                   style={{
                     position: "relative",
                     width: `${imgWidth}px`,
@@ -239,8 +257,7 @@ const DetailsThumbWrapper = ({
               <div className="tp-product-badge-2">
                 {product?.defaultVariant?.quantityAvailable === 0 && (
                   <span
-                    className="product-hot text-center"
-                    style={{ padding: "15px 12px", fontSize: "12px" }}
+                    className="product-hot text-center soldout-badge"
                   >
                     SOLD
                     <br /> OUT
@@ -334,9 +351,9 @@ const DetailsThumbWrapper = ({
             width={imgWidth}
             height={adjustedImgHeight}
             style={{
-              width: "100%",
-              maxWidth: "90%",
-              maxHeight: "90%",
+              transform: `scale(${zoomLevel})`,
+              cursor: "zoom-in",
+              transition: "transform 0.3s ease-in-out",
               objectFit: "contain",
             }}
           />
@@ -370,6 +387,46 @@ const DetailsThumbWrapper = ({
           >
             &gt;
           </button>
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              display: "flex",
+              gap: "15px",
+              right: "70px",
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                zoomIn();
+              }}
+              style={{
+                fontSize: "18px",
+
+                color: "black",
+                cursor: "pointer",
+                borderRadius: "50%",
+              }}
+            >
+              <PlusOutlined style={{ color: "white" }} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                zoomOut();
+              }}
+              style={{
+                fontSize: "18px",
+
+                color: "black",
+                cursor: "pointer",
+                borderRadius: "50%",
+              }}
+            >
+              <MinusOutlined style={{ color: "white" }} />
+            </button>
+          </div>
         </div>
       )}
     </>

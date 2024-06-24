@@ -95,7 +95,7 @@ const ShopHiddenSidebarArea = ({
                   </div>
                 )}
                 {products.length > 0 && (
-                  <div className="tp-shop-pagination mt-20">
+                  <div className="tp-shop-pagination mt-20 mb-20">
                     <div className="tp-pagination">
                       <Pagination
                         items={products}

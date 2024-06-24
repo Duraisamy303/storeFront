@@ -75,7 +75,7 @@ const Pagination = ({
             </button>
           </li>
 
-          {getPageList(totalPage, currPage, 7).map((n, i) => (
+          {getPageList(totalPage, currPage, 5).map((n, i) => (
             <li key={i} onClick={() => setPage(n)} className={`${n === 0 ? "dots" : ""}`}>
               <span className={`${currPage === n ? "current" : ""}`}>{n || "..."}</span>
             </li>

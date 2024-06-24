@@ -355,18 +355,13 @@ const DetailsWrapper = ({
     setNextHovered(false);
   };
 
-  const PreviousProductClick = () => {
-    router.push(`/product-details/${productItem?.previousProduct}`);
-  };
-  const NextProductClick = () => {
-    router.push(`/product-details/${productItem?.nextProduct}`);
-  };
-
   const {
     data: nextProductData,
     isNextLoadings,
     isNextErrors,
   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
+
+  console.log("nextProductData: ", nextProductData);
 
   const {
     data: prevProductData,
@@ -375,16 +370,23 @@ const DetailsWrapper = ({
   } = useGetPrevProductQuery({ prevProductId: productItem?.previousProduct });
 
   useEffect(() => {
-    if (prevProductData) {
+    if (prevProductData && prevProductData?.data?.product) {
       setPreviousProduct(prevProductData?.data?.product);
     }
   }, [prevProductData]);
 
   useEffect(() => {
-    if (nextProductData) {
+    if (nextProductData && nextProductData?.data?.product) {
       setNextProduct(nextProductData?.data?.product);
     }
   }, [nextProductData]);
+
+  const PreviousProductClick = () => {
+    router.push(`/product-details/${previousProduct?.id}`);
+  };
+  const NextProductClick = () => {
+    router.push(`/product-details/${nextProduct?.id}`);
+  };
 
   const multiVariantPrice = () => {
     if (checkChannel() == "india-channel") {
@@ -485,8 +487,7 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
-
- 
+  console.log("router: ", router?.route);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -497,151 +498,189 @@ const DetailsWrapper = ({
             title={productItem?.name}
           />
         </div>
-        <div style={{ paddingRight: "10px", display: "flex" }}>
-          <div
-            style={{ position: "relative" }}
-            onMouseEnter={PreviousMouseEnter}
-            onMouseLeave={PreviousMouseLeave}
-          >
-            <LeftOutlined
-              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
-              onClick={PreviousProductClick}
-              onMouseEnter={PreviousMouseEnter}
-              onMouseLeave={PreviousMouseLeave}
-            />
-            {previousHovered && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "25",
-                  right: "-35px",
-                  background: "white",
-                  padding: "0 5px 0 0",
-                  width: "250px",
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingRight: "10px", width: "50%" }}>
-                    {/* <Image
-                      style={{ width: "100%" }}
-                      height={100}
-                      width={100}
-                      src={profilePic(previousProduct?.thumbnail?.url)}
-                    /> */}
 
-                    <img
-                      style={{ width: "100%" }}
-                      height={100}
-                      width={100}
-                      src={profilePic(previousProduct?.thumbnail?.url)}
-                    />
-                  </div>
+        {router?.route == "/gift-card" ? (
+          <></>
+        ) : (
+          <div style={{ paddingRight: "10px", display: "flex" }}>
+            {productItem?.previousProduct !== null ? (
+              <div
+                style={{ position: "relative" }}
+                onMouseEnter={PreviousMouseEnter}
+                onMouseLeave={PreviousMouseLeave}
+              >
+                <LeftOutlined
+                  style={{
+                    color: "gray",
+                    paddingRight: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={PreviousProductClick}
+                  onMouseEnter={PreviousMouseEnter}
+                  onMouseLeave={PreviousMouseLeave}
+                />
+                {previousHovered && (
                   <div
                     style={{
-                      width: "50%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
+                      position: "absolute",
+                      top: "25",
+                      right: "-35px",
+                      background: "white",
+                      padding: "0 5px 0 0",
+                      width: "250px",
                     }}
                   >
-                    <div>
-                      <p style={{ color: "gray", marginBottom: "0px" }}>
-                        {previousProduct?.name}
-                      </p>
-                      <p
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px", width: "50%" }}>
+                        {/* <Image
+                        style={{ width: "100%" }}
+                        height={100}
+                        width={100}
+                        src={profilePic(previousProduct?.thumbnail?.url)}
+                      /> */}
+
+                        <img
+                          style={{ width: "100%" }}
+                          height={100}
+                          width={100}
+                          src={profilePic(previousProduct?.thumbnail?.url)}
+                        />
+                      </div>
+                      <div
                         style={{
-                          color: "rgb(195,147,91)",
-                          marginBottom: "0px",
+                          width: "50%",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
                         }}
                       >
-                        {channel === "india-channel"
-                          ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
-                          : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
-                      </p>
+                        <div>
+                          <p style={{ color: "gray", marginBottom: "0px" }}>
+                            {previousProduct?.name}
+                          </p>
+                          <p
+                            style={{
+                              color: "rgb(195,147,91)",
+                              marginBottom: "0px",
+                            }}
+                          >
+                            {channel === "india-channel"
+                              ? `₹${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                              : `$${previousProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ position: "relative" }}>
+                <LeftOutlined
+                  style={{
+                    color: "gray",
+                    paddingRight: "5px",
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             )}
-          </div>
-          <div>
-            <Tooltip title="Back to product">
-              <Link href="/shop">
-                <AppstoreOutlined
-                  style={{ color: "gray", paddingRight: "5px" }}
-                />
-              </Link>
-            </Tooltip>
-          </div>
-          <div
-            style={{ position: "relative" }}
-            onMouseEnter={NextMouseEnter}
-            onMouseLeave={NextMouseLeave}
-          >
-            <RightOutlined
-              style={{ color: "gray", paddingRight: "5px", cursor: "pointer" }}
-              onClick={NextProductClick}
-              onMouseEnter={NextMouseEnter}
-              onMouseLeave={NextMouseLeave}
-            />{" "}
-            {nextHovered && (
+
+            <div>
+              <Tooltip title="Back to product">
+                <Link href="/shop">
+                  <AppstoreOutlined
+                    style={{ color: "gray", paddingRight: "5px" }}
+                  />
+                </Link>
+              </Tooltip>
+            </div>
+            {productItem?.nextProduct !== null ? (
               <div
-                style={{
-                  position: "absolute",
-                  top: "25",
-                  right: "0px",
-                  background: "white",
-                  padding: "0 10px 0 0",
-                  width: "250px",
-                }}
+                style={{ position: "relative" }}
                 onMouseEnter={NextMouseEnter}
                 onMouseLeave={NextMouseLeave}
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ paddingRight: "10px", width: "50%" }}>
-                    {/* <Image
+                <RightOutlined
+                  style={{
+                    color: "gray",
+                    paddingRight: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={NextProductClick}
+                  onMouseEnter={NextMouseEnter}
+                  onMouseLeave={NextMouseLeave}
+                />{" "}
+                {nextHovered && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "25",
+                      right: "0px",
+                      background: "white",
+                      padding: "0 10px 0 0",
+                      width: "250px",
+                    }}
+                    onMouseEnter={NextMouseEnter}
+                    onMouseLeave={NextMouseLeave}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px", width: "50%" }}>
+                        {/* <Image
                       style={{ width: "100%" }}
                       width={100}
                       height={100}
                       src={profilePic(nextProduct?.thumbnail?.url)}
                     /> */}
 
-                    <img
-                      style={{ width: "100%" }}
-                      width={100}
-                      height={100}
-                      src={profilePic(nextProduct?.thumbnail?.url)}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      width: "50%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div>
-                      <p style={{ color: "gray", marginBottom: "0px" }}>
-                        {nextProduct?.name}
-                      </p>
-                      <p
+                        <img
+                          style={{ width: "100%" }}
+                          width={100}
+                          height={100}
+                          src={profilePic(nextProduct?.thumbnail?.url)}
+                        />
+                      </div>
+                      <div
                         style={{
-                          color: "rgb(195,147,91)",
-                          marginBottom: "0px",
+                          width: "50%",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
                         }}
                       >
-                        {channel === "india-channel"
-                          ? `₹${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`
-                          : `$${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`}
-                      </p>
+                        <div>
+                          <p style={{ color: "gray", marginBottom: "0px" }}>
+                            {nextProduct?.name}
+                          </p>
+                          <p
+                            style={{
+                              color: "rgb(195,147,91)",
+                              marginBottom: "0px",
+                            }}
+                          >
+                            {channel === "india-channel"
+                              ? `₹${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`
+                              : `$${nextProduct?.pricing?.priceRange?.start?.gross?.amount}`}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ position: "relative" }}>
+                <RightOutlined
+                  style={{
+                    color: "gray",
+                    paddingRight: "5px",
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             )}
           </div>
-        </div>
+        )}
       </div>
       {/* <div className="tp-product-details-category">
         <span>
@@ -666,7 +705,7 @@ const DetailsWrapper = ({
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
                 {variantDetails ? (
-                  <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                  <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
                 ) : (
                   <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
                 )}
@@ -674,10 +713,10 @@ const DetailsWrapper = ({
             )}
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
-                <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
+                <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
               ) : (
                 <>
-                  &#8377;{" "}
+                  &#8377;
                   {roundOff(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
@@ -717,7 +756,7 @@ const DetailsWrapper = ({
                 </>
               ) : (
                 <>
-                  {"$"}{" "}
+                  {"$"}
                   {roundOff(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
@@ -836,14 +875,29 @@ const DetailsWrapper = ({
           ))}
         </div>
       )} */}
+
       <div className="mt-2">
         <p style={{ fontSize: "16px", color: "black" }}>
           {variantDetails ? (
-            <>{variantDetails?.quantityAvailable}</>
+            <>
+              {variantDetails?.quantityAvailable == 0
+                ? ""
+                : variantDetails?.quantityAvailable}
+            </>
           ) : (
-            <>{productItem?.defaultVariant?.quantityAvailable}</>
+            <>
+              {productItem?.defaultVariant?.quantityAvailable == 0
+                ? ""
+                : productItem?.defaultVariant?.quantityAvailable}
+            </>
           )}
-          in stock
+          {""}{" "}
+          {variantDetails?.quantityAvailable == 0 ||
+          productItem?.defaultVariant?.quantityAvailable == 0 ? (
+            <span style={{ color: "red", fontWeight:"500" }}>Out of Stock</span>
+          ) : (
+            <span>In Stock</span>
+          )}
         </p>
       </div>
 
@@ -943,30 +997,42 @@ const DetailsWrapper = ({
 
       {/* dESCRIPTION */}
 
-      <div
-        style={{
-          borderBottom: "1px solid #EAEBED",
-          paddingBottom: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            cursor: "pointer",
-          }}
-          onClick={() => toggleVisibility("description")}
-        >
-          <div className={`${visibility?.description ? "theme-color" : ""}`}>
-            MAINTENENCE TIPS
-          </div>{" "}
-          <div>{visibility.description ? "▲" : "▼"}</div>{" "}
-          {/* Toggle arrow up/down based on content visibility */}
+      {router?.route == "/gift-card" ? (
+        <div className="pb-20" style={{fontSize: "16px"}}>
+          {
+            productItem?.metadata?.filter(
+              (item) => item.key === "description"
+            )?.[0]?.value
+          }
         </div>
-        {visibility?.description && (
-          <>
-            {/* {JSON.parse(productItem?.description)?.blocks?.map((block) => (
+      ) : (
+        <>
+          <div
+            style={{
+              borderBottom: "1px solid #EAEBED",
+              paddingBottom: "15px",
+              marginBottom: "15px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                cursor: "pointer",
+              }}
+              onClick={() => toggleVisibility("description")}
+            >
+              <div
+                className={`${visibility?.description ? "theme-color" : ""}`}
+              >
+                MAINTENENCE TIPS
+              </div>{" "}
+              <div>{visibility.description ? "▲" : "▼"}</div>{" "}
+              {/* Toggle arrow up/down based on content visibility */}
+            </div>
+            {visibility?.description && (
+              <>
+                {/* {JSON.parse(productItem?.description)?.blocks?.map((block) => (
               <>
                 <div className="pt-10">
                   {block.type === "header" && (
@@ -989,284 +1055,311 @@ const DetailsWrapper = ({
                 </div>
               </>
             ))} */}
-            {
-              <div className="pt-10">
                 {
-                  productItem?.metadata?.filter(
-                    (item) => item.key === "description"
-                  )?.[0]?.value
+                  <div className="pt-10">
+                    {
+                      productItem?.metadata?.filter(
+                        (item) => item.key === "description"
+                      )?.[0]?.value
+                    }
+                  </div>
                 }
-              </div>
-            }
-          </>
-        )}
-      </div>
-
-      <div
-        style={{
-          borderBottom: "1px solid #EAEBED",
-          paddingBottom: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            cursor: "pointer",
-          }}
-          onClick={() => toggleVisibility("additionalInfo")}
-        >
-          <div className={`${visibility?.additionalInfo ? "theme-color" : ""}`}>
-            ADDITIONAL INFORMATION
-          </div>{" "}
-          <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
-          {/* Toggle arrow up/down based on content visibility */}
-        </div>
-        {visibility.additionalInfo && (
-          <>
-            {productItem?.productFinish?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
-                <li>
-                  {productItem?.productFinish?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productFinish.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
+              </>
             )}
-
-            {productItem?.productstyle?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
-                <li>
-                  {productItem?.productstyle?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productstyle.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-
-            {productItem?.prouctDesign?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
-                <li>
-                  {productItem?.prouctDesign?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.prouctDesign.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-
-            {productItem?.productStoneType?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
-                <li>
-                  {productItem?.productStoneType?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productStoneType.length - 1
-                        ? ", "
-                        : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-
-            {productItem?.productItemtype?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
-                <li>
-                  {productItem?.productItemtype?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productItemtype.length - 1
-                        ? ", "
-                        : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-
-            {productItem?.productSize?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
-                <li>
-                  {productItem?.productSize?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productSize.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-
-            {productItem?.productStonecolor?.length > 0 && (
-              <ul
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  listStyleType: "none",
-                  paddingTop: "20px",
-                }}
-              >
-                <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
-                <li>
-                  {productItem?.productStonecolor?.map((finish, index) => (
-                    <span
-                      key={finish?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                    >
-                      {finish?.name}
-                      {index < productItem.productStonecolor.length - 1
-                        ? ", "
-                        : ""}
-                    </span>
-                  ))}
-                </li>
-              </ul>
-            )}
-          </>
-        )}
-      </div>
-
-      <div
-        style={{
-          borderBottom: "1px solid #EAEBED",
-          paddingBottom: "15px",
-          marginBottom: "15px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            cursor: "pointer", // Add cursor pointer to indicate it's clickable
-          }}
-          onClick={() => toggleVisibility("shipping")}
-        >
-          <div
-            className={`${visibility.shipping ? "theme-color" : ""}`}
-            style={{ fontSize: "14px" }}
-          >
-            SHIPPING & DELIVERY
-          </div>{" "}
-          <div>{visibility.shipping ? "▲" : "▼"}</div>{" "}
-          {/* Toggle arrow up/down based on content visibility */}
-        </div>
-        {visibility.shipping && (
-          <div
-            style={{ paddingTop: "10px", height: "300px", overflowY: "scroll" }}
-          >
-            <h5 style={{ fontWeight: "400" }}>Cancellation Policy:</h5>
-            <p style={{ color: "#55585b" }}>
-              If you wish to cancel your order, we shall provide you with an
-              option to replace the ordered product with another product. In no
-              manner shall we provide any refund of the ordered product.
-            </p>
-            <p style={{ color: "#55585b" }}>
-              In the case where your order gets cancelled from our end for some
-              reason, we shall notify you about the same. We will also take all
-              efforts to refund the amount paid by yourself to your original
-              payment method within 2 working days.
-            </p>
-            <h5 style={{ fontWeight: "400" }}>Return & Exchange Policy:</h5>
-            <p style={{ color: "#55585b" }}>
-              {" "}
-              &#129174;Shipping charges are not refundable.
-            </p>
-
-            <p style={{ color: "#55585b" }}>
-              {" "}
-              &#129174; The brand has put the utmost effort in showcasing the
-              products as realistic as possible with the colour, appearance etc.
-              Please note that the colour of the jewellery might slightly vary
-              in person, any return/ exchange on these criteria will not be
-              accepted.
-            </p>
-            <p style={{ color: "#55585b" }}>
-              {" "}
-              &#129174; We at PraDe believe in providing fair trade to our
-              artisans and hence selected products shall not be eligible for
-              returns.
-            </p>
           </div>
+{
+  productItem?.productFinish?.length > 0 || 
+  productItem?.productstyle?.length > 0 || 
+  productItem?.prouctDesign?.length > 0 || 
+  productItem?.productStoneType?.length > 0 ||
+  productItem?.productItemtype?.length > 0 ||
+  productItem?.productSize?.length > 0 ||
+  productItem?.productStonecolor?.length > 0 ? (
+    <div
+    style={{
+      borderBottom: "1px solid #EAEBED",
+      paddingBottom: "15px",
+      marginBottom: "15px",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        cursor: "pointer",
+      }}
+      onClick={() => toggleVisibility("additionalInfo")}
+    >
+      <div
+        className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
+      >
+        ADDITIONAL INFORMATION
+      </div>{" "}
+      <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
+      {/* Toggle arrow up/down based on content visibility */}
+    </div>
+    {visibility.additionalInfo && (
+      <>
+        {productItem?.productFinish?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
+            <li>
+              {productItem?.productFinish?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productFinish.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
         )}
-      </div>
 
-      {/* <div
+        {productItem?.productstyle?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
+            <li>
+              {productItem?.productstyle?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productstyle.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+
+        {productItem?.prouctDesign?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
+            <li>
+              {productItem?.prouctDesign?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.prouctDesign.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+
+        {productItem?.productStoneType?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
+            <li>
+              {productItem?.productStoneType?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productStoneType.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+
+        {productItem?.productItemtype?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
+            <li>
+              {productItem?.productItemtype?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productItemtype.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+
+        {productItem?.productSize?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
+            <li>
+              {productItem?.productSize?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productSize.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+
+        {productItem?.productStonecolor?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
+            <li>
+              {productItem?.productStonecolor?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productStonecolor.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+      </>
+    )}
+  </div>
+  ) : 
+  (
+    <></>
+  )
+}
+        
+
+          <div
+            style={{
+              borderBottom: "1px solid #EAEBED",
+              paddingBottom: "15px",
+              marginBottom: "15px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                cursor: "pointer", // Add cursor pointer to indicate it's clickable
+              }}
+              onClick={() => toggleVisibility("shipping")}
+            >
+              <div
+                className={`${visibility.shipping ? "theme-color" : ""}`}
+                style={{ fontSize: "14px" }}
+              >
+                SHIPPING & DELIVERY
+              </div>{" "}
+              <div>{visibility.shipping ? "▲" : "▼"}</div>{" "}
+              {/* Toggle arrow up/down based on content visibility */}
+            </div>
+            {visibility.shipping && (
+              <div
+                style={{
+                  paddingTop: "10px",
+                  height: "300px",
+                  overflowY: "scroll",
+                }}
+              >
+                <h5 style={{ fontWeight: "400" }}>Cancellation Policy:</h5>
+                <p style={{ color: "#55585b" }}>
+                  If you wish to cancel your order, we shall provide you with an
+                  option to replace the ordered product with another product. In
+                  no manner shall we provide any refund of the ordered product.
+                </p>
+                <p style={{ color: "#55585b" }}>
+                  In the case where your order gets cancelled from our end for
+                  some reason, we shall notify you about the same. We will also
+                  take all efforts to refund the amount paid by yourself to your
+                  original payment method within 2 working days.
+                </p>
+                <h5 style={{ fontWeight: "400" }}>Return & Exchange Policy:</h5>
+                <p style={{ color: "#55585b" }}>
+                  {" "}
+                  &#129174;Shipping charges are not refundable.
+                </p>
+
+                <p style={{ color: "#55585b" }}>
+                  {" "}
+                  &#129174; The brand has put the utmost effort in showcasing
+                  the products as realistic as possible with the colour,
+                  appearance etc. Please note that the colour of the jewellery
+                  might slightly vary in person, any return/ exchange on these
+                  criteria will not be accepted.
+                </p>
+                <p style={{ color: "#55585b" }}>
+                  {" "}
+                  &#129174; We at PraDe believe in providing fair trade to our
+                  artisans and hence selected products shall not be eligible for
+                  returns.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* <div
         style={{
           borderBottom: "1px solid #EAEBED",
           paddingBottom: "25px",
@@ -1328,47 +1421,49 @@ const DetailsWrapper = ({
         )}
       </div> */}
 
-      <div>
-        <p style={{ color: "#55585b" }}>
-          <b>SKU:</b>{" "}
-          {variantDetails
-            ? variantDetails?.sku
-            : productItem?.defaultVariant?.sku}
-        </p>
-        <p
-          style={{ color: "#55585b", cursor: "pointer" }}
-          onClick={() => {
-            router.push({
-              pathname: "/shop",
-              query: { categoryId: productItem?.category?.id }, // Your parameters
-            });
-          }}
-        >
-          <b>Categories:</b> {productItem?.category?.name}
-        </p>
-        {productItem?.tags?.length > 0 && (
-          <p style={{ color: "#55585b" }}>
-            <b>Tags:</b>{" "}
-            {productItem?.tags?.map((tag, index) => {
-              return (
-                <span
-                  key={tag?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                  onClick={() => {
-                    router.push({
-                      pathname: "/shop",
-                      query: { tag: tag?.id }, // Your parameters
-                    });
-                  }}
-                >
-                  {tag?.name}
-                  {index < productItem.tags.length - 1 ? ", " : ""}
-                </span>
-              );
-            })}
-          </p>
-        )}
-      </div>
+          <div>
+            <p style={{ color: "#55585b" }}>
+              <b>SKU:</b>{" "}
+              {variantDetails
+                ? variantDetails?.sku
+                : productItem?.defaultVariant?.sku}
+            </p>
+            <p
+              style={{ color: "#55585b", cursor: "pointer" }}
+              onClick={() => {
+                router.push({
+                  pathname: "/shop",
+                  query: { categoryId: productItem?.category?.id }, // Your parameters
+                });
+              }}
+            >
+              <b>Categories:</b> {productItem?.category?.name}
+            </p>
+            {productItem?.tags?.length > 0 && (
+              <p style={{ color: "#55585b" }}>
+                <b>Tags:</b>{" "}
+                {productItem?.tags?.map((tag, index) => {
+                  return (
+                    <span
+                      key={tag?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { tag: tag?.id }, // Your parameters
+                        });
+                      }}
+                    >
+                      {tag?.name}
+                      {index < productItem.tags.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+          </div>
+        </>
+      )}
 
       {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && (

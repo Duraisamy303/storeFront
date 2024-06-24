@@ -26,7 +26,7 @@ const slider_setting = {
   },
   breakpoints: {
     1400: {
-      slidesPerView: 5,
+      slidesPerView: 4,
     },
     1200: {
       slidesPerView: 4,
@@ -46,8 +46,40 @@ const slider_setting = {
   },
 };
 
-const CategoryContent = ({ title, commonImage, children, lists }) => {
+const CategoryContent = ({
+  title,
+  commonImage,
+  children,
+  lists,
+  categoryName,
+}) => {
+  console.log("categoryName --->", categoryName);
   const router = useRouter();
+
+  useEffect(() => {
+    filterByCategory();
+  }, [categoryName]);
+  const [parentCategoryId, setParentCategoryId] = useState("");
+
+  const filterByCategory = async () => {
+    let categoryId = "";
+    if (categoryName === "Earrings") {
+      categoryId = "Q2F0ZWdvcnk6NQ==";
+    } else if (categoryName === "Necklaces") {
+      categoryId = "Q2F0ZWdvcnk6NzA=";
+    } else if (categoryName === "Bangles") {
+      categoryId = "Q2F0ZWdvcnk6Njc=";
+    } else if (categoryName === "Rings") {
+      categoryId = "Q2F0ZWdvcnk6MTIwNw==";
+    } else if (categoryName === "Anklets") {
+      categoryId = "Q2F0ZWdvcnk6NzM1";
+    } else if (categoryName === "OtherAccessories") {
+      categoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+    }
+    console.log("categoryId: ", categoryId);
+    setParentCategoryId(categoryId);
+  };
+
   return (
     <div className="row" style={{ paddingBottom: "30px" }}>
       <div className="col-3" style={{ paddingLeft: "30px" }}>
@@ -55,14 +87,14 @@ const CategoryContent = ({ title, commonImage, children, lists }) => {
           <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
         </div>
         <div>
-          <ul>
+          <ul style={{ margin: "0px 25px 10px " }}>
             {lists?.slice(0, 12)?.map((item) => {
               return (
                 <li
                   style={{
-                    paddingLeft: "25px",
                     cursor: "pointer",
-                    marginBottom: "5px",
+                    borderBottom: "1px solid #e8e3e3",
+                    marginBottom: "10px",
                   }}
                   key={item?.node?.id}
                   onClick={() => {
@@ -102,8 +134,16 @@ const CategoryContent = ({ title, commonImage, children, lists }) => {
                 Excepteur sint occaecat
                 <br /> cupidatat
               </h4>
-              <button className="tp-btn tp-btn-border">
-                <Link href="/shop">Shop Now</Link>
+              <button
+                className="tp-btn tp-btn-border"
+                onClick={() => {
+                  router?.push({
+                    pathname: "/shop",
+                    query: { categoryId: parentCategoryId }, // Your parameters
+                  });
+                }}
+              >
+                Shop Now
               </button>
             </div>
           </div>
@@ -166,7 +206,6 @@ const CategoryComponent = ({
       lastHoveredCategory === "Anklets"
     ) {
       categoryId = "Q2F0ZWdvcnk6NzM1";
-      console.log("hoveredCategoryAnklelts: ", hoveredCategory);
     } else if (
       hoveredCategory === "OtherAccessories" ||
       lastHoveredCategory === "OtherAccessories"
@@ -202,14 +241,7 @@ const CategoryComponent = ({
             style={{ padding: "0px 8px 0px 0px", width: "250px" }}
             key={item?.id}
           >
-            <SwiperSlide
-              style={{
-                width: "100%",
-                minWidth: "222px",
-                maxWidth: "222px",
-                marginRight: "10px !important",
-              }}
-            >
+            <SwiperSlide>
               <MenusProductSlider product={item} />
             </SwiperSlide>
           </div>
@@ -226,6 +258,7 @@ const CategoryComponent = ({
             title="ALL EARRINGS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -236,6 +269,7 @@ const CategoryComponent = ({
             title="ALL NECKLACES"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -246,6 +280,7 @@ const CategoryComponent = ({
             title="ALL BANGLES & BRACELETS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -256,6 +291,7 @@ const CategoryComponent = ({
             title="ALL RINGS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -266,6 +302,7 @@ const CategoryComponent = ({
             title="ALL ANKLETS"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -276,6 +313,7 @@ const CategoryComponent = ({
             title="ALL OTHER ACCESSORIES"
             commonImage={CommonImage}
             lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
           >
             {renderContent()}
           </CategoryContent>
@@ -497,7 +535,7 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6Mzk0Nw==" }, // Your parameters
                     });
                   }}
                 >
@@ -534,7 +572,7 @@ const Menus = () => {
       </li>
 
       <li>
-        <Link href="/giftCart" style={{ fontWeight: "500" }}>
+        <Link href="/gift-card" style={{ fontWeight: "500" }}>
           GIFT CARD
         </Link>
       </li>

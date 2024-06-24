@@ -217,7 +217,7 @@ const InstagramAreaFour = () => {
               </p>
             </div>
             <div className="col-md-8">
-              <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-1 gx-1 gy-1 gy-lg-0">
+              <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-2 gx-1 gy-1 gy-lg-0">
                 {productList?.map((item, i) => (
                   <div className="col col-content-container" key={i}>
                     <div className="tp-instagram-item-2 w-img">
@@ -360,11 +360,10 @@ const InstagramAreaFour = () => {
                                     textDecoration: "line-through red  ",
                                   }}
                                 >
-                                  ₹ {roundOff(item?.defaultVariant?.costPrice)}
+                                  ₹{roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              <br /> ₹{" "}
-                              {roundOff(
+                              <br />₹{roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>
@@ -380,11 +379,10 @@ const InstagramAreaFour = () => {
                                     textDecoration: "line-through red  ",
                                   }}
                                 >
-                                  $ {roundOff(item?.defaultVariant?.costPrice)}
+                                  ${roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              ${" "}
-                              {roundOff(
+                              ${roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>
@@ -425,8 +423,8 @@ const InstagramAreaFour = () => {
                               {cartList?.data?.checkout?.lines?.some(
                                 (prd) => prd?.variant?.product?.id == item?.id
                               )
-                                ? "View Card"
-                                : "Add To Card"}
+                                ? "View Cart"
+                                : "Add To Cart"}
                             </>
                           )}
                         </button>

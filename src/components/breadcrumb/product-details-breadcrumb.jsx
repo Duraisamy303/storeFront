@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const ProductDetailsBreadcrumb = ({ category, title }) => {
-  console.log("✌️category --->", category);
 
   const router = useRouter();
 
@@ -38,7 +37,6 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
     setCategoryId(ParentCategoryId);
   }, [categories[1]]);
 
-  console.log("categoryId: ", categoryId);
   return (
     <section className="breadcrumb__area breadcrumb__style-2 include-bg pb-20">
       <div className="container-fluid">
@@ -48,7 +46,7 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
               <div>
                 <span className="breadcrumb-icon"></span>
                 <span>
-                  <a href="#">Home</a>
+                  <a href="/">Home</a>
                 </span>{" "}
                 /
                 <span>
@@ -57,7 +55,7 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
                     <span
                       onClick={() => {
                         if (categories[1] === "Gift Card") {
-                          router.push("/giftCart");
+                          router.push("/gift-card");
                         } else {
                           router.push({
                             pathname: "/shop",

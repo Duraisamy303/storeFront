@@ -4,7 +4,7 @@ import banner from "@assets/img/shop-banner.jpg";
 const ContactBreadcrumb = () => {
   return (
     <section
-      className="breadcrumb__area include-bg text-center pt-95 pb-50"
+      className="breadcrumb__area include-bg text-center pt-50 pb-50"
       style={{ backgroundImage: `url(${banner?.src})` }}
     >
       <div className="container">
@@ -18,11 +18,11 @@ const ContactBreadcrumb = () => {
                 className="breadcrumb__title"
                 style={{ color: "white", fontSize: "70px" }}
               >
-                Keep In Touch with Us
+                Contact Us
               </h3>
               <div>
                 <span>
-                  <a href="#">Home</a>
+                  <a href="/">Home</a>
                 </span>{" "}
                 / <span>Contact</span>
               </div>

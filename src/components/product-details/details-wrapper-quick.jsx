@@ -748,23 +748,24 @@ const DetailsWrapper = ({
           <b>SKU:</b>{" "}
           {variantDetails
             ? variantDetails?.sku
-            : productItem?.defaultVariant?.sku}
+            : ProductData?.defaultVariant?.sku}
         </p>
         <p
           style={{ color: "#55585b", cursor: "pointer" }}
           onClick={() => {
             router.push({
               pathname: "/shop",
-              query: { categoryId: productItem?.category?.id }, // Your parameters
+              query: { categoryId: ProductData?.category?.id }, // Your parameters
             });
+            dispatch(handleModalClose());
           }}
         >
-          <b>Categories:</b> {productItem?.category?.name}
+          <b>Categories:</b> {ProductData?.category?.name}
         </p>
-        {productItem?.tags?.length > 0 && (
+        {ProductData?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
             <b>Tags:</b>{" "}
-            {productItem?.tags?.map((tag, index) => {
+            {ProductData?.tags?.map((tag, index) => {
               return (
                 <span
                   key={tag?.id}
@@ -774,10 +775,12 @@ const DetailsWrapper = ({
                       pathname: "/shop",
                       query: { tag: tag?.id }, // Your parameters
                     });
+                    dispatch(handleModalClose());
                   }}
+                
                 >
                   {tag?.name}
-                  {index < productItem.tags.length - 1 ? ", " : ""}
+                  {index < ProductData.tags.length - 1 ? ", " : ""}
                 </span>
               );
             })}

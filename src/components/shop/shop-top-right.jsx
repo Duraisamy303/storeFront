@@ -9,7 +9,7 @@ const ShopTopRight = ({ selectHandleFilter }) => {
   const dispatch = useDispatch();
   return (
     <div
-      className="tp-shop-top-right d-sm-flex align-items-center justify-content-xl-end relative"
+      className="tp-shop-top-right d-flex align-items-center justify-content-md-end justify-content-between relative"
       // style={{ zIndex: 9999, minHeight: 250 }}
     >
       <div className="tp-shop-top-select relative z-10">

@@ -146,7 +146,7 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(NEXT_PRODUCT({ nextProductId, channel }));
       },
-      providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
+      providesTags: (result, error, arg) => [{ type: "NextProduct", slug: arg }],
     }),
 
     // get prev product
@@ -161,7 +161,7 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(PREV_PRODUCT({ prevProductId, channel }));
       },
-      providesTags: (result, error, arg) => [{ type: "NextProduct", id: arg }],
+      providesTags: (result, error, arg) => [{ type: "NextProduct", slug: arg }],
     }),
 
     // get related products
