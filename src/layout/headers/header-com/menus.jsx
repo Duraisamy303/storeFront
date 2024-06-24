@@ -87,14 +87,14 @@ const CategoryContent = ({
           <h6 style={{ paddingBottom: "15px", fontWeight: "500" }}>{title}</h6>
         </div>
         <div>
-          <ul>
+          <ul style={{ margin: "0px 25px 10px " }}>
             {lists?.slice(0, 12)?.map((item) => {
               return (
                 <li
                   style={{
-                    paddingLeft: "25px",
                     cursor: "pointer",
-                    marginBottom: "5px",
+                    borderBottom: "1px solid #e8e3e3",
+                    marginBottom: "10px",
                   }}
                   key={item?.node?.id}
                   onClick={() => {
