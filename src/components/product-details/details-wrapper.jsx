@@ -894,7 +894,7 @@ const DetailsWrapper = ({
           {""}{" "}
           {variantDetails?.quantityAvailable == 0 ||
           productItem?.defaultVariant?.quantityAvailable == 0 ? (
-            <span style={{ color: "red" }}>Out of Stock</span>
+            <span style={{ color: "red", fontWeight:"500" }}>Out of Stock</span>
           ) : (
             <span>In Stock</span>
           )}
