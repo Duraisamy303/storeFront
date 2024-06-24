@@ -180,9 +180,11 @@ const ShopPage = () => {
   }, [isLoading, isError, products]);
 
   useEffect(() => {
-    productLists();
-  }, [productsData]);
-
+    if (router?.asPath === "/shop") {
+      productLists();
+    }
+  }, [productsData, router]);
+  console.log("router.query: ", router);
   const productLists = () => {
     if (
       productsData &&
@@ -413,7 +415,7 @@ const ShopPage = () => {
   }
 
   console.log(shopTitle);
-console.log('✌️shopTitle --->', shopTitle);
+  console.log("✌️shopTitle --->", shopTitle);
 
   return (
     <Wrapper>
@@ -424,7 +426,8 @@ console.log('✌️shopTitle --->', shopTitle);
         // title="Shop"
         subtitle="Shop"
         bgImage={shopBanner}
-        catList={categoryList} product={productList}
+        catList={categoryList}
+        product={productList}
       />
       {/* {isLoading ? (
         <ShopLoader loading={isLoading} />
