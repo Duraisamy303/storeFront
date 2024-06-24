@@ -97,7 +97,7 @@
             margin-top: 30px;
         }
         &:not(.tp-shop-top-right-2){
-            @media #{$lg, $md, $sm, $xs}{
+            @media #{$sm, $xs}{
                 margin-top: 30px;
             }
         }

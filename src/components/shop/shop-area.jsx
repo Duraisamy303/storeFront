@@ -188,7 +188,7 @@ const ShopArea = ({
               <div className="tp-shop-main-wrapper">
                 <div className="tp-shop-top mb-45">
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-md-6">
                       <ShopTopLeft
                         showing={
                           products?.length === 0
@@ -212,7 +212,7 @@ const ShopArea = ({
                         total={all_products?.length}
                       /> */}
                     </div>
-                    <div className="col-xl-6">
+                    <div className="col-md-6">
                       <ShopTopRight selectHandleFilter={selectHandleFilter} />
                     </div>
                   </div>
