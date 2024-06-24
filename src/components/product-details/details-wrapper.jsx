@@ -1067,216 +1067,229 @@ const DetailsWrapper = ({
               </>
             )}
           </div>
-
-          <div
+{
+  productItem?.productFinish?.length > 0 || 
+  productItem?.productstyle?.length > 0 || 
+  productItem?.prouctDesign?.length > 0 || 
+  productItem?.productStoneType?.length > 0 ||
+  productItem?.productItemtype?.length > 0 ||
+  productItem?.productSize?.length > 0 ||
+  productItem?.productStonecolor?.length > 0 ? (
+    <div
+    style={{
+      borderBottom: "1px solid #EAEBED",
+      paddingBottom: "15px",
+      marginBottom: "15px",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        cursor: "pointer",
+      }}
+      onClick={() => toggleVisibility("additionalInfo")}
+    >
+      <div
+        className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
+      >
+        ADDITIONAL INFORMATION
+      </div>{" "}
+      <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
+      {/* Toggle arrow up/down based on content visibility */}
+    </div>
+    {visibility.additionalInfo && (
+      <>
+        {productItem?.productFinish?.length > 0 && (
+          <ul
             style={{
-              borderBottom: "1px solid #EAEBED",
-              paddingBottom: "15px",
-              marginBottom: "15px",
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                cursor: "pointer",
-              }}
-              onClick={() => toggleVisibility("additionalInfo")}
-            >
-              <div
-                className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
-              >
-                ADDITIONAL INFORMATION
-              </div>{" "}
-              <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
-              {/* Toggle arrow up/down based on content visibility */}
-            </div>
-            {visibility.additionalInfo && (
-              <>
-                {productItem?.productFinish?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
-                    <li>
-                      {productItem?.productFinish?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productFinish.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+            <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
+            <li>
+              {productItem?.productFinish?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productFinish.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.productstyle?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
-                    <li>
-                      {productItem?.productstyle?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productstyle.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+        {productItem?.productstyle?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
+            <li>
+              {productItem?.productstyle?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productstyle.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.prouctDesign?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
-                    <li>
-                      {productItem?.prouctDesign?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.prouctDesign.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+        {productItem?.prouctDesign?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
+            <li>
+              {productItem?.prouctDesign?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.prouctDesign.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.productStoneType?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
-                    <li>
-                      {productItem?.productStoneType?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productStoneType.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+        {productItem?.productStoneType?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
+            <li>
+              {productItem?.productStoneType?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productStoneType.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.productItemtype?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
-                    <li>
-                      {productItem?.productItemtype?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productItemtype.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+        {productItem?.productItemtype?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
+            <li>
+              {productItem?.productItemtype?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productItemtype.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.productSize?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
-                    <li>
-                      {productItem?.productSize?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productSize.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
+        {productItem?.productSize?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
+            <li>
+              {productItem?.productSize?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productSize.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
 
-                {productItem?.productStonecolor?.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      listStyleType: "none",
-                      paddingTop: "20px",
-                    }}
-                  >
-                    <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
-                    <li>
-                      {productItem?.productStonecolor?.map((finish, index) => (
-                        <span
-                          key={finish?.id}
-                          style={{ marginRight: "3px", cursor: "pointer" }}
-                        >
-                          {finish?.name}
-                          {index < productItem.productStonecolor.length - 1
-                            ? ", "
-                            : ""}
-                        </span>
-                      ))}
-                    </li>
-                  </ul>
-                )}
-              </>
-            )}
-          </div>
+        {productItem?.productStonecolor?.length > 0 && (
+          <ul
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              listStyleType: "none",
+              paddingTop: "20px",
+            }}
+          >
+            <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
+            <li>
+              {productItem?.productStonecolor?.map((finish, index) => (
+                <span
+                  key={finish?.id}
+                  style={{ marginRight: "3px", cursor: "pointer" }}
+                >
+                  {finish?.name}
+                  {index < productItem.productStonecolor.length - 1
+                    ? ", "
+                    : ""}
+                </span>
+              ))}
+            </li>
+          </ul>
+        )}
+      </>
+    )}
+  </div>
+  ) : 
+  (
+    <></>
+  )
+}
+        
 
           <div
             style={{
