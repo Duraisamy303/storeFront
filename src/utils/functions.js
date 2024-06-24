@@ -103,3 +103,17 @@ export const RegularPrice = (costPrice, sale) => {
   }
   return price;
 };
+
+export const getUniqueStates = (states) => {
+  const uniqueStates = [];
+  const seen = new Set();
+
+  states.forEach(state => {
+    if (!seen.has(state.raw)) {
+      uniqueStates.push(state);
+      seen.add(state.raw);
+    }
+  });
+
+  return uniqueStates;
+};
