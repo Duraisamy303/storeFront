@@ -875,14 +875,15 @@ const DetailsWrapper = ({
           ))}
         </div>
       )} */}
+
       <div className="mt-2">
         <p style={{ fontSize: "16px", color: "black" }}>
           {variantDetails ? (
-            <>{variantDetails?.quantityAvailable}</>
+            <>{variantDetails?.quantityAvailable == 0 ? "" : variantDetails?.quantityAvailable }</>
           ) : (
-            <>{productItem?.defaultVariant?.quantityAvailable}</>
+            <>{productItem?.defaultVariant?.quantityAvailable == 0 ? "" : productItem?.defaultVariant?.quantityAvailable}</>
           )}
-          in stock
+          {""} {variantDetails?.quantityAvailable == 0 || productItem?.defaultVariant?.quantityAvailable == 0 ? <span style={{ color: "red" }}>Out of Stock</span> :<span>In Stock</span>}
         </p>
       </div>
 
