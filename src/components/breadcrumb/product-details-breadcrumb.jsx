@@ -9,7 +9,6 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
   const router = useRouter();
 
   const categories = category.split(" / ");
-  console.log("✌️categories --->", categories[0]);
   const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
 
   // Initialize ParentCategoryId

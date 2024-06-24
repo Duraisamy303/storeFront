@@ -49,7 +49,6 @@ const [catName, setCatName] = useState([]);
       const res = await getCategoryName({
         categoryid: categoryId,
       });
-      console.log("✌️res --->", res);
 
       const list = res?.data?.data?.category?.name;
       setCatName(list);
@@ -59,7 +58,6 @@ const [catName, setCatName] = useState([]);
       console.log(err);
     }
   };
-  console.log("categoryId: ", categoryId);
   return (
     <>
       <section

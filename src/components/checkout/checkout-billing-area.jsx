@@ -454,7 +454,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           const response = await checkoutShippingAddressUpdate({
             checkoutId,
             shippingAddress,
-            note:state.notes
+            note: state.notes,
           });
 
           if (
@@ -666,7 +666,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           shippingAddress: {
             country: e.target.value,
           },
-          note:state.notes
+          note: state.notes,
         });
         updateDelivertMethod(e.target.value);
       }
@@ -688,7 +688,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         shippingAddress: {
           country: e.target.value,
         },
-        note:state.notes
+        note: state.notes,
       });
       updateDelivertMethod(e.target.value);
     } catch (e) {
@@ -1207,7 +1207,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                   <div className="col-md-12">
                     <div className="tp-checkout-input">
-                      <label>Street address</label>
+                      <label>
+                        Street address <span>*</span>
+                      </label>
                       <input
                         name="address"
                         id="address"
@@ -1223,7 +1225,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="tp-checkout-input">
-                      <label>Town / City</label>
+                      <label>
+                        Town / City <span>*</span>
+                      </label>
                       <input
                         name="city"
                         id="city"
@@ -1291,18 +1295,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       {state.errors.email && (
                         <ErrorMsg msg={state.errors.email} />
                       )}
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="tp-checkout-input">
-                      <label>Order notes (optional)</label>
-                      <textarea
-                        name="orderNote"
-                        id="orderNote"
-                        placeholder="Notes about your order, e.g. special notes for delivery."
-                        value={state.notes}
-                        onChange={(e) => handleInputChange(e, "notes")}
-                      />
                     </div>
                   </div>
                 </div>
@@ -1545,7 +1537,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </div>
                     <div className="col-md-12">
                       <div className="tp-checkout-input">
-                        <label>Street address</label>
+                        <label>
+                          Street address <span>*</span>
+                        </label>
                         <input
                           name="address"
                           id="address"
@@ -1563,7 +1557,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </div>
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
-                        <label>Town / City</label>
+                        <label>
+                          Town / City <span>*</span>
+                        </label>
                         <input
                           name="city1"
                           id="city1"
@@ -1635,6 +1631,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 </div>
               </div>
             )}
+            <div className="col-md-12 mt-6">
+              <div className="tp-checkout-input mt-10">
+                <label>Order notes (optional)</label>
+                <textarea
+                  name="orderNote"
+                  id="orderNote"
+                  placeholder="Notes about your order, e.g. special notes for delivery."
+                  value={state.notes}
+                  onChange={(e) => handleInputChange(e, "notes")}
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div className="col-lg-5">
@@ -1711,6 +1719,35 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
                   </li>
                 )}
+
+                <li className="tp-order-info-list-total">
+                  <span>Subtotal</span>
+                  {checkChannel() === "india-channel" ? (
+                    <>
+                      <span
+                        style={{
+                          color: "black",
+                          fontWeight: "400",
+                          textAlign: "right",
+                        }}
+                      >
+                        {state?.total && <>&#8377;{roundOff(state?.total)}</>}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        style={{
+                          color: "black",
+                          fontWeight: "700",
+                          textAlign: "right",
+                        }}
+                      >
+                        {state?.total && <>${roundOff(state?.total)}</>}
+                      </span>
+                    </>
+                  )}
+                </li>
 
                 <li className="tp-order-info-list-total">
                   <span>Total</span>
