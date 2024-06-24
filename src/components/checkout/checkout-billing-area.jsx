@@ -39,7 +39,11 @@ import {
   useGetCheckoutDetailsQuery,
   useUpdateShippingAddressMutation,
 } from "../../redux/features/card/cardApi";
-import { checkChannel, validLoginAndReg } from "../../utils/functions";
+import {
+  checkChannel,
+  getUniqueStates,
+  validLoginAndReg,
+} from "../../utils/functions";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 import { useLoginUserMutation } from "@/redux/features/auth/authApi";
 import CheckoutLogin from "./checkout-login";
@@ -171,8 +175,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   useEffect(() => {
     if (stateList?.data?.addressValidationRules?.countryAreaChoices) {
+      const list = stateList?.data?.addressValidationRules?.countryAreaChoices;
+      const uniqueStateList = getUniqueStates(list);
       setState({
-        stateList: stateList?.data?.addressValidationRules?.countryAreaChoices,
+        stateList: uniqueStateList,
       });
     }
   }, [stateList]);
