@@ -112,11 +112,7 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    const Token = localStorage.getItem("checkoutToken");
-    setToken(Token);
-  }, []);
+ 
 
   // handle wishlist product
 
@@ -124,8 +120,9 @@ const ProductItem = ({
     try {
       setWishlistLoader(true);
       const user = localStorage.getItem("userInfo");
+      const Token = localStorage.getItem("token");
 
-      if (token) {
+      if (Token) {
         const users = JSON.parse(user);
         const input = {
           input: {

@@ -361,7 +361,6 @@ const DetailsWrapper = ({
     isNextErrors,
   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-  console.log("nextProductData: ", nextProductData);
 
   const {
     data: prevProductData,
@@ -487,7 +486,6 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
-  console.log("router: ", router?.route);
 
   return (
     <div className="tp-product-details-wrapper">

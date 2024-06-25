@@ -107,6 +107,16 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
       id
       name
     }
+      getUpsells {
+      name
+      productId
+      id
+    }
+    getCrosssells {
+      id
+      name
+      productId
+    }
   }
 }
     `,

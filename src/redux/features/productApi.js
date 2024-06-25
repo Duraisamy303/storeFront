@@ -53,10 +53,8 @@ import { checkChannel } from "@/utils/functions";
 export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-
-
     getAllProduct: builder.mutation({
-      query: ({  sortBy }) => {
+      query: ({ sortBy }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -71,7 +69,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getAllProducts: builder.query({
-      query: ({  sortBy }) => {
+      query: ({ sortBy }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -84,7 +82,6 @@ export const productApi = apiSlice.injectEndpoints({
 
       providesTags: ["Products"],
     }),
-
 
     getProductType: builder.query({
       query: ({ first }) => {
@@ -146,7 +143,9 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(NEXT_PRODUCT({ nextProductId, channel }));
       },
-      providesTags: (result, error, arg) => [{ type: "NextProduct", slug: arg }],
+      providesTags: (result, error, arg) => [
+        { type: "NextProduct", slug: arg },
+      ],
     }),
 
     // get prev product
@@ -161,7 +160,9 @@ export const productApi = apiSlice.injectEndpoints({
         }
         return configuration(PREV_PRODUCT({ prevProductId, channel }));
       },
-      providesTags: (result, error, arg) => [{ type: "NextProduct", slug: arg }],
+      providesTags: (result, error, arg) => [
+        { type: "NextProduct", slug: arg },
+      ],
     }),
 
     // get related products
@@ -352,7 +353,7 @@ export const productApi = apiSlice.injectEndpoints({
 
     //filters
     priceFilter: builder.mutation({
-      query: ({  sortByField, sortByDirection, filter}) => {
+      query: ({ sortByField, sortByDirection, filter }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -367,7 +368,7 @@ export const productApi = apiSlice.injectEndpoints({
             after: null,
             sortByField,
             sortByDirection,
-            filter
+            filter,
           })
         );
       },
@@ -524,6 +525,19 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    getYouMayLike: builder.mutation({
+      query: ({ productId }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(SINGLE_PRODUCT({ productId, channel }));
+      },
+    }),
   }),
 });
 
@@ -569,4 +583,5 @@ export const {
   useGetCategoryNameMutation,
   useGetTagNameMutation,
   useOrderCancelMutation,
+  useGetYouMayLikeMutation,
 } = productApi;

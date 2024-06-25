@@ -5,10 +5,19 @@ import { useDispatch } from "react-redux";
 import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
 import { useRouter } from "next/router";
+import ProductItem from "../products/beauty/product-item";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar, Navigation, Autoplay } from "swiper";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { slider_setting } from "../../utils/functions";
 
-const ProductDetailsArea = ({ productItem, pageTitle, detailsRefetch }) => {
+const ProductDetailsArea = ({
+  productItem,
+  pageTitle,
+  detailsRefetch,
+  youMayLikeData,
+}) => {
   const router = useRouter();
-  console.log("✌️productItem --->", productItem);
   const { images, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
@@ -24,7 +33,8 @@ const ProductDetailsArea = ({ productItem, pageTitle, detailsRefetch }) => {
 
   const imageUrls = productItem?.images?.map((item) => item?.url);
 
-  console.log("router", router);
+  
+
   return (
     <section
       className="tp-product-details-area pt-50"
@@ -93,6 +103,43 @@ const ProductDetailsArea = ({ productItem, pageTitle, detailsRefetch }) => {
 
                 <div className="row">
                   <RelatedProducts id={productItem?.category?.id} />
+                </div>
+              </div>
+            </section>
+          )}
+
+          {youMayLikeData?.length > 0 && (
+            <section className="tp-related-product pt-50">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="tp-section-title-wrapper-6 mb-40">
+                    {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
+                    <h3 className="tp-section-title-6">You May Like This...</h3>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <Swiper
+                    {...slider_setting}
+                    modules={[Autoplay, Navigation]}
+                    className="tp-product-related-slider-active swiper-container mb-10"
+                  >
+                    {youMayLikeData?.map((item) => (
+                      <SwiperSlide key={item._id}>
+                        <ProductItem
+                          product={item?.data?.product}
+                          primary_style={true}
+                          data={youMayLikeData}
+                        />
+                      </SwiperSlide>
+                    ))}
+                    <div className="tp-related-slider-button-prev swiper-button-prev">
+                      <LeftOutlined />
+                    </div>
+                    <div className="tp-related-slider-button-next swiper-button-next">
+                      <RightOutlined />
+                    </div>
+                  </Swiper>
                 </div>
               </div>
             </section>

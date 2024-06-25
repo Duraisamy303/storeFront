@@ -53,7 +53,6 @@ const CategoryContent = ({
   lists,
   categoryName,
 }) => {
-  console.log("categoryName --->", categoryName);
   const router = useRouter();
 
   useEffect(() => {
@@ -76,7 +75,6 @@ const CategoryContent = ({
     } else if (categoryName === "OtherAccessories") {
       categoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
     }
-    console.log("categoryId: ", categoryId);
     setParentCategoryId(categoryId);
   };
 

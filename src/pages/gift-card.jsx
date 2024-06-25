@@ -19,7 +19,6 @@ export default function GiftCart() {
     refetch: productRefetch,
   } = useGetProductQuery({ productId: "UHJvZHVjdDo1NTI3" });
   const product = productData?.data?.product;
-  console.log("product: ", product);
 
   // const [state, setState] = useSetState({
   //   data: {},
@@ -75,10 +74,6 @@ export default function GiftCart() {
       parentCatName ? `${parentCatName} / ` : ""
     }${catName}`;
   }
-
-  console.log("shopTitle: ", shopTitle);
-
-  console.log("product[id]: ", product);
 
   let content = null;
   if (isLoading) {
