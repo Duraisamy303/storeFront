@@ -112,7 +112,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     selectedState1: "",
     companyName1: "",
     stateList: [],
-    stateList1:[],
+    stateList1: [],
     coupenCode: "",
     orderData: [],
     channel: "",
@@ -152,7 +152,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   });
 
   const { data: stateList1, refetch: stateRefetch1 } = useStateListQuery({
-    code: state.selectedCountry,
+    code: state.selectedCountry1,
   });
 
   const [successPayment] = usePaymentMutation();
@@ -702,7 +702,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         selectedCountry1: e.target.value,
         selectedState1: "",
       });
-      stateRefetch();
+      stateRefetch1();
       const checkoutId = localStorage.getItem("checkoutId");
       await checkoutShippingAddressUpdate({
         checkoutId,
