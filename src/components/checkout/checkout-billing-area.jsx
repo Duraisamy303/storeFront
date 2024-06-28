@@ -112,6 +112,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     selectedState1: "",
     companyName1: "",
     stateList: [],
+    stateList1:[],
     coupenCode: "",
     orderData: [],
     channel: "",
@@ -150,6 +151,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
     code: state.selectedCountry,
   });
 
+  const { data: stateList1, refetch: stateRefetch1 } = useStateListQuery({
+    code: state.selectedCountry,
+  });
+
   const [successPayment] = usePaymentMutation();
 
   const { data: linelist } = useGetCartListQuery();
@@ -182,6 +187,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
       });
     }
   }, [stateList]);
+
+  useEffect(() => {
+    if (stateList1?.data?.addressValidationRules?.countryAreaChoices) {
+      const list = stateList1?.data?.addressValidationRules?.countryAreaChoices;
+      const uniqueStateList = getUniqueStates(list);
+      setState({
+        stateList1: uniqueStateList,
+      });
+    }
+  }, [stateList1]);
 
   useEffect(() => {
     orderData();
@@ -1530,7 +1545,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             }
                           >
                             <option value="">Select State</option>
-                            {state.stateList?.map((item) => (
+                            {state.stateList1?.map((item) => (
                               <option key={item.raw} value={item.raw}>
                                 {item.raw}
                               </option>
