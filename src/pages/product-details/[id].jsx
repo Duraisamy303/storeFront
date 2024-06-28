@@ -8,6 +8,7 @@ import {
   useGetCategoryNameMutation,
   useGetProductQuery,
   useGetRelatedProductsQuery,
+  useGetYouMayLikeMutation,
 } from "@/redux/features/productApi";
 import ProductDetailsBreadcrumb from "@/components/breadcrumb/product-details-breadcrumb";
 import ProductDetailsArea from "@/components/product-details/product-details-area";
@@ -19,12 +20,16 @@ import { useRouter } from "next/router";
 const ProductDetailsPage = ({ query }) => {
   const router = useRouter();
 
+  const [youMayLikeData, setYouMayLikeData] = useState([]);
+
   const {
     data: productData,
     isLoading,
     isError,
     refetch: detailProductRefetch,
   } = useGetProductQuery({ productId: query.id });
+
+  const [getYouMayLike] = useGetYouMayLikeMutation();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
@@ -40,6 +45,10 @@ const ProductDetailsPage = ({ query }) => {
       createCheckoutTokenUSD();
     }
   }, []);
+
+  useEffect(() => {
+    getYouMayLikeData();
+  }, [productData]);
 
   const createCheckoutTokenINR = async () => {
     try {
@@ -70,11 +79,31 @@ const ProductDetailsPage = ({ query }) => {
     }
   };
 
+  const getYouMayLikeData = async () => {
+    try {
+      const product = productData?.data?.product;
+      let productDetails = [];
+
+      if (product?.getUpsells?.length > 0) {
+        for (let item of product.getUpsells) {
+          try {
+            const res = await getYouMayLike({ productId: item?.productId });
+            productDetails.push(res?.data);
+          } catch (error) {
+            console.error(
+              `Error fetching data for productId ${item?.productId}:`,
+              error
+            );
+          }
+        }
+        setYouMayLikeData(productDetails);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const product = productData?.data?.product;
-  console.log("✌️product --->", product);
-
-
-  
   const [getCategoryName] = useGetCategoryNameMutation();
 
   const [catName, setCatName] = useState("");
@@ -112,9 +141,6 @@ const ProductDetailsPage = ({ query }) => {
     }${catName}`;
   }
 
-  console.log("shopTitle: ", shopTitle);
-
-console.log("product[id]: ", product);
   // decide what to render
   let content = null;
   if (isLoading) {
@@ -128,13 +154,14 @@ console.log("product[id]: ", product);
       <>
         {/* <ProductDetailsBreadcrumb category={product.category.name} title={product.title} /> */}
         <ProductDetailsArea
-          productItem={product} pageTitle={shopTitle}
+          productItem={product}
+          pageTitle={shopTitle}
           detailsRefetch={detailProductRefetch}
+          youMayLikeData={youMayLikeData}
         />
       </>
     );
   }
-
 
   return (
     <Wrapper>

@@ -27,7 +27,6 @@ const ProductModal = () => {
   );
 
   const { img, imageURLs, status, sku } = productItem || {};
-console.log('✌️productItem --->', productItem);
   const imageUrls = productItem?.images?.map((item) => item?.url);
 
   const [activeImg, setActiveImg] = useState(img);

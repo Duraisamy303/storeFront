@@ -90,6 +90,14 @@ export const CART_LIST = ({ checkoutToken }) => {
                 category {
                   name
                 }
+                  getUpsells {
+            name
+            productId
+          }
+          getCrosssells {
+            name
+            productId
+          }
               }
               pricing {
                 price {
@@ -706,7 +714,7 @@ export const UPDATE_SHIPPING_ADDRESS = ({
   checkoutId,
   shippingAddress,
   validationRules,
-  note
+  note,
 }) => {
   return {
     query: `
@@ -737,7 +745,7 @@ export const UPDATE_SHIPPING_ADDRESS = ({
       checkoutId,
       shippingAddress,
       validationRules,
-      note
+      note,
     },
   };
 };

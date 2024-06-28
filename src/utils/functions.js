@@ -117,3 +117,35 @@ export const getUniqueStates = (states) => {
 
   return uniqueStates;
 };
+
+export const slider_setting = {
+  slidesPerView: 4,
+  spaceBetween: 10,
+  navigation: {
+    prevEl: ".tp-related-slider-button-prev",
+    nextEl: ".tp-related-slider-button-next",
+  },
+  autoplay: {
+    delay: 5000,
+  },
+  breakpoints: {
+    1200: {
+      slidesPerView: 4,
+    },
+    992: {
+      slidesPerView: 3,
+    },
+    768: {
+      slidesPerView: 2,
+    },
+    576: {
+      slidesPerView: 2,
+    },
+    350: {
+      slidesPerView: 2,
+    },
+    0: {
+      slidesPerView: 1,
+    },
+  },
+};
