@@ -111,52 +111,70 @@ export default function App({ Component, pageProps }) {
   const isOrderFailedPath = router.pathname.startsWith("/order-failed");
   const isOrderDetailsPath = router.pathname.startsWith("/order-details");
 
+
+  useEffect(() => {
+    // Initialize dataLayer and gtag on client side only
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-7TTX2YVRPQ');
+  }, []); // Empty dependency array ensures this runs once on mount
+
   return (
-    <ApolloProvider client={client}>
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-        <Provider store={store}>
-          {/* <Elements stripe={stripePromise}> */}
-          <div id="root">
-            {!paths.includes(router.pathname) &&
-              !isOrderSuccessPath &&
-              !isOrderFailedPath &&
-              !isOrderDetailsPath && (
-                <div
-                  style={{
-                    position: "fixed",
-                    zIndex: 999,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    right: 0,
-                  }}
-                >
-                  {channelList?.map((item, index) => (
-                    <div
-                      key={index}
-                      className={` p-2 mb-1 text-white`}
-                      style={{
-                        backgroundColor:
-                          channel == item.name ? "#c2882b" : "#000",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        handleChannelChange(item.name);
-                      }}
-                    >
-                      {item.value}
-                    </div>
-                  ))}
-                </div>
+    <>
+      <ApolloProvider client={client}>
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        >
+          <Provider store={store}>
+            {/* <Elements stripe={stripePromise}> */}
+            <div id="root">
+              {!paths.includes(router.pathname) &&
+                !isOrderSuccessPath &&
+                !isOrderFailedPath &&
+                !isOrderDetailsPath && (
+                  <div
+                    style={{
+                      position: "fixed",
+                      zIndex: 999,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      right: 0,
+                    }}
+                  >
+                    {channelList?.map((item, index) => (
+                      <div
+                        key={index}
+                        className={` p-2 mb-1 text-white`}
+                        style={{
+                          backgroundColor:
+                            channel == item.name ? "#c2882b" : "#000",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          handleChannelChange(item.name);
+                        }}
+                      >
+                        {item.value}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              {loading ? (
+                <CommonLoader loading={loading} />
+              ) : (
+                <Component {...pageProps} />
               )}
-            {loading ? (
-              <CommonLoader loading={loading} />
-            ) : (
-              <Component {...pageProps} />
-            )}
-          </div>
-          {/* </Elements> */}
-        </Provider>
-      </GoogleOAuthProvider>
-    </ApolloProvider>
+            </div>
+            {/* </Elements> */}
+          </Provider>
+        </GoogleOAuthProvider>
+      </ApolloProvider>
+
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-7TTX2YVRPQ"
+      />
+    </>
   );
 }
