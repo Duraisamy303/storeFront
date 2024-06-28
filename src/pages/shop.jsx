@@ -424,7 +424,7 @@ const ShopPage = () => {
 
   let content = null;
 
-  if (!isLoading) {
+  if (isLoading) {
     content = <CommonLoader loading={isLoading} />;
   }
   if (isError) {
