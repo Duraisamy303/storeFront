@@ -894,7 +894,9 @@ const DetailsWrapper = ({
           {""}{" "}
           {variantDetails?.quantityAvailable == 0 ||
           productItem?.defaultVariant?.quantityAvailable == 0 ? (
-            <span style={{ color: "red", fontWeight:"500" }}>Out of Stock</span>
+            <span style={{ color: "red", fontWeight: "500" }}>
+              Out of Stock
+            </span>
           ) : (
             <span>In Stock</span>
           )}
@@ -998,7 +1000,7 @@ const DetailsWrapper = ({
       {/* dESCRIPTION */}
 
       {router?.route == "/gift-card" ? (
-        <div className="pb-20" style={{fontSize: "16px"}}>
+        <div className="pb-20" style={{ fontSize: "16px" }}>
           {
             productItem?.metadata?.filter(
               (item) => item.key === "description"
@@ -1032,30 +1034,67 @@ const DetailsWrapper = ({
             </div>
             {visibility?.description && (
               <>
-                {/* {JSON.parse(productItem?.description)?.blocks?.map((block) => (
-              <>
-                <div className="pt-10">
-                  {block.type === "header" && (
-                    <ul className="pl-20">
-                      <li key={block?.id}>
-                        {block?.type === "header" && (
-                          <h5 style={{ fontWeight: "400" }}>
-                            {block?.data?.text}
-                          </h5>
-                        )}
-                      </li>
-                    </ul>
-                  )}
+                {JSON.parse(productItem?.description)?.blocks?.map((block) => {
+                  console.log("✌️block --->", block);
 
-                  <div key={block.id}>
-                    {block.type === "paragraph" && (
-                      <p style={{ color: "gray" }}>{block?.data?.text}</p>
-                    )}
-                  </div>
-                </div>
-              </>
-            ))} */}
-                {
+                  return (
+                    <>
+                      <div style={{marginTop:"10px"}}>
+                        <div>
+                          {block?.type === "header" && (
+                            <h5 style={{ fontWeight: "400" }}>
+                              {block?.data?.text}
+                            </h5>
+                          )}
+                        </div>
+
+                        <div key={block.id}>
+                          {block.type === "paragraph" && (
+                            <p style={{ color: "gray", marginBottom:"5px" }}>
+                              {block.data.text && (
+                                <span
+                                  dangerouslySetInnerHTML={{
+                                    __html: block.data.text.includes("<b>")
+                                      ? `<b>${block.data.text}</b>`
+                                      : block.data.text,
+                                  }}
+                                />
+                              )}
+                            </p>
+                          )}
+                        </div>
+
+                        <div key={block.id} style={{paddingLeft:"20px"}}>
+                          {block.type === "list" && (
+                            <ul>
+                              {
+                                block.data.items &&
+                                  block?.data?.items.map((item) => (
+                                    <li
+                                      style={{ color: "gray" }}
+                                      dangerouslySetInnerHTML={{
+                                        __html: item.includes("<b>")
+                                          ? `<b>${item}</b>`
+                                          : item,
+                                      }}
+                                    ></li>
+                                  ))
+                                // <li style={{ color: "gray", fontWeight: "bold" }}
+                                //   dangerouslySetInnerHTML={{
+                                //     __html: block.data.text.includes("<b>")
+                                //       ? block.data.text
+                                //       : `<b>${block.data.text}</b>`,
+                                //   }}
+                                // ></li>
+                              }
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+                {/* {
                   <div className="pt-10">
                     {
                       productItem?.metadata?.filter(
@@ -1063,233 +1102,233 @@ const DetailsWrapper = ({
                       )?.[0]?.value
                     }
                   </div>
-                }
+                } */}
               </>
             )}
           </div>
-{
-  productItem?.productFinish?.length > 0 || 
-  productItem?.productstyle?.length > 0 || 
-  productItem?.prouctDesign?.length > 0 || 
-  productItem?.productStoneType?.length > 0 ||
-  productItem?.productItemtype?.length > 0 ||
-  productItem?.productSize?.length > 0 ||
-  productItem?.productStonecolor?.length > 0 ? (
-    <div
-    style={{
-      borderBottom: "1px solid #EAEBED",
-      paddingBottom: "15px",
-      marginBottom: "15px",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        cursor: "pointer",
-      }}
-      onClick={() => toggleVisibility("additionalInfo")}
-    >
-      <div
-        className={`${visibility?.additionalInfo ? "theme-color" : ""}`}
-      >
-        ADDITIONAL INFORMATION
-      </div>{" "}
-      <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
-      {/* Toggle arrow up/down based on content visibility */}
-    </div>
-    {visibility.additionalInfo && (
-      <>
-        {productItem?.productFinish?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
-            <li>
-              {productItem?.productFinish?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
+          {productItem?.productFinish?.length > 0 ||
+          productItem?.productstyle?.length > 0 ||
+          productItem?.prouctDesign?.length > 0 ||
+          productItem?.productStoneType?.length > 0 ||
+          productItem?.productItemtype?.length > 0 ||
+          productItem?.productSize?.length > 0 ||
+          productItem?.productStonecolor?.length > 0 ? (
+            <div
+              style={{
+                borderBottom: "1px solid #EAEBED",
+                paddingBottom: "15px",
+                marginBottom: "15px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  cursor: "pointer",
+                }}
+                onClick={() => toggleVisibility("additionalInfo")}
+              >
+                <div
+                  className={`${
+                    visibility?.additionalInfo ? "theme-color" : ""
+                  }`}
                 >
-                  {finish?.name}
-                  {index < productItem.productFinish.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  ADDITIONAL INFORMATION
+                </div>{" "}
+                <div>{visibility?.additionalInfo ? "▲" : "▼"}</div>{" "}
+                {/* Toggle arrow up/down based on content visibility */}
+              </div>
+              {visibility.additionalInfo && (
+                <>
+                  {productItem?.productFinish?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Finish:</li>{" "}
+                      <li>
+                        {productItem?.productFinish?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.productFinish.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.productstyle?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
-            <li>
-              {productItem?.productstyle?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.productstyle.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  {productItem?.productstyle?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Style:</li>{" "}
+                      <li>
+                        {productItem?.productstyle?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.productstyle.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.prouctDesign?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
-            <li>
-              {productItem?.prouctDesign?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.prouctDesign.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  {productItem?.prouctDesign?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Design:</li>{" "}
+                      <li>
+                        {productItem?.prouctDesign?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.prouctDesign.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.productStoneType?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
-            <li>
-              {productItem?.productStoneType?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.productStoneType.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  {productItem?.productStoneType?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Stone Type:</li>{" "}
+                      <li>
+                        {productItem?.productStoneType?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.productStoneType.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.productItemtype?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
-            <li>
-              {productItem?.productItemtype?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.productItemtype.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  {productItem?.productItemtype?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Item Type:</li>{" "}
+                      <li>
+                        {productItem?.productItemtype?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.productItemtype.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.productSize?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
-            <li>
-              {productItem?.productSize?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.productSize.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
+                  {productItem?.productSize?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Size:</li>{" "}
+                      <li>
+                        {productItem?.productSize?.map((finish, index) => (
+                          <span
+                            key={finish?.id}
+                            style={{ marginRight: "3px", cursor: "pointer" }}
+                          >
+                            {finish?.name}
+                            {index < productItem.productSize.length - 1
+                              ? ", "
+                              : ""}
+                          </span>
+                        ))}
+                      </li>
+                    </ul>
+                  )}
 
-        {productItem?.productStonecolor?.length > 0 && (
-          <ul
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              listStyleType: "none",
-              paddingTop: "20px",
-            }}
-          >
-            <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
-            <li>
-              {productItem?.productStonecolor?.map((finish, index) => (
-                <span
-                  key={finish?.id}
-                  style={{ marginRight: "3px", cursor: "pointer" }}
-                >
-                  {finish?.name}
-                  {index < productItem.productStonecolor.length - 1
-                    ? ", "
-                    : ""}
-                </span>
-              ))}
-            </li>
-          </ul>
-        )}
-      </>
-    )}
-  </div>
-  ) : 
-  (
-    <></>
-  )
-}
-        
+                  {productItem?.productStonecolor?.length > 0 && (
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        listStyleType: "none",
+                        paddingTop: "20px",
+                      }}
+                    >
+                      <li style={{ fontWeight: "bold" }}>Stone Color:</li>{" "}
+                      <li>
+                        {productItem?.productStonecolor?.map(
+                          (finish, index) => (
+                            <span
+                              key={finish?.id}
+                              style={{ marginRight: "3px", cursor: "pointer" }}
+                            >
+                              {finish?.name}
+                              {index < productItem.productStonecolor.length - 1
+                                ? ", "
+                                : ""}
+                            </span>
+                          )
+                        )}
+                      </li>
+                    </ul>
+                  )}
+                </>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
 
           <div
             style={{
