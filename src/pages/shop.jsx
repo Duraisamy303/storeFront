@@ -422,40 +422,7 @@ const ShopPage = () => {
   console.log(shopTitle);
   console.log("✌️shopTitle --->", shopTitle);
 
-  let content = null;
-
-  if (isLoading) {
-    content = <CommonLoader loading={isLoading} />;
-  }
-  if (isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  }
-  if (productList?.length == 0 && !isLoading && !isError) {
-    content = (
-      <div className="text-center mt-50 mb-50">
-        <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
-        <p
-          className="mt-20"
-          style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
-        >
-          No Product Found
-        </p>
-      </div>
-    );
-  }
-  if (!isLoading && !isError && productList?.length > 0) {
-    // Render product items...
-    content = (
-      <ShopArea
-        all_products={productList}
-        products={productList}
-        otherProps={otherProps}
-        updateData={() => setCartUpdate(true)}
-        subtitle={shopTitle}
-        updateRange={(range) => setPriceValue(range)}
-      />
-    );
-  }
+ 
 
   return (
     <Wrapper>
@@ -474,7 +441,14 @@ const ShopPage = () => {
       ) : (
         <> */}
 
-      {content}
+<ShopArea
+        all_products={productList}
+        products={productList}
+        otherProps={otherProps}
+        updateData={() => setCartUpdate(true)}
+        subtitle={shopTitle}
+        updateRange={(range) => setPriceValue(range)}
+      />
       <ShopFilterOffCanvas
         all_products={products}
         otherProps={otherProps}

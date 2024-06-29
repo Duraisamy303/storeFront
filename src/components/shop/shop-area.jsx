@@ -23,6 +23,7 @@ const ShopArea = ({
   updateData,
   subtitle,
   updateRange,
+
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -79,6 +80,9 @@ const ShopArea = ({
         updatedFilter = filter.filter((data) => data.id !== item.id);
       }
 
+      dispatch(filterData(updatedFilter));
+    } else {
+      const updatedFilter = filter.filter((data) => data.id !== item.id);
       dispatch(filterData(updatedFilter));
     }
   };
@@ -143,6 +147,153 @@ const ShopArea = ({
   }, [categories[1]]);
 
   console.log("categoryId: ", categoryId);
+
+  let content = null;
+
+  if (loading) {
+    content = <CommonLoader loading={loading} />;
+  }
+  if (all_products?.length == 0) {
+    content = (
+      <div className="text-center mt-50 mb-50">
+        <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
+        <p
+          className="mt-20"
+          style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
+        >
+          No Product Found
+        </p>
+      </div>
+    );
+  }
+  if ( all_products?.length > 0) {
+    // Render product items...
+    content = (
+      <>
+        {filter?.length > 0 && (
+          <div className="d-flex cursor" style={{ gap: 20, cursor: "pointer" }}>
+            <div className="cartmini__close">
+              <button
+                // onClick={() => dispatch(closeCartMini())}
+                type="button"
+                className="cartmini__close-btn cartmini-close-btn"
+              >
+                <i className="fal fa-times"></i>
+              </button>
+            </div>
+            <div onClick={() => clearFilter()}>
+              <i className="fa-regular fa-xmark " />
+              <span style={{ paddingLeft: "5px" }}>Clear filter</span>
+            </div>
+            <div
+              className="pb-20"
+              style={{ display: "flex", gap: 10, cursor: "pointer" }}
+            >
+              {filter?.map((item, index) =>
+                item?.type == "price" ? (
+                  <>
+                    {item?.min && (
+                      <div
+                        onClick={() =>
+                          removeFilter(item, "price", index, "min")
+                        }
+                      >
+                        <span>Min {item.min}</span>
+                      </div>
+                    )}
+                    {item?.max && (
+                      <div
+                        onClick={() =>
+                          removeFilter(item, "price", index, "max")
+                        }
+                      >
+                        <span>Max {item.max}</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div key={index} onClick={() => removeFilter(item)}>
+                    <i className="fa-regular fa-xmark " />
+                    <span style={{ paddingLeft: "5px" }}>{item.name}</span>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        )}
+        {products?.length === 0 && (
+          <div className="text-center">
+            <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
+            <p
+              className="mt-20"
+              style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
+            >
+              No Product Found
+            </p>
+          </div>
+        )}
+        {products?.length > 0 && (
+          <div className="tp-shop-items-wrapper tp-shop-item-primary">
+            <div className="tab-content" id="productTabContent">
+              <div
+                className="tab-pane fade show active"
+                id="grid-tab-pane"
+                role="tabpanel"
+                aria-labelledby="grid-tab"
+                tabIndex="0"
+              >
+                <div className="row gx-1 gx-lg-3">
+                  {filteredRows
+                    ?.slice(pageStart, pageStart + countOfPage)
+                    ?.map((item) => (
+                      <div
+                        key={item._id}
+                        className="col-xl-4 col-md-6 col-sm-6 col-6"
+                        style={{ marginBottom: "50px" }}
+                      >
+                        <ProductItem products={item} updateData={updateData} />
+                      </div>
+                    ))}
+                </div>
+              </div>
+              <div
+                className="tab-pane fade"
+                id="list-tab-pane"
+                role="tabpanel"
+                aria-labelledby="list-tab"
+                tabIndex="0"
+              >
+                <div className="tp-shop-list-wrapper tp-shop-item-primary mb-70">
+                  <div className="row">
+                    <div className="col-xl-12">
+                      {all_products
+                        ?.slice(pageStart, pageStart + countOfPage)
+                        .map((item) => (
+                          <ShopListItem key={item._id} product={item} />
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {products?.length > 0 && (
+          <div className="tp-shop-pagination mt-20 mb-20">
+            <div className="tp-pagination">
+              <Pagination
+                items={products}
+                countOfPage={12}
+                paginatedData={paginatedData}
+                currPage={currPage}
+                setCurrPage={setCurrPage}
+              />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   return (
     <>
@@ -217,130 +368,8 @@ const ShopArea = ({
                     </div>
                   </div>
                 </div>
-                {filter?.length > 0 && (
-                  <div
-                    className="d-flex cursor"
-                    style={{ gap: 20, cursor: "pointer" }}
-                  >
-                    <div className="cartmini__close">
-                      <button
-                        // onClick={() => dispatch(closeCartMini())}
-                        type="button"
-                        className="cartmini__close-btn cartmini-close-btn"
-                      >
-                        <i className="fal fa-times"></i>
-                      </button>
-                    </div>
-                    <div onClick={() => clearFilter()}>
-                      <i className="fa-regular fa-xmark " />
-                      <span style={{ paddingLeft: "5px" }}>Clear filter</span>
-                    </div>
-                    <div
-                      className="pb-20"
-                      style={{ display: "flex", gap: 10, cursor: "pointer" }}
-                    >
-                      {filter?.map((item, index) =>
-                        item?.type == "price" ? (
-                          <>
-                            {item?.min && (
-                              <div
-                                onClick={() =>
-                                  removeFilter(item, "price", index, "min")
-                                }
-                              >
-                                <span>Min {item.min}</span>
-                              </div>
-                            )}
-                            {item?.max && (
-                              <div
-                                onClick={() =>
-                                  removeFilter(item, "price", index, "max")
-                                }
-                              >
-                                <span>Max {item.max}</span>
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <div key={index} onClick={() => removeFilter(item)}>
-                            <i className="fa-regular fa-xmark " />
-                            <span style={{ paddingLeft: "5px" }}>
-                              {item.name}
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-                {products?.length === 0 && (
-                  <div className="text-center">
-                    <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
-                    <p className="mt-20" style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}>No Product Found</p>
-                  </div>
-                )}
-                {products?.length > 0 && (
-                  <div className="tp-shop-items-wrapper tp-shop-item-primary">
-                    <div className="tab-content" id="productTabContent">
-                      <div
-                        className="tab-pane fade show active"
-                        id="grid-tab-pane"
-                        role="tabpanel"
-                        aria-labelledby="grid-tab"
-                        tabIndex="0"
-                      >
-                        <div className="row gx-1 gx-lg-3">
-                          {filteredRows
-                            ?.slice(pageStart, pageStart + countOfPage)
-                            ?.map((item) => (
-                              <div
-                                key={item._id}
-                                className="col-xl-4 col-md-6 col-sm-6 col-6"
-                                style={{ marginBottom: "50px" }}
-                              >
-                                <ProductItem
-                                  products={item}
-                                  updateData={updateData}
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                      <div
-                        className="tab-pane fade"
-                        id="list-tab-pane"
-                        role="tabpanel"
-                        aria-labelledby="list-tab"
-                        tabIndex="0"
-                      >
-                        <div className="tp-shop-list-wrapper tp-shop-item-primary mb-70">
-                          <div className="row">
-                            <div className="col-xl-12">
-                              {all_products
-                                ?.slice(pageStart, pageStart + countOfPage)
-                                .map((item) => (
-                                  <ShopListItem key={item._id} product={item} />
-                                ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {products?.length > 0 && (
-                  <div className="tp-shop-pagination mt-20 mb-20">
-                    <div className="tp-pagination">
-                      <Pagination
-                        items={products}
-                        countOfPage={12}
-                        paginatedData={paginatedData}
-                        currPage={currPage}
-                        setCurrPage={setCurrPage}
-                      />
-                    </div>
-                  </div>
-                )}
+
+                {content}
               </div>
             </div>
           </div>
