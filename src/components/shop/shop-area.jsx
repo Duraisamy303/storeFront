@@ -23,7 +23,6 @@ const ShopArea = ({
   updateData,
   subtitle,
   updateRange,
-
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -60,19 +59,33 @@ const ShopArea = ({
               ? { max: removemin.max }
               : { min: removemin.min }),
           };
-          const maxPrice = all_products?.reduce((max, item) => {
-            const price =
-              item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-            return price > max ? price : max;
-          }, 0);
+
+          // const maxPrice = products?.reduce((max, item) => {
+          //   const price =
+          //     item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
+          //   return price > max ? price : max;
+          // }, 0);
+          // console.log("maxPrice: ", maxPrice);
+
           let range = [];
+          let body = {};
           if (price === "min") {
-            range[(0, removemin.max)];
+            body = {
+              type: "price",
+              min: 0,
+              max: removemin.max,
+            };
+            range = [0, removemin.max];
           } else {
-            range = [removemin.min, maxPrice];
+            body = {
+              type: "price",
+              min: removemin.min,
+              max: maxsValue,
+            };
+            range = [removemin.min, maxsValue];
           }
           updateRange(range);
-          // updateRange([price === "min" && 0, price === "max" && maxPrice]);
+          dispatch(filterData([body]));
         } else {
           updatedFilter[index] = { type: "price" };
         }
@@ -166,61 +179,10 @@ const ShopArea = ({
       </div>
     );
   }
-  if ( all_products?.length > 0) {
+  if (all_products?.length > 0) {
     // Render product items...
     content = (
       <>
-        {filter?.length > 0 && (
-          <div className="d-flex cursor" style={{ gap: 20, cursor: "pointer" }}>
-            <div className="cartmini__close">
-              <button
-                // onClick={() => dispatch(closeCartMini())}
-                type="button"
-                className="cartmini__close-btn cartmini-close-btn"
-              >
-                <i className="fal fa-times"></i>
-              </button>
-            </div>
-            <div onClick={() => clearFilter()}>
-              <i className="fa-regular fa-xmark " />
-              <span style={{ paddingLeft: "5px" }}>Clear filter</span>
-            </div>
-            <div
-              className="pb-20"
-              style={{ display: "flex", gap: 10, cursor: "pointer" }}
-            >
-              {filter?.map((item, index) =>
-                item?.type == "price" ? (
-                  <>
-                    {item?.min && (
-                      <div
-                        onClick={() =>
-                          removeFilter(item, "price", index, "min")
-                        }
-                      >
-                        <span>Min {item.min}</span>
-                      </div>
-                    )}
-                    {item?.max && (
-                      <div
-                        onClick={() =>
-                          removeFilter(item, "price", index, "max")
-                        }
-                      >
-                        <span>Max {item.max}</span>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div key={index} onClick={() => removeFilter(item)}>
-                    <i className="fa-regular fa-xmark " />
-                    <span style={{ paddingLeft: "5px" }}>{item.name}</span>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-        )}
         {products?.length === 0 && (
           <div className="text-center">
             <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
@@ -368,7 +330,62 @@ const ShopArea = ({
                     </div>
                   </div>
                 </div>
-
+                {filter?.length > 0 && (
+                  <div
+                    className="d-flex cursor"
+                    style={{ gap: 20, cursor: "pointer" }}
+                  >
+                    <div className="cartmini__close">
+                      <button
+                        // onClick={() => dispatch(closeCartMini())}
+                        type="button"
+                        className="cartmini__close-btn cartmini-close-btn"
+                      >
+                        <i className="fal fa-times"></i>
+                      </button>
+                    </div>
+                    <div onClick={() => clearFilter()}>
+                      <i className="fa-regular fa-xmark " />
+                      <span style={{ paddingLeft: "5px" }}>Clear filter</span>
+                    </div>
+                    <div
+                      className="pb-20"
+                      style={{ display: "flex", gap: 10, cursor: "pointer" }}
+                    >
+                      {filter?.map((item, index) =>
+                        item?.type == "price" ? (
+                          <>
+                            {item?.min && (
+                              <div
+                                onClick={() =>
+                                  removeFilter(item, "price", index, "min")
+                                }
+                              >
+                                <span>Min {item.min}</span>
+                              </div>
+                            )}
+                            {item?.max && (
+                              <div
+                                onClick={() =>
+                                  removeFilter(item, "price", index, "max")
+                                }
+                              >
+                                <span>Max {item.max}</span>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div key={index} onClick={() => removeFilter(item)}>
+                            <i className="fa-regular fa-xmark " />
+                            <span style={{ paddingLeft: "5px" }}>
+                              {item.name}
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
                 {content}
               </div>
             </div>
