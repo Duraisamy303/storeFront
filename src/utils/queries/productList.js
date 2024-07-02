@@ -595,7 +595,7 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
           node {
             id
             name
-            products(first: $first, after: $after) {
+            products(first: $first, after: $after,sortBy: {direction: DESC, field: CREATED_AT}) {
               totalCount
               edges {
                 node {

@@ -235,6 +235,7 @@ const PreOrders = () => {
         datas.price = { gte: priceValue[0], lte: priceValue[1] };
         // setPriceValue([find.min, find.max]);
       }
+      datas.collections = ["Q29sbGVjdGlvbjo0"];
 
       priceFilter({
         filter: datas,
@@ -256,6 +257,7 @@ const PreOrders = () => {
   const filterByPrice = (type) => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
+      collections: ["Q29sbGVjdGlvbjo0"],
     };
     priceFilter({
       filter: bodyData,
