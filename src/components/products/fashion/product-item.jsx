@@ -10,12 +10,21 @@ import {
   add_cart_product,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
-import { capitalizeFLetter, roundOff, RegularPrice, addCommasToNumber } from "@/utils/functions";
+import {
+  capitalizeFLetter,
+  roundOff,
+  RegularPrice,
+  addCommasToNumber,
+} from "@/utils/functions";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartAllListQuery,
+} from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { checkWishlist } from "@/utils/common_function";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
@@ -48,6 +57,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -105,7 +116,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         // notifyError(err);
       } else {
         notifySuccess(`Product added to cart successfully`);
+        dispatch(openCartMini());
         cartRefetch();
+        AllListChannelREfresh();
       }
       setCartLoader(false);
     } catch (error) {
@@ -247,9 +260,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
 
         <div className="tp-product-badge-2">
           {product?.defaultVariant?.quantityAvailable == 0 && (
-            <span
-              className="product-hot text-center soldout-badge"
-            >
+            <span className="product-hot text-center soldout-badge">
               SOLD
               <br /> OUT
             </span>
@@ -452,7 +463,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             <div className="tp-product-price-wrapper ">
               {RegularPrice(
                 addCommasToNumber(product?.defaultVariant?.costPrice),
-                addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)
+                addCommasToNumber(
+                  product?.pricing?.priceRange?.start?.gross?.amount
+                )
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
@@ -463,7 +476,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   }}
                 >
                   &#8377;
-                  {addCommasToNumber(roundOff(product?.defaultVariant?.costPrice))}
+                  {addCommasToNumber(
+                    roundOff(product?.defaultVariant?.costPrice)
+                  )}
                 </span>
               )}
               <span
@@ -471,7 +486,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 style={{ fontSize: "14px" }}
               >
                 &#8377;
-                {addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)}
+                {addCommasToNumber(
+                  product?.pricing?.priceRange?.start?.gross?.amount
+                )}
               </span>
             </div>
           ) : (
@@ -489,7 +506,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   }}
                 >
                   {"$"}
-                  { addCommasToNumber(product?.defaultVariant?.costPrice)}
+                  {addCommasToNumber(product?.defaultVariant?.costPrice)}
                 </span>
               )}
               <span
@@ -497,7 +514,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 style={{ fontSize: "14px" }}
               >
                 {"$"}
-                { addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)}
+                {addCommasToNumber(
+                  product?.pricing?.priceRange?.start?.gross?.amount
+                )}
               </span>
             </div>
           )}

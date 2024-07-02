@@ -16,6 +16,7 @@ import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 import { CompareThree, QuickView, Wishlist } from "@/svg";
 import {
   useAddToCartMutation,
+  useGetCartAllListQuery,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -23,7 +24,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
-import { compare_list } from "@/redux/features/cartSlice";
+import { compare_list, openCartMini } from "@/redux/features/cartSlice";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../loader/button-loader";
 
@@ -43,6 +44,9 @@ const InstagramAreaFour = () => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const [productList, setProduct] = useState([]);
   const [cartLoader, setCartLoader] = useState(false);
@@ -97,6 +101,8 @@ const InstagramAreaFour = () => {
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
 
       setCartLoader(false);

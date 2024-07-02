@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import {
   useDeleteWishlistMutation,
+  useGetCartAllListQuery,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 
@@ -12,6 +13,7 @@ import { Close, Minus, Plus } from "@/svg";
 import {
   add_cart_product,
   cart_list,
+  openCartMini,
   quantityDecrement,
 } from "@/redux/features/cartSlice";
 import {
@@ -37,6 +39,9 @@ const WishlistItem = ({ product, refetchWishlist }) => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const { wishlist } = useSelector((state) => state.wishlist);
 
@@ -96,6 +101,8 @@ const WishlistItem = ({ product, refetchWishlist }) => {
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
 
       setCartLoader(false);

@@ -11,6 +11,7 @@ import {
   add_cart_product,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
@@ -23,6 +24,7 @@ import {
 import {
   useAddToCartMutation,
   useGetCartListQuery,
+  useGetCartAllListQuery,
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -157,6 +159,9 @@ const DetailsWrapper = ({
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
+
   useEffect(() => {
     if (reviews && reviews.length > 0) {
       const rating =
@@ -268,6 +273,8 @@ const DetailsWrapper = ({
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
       setCartLoader(false);
     } catch (error) {

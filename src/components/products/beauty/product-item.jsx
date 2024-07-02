@@ -9,10 +9,11 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
+  useGetCartAllListQuery
 } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { compare_list } from "@/redux/features/cartSlice";
+import { compare_list, openCartMini, } from "@/redux/features/cartSlice";
 import { handleWishlistProduct } from "@/utils/common_function";
 import { useRouter } from "next/router";
 import {
@@ -40,6 +41,9 @@ const ProductItem = ({
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
@@ -90,6 +94,9 @@ const ProductItem = ({
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
+        
       }
       setCartLoader(false);
     } catch (error) {
