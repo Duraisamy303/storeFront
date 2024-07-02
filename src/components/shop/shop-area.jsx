@@ -23,7 +23,7 @@ const ShopArea = ({
   updateData,
   subtitle,
   updateRange,
-
+  maxPrice,
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -31,6 +31,7 @@ const ShopArea = ({
   const { priceValue, handleChanges } = priceFilterValues;
 
   const filter = useSelector((state) => state.shopFilter.filterData);
+  console.log("fistt: ", filter);
 
   const dispatch = useDispatch();
 
@@ -46,40 +47,44 @@ const ShopArea = ({
     setCountOfPage(pageCount);
   };
 
-  const removeFilter = (item, type, index, price) => {
-    if (type === "price") {
-      const removemin = filter.find((data) => data.type === type);
+  const removeFilter = (item, type, i) => {
+    if (item?.type === "price") {
+      const removemin = filter.find((data) => data.type === item.type);
 
       let updatedFilter = [...filter]; // Create a copy of the original filter array
-
-      if (removemin) {
-        if ((price === "min" && item.max) || (price !== "min" && item.min)) {
-          updatedFilter[index] = {
-            type: "price",
-            ...(price === "min"
-              ? { max: removemin.max }
-              : { min: removemin.min }),
-          };
-          const maxPrice = all_products?.reduce((max, item) => {
-            const price =
-              item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-            return price > max ? price : max;
-          }, 0);
-          let range = [];
-          if (price === "min") {
-            range[(0, removemin.max)];
-          } else {
-            range = [removemin.min, maxPrice];
-          }
-          updateRange(range);
-          // updateRange([price === "min" && 0, price === "max" && maxPrice]);
-        } else {
-          updatedFilter[index] = { type: "price" };
+      let body = {};
+      let range = null;
+      if (type === "min") {
+        body = {
+          type: "price",
+        };
+        if (removemin?.max) {
+          body.max = removemin.max;
         }
+
+        range = [0, removemin?.max ? removemin?.max : maxPrice];
       } else {
-        updatedFilter = filter.filter((data) => data.id !== item.id);
+        body = {
+          type: "price",
+        };
+        if (removemin?.min) {
+          body.min = removemin.min;
+        }
+        range = [removemin?.min ? removemin?.min : 0, maxPrice];
       }
 
+      updateRange(range);
+
+      const finds = updatedFilter?.find((item) => item.type == "price");
+      if (finds !== undefined) {
+        updatedFilter[i] = body;
+      }
+      const res = removeIncompletePriceObjects(updatedFilter);
+      if (res?.lenth > 0) {
+        updatedFilter = updatedFilter;
+      } else {
+        updatedFilter = res;
+      }
       dispatch(filterData(updatedFilter));
     } else {
       const updatedFilter = filter.filter((data) => data.id !== item.id);
@@ -87,8 +92,18 @@ const ShopArea = ({
     }
   };
 
+  const removeIncompletePriceObjects = (array) => {
+    return array.filter((item) => {
+      if (item.type === "price") {
+        return item.hasOwnProperty("min") || item.hasOwnProperty("max");
+      }
+      return true; // keep the item if it's not a price type
+    });
+  };
+
   const clearFilter = () => {
     dispatch(filterData([]));
+    updateRange([0,maxPrice]);
   };
 
   const [loading, setLoading] = useState(false);
@@ -117,7 +132,6 @@ const ShopArea = ({
   }
 
   const categories = subtitle.split(" / ");
-  console.log("✌️categories --->", categories[0]);
   const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
 
   // Initialize ParentCategoryId
@@ -146,8 +160,6 @@ const ShopArea = ({
     setCategoryId(ParentCategoryId);
   }, [categories[1]]);
 
-  console.log("categoryId: ", categoryId);
-
   let content = null;
 
   if (loading) {
@@ -166,61 +178,10 @@ const ShopArea = ({
       </div>
     );
   }
-  if ( all_products?.length > 0) {
+  if (all_products?.length > 0) {
     // Render product items...
     content = (
       <>
-        {filter?.length > 0 && (
-          <div className="d-flex cursor" style={{ gap: 20, cursor: "pointer" }}>
-            <div className="cartmini__close">
-              <button
-                // onClick={() => dispatch(closeCartMini())}
-                type="button"
-                className="cartmini__close-btn cartmini-close-btn"
-              >
-                <i className="fal fa-times"></i>
-              </button>
-            </div>
-            <div onClick={() => clearFilter()}>
-              <i className="fa-regular fa-xmark " />
-              <span style={{ paddingLeft: "5px" }}>Clear filter</span>
-            </div>
-            <div
-              className="pb-20"
-              style={{ display: "flex", gap: 10, cursor: "pointer" }}
-            >
-              {filter?.map((item, index) =>
-                item?.type == "price" ? (
-                  <>
-                    {item?.min && (
-                      <div
-                        onClick={() =>
-                          removeFilter(item, "price", index, "min")
-                        }
-                      >
-                        <span>Min {item.min}</span>
-                      </div>
-                    )}
-                    {item?.max && (
-                      <div
-                        onClick={() =>
-                          removeFilter(item, "price", index, "max")
-                        }
-                      >
-                        <span>Max {item.max}</span>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div key={index} onClick={() => removeFilter(item)}>
-                    <i className="fa-regular fa-xmark " />
-                    <span style={{ paddingLeft: "5px" }}>{item.name}</span>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-        )}
         {products?.length === 0 && (
           <div className="text-center">
             <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
@@ -368,7 +329,74 @@ const ShopArea = ({
                     </div>
                   </div>
                 </div>
-
+                {filter?.length > 0 && (
+                  <div
+                    className="d-flex cursor"
+                    style={{ gap: 20, cursor: "pointer" }}
+                  >
+                    <div className="cartmini__close">
+                      <button
+                        // onClick={() => dispatch(closeCartMini())}
+                        type="button"
+                        className="cartmini__close-btn cartmini-close-btn"
+                      >
+                        <i className="fal fa-times"></i>
+                      </button>
+                    </div>
+                    <div onClick={() => clearFilter()}>
+                      <i className="fa-regular fa-xmark " />
+                      <span style={{ paddingLeft: "5px" }}>Clear filter</span>
+                    </div>
+                    <div
+                      className="pb-20"
+                      style={{ display: "flex", gap: 10, cursor: "pointer" }}
+                    >
+                      {filter?.map((item, index) => {
+                        console.log("item: ", item);
+                        return item?.type == "price" ? (
+                          <>
+                           
+                            {(item?.min || item?.min == 0) && (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: 5,
+                                  cursor: "pointer",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => removeFilter(item, "min", index)}
+                              >
+                                <i className="fa-regular fa-xmark " />
+                                <span>Min {item.min}</span>
+                              </div>
+                            )}
+                             {item?.max && (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: 5,
+                                  cursor: "pointer",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => removeFilter(item, "max", index)}
+                              >
+                                <i className="fa-regular fa-xmark " />
+                                <span>Max {item.max}</span>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div key={index} onClick={() => removeFilter(item)}>
+                            <i className="fa-regular fa-xmark " />
+                            <span style={{ paddingLeft: "5px" }}>
+                              {item?.name}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
                 {content}
               </div>
             </div>

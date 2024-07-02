@@ -38,8 +38,6 @@ const PreOrders = () => {
     collectionid: ["Q29sbGVjdGlvbjoy"],
   });
 
-  console.log("sale: ", productsData);
-
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { data: wishlistData } = useGetWishlistQuery();
@@ -110,6 +108,7 @@ const PreOrders = () => {
   const [priceFilter, {}] = usePriceFilterMutation();
 
   const [cartUpdate, setCartUpdate] = useState(false);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   let products =
     productsData?.data?.collections?.edges[0]?.node?.products?.edges;
@@ -131,6 +130,7 @@ const PreOrders = () => {
         return price > max ? price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
+      setMaxPrice(maxPrice);
     }
   }, [isLoading, isError, products]);
 
@@ -191,7 +191,11 @@ const PreOrders = () => {
   }, [selectValue]);
 
   useEffect(() => {
-    filters();
+    if (filter?.length > 0) {
+      filters();
+    } else {
+      productLists();
+    }
   }, [filter]);
 
   const sortingFilter = () => {
@@ -212,33 +216,44 @@ const PreOrders = () => {
   }
 
   const filters = () => {
-    const datas = {};
+    let datas = {};
+    const find = filter?.find((item) => item?.type == "price");
+    // if (find == undefined) {
     if (filter?.length > 0) {
       filter.forEach((item) => {
         if (item.type === "finish") {
-          datas.finish = item.id;
+          datas.productFinish = item.id;
         } else if (item.type === "style") {
-          datas.style = item.id;
+          datas.productstyle = item.id;
         } else if (item.type === "design") {
-          datas.design = item.id;
+          datas.prouctDesign = item.id;
         } else if (item.type === "stone") {
-          datas.stone = item.id;
+          datas.productStoneType = item.id;
         }
       });
+      if (find !== undefined) {
+        datas.price = { gte: priceValue[0], lte: priceValue[1] };
+        // setPriceValue([find.min, find.max]);
+      }
 
       priceFilter({
         filter: datas,
       }).then((res) => {
         const list = res?.data?.data?.products?.edges;
         setProductList(list);
+
         dispatch(handleFilterSidebarClose());
       });
     } else {
       productLists();
+
+      let datas = [...filter, find];
+      dispatch(filterData(datas));
     }
+    // }
   };
 
-  const filterByPrice = (data, type) => {
+  const filterByPrice = (type) => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
@@ -247,13 +262,20 @@ const PreOrders = () => {
     }).then((res) => {
       const list = res?.data?.data?.products?.edges;
       setProductList(list);
+
       const body = {
         type: "price",
         min: priceValue[0],
         max: priceValue[1],
       };
 
-      const listd = [...filter, body];
+      let filteredList = filter;
+
+      if (type === "priceRange") {
+        filteredList = filter?.filter((item) => item.type !== "price");
+      }
+
+      const listd = [...filteredList, body];
       dispatch(filterData(listd));
       setPriceValue([priceValue[0], priceValue[1]]);
       setFilterList([...filterList, body]);
@@ -263,11 +285,11 @@ const PreOrders = () => {
 
   return (
     <Wrapper>
-      <SEO pageTitle="Sale" />
+      <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Sale"
-        subtitle="Sale"
+        title="Pre Orders"
+        subtitle="Pre Orders"
         bgImage={shopBanner}
         catList={categoryList}
       />
@@ -276,14 +298,15 @@ const PreOrders = () => {
         products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
-        subtitle="Sale"
-        updateRange={(range) => setPriceValue(range)}
+        subtitle="Pre Orders"
+        updateRange={(range) => handleChanges(range)}
+        maxPrice={maxPrice}
       />
       <ShopFilterOffCanvas
         all_products={products}
         otherProps={otherProps}
-        filterByPrice={() => filterByPrice()}
-        finishFilterData={(data, type) => filterByPrice(data, type)}
+        filterByPrice={(val) => filterByPrice("priceRange")}
+        maxPrice={maxPrice}
       />
       <FooterTwo primary_style={true} />
     </Wrapper>

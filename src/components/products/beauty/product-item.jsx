@@ -19,7 +19,12 @@ import {
   useAddWishlistMutation,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
-import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
+import {
+  RegularPrice,
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "@/components/loader/button-loader";
 
@@ -112,7 +117,6 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
- 
 
   // handle wishlist product
 
@@ -373,15 +377,17 @@ const ProductItem = ({
           {checkChannel() === "india-channel" ? (
             <>
               {RegularPrice(
-                product?.defaultVariant?.costPrice,
-                product?.pricing?.priceRange?.start?.gross?.amount
+                addCommasToNumber(product?.defaultVariant?.costPrice),
+                addCommasToNumber(
+                  product?.pricing?.priceRange?.start?.gross?.amount
+                )
               ) && (
                 <span
                   className="pr-5"
                   style={{ textDecoration: "line-through", color: "gray" }}
                 >
                   {" "}
-                  &#8377;{roundOff(product?.defaultVariant?.costPrice)}
+                  &#8377;{addCommasToNumber(roundOff(product?.defaultVariant?.costPrice))}
                 </span>
               )}
               <span className="tp-product-price-3">

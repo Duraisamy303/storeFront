@@ -13,7 +13,7 @@ import {
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
-import { capitalizeFLetter, roundOff, RegularPrice } from "@/utils/functions";
+import { capitalizeFLetter, roundOff, RegularPrice, addCommasToNumber } from "@/utils/functions";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddToCartMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
@@ -451,8 +451,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           {channel == "india-channel" ? (
             <div className="tp-product-price-wrapper ">
               {RegularPrice(
-                product?.defaultVariant?.costPrice,
-                product?.pricing?.priceRange?.start?.gross?.amount
+                addCommasToNumber(product?.defaultVariant?.costPrice),
+                addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)
               ) && (
                 <span
                   className="tp-product-price-1 pr-5 line-through "
@@ -463,7 +463,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   }}
                 >
                   &#8377;
-                  {roundOff(product?.defaultVariant?.costPrice)}
+                  {addCommasToNumber(roundOff(product?.defaultVariant?.costPrice))}
                 </span>
               )}
               <span
@@ -471,7 +471,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 style={{ fontSize: "14px" }}
               >
                 &#8377;
-                {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
+                {addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
             </div>
           ) : (
@@ -489,7 +489,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   }}
                 >
                   {"$"}
-                  {roundOff(product?.defaultVariant?.costPrice)}
+                  { addCommasToNumber(product?.defaultVariant?.costPrice)}
                 </span>
               )}
               <span
@@ -497,7 +497,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 style={{ fontSize: "14px" }}
               >
                 {"$"}
-                {roundOff(product?.pricing?.priceRange?.start?.gross?.amount)}
+                { addCommasToNumber(product?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
             </div>
           )}
