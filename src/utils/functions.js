@@ -149,3 +149,38 @@ export const slider_setting = {
     },
   },
 };
+
+
+export const addCommasToNumber = (value) => {
+  let values=null
+  if (typeof value === 'number') {
+    values= value.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+      });
+  } else {
+    values=value
+  }
+  return values;
+
+};
+
+export const mergeAndRemoveDuplicates = (arr1, arr2) => {
+  // Merge the two arrays
+  const combinedArray = [...arr1, ...arr2];
+
+  // Use a Set to keep track of unique IDs
+  const uniqueIds = new Set();
+
+  // Filter the combined array to remove duplicates based on the 'id' property
+  const uniqueArray = combinedArray.filter(item => {
+      if (uniqueIds.has(item.id)) {
+          return false;
+      } else {
+          uniqueIds.add(item.id);
+          return true;
+      }
+  });
+
+  return uniqueArray;
+};

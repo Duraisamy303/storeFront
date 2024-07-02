@@ -1,7 +1,11 @@
 import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
 import React from "react";
-import { checkChannel, roundOff } from "../../utils/functions";
+import {
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "../../utils/functions";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -25,7 +29,12 @@ const Success = ({ data }) => {
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
             {/* {paymentMethod != "Cash On delivery" && */}
-            <p style={{ color: "gray" }}>Pay with {paymentMethod} </p>
+            <p style={{ color: "gray" }}>
+              Pay with{" "}
+              {paymentMethod == "Cash On delivery"
+                ? "Cash On Delivery"
+                : paymentMethod}{" "}
+            </p>
             {/* } */}
             <h3>Order Details</h3>
             <div>
@@ -44,7 +53,10 @@ const Success = ({ data }) => {
                         {checkChannel() === "india-channel" ? (
                           <>
                             <td>
-                              &#8377;{roundOff(order.totalPrice?.gross?.amount)}
+                              &#8377;
+                              {addCommasToNumber(
+                                order.totalPrice?.gross?.amount
+                              )}
                             </td>
                           </>
                         ) : (
@@ -62,7 +74,7 @@ const Success = ({ data }) => {
                     <td>Subtotal</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{roundOff(SubTotal)}</td>
+                        <td>&#8377;{addCommasToNumber(SubTotal)}</td>
                       </>
                     ) : (
                       <>
@@ -74,7 +86,7 @@ const Success = ({ data }) => {
                   <tr>
                     <td>
                       {paymentMethod == "Cash On delivery"
-                        ? "Cash On delivery"
+                        ? "COD Cost"
                         : "Shipping"}
                     </td>
 
@@ -82,48 +94,50 @@ const Success = ({ data }) => {
                       <>
                         <td>
                           &#8377;{roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
+                          {giftWrap && <div>(Include Gift Wrap &#8377;50)</div>}
                         </td>
                       </>
                     ) : (
                       <>
                         <td>
                           ${roundOff(ShippingAmount)}
-                          <div>&#8377; Include Gift wrap 50</div>
+                          <div>&#8377; Include Gift Wrap 50</div>
                         </td>
                       </>
                     )}
                   </tr>
 
-
-                  {
-                GiftCard && GiftCard.length > 0 && (
-                  <tr>
-                  <td>
-                    Coupon
-                  </td>
-                  <td>{GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
-                    { GiftCard[0]?.initialBalance?.amount}
-                  </td>
-                </tr>
-                )
-              }
+                  {GiftCard && GiftCard.length > 0 && (
+                    <tr>
+                      <td>Coupon</td>
+                      <td>
+                        {GiftCard[0]?.initialBalance?.currency == "USD"
+                          ? "$"
+                          : "₹"}
+                        {GiftCard[0]?.initialBalance?.amount}
+                      </td>
+                    </tr>
+                  )}
 
                   <tr>
                     <td>Payment Method</td>
-                    <td>{paymentMethod}</td>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "Cash On Delivery"
+                        : paymentMethod}
+                    </td>
                   </tr>
                   <tr>
                     <td style={{ color: "black", fontWeight: "600" }}>Total</td>
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          &#8377;{roundOff(Total)}
+                          &#8377;{addCommasToNumber(Total)}
                           <div
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
                             (includes {Tax?.currency == "USD" ? "$" : "₹"}
-                            {roundOff(Tax?.amount)} GST)
+                            {addCommasToNumber(Tax?.amount)} GST)
                           </div>
                         </td>
                       </>
@@ -167,7 +181,7 @@ const Success = ({ data }) => {
                   Total:{" "}
                   {checkChannel() === "india-channel" ? (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      &#8377;{roundOff(Total)}
+                      &#8377;{addCommasToNumber(Total)}
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
@@ -176,7 +190,12 @@ const Success = ({ data }) => {
                   )}
                 </li>
                 <li style={{ paddingBottom: "8px" }}>
-                  Payment Method: <span>{paymentMethod}</span>
+                  Payment Method:
+                  <span>
+                    {paymentMethod == "Cash On delivery"
+                      ? "Cash On Delivery"
+                      : paymentMethod}
+                  </span>
                 </li>
               </ul>
             </div>

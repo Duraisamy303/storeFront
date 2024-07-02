@@ -227,7 +227,6 @@ const AddressInfo = () => {
 
 
   const DefaultCountry = selectedAddress?.country?.code
-console.log('✌️DefaultCountry --->', DefaultCountry);
 
   return (
     <div>

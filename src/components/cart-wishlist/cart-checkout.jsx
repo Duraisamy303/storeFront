@@ -4,7 +4,7 @@ import useCartInfo from "@/hooks/use-cart-info";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCartListQuery } from "@/redux/features/card/cardApi";
-import { checkChannel } from "@/utils/functions";
+import { addCommasToNumber, checkChannel } from "@/utils/functions";
 import { roundOff } from "@/utils/functions";
 
 const CartCheckout = ({ cartData }) => {
@@ -63,7 +63,7 @@ const CartCheckout = ({ cartData }) => {
         {checkChannel() === "india-channel" ? (
           <span className="tp-cart-checkout-top-price">
             &#8377;
-            {roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
+            {addCommasToNumber(list?.data?.checkout?.totalPrice?.gross?.amount)}
           </span>
         ) : (
           <span className="tp-cart-checkout-top-price">
@@ -118,11 +118,11 @@ const CartCheckout = ({ cartData }) => {
         {checkChannel() === "india-channel" ? (
           <>
             <span style={{ color: "#c3935b", fontSize: "16px", textAlign:"end" }}>
-              &#8377;{roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
+              &#8377;{addCommasToNumber(list?.data?.checkout?.totalPrice?.gross?.amount)}
               <br />
               <span style={{ fontSize: "14px" }}>
                 (includes &#8377;
-                {roundOff(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
+                {addCommasToNumber(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
               </span>
             </span>
           </>

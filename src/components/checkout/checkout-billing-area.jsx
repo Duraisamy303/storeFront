@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ErrorMsg from "../common/error-msg";
 import { useDispatch, useSelector } from "react-redux";
-import { roundOff, useSetState } from "@/utils/functions";
+import { addCommasToNumber, roundOff, useSetState } from "@/utils/functions";
 import CheckoutOrderArea from "./checkout-order-area";
 import {
   useApplyCoupenCodeMutation,
@@ -321,7 +321,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       const arr1 = [
         { id: 1, name: "Razorpay", checked: false },
-        { id: 2, name: "Cash On delivery", checked: false },
+        { id: 2, name: "Cash On Delivery", checked: false },
       ];
 
       const arr = [{ id: 1, name: "Razorpay", checked: false }];
@@ -534,7 +534,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         const checkedOption = state.paymentType.find(
           (item) => item.checked
         )?.name;
-        if (checkedOption == "Cash On delivery") {
+        if (checkedOption == "Cash On Delivery") {
           localStorage.removeItem("checkoutTokenUSD");
           localStorage.removeItem("checkoutTokenINR");
           dispatch(cart_list([]));
@@ -878,7 +878,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
     const checkedOption = updatedPaymentType.find((item) => item.checked)?.name;
 
-    if (checkedOption == "Cash On delivery") {
+    if (checkedOption == "Cash On Delivery") {
       if (state.checkedGiftwrap) {
         checkedGiftWrap_checkedCOD(state.checkedGiftwrap);
       } else {
@@ -901,6 +901,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     });
     updatePaymentMethod(checkedOption);
   };
+  console.log("selectedPaymentType: ", state.selectedPaymentType);
 
   const updatePaymentMethod = async (option) => {
     try {
@@ -920,13 +921,13 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const handleGiftWrapChanged = (checked) => {
     setState({ checkedGiftwrap: checked });
     if (checked) {
-      if (state.selectedPaymentType == "Cash On delivery") {
+      if (state.selectedPaymentType == "Cash On Delivery") {
         checkedGiftWrap_checkedCOD(checked);
       } else {
         checkedGiftWrap_uncheckedCOD(checked);
       }
     } else {
-      if (state.selectedPaymentType == "Cash On delivery") {
+      if (state.selectedPaymentType == "Cash On Delivery") {
         unCheckedGiftWrap_checkedCOD(checked);
       } else {
         if (state.diffAddress) {
@@ -1000,10 +1001,17 @@ const CheckoutBillingArea = ({ register, errors }) => {
   return (
     <>
       <section
-        className="tp-checkout-area pb-50 pt-50"
-        style={{ backgroundColor: "#EFF1F5" }}
+        className="tp-checkout-area pt-10"
+        style={{
+          backgroundColor: "#EFF1F5",
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+          flexDirection: "row",
+          paddingTop: 40,
+        }}
       >
-        <div className="container-fluid">
+        <div className="container ">
           {cartList?.data?.checkout?.lines?.length == 0 && (
             <div className="tp-checkout-empty">
               <h3 className="py-2">No items found in cart to checkout</h3>
@@ -1014,11 +1022,19 @@ const CheckoutBillingArea = ({ register, errors }) => {
           )}
           {cart?.length > 0 && (
             <div className="row">
-              <div className="col-xl-7 col-lg-7">
-                <div className="tp-checkout-verify">
-                  {!state.token && <CheckoutLogin />}
-
-                  <div className="tp-checkout-verify-item">
+              <div className=" ">
+                <div
+                  className="tp-checkout-verify"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 10,
+                  }}
+                >
+                  <div className="col-xl-6 col-lg-12">
+                    {!state.token && <CheckoutLogin />}
+                  </div>
+                  <div className="tp-checkout-verify-item col-xl-6 col-lg-12">
                     <p className="tp-checkout-verify-reveal">
                       Have a coupon?{" "}
                       <button
@@ -1299,7 +1315,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     <div className="col-md-12">
                       <div className="tp-checkout-input">
                         <label>
-                          Email address <span>*</span>
+                          Email Address <span>*</span>
                         </label>
                         <input
                           name="email"
@@ -1330,7 +1346,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         setState({ createAccount: e.target.checked })
                       }
                     />
-                    <label htmlFor="remeber1">Create an account?</label>
+                    <label htmlFor="remeber1">Create an Account?</label>
                   </div>
                   <>
                     {state.createAccount && (
@@ -1380,7 +1396,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             <div className="col-md-6">
                               <div className="tp-checkout-input">
                                 <label>
-                                  Email address <span>*</span>
+                                  Email Address <span>*</span>
                                 </label>
                                 <input
                                   name="email"
@@ -1446,7 +1462,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   checked={state.diffAddress}
                   onChange={(e) => setState({ diffAddress: e.target.checked })}
                 />
-                <label htmlFor="remeber">Ship to a different address?</label>
+                <label htmlFor="remeber">Ship to a Different Address?</label>
               </div>
               {state.diffAddress && (
                 <div className="tp-checkout-bill-form">
@@ -1652,7 +1668,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
               )}
               <div className="col-md-12">
                 <div className="tp-checkout-input">
-                  <label>Order notes (optional)</label>
+                  <label>Order Notes (optional)</label>
                   <textarea
                     name="orderNote"
                     id="orderNote"
@@ -1685,7 +1701,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </p>
                       {state.channel == "india-channel" ? (
                         <span>
-                          &#8377;{roundOff(item?.totalPrice?.gross?.amount)}
+                          &#8377;
+                          {addCommasToNumber(item?.totalPrice?.gross?.amount)}
                         </span>
                       ) : (
                         <span>
@@ -1698,9 +1715,15 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   {/* total */}
                   {state?.shippingCost && (
                     <li className="tp-order-info-list-total">
-                      <span>Shipping</span>
+                      <span>
+                        {state.selectedPaymentType == "Cash On Delivery"
+                          ? "COD Cost"
+                          : "Shipping"}
+                      </span>
                       {checkChannel() == "india-channel" ? (
-                        <span>&#8377;{roundOff(state?.shippingCost)}</span>
+                        <span>
+                          &#8377;{addCommasToNumber(state?.shippingCost)}
+                        </span>
                       ) : (
                         <span>
                           <span>${roundOff(state?.shippingCost)}</span>
@@ -1718,7 +1741,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         {checkChannel() == "india-channel" ? (
                           <span>
                             &#8377;
-                            {roundOff(item?.currentBalance?.amount)}
+                            {addCommasToNumber(item?.currentBalance?.amount)}
                           </span>
                         ) : (
                           <span>
@@ -1732,7 +1755,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                   {state.checkedGiftwrap && (
                     <li className="tp-order-info-list-total">
-                      <span>Gift wrap</span>
+                      <span>Gift Wrap</span>
                       {checkChannel() == "india-channel" ? (
                         <span>&#8377;{roundOff(50)}</span>
                       ) : (
@@ -1754,7 +1777,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             textAlign: "right",
                           }}
                         >
-                          {state?.total && <>&#8377;{roundOff(state?.total)}</>}
+                          {state?.total && (
+                            <>&#8377;{addCommasToNumber(state?.total)}</>
+                          )}
                           <br />
                           <span style={{ fontWeight: "400", fontSize: "14px" }}>
                             (includes &#8377;{roundOff(state?.tax)} GST)
@@ -1806,7 +1831,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </div>
                       ))}
 
-                      {state.selectedPaymentType == "Cash On delivery" && (
+                      {state.selectedPaymentType == "Cash On Delivery" && (
                         <ol>
                           <li>
                             Cash On Delivery orders will be booked only if the
@@ -1854,7 +1879,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     {state.isGiftWrap && (
                       <div>
                         <div className="mt-3 mb-2">
-                          <h5>Gift wrap</h5>
+                          <h5>Gift Wrap</h5>
                         </div>
                         <div className="tp-login-remeber">
                           <input
@@ -1870,7 +1895,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             htmlFor={`giftWrap`}
                             style={{ color: "black" }}
                           >
-                            {"gift wrap"}
+                            {"Gift Wrap"}
                           </label>
                         </div>
                       </div>
