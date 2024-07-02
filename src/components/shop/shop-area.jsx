@@ -31,7 +31,6 @@ const ShopArea = ({
   const { priceValue, handleChanges } = priceFilterValues;
 
   const filter = useSelector((state) => state.shopFilter.filterData);
-  console.log("fistt: ", filter);
 
   const dispatch = useDispatch();
 
