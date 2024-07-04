@@ -28,6 +28,7 @@ import {
 import {
   useCountryListQuery,
   usePaymentFailedQuery,
+  usePaymentListMutation,
   usePaymentMutation,
   usePaymentQuery,
   useStateListQuery,
@@ -160,6 +161,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const { data: linelist } = useGetCartListQuery();
 
   const [loginUser, {}] = useLoginUserMutation();
+
+  const [paymentList, {}] = usePaymentListMutation();
 
   const [registerUser, {}] = useRegisterUserMutation();
 
@@ -305,26 +308,36 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const enableCOD = async () => {
     try {
-      // const res = await paymentMethodList();
-      // const resArr = res?.data?.data?.paymentGateways?.edges?.map((item) => ({
-      //   id: item?.node?.id,
-      //   name: item?.node?.name,
-      //   checked: false,
-      // }));
+      const res = await paymentList();
+      console.log("paymentList: ", res.data?.data?.paymentGateways?.edges);
+      const data = res.data?.data?.paymentGateways?.edges;
+      const findCOD = data?.find(
+        (item) => item.node?.name === "Cash On delivery"
+      );
+      console.log("findCOD: ", findCOD);
+
+      const filterExceptCOD = data?.filter(
+        (item) => item.node?.name !== "Cash On delivery" && item.node.isActive
+      );
+
+      console.log("filterExceptCOD: ", filterExceptCOD);
 
       let isShowCOD = false;
+      let arr = filterExceptCOD?.map((item, index) => ({
+        id: index + 1,
+        name: item.node.name,
+        checked: false,
+      }));
 
-      // const arr1 = resArr?.reverse();
-      // const filter = resArr?.filter((item) => item?.name != "Cash On delivery");
-      // filter[0].checked = false;
-      // const arr = filter;
+      if (findCOD?.node?.isActive) {
+        arr.push({
+          id: arr.length + 1,
+          name: "Cash On Delivery",
+          checked: false,
+        });
+      }
 
-      const arr1 = [
-        { id: 1, name: "Razorpay", checked: false },
-        { id: 2, name: "Cash On Delivery", checked: false },
-      ];
-
-      const arr = [{ id: 1, name: "Razorpay", checked: false }];
+      console.log("arr: ", arr);
 
       const hasPreOrders = state.orderData?.lines?.some((line) =>
         line?.variant?.product?.collections?.some(
@@ -357,19 +370,19 @@ const CheckoutBillingArea = ({ register, errors }) => {
         }
       }
 
-      if (isShowCOD) {
-        setState({
-          paymentType: arr1,
-        });
-      } else {
-        setState({
-          paymentType: arr,
-        });
+      if (!isShowCOD) {
+        arr = arr.filter((item) => item.name !== "Cash On Delivery");
       }
+
+      setState({
+        paymentType: arr,
+      });
     } catch (error) {
       console.log("error: ", error);
     }
   };
+
+  console.log("paymentType: ", state.paymentType);
 
   const enableGiftWrap = async () => {
     try {
@@ -901,7 +914,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     });
     updatePaymentMethod(checkedOption);
   };
-  console.log("selectedPaymentType: ", state.selectedPaymentType);
 
   const updatePaymentMethod = async (option) => {
     try {
@@ -1717,7 +1729,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     <li className="tp-order-info-list-total">
                       <span>
                         {state.selectedPaymentType == "Cash On Delivery"
-                          ? "COD Cost"
+                          ? "COD Fee"
                           : "Shipping"}
                       </span>
                       {checkChannel() == "india-channel" ? (
@@ -1811,26 +1823,28 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       <div className="mt-3 mb-2">
                         <h5>Payment Method</h5>
                       </div>
-
-                      {state.paymentType?.map((item) => (
-                        <div className="tp-login-remeber" key={item.id}>
-                          <input
-                            id={`payment-${item.id}`}
-                            type="checkbox"
-                            checked={item.checked}
-                            onChange={() => {
-                              handleCheckboxChange(item.id);
-                            }}
-                          />
-                          <label
-                            htmlFor={`payment-${item.id}`}
-                            style={{ color: "black" }}
-                          >
-                            {item.name}
-                          </label>
-                        </div>
-                      ))}
-
+                      {state.paymentType?.length > 0 ? (
+                        state.paymentType?.map((item) => (
+                          <div className="tp-login-remeber" key={item.id}>
+                            <input
+                              id={`payment-${item.id}`}
+                              type="checkbox"
+                              checked={item.checked}
+                              onChange={() => {
+                                handleCheckboxChange(item.id);
+                              }}
+                            />
+                            <label
+                              htmlFor={`payment-${item.id}`}
+                              style={{ color: "black" }}
+                            >
+                              {item.name}
+                            </label>
+                          </div>
+                        ))
+                      ) : (
+                        <div className=" text-danger">Currenly Not available payment Methods</div>
+                      )}
                       {state.selectedPaymentType == "Cash On Delivery" && (
                         <ol>
                           <li>

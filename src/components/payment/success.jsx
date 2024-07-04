@@ -86,26 +86,33 @@ const Success = ({ data }) => {
                   <tr>
                     <td>
                       {paymentMethod == "Cash On delivery"
-                        ? "COD Cost"
+                        ? "COD Fee"
                         : "Shipping"}
                     </td>
 
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;{roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift Wrap &#8377;50)</div>}
+                          &#8377;
+                          {paymentMethod == "Cash On delivery" || giftWrap
+                            ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
+                            : Number(roundOff(ShippingAmount)).toFixed(2)}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>
-                          ${roundOff(ShippingAmount)}
-                          <div>&#8377; Include Gift Wrap 50</div>
-                        </td>
+                        <td>${roundOff(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
+
+                  {giftWrap && (
+                    <tr>
+                      <td>Gift Wrap</td>
+
+                      <td>&#8377;50.00</td>
+                    </tr>
+                  )}
 
                   {GiftCard && GiftCard.length > 0 && (
                     <tr>

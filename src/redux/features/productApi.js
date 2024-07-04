@@ -30,6 +30,7 @@ import {
   UPDATE_BILLING_ADDRESS_ADDRESS_SECTION,
   UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION,
   TAG_NAME,
+  PAYMENT_LIST,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -538,6 +539,12 @@ export const productApi = apiSlice.injectEndpoints({
         return configuration(SINGLE_PRODUCT({ productId, channel }));
       },
     }),
+
+    paymentList: builder.mutation({
+      query: () => {
+        return configuration(PAYMENT_LIST());
+      },
+    }),
   }),
 });
 
@@ -584,4 +591,5 @@ export const {
   useGetTagNameMutation,
   useOrderCancelMutation,
   useGetYouMayLikeMutation,
+  usePaymentListMutation,
 } = productApi;

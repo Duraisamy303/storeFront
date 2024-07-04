@@ -131,7 +131,10 @@ const Failed = ({ data, orderId }) => {
                         {checkChannel() === "india-channel" ? (
                           <>
                             <td>
-                              &#8377;{roundOff(order.totalPrice?.gross?.amount)}
+                              &#8377;
+                              {addCommasToNumber(
+                                order.totalPrice?.gross?.amount
+                              )}
                             </td>
                           </>
                         ) : (
@@ -159,23 +162,35 @@ const Failed = ({ data, orderId }) => {
                   </tr>
 
                   <tr>
-                    <td>Shipping</td>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "COD Fee"
+                        : "Shipping"}
+                    </td>
+
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;{roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift Wrap &#8377;50)</div>}
+                          &#8377;
+                          {paymentMethod == "Cash On delivery" || giftWrap
+                            ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
+                            : Number(roundOff(ShippingAmount)).toFixed(2)}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>
-                          ${roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift Wrap &#8377;50)</div>}
-                        </td>
+                        <td>${roundOff(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
+
+                  {giftWrap && (
+                    <tr>
+                      <td>Gift Wrap</td>
+
+                      <td>&#8377;50.00</td>
+                    </tr>
+                  )}
 
                   <tr>
                     <td>Payment Method</td>

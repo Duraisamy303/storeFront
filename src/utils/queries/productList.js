@@ -1,6 +1,6 @@
 import { PRODUCT_LIST_ITEM_FRAGMENT } from "./productDetails";
 
-export const PRODUCT_LIST = ({ channel, first,sortBy }) => {
+export const PRODUCT_LIST = ({ channel, first, sortBy }) => {
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy:ProductOrder) {
@@ -689,6 +689,25 @@ export const COUNTRY_LIST = () => {
         }
       }
     }
+    `,
+  });
+};
+
+export const PAYMENT_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query GetPaymnetGatewayList {
+  paymentGateways(first: 10) {
+    edges {
+      node {
+        description
+        id
+        isActive
+        name
+      }
+    }
+  }
+}
     `,
   });
 };
