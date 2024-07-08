@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SEO from "@/components/seo";
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from "@/layout/headers/header-2";
@@ -21,17 +21,7 @@ const ForgotPage = () => {
   const [showPass, setShowPass] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const paramssd = new URLSearchParams(window.location.search);
-  const resff =
-    "http://192.168.1.196:3000/password_rest/?email=testing%40gmail.com&token=c9qq11-623ae17e8d1ea67bc5d77c4c553e9af4";
 
-  const urlObj = new URL(resff);
-
-  // Use URLSearchParams to extract the query parameters
-  const params = new URLSearchParams(urlObj.search);
-
-  const email = params.get("email");
-  const token = params.get("token");
   const [resetPassword, { loading: loading }] = useResetPasswordMutation();
 
   // schema
@@ -43,6 +33,23 @@ const ForgotPage = () => {
     ),
   });
 
+  let email = "";
+  let token = "";
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const paramssd = new URLSearchParams(window.location.search);
+      const resff =
+        "http://192.168.1.196:3000/password_rest/?email=testing%40gmail.com&token=c9qq11-623ae17e8d1ea67bc5d77c4c553e9af4";
+
+      const urlObj = new URL(resff);
+
+      // Use URLSearchParams to extract the query parameters
+      const params = new URLSearchParams(urlObj.search);
+
+      email = params.get("email");
+      token = params.get("token");
+    }
+  }, []);
   const {
     register,
     handleSubmit,
