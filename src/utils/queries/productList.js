@@ -933,47 +933,40 @@ export const SALE_LIST = ({ code }) => {
   });
 };
 
-export const PRODUCT_SEARCH = ({ query, channel }) => {
+export const PRODUCT_SEARCH = ({ search, channel }) => {
   return JSON.stringify({
-    query: `query ProductSearchbyName($query: String!, $channel: String!) {
-      products(
-        first: 50
-        channel: $channel
-        search: $query
-        sortBy: {direction: ASC, field: NAME}
-      ) {
-        edges {
-          node {
-            id
-            name
-            defaultVariant {
-              id
-              name
-              
-            }
-            thumbnail {
-              url
-            }
-            pricing {
-              priceRange {
-                start {
-                  gross {
-                    amount
-                  }
-                }
-                stop {
-                  gross {
-                    amount
-                  }
-                }
+    query: `query GlobalSearch($channel: String!, $search: String!) {
+  productsSearch(
+    channel: $channel
+    first: 100
+    search: $search
+    sortBy: {direction: DESC, field: CREATED_AT}
+  ) {
+    edges {
+      node {
+        id
+        name
+        defaultVariant {
+          pricing {
+            price {
+              gross {
+                amount
+                currency
               }
             }
           }
         }
+        thumbnail {
+          url
+          alt
+        }
       }
     }
+  }
+}
+
     `,
-    variables: { query, channel },
+    variables: { search, channel },
   });
 };
 

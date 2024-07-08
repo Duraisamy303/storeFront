@@ -58,3 +58,42 @@ export const GET_ORDER_LIST_BY_EMAIL = ({ email }) => {
   };
 };
 
+export const FORGET_PASSWORD = ({ email, redirectUrl }) => {
+  return {
+    query: `
+   mutation RequestPasswordReset($email:String!,$redirectUrl:String!) {
+  requestPasswordReset(
+    email: $email
+    redirectUrl: $redirectUrl
+    channel: "india-channel"
+  ) {
+    errors {
+      code
+      field
+      message
+    }
+  }
+}
+    `,
+    variables: { email, redirectUrl },
+  };
+};
+
+export const RESET_PASSWORD = ({ token, email, password }) => {
+  return {
+    query: `
+ mutation setPassword($token:String!, $email:String!,$password:String!) {
+  setPassword(token: $token, email: $email, password: $password) {
+    errors {
+      field
+      message
+    }
+    user {
+      email
+    }
+  }
+}
+    `,
+    variables: { token, email, password },
+  };
+};

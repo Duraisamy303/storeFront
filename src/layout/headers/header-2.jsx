@@ -39,7 +39,7 @@ import {
 } from "@/redux/features/productApi";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/router";
-import { checkChannel } from "@/utils/functions";
+import { checkChannel, removeduplicate } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
@@ -202,12 +202,12 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       if (search?.length > 3) {
       }
       const data = await searchProduct({
-        query: search,
+        search: search,
       });
 
-      const filter = data?.data?.data?.products?.edges?.map((item) => ({
+      const filter = data?.data?.data?.productsSearch?.edges?.map((item) => ({
         name: item?.node?.name,
-        price: item?.node?.pricing?.priceRange?.start?.gross?.amount,
+        price: item?.node?.defaultVariant?.pricing?.price?.gross?.amount,
         img: item?.node?.thumbnail?.url,
         id: item?.node?.id,
       }));
@@ -218,8 +218,8 @@ const HeaderTwo = ({ style_2 = false, data }) => {
       } else {
         setIsOpen2(true);
       }
-
-      setSearchOption(filter);
+      const res = removeduplicate(filter);
+      setSearchOption(res);
     } catch (error) {
       console.log("error: ", error);
     }

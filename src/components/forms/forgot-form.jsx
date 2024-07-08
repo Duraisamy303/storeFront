@@ -4,8 +4,12 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // internal
 import ErrorMsg from "../common/error-msg";
-import { useResetPasswordMutation } from "@/redux/features/auth/authApi";
+import {
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+} from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import ButtonLoader from "../loader/button-loader";
 
 // schema
 const schema = Yup.object().shape({
@@ -13,25 +17,32 @@ const schema = Yup.object().shape({
 });
 
 const ForgotForm = () => {
-  const [resetPassword, {}] = useResetPasswordMutation();
-    // react hook form
-    const {register,handleSubmit,formState: { errors },reset} = useForm({
-      resolver: yupResolver(schema), 
+  const [resetPassword, { loading: loading }] = useForgetPasswordMutation();
+  // react hook form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  // onSubmit
+  const onSubmit = (data) => {
+    resetPassword({
+      email: data.email,
+      redirectUrl: "http://192.168.1.196:3000/password_rest/",
+    }).then((result) => {
+      const res = result?.data?.data?.requestPasswordReset;
+      console.log("result: ", result?.data?.data?.requestPasswordReset);
+      if (res?.errors?.length > 0) {
+        notifyError(res?.errors[0]?.message);
+      } else {
+        notifySuccess("Password reset link sent. Please check your email");
+      }
     });
-    // onSubmit
-    const onSubmit = (data) => {
-      resetPassword({
-        verifyEmail: data.email,
-      }).then((result) => {
-        if(result?.error){
-          notifyError(result?.error?.data?.message)
-        }
-        else {
-          notifySuccess(result.data?.message);
-        }
-      });
-      reset();
-    };
+    reset();
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="tp-login-input-wrapper">
@@ -53,7 +64,7 @@ const ForgotForm = () => {
       </div>
       <div className="tp-login-bottom mb-15">
         <button type="submit" className="tp-login-btn w-100">
-          Send Mail
+          {loading ? <ButtonLoader /> : "Send Mail"}
         </button>
       </div>
     </form>

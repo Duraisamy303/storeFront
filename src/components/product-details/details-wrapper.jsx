@@ -159,7 +159,7 @@ const DetailsWrapper = ({
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
   useEffect(() => {
@@ -368,7 +368,6 @@ const DetailsWrapper = ({
     isNextErrors,
   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-
   const {
     data: prevProductData,
     isPreviousLoadings,
@@ -492,7 +491,6 @@ const DetailsWrapper = ({
     );
     setVariantDetails(variantDetails);
   };
-
 
   return (
     <div className="tp-product-details-wrapper">
@@ -1042,7 +1040,7 @@ const DetailsWrapper = ({
                 {JSON.parse(productItem?.description)?.blocks?.map((block) => {
                   return (
                     <>
-                      <div style={{marginTop:"10px"}}>
+                      <div style={{ marginTop: "10px" }}>
                         <div>
                           {block?.type === "header" && (
                             <h5 style={{ fontWeight: "400" }}>
@@ -1053,7 +1051,7 @@ const DetailsWrapper = ({
 
                         <div key={block.id}>
                           {block.type === "paragraph" && (
-                            <p style={{ color: "gray", marginBottom:"5px" }}>
+                            <p style={{ color: "gray", marginBottom: "5px" }}>
                               {block.data.text && (
                                 <span
                                   dangerouslySetInnerHTML={{
@@ -1067,7 +1065,7 @@ const DetailsWrapper = ({
                           )}
                         </div>
 
-                        <div key={block.id} style={{paddingLeft:"20px"}}>
+                        <div key={block.id} style={{ paddingLeft: "20px" }}>
                           {block.type === "list" && (
                             <ul>
                               {
@@ -1479,8 +1477,23 @@ const DetailsWrapper = ({
                 });
               }}
             >
-              <b>Categories:</b> {productItem?.category?.name}
+              <div className="flex ">
+              <b>Categories:</b>{" "}
+              {productItem?.category?.map((item) => (
+                <div
+                  onClick={() => {
+                    router.push({
+                      pathname: "/shop",
+                      query: { categoryId: item?.id }, // Your parameters
+                    });
+                  }}
+                >
+                  {item?.name}
+                </div>
+              ))}
+              </div>
             </p>
+
             {productItem?.tags?.length > 0 && (
               <p style={{ color: "#55585b" }}>
                 <b>Tags:</b>{" "}

@@ -411,7 +411,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     productSearch: builder.mutation({
-      query: ({ query }) => {
+      query: ({ search }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -419,7 +419,7 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_SEARCH({ channel, query }));
+        return configuration(PRODUCT_SEARCH({ channel, search }));
       },
       providesTags: ["Products"],
     }),

@@ -108,7 +108,7 @@ export const getUniqueStates = (states) => {
   const uniqueStates = [];
   const seen = new Set();
 
-  states.forEach(state => {
+  states.forEach((state) => {
     if (!seen.has(state.raw)) {
       uniqueStates.push(state);
       seen.add(state.raw);
@@ -150,19 +150,17 @@ export const slider_setting = {
   },
 };
 
-
 export const addCommasToNumber = (value) => {
-  let values=null
-  if (typeof value === 'number') {
-    values= value.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-      });
+  let values = null;
+  if (typeof value === "number") {
+    values = value.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   } else {
-    values=value
+    values = value;
   }
   return values;
-
 };
 
 export const mergeAndRemoveDuplicates = (arr1, arr2) => {
@@ -173,14 +171,34 @@ export const mergeAndRemoveDuplicates = (arr1, arr2) => {
   const uniqueIds = new Set();
 
   // Filter the combined array to remove duplicates based on the 'id' property
-  const uniqueArray = combinedArray.filter(item => {
-      if (uniqueIds.has(item.id)) {
-          return false;
-      } else {
-          uniqueIds.add(item.id);
-          return true;
-      }
+  const uniqueArray = combinedArray.filter((item) => {
+    if (uniqueIds.has(item.id)) {
+      return false;
+    } else {
+      uniqueIds.add(item.id);
+      return true;
+    }
   });
 
   return uniqueArray;
 };
+
+export const removeduplicate = (arr) => {
+  const uniqueData = arr.reduce((acc, current) => {
+    const x = acc.find((item) => item.id === current.id);
+    if (!x) {
+      acc.push(current);
+    }
+    return acc;
+  }, []);
+  return uniqueData;
+};
+
+export const getParamsFromUrl=(url)=> {
+  const urlObj = new URL(url);
+  const params = new URLSearchParams(urlObj.search);
+  return {
+      email: params.get('email'),
+      token: params.get('token')
+  };
+}
