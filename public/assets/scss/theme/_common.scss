@@ -542,6 +542,24 @@ font-size: 12px;
 }
 
 
+.prev-btn{   
+	position: absolute;
+	top: 10px;
+	background: rgb(0 0 0 / 40%);
+	left: 40%;
+	padding: 3px;
+}
+
+.next-btn {
+
+		position: absolute;
+		bottom: 10px;
+		background: rgb(0 0 0 / 40%);
+		left: 40%;
+		padding: 3px;
+	
+}
+
 @media(max-width:1200px) {
 	.about-section-logo{
 		width: 400px;

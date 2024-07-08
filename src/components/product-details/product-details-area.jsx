@@ -18,13 +18,13 @@ const ProductDetailsArea = ({
   youMayLikeData,
 }) => {
   const router = useRouter();
-  const { images, imageURLs, videoId, status } = productItem || {};
+  const { media, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
   // active image change when img change
   useEffect(() => {
-    setActiveImg(images);
-  }, [images]);
+    setActiveImg(media);
+  }, [media]);
 
   // handle image active
   const handleImageActive = (item) => {
@@ -64,7 +64,7 @@ const ProductDetailsArea = ({
                 productItem={productItem}
                 productRefetch={detailsRefetch}
                 handleImageActive={handleImageActive}
-                activeImg={productItem?.images[0]?.url}
+                activeImg={productItem?.media[0]?.url}
                 detailsBottom={false}
                 pageTitle={pageTitle}
               />
@@ -91,7 +91,7 @@ const ProductDetailsArea = ({
       ) : (
         <>
           {/* related products start */}
-          {productItem?.category?.id && (
+          {productItem?.category?.length > 0 && (
             <section className="tp-related-product pt-50">
               <div className="container-fluid">
                 <div className="row">
@@ -102,7 +102,7 @@ const ProductDetailsArea = ({
                 </div>
 
                 <div className="row">
-                  <RelatedProducts id={productItem?.category?.id} />
+                  <RelatedProducts id={productItem?.category[0]?.id} />
                 </div>
               </div>
             </section>

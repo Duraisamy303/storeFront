@@ -4,11 +4,12 @@ import { profilePic } from "@/utils/constant";
 import {
   UpOutlined,
   DownOutlined,
-  MergeCellsOutlined,
+  MergeCellsOutlined, LeftOutlined, RightOutlined
 } from "@ant-design/icons";
 
 const DetailsThumbWrapper = ({ product }) => {
-  const imageUrls = product?.images?.map((item) => item?.url) || [];
+  console.log("✌️product --->", product);
+  const imageUrls = product?.media?.map((item) => item?.url) || [];
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
   const [loading, setLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -17,7 +18,7 @@ const DetailsThumbWrapper = ({ product }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
   const buttonRef = useRef(null);
   const timeoutId = useRef(null);
-
+  const [startIndex, setStartIndex] = useState(0);
   const handleImageActive = (item) => {
     setActiveImg(item);
     // setPhotoIndex(imageUrls.indexOf(item));
@@ -33,6 +34,13 @@ const DetailsThumbWrapper = ({ product }) => {
     }
     setActiveImg(imageUrls[newIndex]);
     setPhotoIndex(newIndex);
+
+    // Adjust start index to show the fifth image when navigating
+    if (direction === "prev" && startIndex > 0) {
+      setStartIndex((prev) => prev - 1);
+    } else if (direction === "next" && startIndex < imageUrls.length - 5) {
+      setStartIndex((prev) => prev + 1);
+    }
   };
 
   const handleMouseEnter = () => {
@@ -77,11 +85,11 @@ const DetailsThumbWrapper = ({ product }) => {
         } w-100`}
       >
         {imageUrls?.length > 1 && (
-          <nav className="product-side-nav-img">
+          <nav className="product-side-nav-img p-relative">
             <div className="nav nav-tabs flex-sm-column">
-              {imageUrls.map((item, i) => (
+              {imageUrls.slice(startIndex, startIndex + 5).map((item, i) => (
                 <button
-                  key={i}
+                  key={i + startIndex}
                   className={`nav-link ${item === activeImg ? "active" : ""}`}
                   onClick={() => handleImageActive(item)}
                   id={`image-${i}`}
@@ -201,26 +209,29 @@ const DetailsThumbWrapper = ({ product }) => {
             msOverflowStyle: "none", // IE and Edge
             scrollbarWidth: "none", // Firefox
           }}
-          onClick={handleLightboxClose}  
+          onClick={handleLightboxClose}
         >
           <button
-            className="prev-btn"
             onClick={handleLightboxPrev}
             name="prev"
             style={{
               fontSize: "18px",
-              background: "#c78b2e",
-              padding: "5px 15px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
               color: "white",
               position: "fixed",
               left: "20px",
-              top:"50vh",
+              top: "50vh",
             }}
           >
-            &lt;
+           <LeftOutlined />
           </button>
           <img
-            src={imageUrls[photoIndex]}
+            src={
+              imageUrls[photoIndex]
+                ? imageUrls[photoIndex]
+                : profilePic(activeImg)
+            }
             alt="Lightbox"
             style={{
               width: "100%",
@@ -246,20 +257,19 @@ const DetailsThumbWrapper = ({ product }) => {
             <i className="fal fa-times"></i>
           </button>
           <button
-            className="next-btn"
             onClick={handleLightboxNext}
             name="next"
             style={{
               fontSize: "18px",
-              background: "#c78b2e",
-              padding: "5px 15px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
               color: "white",
               position: "fixed",
               right: "20px",
-              top:"50vh",
+              top: "50vh",
             }}
           >
-            &gt;
+           <RightOutlined />
           </button>
         </div>
       )}

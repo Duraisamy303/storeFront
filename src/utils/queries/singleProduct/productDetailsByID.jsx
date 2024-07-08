@@ -59,7 +59,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     created
     description
-    images {
+    media {
       url
     }
     defaultVariant {
