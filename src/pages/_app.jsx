@@ -105,6 +105,7 @@ export default function App({ Component, pageProps }) {
     "/register",
     "/order-success",
     "/order-failed",
+    "/password_reset"
   ];
 
   const isOrderSuccessPath = router.pathname.startsWith("/order-success");

@@ -17,7 +17,7 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { checkChannel, roundOff } from "../../utils/functions";
+import { addCommasToNumber, checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import { isPreOrderAndGiftCart } from "../../redux/features/cartSlice";
 
@@ -191,7 +191,7 @@ const CartMiniSidebar = () => {
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {roundOff(item?.totalPrice?.gross?.amount)}
+                                  {addCommasToNumber(item?.totalPrice?.gross?.amount)}
                                 </span>
                               ) : (
                                 <span className="cartmini__price">
@@ -251,7 +251,7 @@ const CartMiniSidebar = () => {
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {roundOff(
+                                  {addCommasToNumber(
                                     item?.variant?.pricing?.price?.gross
                                       ?.amount ||
                                       item?.node?.pricing?.priceRange?.start
@@ -316,7 +316,7 @@ const CartMiniSidebar = () => {
                   <>
                     <span>
                       &#8377;
-                      {roundOff(
+                      {addCommasToNumber(
                         cartList?.data?.checkout?.totalPrice?.gross?.amount
                       )}
                     </span>
@@ -328,7 +328,7 @@ const CartMiniSidebar = () => {
                       }}
                     >
                       (includes &#8377;
-                      {roundOff(
+                      {addCommasToNumber(
                         cartList?.data?.checkout?.totalPrice?.tax?.amount
                       )}{" "}
                       GST)

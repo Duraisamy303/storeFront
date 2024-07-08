@@ -14,17 +14,21 @@ import FinishFilter from "../shop/shop-filter/status-filter";
 import StyleFilter from "../shop/shop-filter/style-filter";
 import DesignFilter from "../shop/shop-filter/design-filter";
 import StoneFilter from "../shop/shop-filter/stone-filter";
+import InputRange from "@/ui/input-range";
+import { checkChannel } from "@/utils/functions";
 
 const ShopFilterOffCanvas = ({
   all_products,
   otherProps,
   right_side = false,
   filterByPrice,
-  finishFilterData,
 }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { priceFilterValues, setCurrPage } = otherProps;
+
+  const { priceValue, handleChanges } = priceFilterValues;
+
   const { filterSidebar } = useSelector((state) => state.shopFilter);
   const dispatch = useDispatch();
 
@@ -32,6 +36,7 @@ const ShopFilterOffCanvas = ({
     const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
     return price > max ? price : max;
   }, 0);
+
   return (
     <>
       <div
@@ -51,17 +56,45 @@ const ShopFilterOffCanvas = ({
           </div>
           <div className="tp-shop-sidebar">
             {/* filter */}
-            <PriceFilter
+            {/* <PriceFilter
               priceFilterValues={priceFilterValues}
               maxPrice={maxPrice}
               filterByPrice={filterByPrice}
-            />
+            /> */}
+            <div className="tp-shop-widget mb-35">
+              <h3 className="tp-shop-widget-title no-border">Price Filter</h3>
+
+              <div className="tp-shop-widget-content">
+                <div className="tp-shop-widget-filter">
+                  <div id="slider-range" className="mb-10">
+                    <InputRange
+                      STEP={1}
+                      MIN={0}
+                      MAX={maxPrice}
+                      values={priceValue}
+                      handleChanges={handleChanges}
+                    />
+                  </div>
+                  <div className="tp-shop-widget-filter-info d-flex align-items-center justify-content-between">
+                    <span className="input-range">
+                      {checkChannel() == "india-channel" ? "₹" : "$"}
+                      {priceValue[0] ? priceValue[0] : 0} -{" "}
+                      {checkChannel() == "india-channel" ? "₹" : "$"}
+                      {priceValue[1] ? priceValue[1] : maxPrice}
+                    </span>
+                    <button
+                      className="tp-shop-widget-filter-btn"
+                      type="button"
+                      onClick={() => filterByPrice(priceValue)}
+                    >
+                      Filter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* Finish */}
-            <FinishFilter
-              setCurrPage={setCurrPage}
-              shop_right={right_side}
-              finishFilterData={finishFilterData}
-            />
+            <FinishFilter setCurrPage={setCurrPage} shop_right={right_side} />
 
             {/* style */}
             {/* <StyleFilter

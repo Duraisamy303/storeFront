@@ -9,17 +9,23 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
+  useGetCartAllListQuery
 } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { compare_list } from "@/redux/features/cartSlice";
+import { compare_list, openCartMini, } from "@/redux/features/cartSlice";
 import { handleWishlistProduct } from "@/utils/common_function";
 import { useRouter } from "next/router";
 import {
   useAddWishlistMutation,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
-import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
+import {
+  RegularPrice,
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "@/components/loader/button-loader";
 
@@ -35,6 +41,9 @@ const ProductItem = ({
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
 
@@ -85,6 +94,9 @@ const ProductItem = ({
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
+        
       }
       setCartLoader(false);
     } catch (error) {
@@ -112,7 +124,6 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
- 
 
   // handle wishlist product
 
@@ -373,15 +384,17 @@ const ProductItem = ({
           {checkChannel() === "india-channel" ? (
             <>
               {RegularPrice(
-                product?.defaultVariant?.costPrice,
-                product?.pricing?.priceRange?.start?.gross?.amount
+                addCommasToNumber(product?.defaultVariant?.costPrice),
+                addCommasToNumber(
+                  product?.pricing?.priceRange?.start?.gross?.amount
+                )
               ) && (
                 <span
                   className="pr-5"
                   style={{ textDecoration: "line-through", color: "gray" }}
                 >
                   {" "}
-                  &#8377;{roundOff(product?.defaultVariant?.costPrice)}
+                  &#8377;{addCommasToNumber(roundOff(product?.defaultVariant?.costPrice))}
                 </span>
               )}
               <span className="tp-product-price-3">

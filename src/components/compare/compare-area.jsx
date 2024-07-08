@@ -9,10 +9,12 @@ import {
   add_compare,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { remove_compare_product } from "@/redux/features/compareSlice";
 import {
   useAddToCartMutation,
+  useGetCartAllListQuery,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -38,6 +40,9 @@ const CompareArea = () => {
 
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const [getProducts] = useGetProductByIdMutation();
   const [compareData, setCompareData] = useState([]);
@@ -147,6 +152,8 @@ const CompareArea = () => {
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
     } catch (error) {
       console.error("Error:", error);

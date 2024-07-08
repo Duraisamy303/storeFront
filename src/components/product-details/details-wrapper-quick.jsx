@@ -11,6 +11,7 @@ import {
   add_cart_product,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
@@ -22,6 +23,7 @@ import {
 } from "@/utils/functions";
 import {
   useAddToCartMutation,
+  useGetCartAllListQuery,
   useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
@@ -88,6 +90,8 @@ const DetailsWrapper = ({
     isError: productError,
     refetch: productRefetch,
   } = useGetProductQuery({ productId: productItem?.id });
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  useGetCartAllListQuery({});
 
   const ProductData = productData?.data?.product;
 
@@ -275,6 +279,8 @@ const DetailsWrapper = ({
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
       setCartLoader(false);
     } catch (error) {

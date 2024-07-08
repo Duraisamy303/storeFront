@@ -11,12 +11,9 @@ import {
   useGetDesignListQuery,
 } from "@/redux/features/productApi";
 import { useGetStoneListQuery } from "../../../redux/features/productApi";
+import { mergeAndRemoveDuplicates } from "@/utils/functions";
 
-const FinishFilter = ({
-  setCurrPage,
-  shop_right = false,
-  finishFilterData,
-}) => {
+const FinishFilter = ({ setCurrPage, shop_right = false }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const dispatch = useDispatch();
@@ -109,27 +106,27 @@ const FinishFilter = ({
       ...designList,
       ...stoneList,
     ].filter((item) =>
-      filter.some(
+      filter?.some(
         (checkedItem) =>
           checkedItem.id === item.id && checkedItem.type === item.type
       )
     );
 
     setCheckedItem(initialCheckedItems);
-  }, [finishList, styleList, stoneList, designList, filter]);
+  }, [finishList, styleList, stoneList, designList,filter]);
 
   const handleCheckboxChange = (data, type) => {
     let item = {
       ...data,
       type,
     };
-    const isChecked = checkedItem.some(
+    const isChecked = checkedItem?.some(
       (selectedItem) => selectedItem.id === item.id
     );
 
     let updatedItems = [];
     if (isChecked) {
-      updatedItems = checkedItem.filter(
+      updatedItems = checkedItem?.filter(
         (selectedItem) => selectedItem.id !== item.id
       );
     } else {
@@ -138,8 +135,27 @@ const FinishFilter = ({
         ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
       ];
     }
-    setCheckedItem(updatedItems);
-    dispatch(filterData(updatedItems));
+    console.log("updatedItems: ", updatedItems);
+
+    let allVal = [];
+    console.log("filter: ", filter);
+
+    if (filter?.length > 0) {
+      const arr = mergeAndRemoveDuplicates(updatedItems, filter);
+      allVal = arr;
+    } else {
+      allVal = [...updatedItems];
+    }
+
+    // if (filter?.length > 0) {
+    //   const findPrice = allVal?.find((item) => item.type == "price");
+    //   if (findPrice) {
+    //     allVal = [...allVal, findPrice];
+    //   }
+    // }
+
+    setCheckedItem(allVal);
+    dispatch(filterData(allVal));
     dispatch(handleFilterSidebarClose());
   };
 
@@ -156,7 +172,7 @@ const FinishFilter = ({
                     id={s?.id}
                     type="checkbox"
                     readOnly
-                    checked={checkedItem.some(
+                    checked={checkedItem?.some(
                       (selectedItem) => selectedItem.id === s.id
                     )}
                     onChange={() => handleCheckboxChange(s, "finish")}

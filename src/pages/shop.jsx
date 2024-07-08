@@ -145,6 +145,7 @@ const ShopPage = () => {
   let products = productsData?.data?.products?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   const [selectValue, setSelectValue] = useState("");
   const [categoryList, setCategoryList] = useState([]);
@@ -176,15 +177,15 @@ const ShopPage = () => {
         return price > max ? price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
+      setMaxPrice(maxPrice);
     }
-  }, [isLoading, isError, products]);
+  }, [isLoading, isError]);
 
   useEffect(() => {
     if (router?.asPath === "/shop") {
       productLists();
     }
   }, [productsData, router]);
-  console.log("router.query: ", router);
   const productLists = () => {
     if (
       productsData &&
@@ -216,7 +217,6 @@ const ShopPage = () => {
   };
 
   const selectHandleFilter = async (e) => {
-    console.log("e: ", e.value);
     setSelectValue(e.value);
 
     try {
@@ -233,17 +233,14 @@ const ShopPage = () => {
       if (e.value == "New Added") {
         sortBy = { direction: "DESC", field: "CREATED_AT" };
       }
-      console.log("sortBy: ", sortBy);
 
       const res = await getAllProducts({
         sortBy: sortBy,
       });
-      console.log("selectHandleFilter: ", res);
       setProductList(res?.data?.data?.products?.edges);
     } catch (error) {
       console.log("error: ", error);
     }
-    console.log("e: ", e.value);
   };
 
   const otherProps = {
@@ -263,7 +260,11 @@ const ShopPage = () => {
   }, [selectValue]);
 
   useEffect(() => {
-    filters();
+    if (filter?.length > 0) {
+      filters();
+    } else {
+      productLists();
+    }
   }, [filter]);
 
   const sortingFilter = () => {
@@ -312,8 +313,6 @@ const ShopPage = () => {
     });
   };
 
-  console.log("productList: ", productList);
-
   const filterByTags = () => {
     const datas = {
       tag: router?.query?.tag,
@@ -330,33 +329,44 @@ const ShopPage = () => {
   };
 
   const filters = () => {
-    const datas = {};
+    let datas = {};
+    const find = filter?.find((item) => item?.type == "price");
+    // if (find == undefined) {
     if (filter?.length > 0) {
-      filter.forEach((item) => {
-        if (item.type === "finish") {
-          datas.productFinish = item.id;
-        } else if (item.type === "style") {
-          datas.productstyle = item.id;
-        } else if (item.type === "design") {
-          datas.prouctDesign = item.id;
-        } else if (item.type === "stone") {
-          datas.productStoneType = item.id;
+      filter?.forEach((item) => {
+        if (item?.type === "finish") {
+          datas.productFinish = item?.id;
+        } else if (item?.type === "style") {
+          datas.productstyle = item?.id;
+        } else if (item?.type === "design") {
+          datas.prouctDesign = item?.id;
+        } else if (item?.type === "stone") {
+          datas.productStoneType = item?.id;
         }
       });
+      if (find !== undefined) {
+        datas.price = { gte: priceValue[0], lte: priceValue[1] };
+        // setPriceValue([find.min, find.max]);
+      }
 
       priceFilter({
         filter: datas,
       }).then((res) => {
         const list = res?.data?.data?.products?.edges;
         setProductList(list);
+
         dispatch(handleFilterSidebarClose());
       });
     } else {
       productLists();
+
+      let datas = [...filter, find];
+      dispatch(filterData(datas));
     }
+    // }
   };
 
-  const filterByPrice = (data, type) => {
+  const filterByPrice = (type) => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
@@ -365,13 +375,20 @@ const ShopPage = () => {
     }).then((res) => {
       const list = res?.data?.data?.products?.edges;
       setProductList(list);
+
       const body = {
         type: "price",
         min: priceValue[0],
         max: priceValue[1],
       };
 
-      const listd = [...filter, body];
+      let filteredList = filter;
+
+      if (type === "priceRange") {
+        filteredList = filter?.filter((item) => item.type !== "price");
+      }
+
+      const listd = [...filteredList, body];
       dispatch(filterData(listd));
       setPriceValue([priceValue[0], priceValue[1]]);
       setFilterList([...filterList, body]);
@@ -400,7 +417,6 @@ const ShopPage = () => {
       const res = await getTagName({
         id: router?.query?.tag,
       });
-      console.log("✌️res --->", res);
       const list = res?.data?.data?.tagById?.name;
       setTagName(list);
     } catch (err) {
@@ -419,11 +435,6 @@ const ShopPage = () => {
     shopTitle = `Shop / ${tagName}`;
   }
 
-  console.log(shopTitle);
-  console.log("✌️shopTitle --->", shopTitle);
-
- 
-
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
@@ -441,19 +452,20 @@ const ShopPage = () => {
       ) : (
         <> */}
 
-<ShopArea
+      <ShopArea
         all_products={productList}
         products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
         subtitle={shopTitle}
-        updateRange={(range) => setPriceValue(range)}
+        updateRange={(range) => handleChanges(range)}
+        maxPrice={maxPrice}
       />
       <ShopFilterOffCanvas
         all_products={products}
         otherProps={otherProps}
-        filterByPrice={() => filterByPrice()}
-        finishFilterData={(data, type) => filterByPrice(data, type)}
+        filterByPrice={(val) => filterByPrice("priceRange")}
+        maxPrice={maxPrice}
       />
       <FooterTwo primary_style={true} />
       {/* </>

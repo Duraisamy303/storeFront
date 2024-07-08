@@ -52,7 +52,6 @@ const ChangePassword = () => {
       new_password: data.newPassword,
     })
       .then((result) => {
-        console.log("✌️result --->", result);
         if (result?.data?.data?.passwordChange?.errors?.length > 0) {
           // If there are errors returned by the mutation, display the first error message
           notifyError(result?.data?.data?.passwordChange?.errors[0]?.message);

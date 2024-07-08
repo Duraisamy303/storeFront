@@ -12,10 +12,14 @@ import {
   add_compare,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartAllListQuery,
+} from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
 import {
@@ -39,6 +43,9 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
+
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
@@ -153,9 +160,8 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
   const Category_Name = product?.node?.category?.name;
   const Price = product?.node?.pricing?.priceRange?.start?.gross?.amount;
 
-
   const openModal = () => {
-    const datas = { ...product?.node, images: product?.node?.images,  };
+    const datas = { ...product?.node, images: product?.node?.images };
     dispatch(handleProductModal(datas));
   };
 
@@ -168,19 +174,25 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
         checkoutToken: checkoutTokenINR,
         variantId: product?.node?.defaultVariant?.id,
       });
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0 || response.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message || response.data?.checkoutLinesAdd?.errors[0]?.message
+      if (
+        response.data?.data?.checkoutLinesAdd?.errors?.length > 0 ||
+        response.data?.checkoutLinesAdd?.errors?.length > 0
+      ) {
+        const err =
+          response.data?.data?.checkoutLinesAdd?.errors[0]?.message ||
+          response.data?.checkoutLinesAdd?.errors[0]?.message;
         notifyError(err);
       } else {
         notifySuccess(`${product.node.name} added to cart successfully`);
+        dispatch(openCartMini());
         cartRefetch();
+        AllListChannelREfresh();
       }
       setCartLoader(false);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
 
   const addToCartProductUSD = async () => {
     setCartLoader(true);
@@ -205,7 +217,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
 
   return (
     <>
-      <div className="tp-category-item-7 p-relative z-index-1 fix text-center" >
+      <div className="tp-category-item-7 p-relative z-index-1 fix text-center">
         <Link href={`/product-details/${product?.node?.id}`}>
           <div
             className="tp-category-thumb-4 include-bg"
@@ -229,7 +241,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
 
           <div
             className={`${
-              RelatedProduct?.defaultVariant?.quantityAvailable == 0 
+              RelatedProduct?.defaultVariant?.quantityAvailable == 0
                 ? "tp-product-badge"
                 : "tp-product-badge-2"
             }`}
@@ -381,58 +393,70 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
             </button>
           </div>
         </div>
-        <div className="text-center  mt-5 tp-menu-product-name" >
-        <p style={{ color: "white", fontWeight: "400", margin: "0px" }}>
-          {Product_name}
-        </p>
-        <p style={{ color: "white", margin: "0px", fontSize: "14px" }}>
-          {Category_Name}
-        </p>
-        {checkChannel() === "india-channel" ? (
-          <>
-            {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
+        <div className="text-center  mt-5 tp-menu-product-name">
+          <p style={{ color: "white", fontWeight: "400", margin: "0px" }}>
+            {Product_name}
+          </p>
+          <p style={{ color: "white", margin: "0px", fontSize: "14px" }}>
+            {Category_Name}
+          </p>
+          {checkChannel() === "india-channel" ? (
+            <>
+              {RegularPrice(
+                RelatedProduct?.defaultVariant?.costPrice,
+                Price
+              ) && (
+                <span
+                  style={{
+                    color: "black",
+                    margin: "0px",
+                    fontSize: "14px",
+                    textDecoration: "line-through",
+                  }}
+                  className="tp-product-price-1 pr-5 line-through "
+                >
+                  ₹{roundOff(RelatedProduct?.defaultVariant?.costPrice)}
+                </span>
+              )}
+              <span
+                className="tp-product-price-2 new-price"
+                style={{ color: "White", margin: "0px", fontSize: "14px" }}
+              >
+                ₹{roundOff(Price)}
+              </span>
+            </>
+          ) : (
+            <>
+              {RegularPrice(
+                RelatedProduct?.defaultVariant?.costPrice,
+                Price
+              ) && (
+                <span
+                  style={{
+                    color: "black",
+                    margin: "0px",
+                    fontSize: "14px",
+                    textDecoration: "line-through",
+                  }}
+                  className="tp-product-price-1 pr-5 line-through "
+                >
+                  ${roundOff(RelatedProduct?.defaultVariant?.costPrice)}
+                </span>
+              )}
               <span
                 style={{
-                  color: "black",
+                  color: "white",
                   margin: "0px",
                   fontSize: "14px",
-                  textDecoration: "line-through",
+                  fontWeight: "500",
                 }}
-                className="tp-product-price-1 pr-5 line-through "
               >
-                ₹{roundOff(RelatedProduct?.defaultVariant?.costPrice)}
+                ${roundOff(Price)}
               </span>
-            )}
-            <span
-              className="tp-product-price-2 new-price"
-              style={{ color: "White", margin: "0px", fontSize: "14px" }}
-            >
-              ₹{roundOff(Price)}
-            </span>
-          </>
-        ) : (
-          <>
-            {RegularPrice(RelatedProduct?.defaultVariant?.costPrice, Price) && (
-              <span
-                style={{
-                  color: "black",
-                  margin: "0px",
-                  fontSize: "14px",
-                  textDecoration: "line-through",
-                }}
-                className="tp-product-price-1 pr-5 line-through "
-              >
-                ${roundOff(RelatedProduct?.defaultVariant?.costPrice)}
-              </span>
-            )}
-            <span style={{ color: "white", margin: "0px", fontSize: "14px", fontWeight:"500" }}>
-              ${roundOff(Price)}
-            </span>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-      </div>
-      
     </>
   );
 };

@@ -5,8 +5,10 @@ import { PRODUCT_LIST } from "@/utils/queries/productList";
 import { configuration } from "@/utils/constant";
 import { CHANGE_PASSWORD, LOGIN } from "@/utils/queries/login/login";
 import {
+  FORGET_PASSWORD,
   GET_ORDER_LIST_BY_EMAIL,
   REGISTER,
+  RESET_PASSWORD
 } from "@/utils/queries/register/register";
 
 export const authApi = apiSlice.injectEndpoints({
@@ -152,22 +154,7 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    // reset password
-    resetPassword: builder.mutation({
-      query: (data) => ({
-        url: "api/user/forget-password",
-        method: "PATCH",
-        body: data,
-      }),
-    }),
-    // confirmForgotPassword
-    confirmForgotPassword: builder.mutation({
-      query: (data) => ({
-        url: "api/user/confirm-forget-password",
-        method: "PATCH",
-        body: data,
-      }),
-    }),
+   
     // change password
     changePassword: builder.mutation({
       query: ({ old_password, new_password }) => {
@@ -181,6 +168,20 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
+    forgetPassword: builder.mutation({
+      query: ({ email,redirectUrl,token }) => {
+        return configuration(FORGET_PASSWORD({ email,redirectUrl,token }));
+      },
+    }),
+
+    resetPassword: builder.mutation({
+      query: ({ email,password,token }) => {
+        return configuration(RESET_PASSWORD({ email,password,token }));
+      },
+    }),
+
+
 
     // updateProfile password
     updateProfile: builder.mutation({
@@ -238,10 +239,11 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useConfirmEmailQuery,
-  useResetPasswordMutation,
   useConfirmForgotPasswordMutation,
   useChangePasswordMutation,
   useUpdateProfileMutation,
   useSignUpProviderMutation,
   useGetOrderListQuery,
+  useForgetPasswordMutation,
+  useResetPasswordMutation
 } = authApi;

@@ -30,6 +30,7 @@ import {
   UPDATE_BILLING_ADDRESS_ADDRESS_SECTION,
   UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION,
   TAG_NAME,
+  PAYMENT_LIST,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -410,7 +411,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     productSearch: builder.mutation({
-      query: ({ query }) => {
+      query: ({ search }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -418,7 +419,7 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_SEARCH({ channel, query }));
+        return configuration(PRODUCT_SEARCH({ channel, search }));
       },
       providesTags: ["Products"],
     }),
@@ -538,6 +539,12 @@ export const productApi = apiSlice.injectEndpoints({
         return configuration(SINGLE_PRODUCT({ productId, channel }));
       },
     }),
+
+    paymentList: builder.mutation({
+      query: () => {
+        return configuration(PAYMENT_LIST());
+      },
+    }),
   }),
 });
 
@@ -584,4 +591,5 @@ export const {
   useGetTagNameMutation,
   useOrderCancelMutation,
   useGetYouMayLikeMutation,
+  usePaymentListMutation,
 } = productApi;

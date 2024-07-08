@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { checkChannel, roundOff } from "../../utils/functions";
+import { addCommasToNumber, checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import { ClipLoader } from "react-spinners";
 
@@ -137,7 +137,7 @@ const CartItem = ({
 
           <td className="tp-cart-price">
             {channel == "india-channel" ? (
-              <span>&#8377;{roundOff(price)}</span>
+              <span>&#8377;{addCommasToNumber(price)}</span>
             ) : (
               <span>${roundOff(price)}</span>
             )}
@@ -188,9 +188,9 @@ const CartItem = ({
                 <>
                   {!isQuantity ? (
 
-                    <span style={{color:"gray"}}>&#8377;{roundOff(price)}</span>
+                    <span style={{color:"gray"}}>&#8377;{addCommasToNumber(price)}</span>
                   ) : (
-                    <span style={{color:"gray"}}>&#8377;{roundOff(price * quantity)}</span>
+                    <span style={{color:"gray"}}>&#8377;{addCommasToNumber(price * quantity)}</span>
                   )}
                 </>
               ) : (

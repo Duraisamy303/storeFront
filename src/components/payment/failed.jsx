@@ -1,7 +1,11 @@
 import { useOrderListQuery } from "@/redux/features/productApi";
 import moment from "moment";
 import React, { useCallback } from "react";
-import { checkChannel, roundOff } from "../../utils/functions";
+import {
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "../../utils/functions";
 import { useRouter } from "next/router";
 import { usePaymentMutation } from "@/redux/features/productApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
@@ -104,7 +108,12 @@ const Failed = ({ data, orderId }) => {
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="col-lg-7">
             <p style={{ color: "red" }}>Order Failed</p>
-            <p style={{ color: "gray" }}>Pay with {paymentMethod} </p>
+            <p style={{ color: "gray" }}>
+              Pay with{" "}
+              {paymentMethod == "Cash On delivery"
+                ? "Cash On Delivery"
+                : paymentMethod}{" "}
+            </p>
             <h3>Order Details</h3>
             <div>
               <table className="table width-100">
@@ -122,7 +131,10 @@ const Failed = ({ data, orderId }) => {
                         {checkChannel() === "india-channel" ? (
                           <>
                             <td>
-                              &#8377;{roundOff(order.totalPrice?.gross?.amount)}
+                              &#8377;
+                              {addCommasToNumber(
+                                order.totalPrice?.gross?.amount
+                              )}
                             </td>
                           </>
                         ) : (
@@ -140,7 +152,7 @@ const Failed = ({ data, orderId }) => {
                     <td>Subtotal</td>
                     {checkChannel() === "india-channel" ? (
                       <>
-                        <td>&#8377;{roundOff(SubTotal)}</td>
+                        <td>&#8377;{addCommasToNumber(SubTotal)}</td>
                       </>
                     ) : (
                       <>
@@ -150,28 +162,44 @@ const Failed = ({ data, orderId }) => {
                   </tr>
 
                   <tr>
-                    <td>Shipping</td>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "COD Fee"
+                        : "Shipping"}
+                    </td>
+
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;{roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
+                          &#8377;
+                          {paymentMethod == "Cash On delivery" || giftWrap
+                            ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
+                            : Number(roundOff(ShippingAmount)).toFixed(2)}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>
-                          ${roundOff(ShippingAmount)}
-                          {giftWrap && <div>(Include Gift wrap &#8377;50)</div>}
-                        </td>
+                        <td>${roundOff(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
 
+                  {giftWrap && (
+                    <tr>
+                      <td>Gift Wrap</td>
+
+                      <td>&#8377;50.00</td>
+                    </tr>
+                  )}
+
                   <tr>
                     <td>Payment Method</td>
 
-                    <td>{paymentMethod}</td>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "Cash On Delivery"
+                        : paymentMethod}
+                    </td>
                   </tr>
 
                   <tr>
@@ -180,25 +208,24 @@ const Failed = ({ data, orderId }) => {
                     <td>{status}</td>
                   </tr>
 
-                  {
-                GiftCard && GiftCard.length > 0 && (
-                  <tr>
-                  <td>
-                    Coupon
-                  </td>
-                  <td>{GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
-                    { GiftCard[0]?.initialBalance?.amount}
-                  </td>
-                </tr>
-                )
-              }
+                  {GiftCard && GiftCard.length > 0 && (
+                    <tr>
+                      <td>Coupon</td>
+                      <td>
+                        {GiftCard[0]?.initialBalance?.currency == "USD"
+                          ? "$"
+                          : "₹"}
+                        {GiftCard[0]?.initialBalance?.amount}
+                      </td>
+                    </tr>
+                  )}
 
                   <tr>
                     <td style={{ color: "black", fontWeight: "600" }}>Total</td>
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          &#8377;{roundOff(Total)}
+                          &#8377;{addCommasToNumber(Total)}
                           <div
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
@@ -247,7 +274,7 @@ const Failed = ({ data, orderId }) => {
                   Total:{" "}
                   {checkChannel() === "india-channel" ? (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      &#8377;{roundOff(Total)}
+                      &#8377;{addCommasToNumber(Total)}
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
@@ -256,7 +283,12 @@ const Failed = ({ data, orderId }) => {
                   )}
                 </li>
                 <li style={{ paddingBottom: "8px" }}>
-                  Payment Method: <span>{paymentMethod}</span>
+                  Payment Method:{" "}
+                  <span>
+                    {paymentMethod == "Cash On delivery"
+                      ? "Cash On Delivery"
+                      : paymentMethod}
+                  </span>
                 </li>
               </ul>
             </div>

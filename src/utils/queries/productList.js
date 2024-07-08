@@ -1,6 +1,6 @@
 import { PRODUCT_LIST_ITEM_FRAGMENT } from "./productDetails";
 
-export const PRODUCT_LIST = ({ channel, first,sortBy }) => {
+export const PRODUCT_LIST = ({ channel, first, sortBy }) => {
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy:ProductOrder) {
@@ -595,7 +595,7 @@ export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
           node {
             id
             name
-            products(first: $first, after: $after) {
+            products(first: $first, after: $after,sortBy: {direction: DESC, field: CREATED_AT}) {
               totalCount
               edges {
                 node {
@@ -689,6 +689,25 @@ export const COUNTRY_LIST = () => {
         }
       }
     }
+    `,
+  });
+};
+
+export const PAYMENT_LIST = () => {
+  return JSON.stringify({
+    query: `
+    query GetPaymnetGatewayList {
+  paymentGateways(first: 10) {
+    edges {
+      node {
+        description
+        id
+        isActive
+        name
+      }
+    }
+  }
+}
     `,
   });
 };
@@ -914,47 +933,40 @@ export const SALE_LIST = ({ code }) => {
   });
 };
 
-export const PRODUCT_SEARCH = ({ query, channel }) => {
+export const PRODUCT_SEARCH = ({ search, channel }) => {
   return JSON.stringify({
-    query: `query ProductSearchbyName($query: String!, $channel: String!) {
-      products(
-        first: 50
-        channel: $channel
-        search: $query
-        sortBy: {direction: ASC, field: NAME}
-      ) {
-        edges {
-          node {
-            id
-            name
-            defaultVariant {
-              id
-              name
-              
-            }
-            thumbnail {
-              url
-            }
-            pricing {
-              priceRange {
-                start {
-                  gross {
-                    amount
-                  }
-                }
-                stop {
-                  gross {
-                    amount
-                  }
-                }
+    query: `query GlobalSearch($channel: String!, $search: String!) {
+  productsSearch(
+    channel: $channel
+    first: 100
+    search: $search
+    sortBy: {direction: DESC, field: CREATED_AT}
+  ) {
+    edges {
+      node {
+        id
+        name
+        defaultVariant {
+          pricing {
+            price {
+              gross {
+                amount
+                currency
               }
             }
           }
         }
+        thumbnail {
+          url
+          alt
+        }
       }
     }
+  }
+}
+
     `,
-    variables: { query, channel },
+    variables: { search, channel },
   });
 };
 

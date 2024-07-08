@@ -1,4 +1,4 @@
-import { checkChannel, roundOff } from "@/utils/functions";
+import { addCommasToNumber, checkChannel, roundOff } from "@/utils/functions";
 import moment from "moment/moment";
 import React from "react";
 
@@ -9,6 +9,8 @@ const MyOrderDetails = ({ data }) => {
   const Tax = data?.data?.order?.total.tax;
   const ShippingAmount = data?.data?.order?.shippingPrice;
   const GiftCard = data?.data?.order?.giftCards;
+  const giftWrap = data?.data?.order?.isGiftWrap;
+  const paymentMethod = data?.data?.order?.paymentMethod?.name;
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -45,7 +47,7 @@ const MyOrderDetails = ({ data }) => {
 
                   <td>
                     {item?.totalPrice?.gross?.currency === "USD" ? "$" : "₹"}
-                    {roundOff(item?.totalPrice?.gross?.amount)}
+                    {addCommasToNumber(item?.totalPrice?.gross?.amount)}
                   </td>
                 </tr>
               ))}
@@ -55,18 +57,39 @@ const MyOrderDetails = ({ data }) => {
 
                 <td>
                   {SubTotal?.currency == "USD" ? "$" : "₹"}
-                  {roundOff(SubTotal?.amount)}
+                  {addCommasToNumber(SubTotal?.amount)}
                 </td>
               </tr>
 
               <tr>
-                <td>Shipping</td>
-
                 <td>
-                  {ShippingAmount?.gross?.currency == "USD" ? "$" : "₹"}
-                  {roundOff(ShippingAmount?.gross?.amount)}
+                  {paymentMethod == "Cash On delivery" ? "COD Fee" : "Shipping"}
                 </td>
+
+                {checkChannel() === "india-channel" ? (
+                  <>
+                    <td>
+                      &#8377;
+                      {paymentMethod == "Cash On delivery" || giftWrap
+                        ? Number(roundOff(ShippingAmount?.gross?.amount) - 50).toFixed(2)
+                        : Number(roundOff(ShippingAmount?.gross?.amount)).toFixed(2)}
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>${roundOff(ShippingAmount?.gross?.amount)}</td>
+                  </>
+                )}
               </tr>
+
+              {giftWrap && (
+                <tr>
+                  <td>Gift Wrap</td>
+
+                  <td>&#8377;50.00</td>
+                </tr>
+              )}
+
               {GiftCard && GiftCard.length > 0 && (
                 <tr>
                   <td>Coupon</td>
@@ -83,10 +106,10 @@ const MyOrderDetails = ({ data }) => {
                 <td style={{ fontSize: "20px" }}>
                   {Total?.currency == "USD" ? "$" : "₹"}
 
-                  {roundOff(Total?.amount)}
+                  {addCommasToNumber(Total?.amount)}
                   <div style={{ fontSize: "15px" }}>
                     (includes {Total?.currency == "USD" ? "$" : "₹"}
-                    {roundOff(Tax?.amount)} GST)
+                    {addCommasToNumber(Tax?.amount)} GST)
                   </div>
                 </td>
               </tr>
@@ -95,7 +118,9 @@ const MyOrderDetails = ({ data }) => {
         </div>
         <div className="row pt-50">
           <div className="col-md-6">
-            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>BILLING ADDRESS</h4>
+            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>
+              BILLING ADDRESS
+            </h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.billingAddress?.firstName} {Data?.billingAddress?.lastName}
             </p>
@@ -118,7 +143,9 @@ const MyOrderDetails = ({ data }) => {
             <p></p>
           </div>
           <div className="col-md-6">
-            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>SHIPPING ADDRESS</h4>
+            <h4 style={{ fontWeight: "400", fontSize: "18px" }}>
+              SHIPPING ADDRESS
+            </h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
               {Data?.shippingAddress?.firstName}{" "}
               {Data?.shippingAddress?.lastName}

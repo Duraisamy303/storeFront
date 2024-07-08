@@ -12,10 +12,11 @@ import {
   add_compare,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useAddToCartMutation } from "@/redux/features/card/cardApi";
+import { useAddToCartMutation, useGetCartAllListQuery } from "@/redux/features/card/cardApi";
 import LoginForm from "@/components/forms/login-form";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
@@ -40,6 +41,9 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
+
+    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  useGetCartAllListQuery({});
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
@@ -174,6 +178,8 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
       } else {
         notifySuccess(`${product.node.name} added to cart successfully`);
         cartRefetch();
+        dispatch(openCartMini());
+        AllListChannelREfresh();
       }
       setCartLoader(false);
     } catch (error) {
