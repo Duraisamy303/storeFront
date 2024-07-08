@@ -361,7 +361,6 @@ const DetailsWrapper = ({
     isNextErrors,
   } = useGetNextProductQuery({ nextProductId: productItem?.nextProduct });
 
-
   const {
     data: prevProductData,
     isPreviousLoadings,
@@ -485,7 +484,6 @@ const DetailsWrapper = ({
     );
     setVariantDetails(variantDetails);
   };
-
 
   return (
     <div className="tp-product-details-wrapper">
@@ -691,7 +689,7 @@ const DetailsWrapper = ({
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
       {/* price */}
-      <div className="tp-product-details-price-wrapper mb-20">
+      <div className="tp-product-details-price-wrapper mb-15">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
             {RegularPrice(
@@ -874,7 +872,7 @@ const DetailsWrapper = ({
         </div>
       )} */}
 
-      <div className="mt-2">
+      <div >
         <p style={{ fontSize: "16px", color: "black" }}>
           {variantDetails ? (
             <>
@@ -900,10 +898,9 @@ const DetailsWrapper = ({
           )}
         </p>
       </div>
-
-      <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
-        <div className="tp-product-details-add-to-cart mb-15">
-          {productItem?.defaultVariant?.quantityAvailable != 0 && (
+      {productItem?.defaultVariant?.quantityAvailable != 0 && (
+        <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
+          <div className="tp-product-details-add-to-cart">
             <button
               onClick={() => {
                 // if (isAddedToCart) {
@@ -923,9 +920,9 @@ const DetailsWrapper = ({
                 <>{"Add To Cart"}</>
               )}
             </button>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* product-details-action-sm start */}
       <div
@@ -1010,8 +1007,8 @@ const DetailsWrapper = ({
           <div
             style={{
               borderBottom: "1px solid #EAEBED",
-              paddingBottom: "15px",
-              marginBottom: "15px",
+              paddingBottom: "10px",
+              marginBottom: "10px",
             }}
           >
             <div
@@ -1037,7 +1034,7 @@ const DetailsWrapper = ({
 
                   return (
                     <>
-                      <div style={{marginTop:"10px"}}>
+                      <div style={{ marginTop: "10px" }}>
                         <div>
                           {block?.type === "header" && (
                             <h5 style={{ fontWeight: "400" }}>
@@ -1048,7 +1045,7 @@ const DetailsWrapper = ({
 
                         <div key={block.id}>
                           {block.type === "paragraph" && (
-                            <p style={{ color: "gray", marginBottom:"5px" }}>
+                            <p style={{ color: "gray", marginBottom: "5px" }}>
                               {block.data.text && (
                                 <span
                                   dangerouslySetInnerHTML={{
@@ -1062,7 +1059,7 @@ const DetailsWrapper = ({
                           )}
                         </div>
 
-                        <div key={block.id} style={{paddingLeft:"20px"}}>
+                        <div key={block.id} style={{ paddingLeft: "20px" }}>
                           {block.type === "list" && (
                             <ul>
                               {
@@ -1114,8 +1111,8 @@ const DetailsWrapper = ({
             <div
               style={{
                 borderBottom: "1px solid #EAEBED",
-                paddingBottom: "15px",
-                marginBottom: "15px",
+                paddingBottom: "10px",
+                marginBottom: "10px",
               }}
             >
               <div
@@ -1331,8 +1328,8 @@ const DetailsWrapper = ({
           <div
             style={{
               borderBottom: "1px solid #EAEBED",
-              paddingBottom: "15px",
-              marginBottom: "15px",
+              paddingBottom: "10px",
+              marginBottom: "10px",
             }}
           >
             <div
