@@ -4,7 +4,9 @@ import { profilePic } from "@/utils/constant";
 import {
   UpOutlined,
   DownOutlined,
-  MergeCellsOutlined, LeftOutlined, RightOutlined
+  MergeCellsOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 
 const DetailsThumbWrapper = ({ product }) => {
@@ -12,13 +14,12 @@ const DetailsThumbWrapper = ({ product }) => {
   const imageUrls = product?.media?.map((item) => item?.url) || [];
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
   const [loading, setLoading] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [showText, setShowText] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const buttonRef = useRef(null);
   const timeoutId = useRef(null);
   const [startIndex, setStartIndex] = useState(0);
+  const [hover, setHover] = useState(false);
   const handleImageActive = (item) => {
     setActiveImg(item);
     // setPhotoIndex(imageUrls.indexOf(item));
@@ -41,18 +42,6 @@ const DetailsThumbWrapper = ({ product }) => {
     } else if (direction === "next" && startIndex < imageUrls.length - 5) {
       setStartIndex((prev) => prev + 1);
     }
-  };
-
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutId.current);
-    setIsHovered(true);
-    timeoutId.current = setTimeout(() => setShowText(true), 300);
-  };
-
-  const handleMouseLeave = () => {
-    clearTimeout(timeoutId.current);
-    setIsHovered(false);
-    setShowText(false);
   };
 
   const handleLightboxClose = () => {
@@ -150,38 +139,12 @@ const DetailsThumbWrapper = ({ product }) => {
                     }}
                   >
                     <button
-                      ref={buttonRef}
-                      className="btn btn-primary"
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                      style={{
-                        border: "none",
-                        background: "rgb(194, 136, 43)",
-                        padding: "7px 0px",
-                        borderRadius: "50px",
-                        color: "white",
-                        transition: "width 0.3s ease-in-out",
-                        minWidth: "40px",
-                        width: isHovered
-                          ? `${buttonRef.current?.offsetWidth + 50}px`
-                          : "40px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                      className={`animated-button ${hover ? "hover" : ""}`}
+                      onMouseEnter={() => setHover(true)}
+                      onMouseLeave={() => setHover(false)}
                     >
-                      <MergeCellsOutlined />
-                      {showText && (
-                        <span
-                          style={{
-                            fontWeight: "500",
-                            marginLeft: "5px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          View Similar
-                        </span>
-                      )}
+                      <span className="icon"><MergeCellsOutlined stytle={{ fontSize: "18px"}} /></span>
+                      <span className="text">Similar Product</span>
                     </button>
                   </div>
                 </>
@@ -224,7 +187,7 @@ const DetailsThumbWrapper = ({ product }) => {
               top: "50vh",
             }}
           >
-           <LeftOutlined />
+            <LeftOutlined />
           </button>
           <img
             src={
@@ -269,7 +232,7 @@ const DetailsThumbWrapper = ({ product }) => {
               top: "50vh",
             }}
           >
-           <RightOutlined />
+            <RightOutlined />
           </button>
         </div>
       )}

@@ -740,3 +740,51 @@ content: none !important;
 }
 
 
+.animated-button {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	padding:5px 10px;
+	font-size: 16px;
+	color: white;
+	background-color: rgb(194, 136, 43);
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	overflow: hidden;
+	transition: width 0.3s ease-in-out;
+	width: 40px;
+  }
+  
+  .animated-button .icon {
+	font-size: 24px;
+	transition: opacity 0.3s ease-in-out;
+  }
+  
+  .animated-button .text {
+	position: absolute;
+	white-space: nowrap;
+	overflow: hidden;
+	left: 145px;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+	font-weight: bold;
+  }
+  
+  .animated-button.hover {
+	width: 155px;
+  }
+  
+  .animated-button.hover .icon {
+	opacity: 1;
+  }
+  
+  .animated-button.hover .text {
+	opacity: 1;
+	transform: translateX(0);
+  }
+  
+  .animated-button.hover .text {
+	transform: translateX(-100%);
+  }
+  
