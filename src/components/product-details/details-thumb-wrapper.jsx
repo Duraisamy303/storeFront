@@ -75,12 +75,12 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
     <>
       <div
         className={`tp-product-details-thumb-wrapper tp-tab ${
-          imageUrls.length > 1 ? "d-sm-flex" : ""
+          imageUrls.length > 1 ? "d-lg-flex" : ""
         } w-100`}
       >
         {imageUrls?.length > 1 && (
           <nav className="product-side-nav-img p-relative">
-            <div className="nav nav-tabs flex-sm-column">
+            <div className="nav nav-tabs flex-lg-column flex-nowrap justify-content-between">
               {imageUrls.slice(startIndex, startIndex + 5).map((item, i) => (
                 <button
                   key={i + startIndex}

@@ -405,9 +405,9 @@ font-weight: 500;
   }
 
 @media(max-width: 1024px){
-	.product-side-nav-img{
-		display: none;
-	}
+	// .product-side-nav-img{
+	// 	display: none;
+	// }
 
 	.prade-navbar-logo{
 		width: 100px;
@@ -589,6 +589,21 @@ font-size: 12px;
 		left: 25px;
 		top: -50px;
 	}
+
+	
+.prev-btn{   
+	top: 40%;
+	left: 10px;	
+	rotate: 270deg;
+}
+
+.next-btn {
+	bottom: 45%;
+	left: 95%;
+	rotate: 270deg;	
+}
+
+
 }
 
 
@@ -637,7 +652,12 @@ font-size: 12px;
         left:65px;
         top: -60px;
 	}
-
+	.next-btn {
+		bottom: 45%;
+		left: 92.5%;
+		rotate: 270deg;	
+	}
+	
 	.soldout-badge{
 		padding: 10px 8px !important;
 		font-size: 10px;
