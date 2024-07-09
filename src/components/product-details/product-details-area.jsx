@@ -80,14 +80,8 @@ const ProductDetailsArea = ({
       </div>
 
       {/* product details description */}
-      <div className="tp-product-details-bottom pb-50">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-xl-12">
-              {/* <DetailsTabNav product={productItem} /> */}
-            </div>
-          </div>
-        </div>
+      <div className="tp-product-details-bottom pb-40">
+        
       </div>
       {/* product details description */}
 
@@ -97,10 +91,10 @@ const ProductDetailsArea = ({
         <>
           {/* related products start */}
           {productItem?.category?.length > 0 && (
-            <section className="tp-related-product pt-50"  ref={relatedProductsRef}>
+            <section className="tp-related-product pt-40"  ref={relatedProductsRef}>
               <div className="container-fluid">
                 <div className="row">
-                  <div className="tp-section-title-wrapper-6 mb-40">
+                  <div className="tp-section-title-wrapper-6 mb-10">
                     {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
                     <h3 className="tp-section-title-6">Similar Products</h3>
                   </div>
@@ -114,7 +108,7 @@ const ProductDetailsArea = ({
           )}
 
           {youMayLikeData?.length > 0 && (
-            <section className="tp-related-product pt-50">
+            <section className="tp-related-product pt-40">
               <div className="container-fluid">
                 <div className="row">
                   <div className="tp-section-title-wrapper-6 mb-40">

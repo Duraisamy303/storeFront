@@ -166,7 +166,7 @@ const ShopArea = ({
   }
   if (all_products?.length == 0) {
     content = (
-      <div className="text-center mt-50 mb-50">
+      <div className="text-center mt-50 mb-50 mt-lg-40 mb-lg-40">
         <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
         <p
           className="mt-20"
@@ -208,8 +208,8 @@ const ShopArea = ({
                     ?.map((item) => (
                       <div
                         key={item._id}
-                        className="col-xl-4 col-md-6 col-sm-6 col-6"
-                        style={{ marginBottom: "50px" }}
+                        className="col-xl-4 col-md-6 col-sm-6 col-6 mb-20 mb-lg-50"
+                      
                       >
                         <ProductItem products={item} updateData={updateData} />
                       </div>
