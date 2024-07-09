@@ -744,7 +744,7 @@ content: none !important;
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	padding:5px 10px;
+	padding:5px 8px;
 	font-size: 16px;
 	color: white;
 	background-color: rgb(194, 136, 43);
@@ -753,7 +753,7 @@ content: none !important;
 	cursor: pointer;
 	overflow: hidden;
 	transition: width 0.3s ease-in-out;
-	width: 40px;
+	width: 35px;
   }
   
   .animated-button .icon {
@@ -765,14 +765,14 @@ content: none !important;
 	position: absolute;
 	white-space: nowrap;
 	overflow: hidden;
-	left: 145px;
+	left: 135px;
 	opacity: 0;
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-	font-weight: bold;
+	font-weight: 500;
   }
   
   .animated-button.hover {
-	width: 155px;
+	width: 145px;
   }
   
   .animated-button.hover .icon {

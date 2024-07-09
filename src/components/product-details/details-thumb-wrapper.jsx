@@ -9,8 +9,8 @@ import {
   RightOutlined,
 } from "@ant-design/icons";
 
-const DetailsThumbWrapper = ({ product }) => {
-  console.log("✌️product --->", product);
+const DetailsThumbWrapper = ({ product, relatedClick }) => {
+
   const imageUrls = product?.media?.map((item) => item?.url) || [];
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
   const [loading, setLoading] = useState(false);
@@ -65,6 +65,11 @@ const DetailsThumbWrapper = ({ product }) => {
       }
     };
   }, []);
+
+
+  const handleClick = () => {
+    relatedClick();
+  };
 
   return (
     <>
@@ -136,15 +141,15 @@ const DetailsThumbWrapper = ({ product }) => {
                       position: "absolute",
                       bottom: "10px",
                       right: "10px",
-                    }}
+                    }} 
                   >
                     <button
                       className={`animated-button ${hover ? "hover" : ""}`}
-                      onMouseEnter={() => setHover(true)}
-                      onMouseLeave={() => setHover(false)}
+                      onMouseEnter={() => setHover(true)} 
+                      onMouseLeave={() => setHover(false)} onClick={handleClick}
                     >
                       <span className="icon"><MergeCellsOutlined stytle={{ fontSize: "18px"}} /></span>
-                      <span className="text">Similar Product</span>
+                      <span className="text"  >Similar Product</span>
                     </button>
                   </div>
                 </>

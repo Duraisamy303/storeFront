@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DetailsThumbWrapper from "./details-thumb-wrapper";
 import DetailsWrapper from "./details-wrapper";
 import { useDispatch } from "react-redux";
@@ -32,8 +32,13 @@ const ProductDetailsArea = ({
   };
 
   const imageUrls = productItem?.images?.map((item) => item?.url);
+  // Ref to the related products section
+  const relatedProductsRef = useRef(null);
 
-  
+  const relatedClicked = () => {
+    // Scroll to the related products section
+    relatedProductsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section
@@ -54,7 +59,7 @@ const ProductDetailsArea = ({
                 imgHeight={740}
                 imgHeightMobile={540}
                 videoId={videoId}
-                status={status}
+                status={status} relatedClick={() => relatedClicked()}
               />
               {/* product-details-thumb-wrapper end */}
             </div>
@@ -92,12 +97,12 @@ const ProductDetailsArea = ({
         <>
           {/* related products start */}
           {productItem?.category?.length > 0 && (
-            <section className="tp-related-product pt-50">
+            <section className="tp-related-product pt-50"  ref={relatedProductsRef}>
               <div className="container-fluid">
                 <div className="row">
                   <div className="tp-section-title-wrapper-6 mb-40">
                     {/* <span className="tp-section-title-pre-6">Next day Products</span> */}
-                    <h3 className="tp-section-title-6">Related Products</h3>
+                    <h3 className="tp-section-title-6">Similar Products</h3>
                   </div>
                 </div>
 
