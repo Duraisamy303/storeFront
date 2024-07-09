@@ -8,8 +8,10 @@ import {
   LeftOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const DetailsThumbWrapper = ({ product, relatedClick }) => {
+  const Router = useRouter();
 
   const imageUrls = product?.media?.map((item) => item?.url) || [];
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
@@ -65,7 +67,6 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
       }
     };
   }, []);
-
 
   const handleClick = () => {
     relatedClick();
@@ -136,22 +137,29 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                       onError={() => setLoading(false)}
                     />
                   </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      right: "10px",
-                    }} 
-                  >
-                    <button
-                      className={`animated-button ${hover ? "hover" : ""}`}
-                      onMouseEnter={() => setHover(true)} 
-                      onMouseLeave={() => setHover(false)} onClick={handleClick}
+                  {Router.route == "/gift-card" ? (
+                    <></>
+                  ) : (
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px",
+                      }}
                     >
-                      <span className="icon"><MergeCellsOutlined stytle={{ fontSize: "18px"}} /></span>
-                      <span className="text"  >Similar Product</span>
-                    </button>
-                  </div>
+                      <button
+                        className={`animated-button ${hover ? "hover" : ""}`}
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
+                        onClick={handleClick}
+                      >
+                        <span className="icon">
+                          <MergeCellsOutlined stytle={{ fontSize: "18px" }} />
+                        </span>
+                        <span className="text">Similar Product</span>
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
