@@ -181,7 +181,7 @@ const ShopArea = ({
     // Render product items...
     content = (
       <>
-        {products?.length === 0 && (
+        {/* {products?.length === 0 && (
           <div className="text-center">
             <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
             <p
@@ -191,7 +191,7 @@ const ShopArea = ({
               No Product Found
             </p>
           </div>
-        )}
+        )} */}
         {products?.length > 0 && (
           <div className="tp-shop-items-wrapper tp-shop-item-primary">
             <div className="tab-content" id="productTabContent">
