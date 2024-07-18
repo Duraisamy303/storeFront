@@ -194,11 +194,16 @@ export const removeduplicate = (arr) => {
   return uniqueData;
 };
 
-export const getParamsFromUrl=(url)=> {
+export const getParamsFromUrl = (url) => {
   const urlObj = new URL(url);
   const params = new URLSearchParams(urlObj.search);
   return {
-      email: params.get('email'),
-      token: params.get('token')
+    email: params.get("email"),
+    token: params.get("token"),
   };
-}
+};
+
+export const getValueByKey = (metadata, keyToFind) => {
+  const foundItem = metadata?.find((item) => item?.key === keyToFind);
+  return foundItem ? foundItem?.value : null;
+};

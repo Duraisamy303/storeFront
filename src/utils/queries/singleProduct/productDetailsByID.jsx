@@ -33,7 +33,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
       url
       alt
     }
-    images {
+    media {
       url
       alt
     }
@@ -59,9 +59,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     created
     description
-    images {
-      url
-    }
+  
     defaultVariant {
       id
       name

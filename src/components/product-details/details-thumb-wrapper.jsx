@@ -18,7 +18,7 @@ const DetailsThumbWrapper = ({
   product,
   imgHeightMobile,
 }) => {
-  const imageUrls = product?.images?.map((item) => item?.url);
+  const imageUrls = product?.media?.map((item) => item?.url);
 
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [activeImg, setActiveImg] = useState(imageUrls?.[0] || "");

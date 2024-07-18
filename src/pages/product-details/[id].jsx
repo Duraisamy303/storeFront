@@ -16,6 +16,7 @@ import PrdDetailsLoader from "@/components/loader/prd-details-loader";
 import FooterTwo from "@/layout/footers/footer-2";
 import { useCreateCheckoutTokenWithoutEmailMutation } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
+import { getValueByKey } from "@/utils/functions";
 
 const ProductDetailsPage = ({ query }) => {
   const router = useRouter();
@@ -48,6 +49,19 @@ const ProductDetailsPage = ({ query }) => {
 
   useEffect(() => {
     getYouMayLikeData();
+  }, [productData]);
+
+  useEffect(() => {
+    const product = productData?.data?.product;
+    const value = getValueByKey(product?.metadata, "keyword");
+      const meta = document.createElement("meta");
+      meta.name = "keyword";
+      meta.content = value?value:product?.name;
+      document.head.appendChild(meta);
+      return () => {
+        document.head.removeChild(meta);
+      };
+    
   }, [productData]);
 
   const createCheckoutTokenINR = async () => {

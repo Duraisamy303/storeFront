@@ -64,7 +64,7 @@ const ProductDetailsArea = ({
                 productItem={productItem}
                 productRefetch={detailsRefetch}
                 handleImageActive={handleImageActive}
-                activeImg={productItem?.images[0]?.url}
+                activeImg={productItem?.media[0]?.url}
                 detailsBottom={false}
                 pageTitle={pageTitle}
               />
