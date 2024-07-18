@@ -290,8 +290,8 @@ const PreOrders = () => {
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Pre Orders"
-        subtitle="Pre Orders"
+        title="Sale"
+        subtitle="Sale"
         bgImage={shopBanner}
         catList={categoryList}
       />

@@ -1,14 +1,14 @@
-import { useState } from "react";
-import PopupVideo from "../common/popup-video";
+import React, { useState, useRef, useEffect } from "react";
 import Loader from "../loader/loader";
 import { profilePic } from "@/utils/constant";
 import {
-  FullscreenOutlined,
   UpOutlined,
   DownOutlined,
-  PlusOutlined,
-  MinusOutlined,
+  MergeCellsOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const DetailsThumbWrapper = ({
   imgWidth,
@@ -18,302 +18,161 @@ const DetailsThumbWrapper = ({
   product,
   imgHeightMobile,
 }) => {
-  const imageUrls = product?.media?.map((item) => item?.url);
 
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [activeImg, setActiveImg] = useState(imageUrls?.[0] || "");
+  const imageUrls = product?.media?.map((item) => item?.url) || [];
+  const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
   const [loading, setLoading] = useState(false);
-  const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
-  const [isZoomed, setIsZoomed] = useState(false);
-
-  // lightbox state
-  const [showLightbox, setShowLightbox] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-  // Zoom state for lightbox
-  const [zoomLevel, setZoomLevel] = useState(1);
-
-  // Calculate adjusted image height
-  const adjustedImgHeight = imgHeight < 740 ? imgHeightMobile : imgHeight;
-
-  const handleImageActive = (item, index) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const buttonRef = useRef(null);
+  const timeoutId = useRef(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [hover, setHover] = useState(false);
+  const handleImageActive = (item) => {
     setActiveImg(item);
-    setSelectedImageIndex(index);
-  };
-
-  const handleMouseMove = (e) => {
-    const { left, top, width, height } = e.target.getBoundingClientRect();
-    const x = ((e.pageX - left) / width) * 100;
-    const y = ((e.pageY - top) / height) * 100;
-    setBackgroundPosition(`${x}% ${y}%`);
-  };
-
-  const handleMouseEnter = () => {
-    setIsZoomed(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsZoomed(false);
-    setBackgroundPosition("50% 50%"); // Center the image when the mouse leaves
-  };
-
-  // Lightbox functions
-  const handleImageClick = (index) => {
-    setSelectedImageIndex(index);
-    setShowLightbox(true);
-  };
-
-  const handleLightboxClose = () => {
-    setShowLightbox(false);
-    setSelectedImageIndex(0); // Reset the selected image index
-    setZoomLevel(1); // Reset zoom level
-  };
-
-  const navigateImage = (direction) => {
-    if (direction === "prev") {
-      setSelectedImageIndex((prevIndex) =>
-        prevIndex === 0 ? imageUrls.length - 1 : prevIndex - 1
-      );
-    } else if (direction === "next") {
-      setSelectedImageIndex((prevIndex) =>
-        prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1
-      );
-    }
-  };
-
-  const handleNavigationClick = (event) => {
-    event.stopPropagation(); // Prevent propagation of the click event
-    navigateImage(event.target.name);
+    // setPhotoIndex(imageUrls.indexOf(item));
   };
 
   const handleNavigationClicking = (direction) => {
     const currentIndex = imageUrls.indexOf(activeImg);
     let newIndex;
-
     if (direction === "prev") {
-      newIndex = currentIndex === 0 ? imageUrls.length - 1 : currentIndex - 1;
+      newIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
     } else {
-      newIndex = currentIndex === imageUrls.length - 1 ? 0 : currentIndex + 1;
+      newIndex = (currentIndex + 1) % imageUrls.length;
     }
+    setActiveImg(imageUrls[newIndex]);
+    setPhotoIndex(newIndex);
 
-    const newActiveImage = imageUrls[newIndex];
-    handleImageActive(newActiveImage, newIndex); // Pass newIndex to handleImageActive
-
-    // Scroll into view
-    const element = document.getElementById(`image-${newIndex}`);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "start",
-      });
+    // Adjust start index to show the fifth image when navigating
+    if (direction === "prev" && startIndex > 0) {
+      setStartIndex((prev) => prev - 1);
+    } else if (direction === "next" && startIndex < imageUrls.length - 5) {
+      setStartIndex((prev) => prev + 1);
     }
   };
 
-  const zoomIn = () => {
-    setZoomLevel((prevZoomLevel) => Math.min(prevZoomLevel + 0.2, 3)); // Max zoom level 3
+  const handleLightboxClose = () => {
+    setIsOpen(false);
   };
 
-  const zoomOut = () => {
-    setZoomLevel((prevZoomLevel) => Math.max(prevZoomLevel - 0.2, 1)); // Min zoom level 1
+  const handleLightboxPrev = (e) => {
+    e.stopPropagation();
+    handleNavigationClicking("prev");
+  };
+
+  const handleLightboxNext = (e) => {
+    e.stopPropagation();
+    handleNavigationClicking("next");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+    };
+  }, []);
+
+  const handleClick = () => {
+    relatedClick();
   };
 
   return (
     <>
-      <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex w-100">
-        <nav
-          className="product-side-nav-img"
-          style={{
-            height: imageUrls?.length > 4 ? "740px" : "auto",
-            overflow: "hidden",
-          }}
-        >
-          <div className="nav nav-tabs flex-sm-column">
-            {imageUrls?.map((item, i) => {
-              return (
+      <div
+        className={`tp-product-details-thumb-wrapper tp-tab ${
+          imageUrls.length > 1 ? "d-lg-flex" : ""
+        } w-100`}
+      >
+        {imageUrls?.length > 1 && (
+          <nav className="product-side-nav-img p-relative">
+            <div className="nav nav-tabs flex-lg-column flex-nowrap justify-content-start">
+              {imageUrls.slice(startIndex, startIndex + 5).map((item, i) => (
                 <button
-                  key={i}
+                  key={i + startIndex}
                   className={`nav-link ${item === activeImg ? "active" : ""}`}
-                  onClick={() => handleImageActive(item, i)}
+                  onClick={() => handleImageActive(item)}
                   id={`image-${i}`}
-                  style={{
-                    height: imageUrls?.length > 3 ? "180px" : "250px",
-                  }}
                 >
                   <img
                     src={item}
-                    alt="image"
+                    alt={`Product image ${i + 1}`}
                     width={78}
                     height={100}
                     style={{ width: "100%", height: "100%" }}
                   />
                 </button>
-              );
-            })}
-          </div>
-          {imageUrls?.length > 4 && (
-            <>
-              <UpOutlined
-                className="prev-btn"
-                onClick={() => handleNavigationClicking("prev")}
-                style={{
-                  fontSize: "12px",
-                  background: "#f2efec",
-                  borderRadius: "50%",
-                  padding: "3px",
-                  color: "black",
-                  position: "absolute",
-                  left: "80px",
-                  top: "20px",
-                  opacity: "0.8",
-                }}
-              />
-              <DownOutlined
-                className="next-btn"
-                onClick={() => handleNavigationClicking("next")}
-                style={{
-                  fontSize: "12px",
-                  background: "#f2efec",
-                  borderRadius: "50%",
-                  padding: "3px",
-                  color: "black",
-                  position: "absolute",
-                  left: "80px",
-                  bottom: "20px",
-                  opacity: "0.8",
-                }}
-              />
-            </>
-          )}
-        </nav>
-        <div className="tab-content m-img details-section-main-image">
-          <div className="tab-pane fade show active details-section-main-image-cover">
-            <div
-              className="tp-product-details-nav-main-thumb p-relative"
-              style={{
-                overflow: "hidden",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+              ))}
+            </div>
+            {imageUrls.length > 4 && (
+              <>
+                <UpOutlined
+                  className="prev-btn"
+                  onClick={() => handleNavigationClicking("prev")}
+                />
+                <DownOutlined
+                  className="next-btn"
+                  onClick={() => handleNavigationClicking("next")}
+                />
+              </>
+            )}
+          </nav>
+        )}
+
+        <div
+          className={`tab-content m-img ${
+            imageUrls.length === 1 ? "full-width-image" : ""
+          }`}
+        >
+          <div className="tab-pane fade show active">
+            <div className="tp-product-details-nav-main-thumb p-relative">
               {loading ? (
                 <Loader />
               ) : (
-                <div
-                  className="details-image-outer"
-                  style={{
-                    position: "relative",
-                    width: `${imgWidth}px`,
-                    height: `${adjustedImgHeight}px`,
-                  }}
-                >
+                <>
                   <div
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                      overflow: "hidden",
-                    }}
-                    onMouseMove={handleMouseMove}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
+                    style={{ cursor: "zoom-in" }}
+                    onClick={() => setIsOpen(true)}
                   >
                     <img
                       src={profilePic(activeImg)}
-                      width={imgWidth}
-                      height={adjustedImgHeight}
-                      className="imageHover"
-                      style={{
-                        cursor: "pointer",
-                        transform: isZoomed ? "scale(2)" : "scale(1)",
-                        transformOrigin: backgroundPosition,
-                        transition: "transform 0.1s ease-in-out",
-                      }}
+                      alt="Active product image"
+                      style={{ width: "100%", height: "auto" }}
+                      onLoad={() => setLoading(false)}
+                      onError={() => setLoading(false)}
                     />
                   </div>
-                  <FullscreenOutlined
-                    style={{
-                      position: "absolute",
-                      bottom: "5px",
-                      left: "50px",
-                      transform: "translate(-50%, -50%)",
-                      color: "gray",
-                      padding: "10px",
-                      background: "white",
-                      borderRadius: "50%",
-                      zIndex: 1,
-                    }}
-                    onClick={() => handleImageClick(selectedImageIndex)}
-                  />
-                </div>
-              )}
-
-              <div className="tp-product-badge">
-                {status === "out-of-stock" && (
-                  <span className="product-hot">out-stock</span>
-                )}
-              </div>
-
-              <div className="tp-product-badge-2">
-                {product?.defaultVariant?.quantityAvailable === 0 && (
-                  <span
-                    className="product-hot text-center soldout-badge"
-                  >
-                    SOLD
-                    <br /> OUT
-                  </span>
-                )}
-              </div>
-
-              <div
-                className={`${
-                  product?.defaultVariant?.quantityAvailable === 0
-                    ? "tp-product-badge"
-                    : "tp-product-badge-2"
-                }`}
-              >
-                {product?.metadata?.filter((item) => item.key === "label")
-                  .length > 0 &&
-                  product.metadata
-                    .filter((item) => item.key === "label")
-                    .map((item, index) => (
-                      <span
-                        key={index}
-                        className="product-trending text-center"
-                        style={{
-                          padding: "18px 12px",
-                          textTransform: "capitalize",
-                        }}
+                  {Router.route == "/gift-card" ? (
+                    <></>
+                  ) : (
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px",
+                      }}
+                    >
+                      <button
+                        className={`animated-button ${hover ? "hover" : ""}`}
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
+                        onClick={handleClick}
                       >
-                        {item.value}
-                      </span>
-                    ))}
-              </div>
-              {videoId && (
-                <div
-                  onClick={() => setIsVideoOpen(true)}
-                  className="tp-product-details-thumb-video"
-                >
-                  <a className="tp-product-details-thumb-video-btn cursor-pointer popup-video">
-                    <i className="fas fa-play"></i>
-                  </a>
-                </div>
+                        <span className="icon">
+                          <MergeCellsOutlined stytle={{ fontSize: "18px" }} />
+                        </span>
+                        <span className="text">Similar Product</span>
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
         </div>
       </div>
-      {/* modal popup start */}
-      {videoId && (
-        <PopupVideo
-          isVideoOpen={isVideoOpen}
-          setIsVideoOpen={setIsVideoOpen}
-          videoId={videoId}
-        />
-      )}
-      {/* modal popup end */}
-
-      {showLightbox && (
+      {isOpen && (
         <div
           className="lightbox"
           style={{
@@ -323,46 +182,53 @@ const DetailsThumbWrapper = ({
             width: "100%",
             height: "100%",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            // display: "flex",
+            // justifyContent: "center",
+            // alignItems: "center",
             zIndex: 999,
+            overflow: "auto", // Enable scrolling
+            // Hide scrollbar for IE, Edge and Firefox
+            msOverflowStyle: "none", // IE and Edge
+            scrollbarWidth: "none", // Firefox
           }}
           onClick={handleLightboxClose}
         >
           <button
-            className="prev-btn"
-            onClick={handleNavigationClick}
+            onClick={handleLightboxPrev}
             name="prev"
             style={{
               fontSize: "18px",
-              background: "#c78b2e",
-              padding: "5px 15px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
               color: "white",
-              position: "absolute",
-              left: "20px", // Adjusted position
+              position: "fixed",
+              left: "20px",
+              top: "50vh",
             }}
           >
-            &lt;
+            <LeftOutlined />
           </button>
           <img
-            src={imageUrls[selectedImageIndex]}
+            src={
+              imageUrls[photoIndex]
+                ? imageUrls[photoIndex]
+                : profilePic(activeImg)
+            }
             alt="Lightbox"
-            width={imgWidth}
-            height={adjustedImgHeight}
             style={{
-              transform: `scale(${zoomLevel})`,
-              cursor: "zoom-in",
-              transition: "transform 0.3s ease-in-out",
+              width: "100%",
+              height: "auto",
+              maxWidth: "none",
+              maxHeight: "none",
               objectFit: "contain",
             }}
           />
           <button
             onClick={handleLightboxClose}
             style={{
-              position: "absolute",
+              position: "fixed",
               top: "20px",
-              right: "20px", // Adjusted position
+              right: "20px",
               background: "none",
               border: "none",
               fontSize: "18px",
@@ -373,60 +239,20 @@ const DetailsThumbWrapper = ({
             <i className="fal fa-times"></i>
           </button>
           <button
-            className="next-btn"
-            onClick={handleNavigationClick}
+            onClick={handleLightboxNext}
             name="next"
             style={{
               fontSize: "18px",
-              background: "#c78b2e",
-              padding: "5px 15px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
               color: "white",
-              position: "absolute",
-              right: "20px", // Adjusted position
+              position: "fixed",
+              right: "20px",
+              top: "50vh",
             }}
           >
-            &gt;
+            <RightOutlined />
           </button>
-          <div
-            style={{
-              position: "absolute",
-              top: "20px",
-              display: "flex",
-              gap: "15px",
-              right: "70px",
-            }}
-          >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                zoomIn();
-              }}
-              style={{
-                fontSize: "18px",
-
-                color: "black",
-                cursor: "pointer",
-                borderRadius: "50%",
-              }}
-            >
-              <PlusOutlined style={{ color: "white" }} />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                zoomOut();
-              }}
-              style={{
-                fontSize: "18px",
-
-                color: "black",
-                cursor: "pointer",
-                borderRadius: "50%",
-              }}
-            >
-              <MinusOutlined style={{ color: "white" }} />
-            </button>
-          </div>
         </div>
       )}
     </>

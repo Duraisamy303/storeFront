@@ -30,7 +30,7 @@ fragment ProductListItem on Product {
     url
     alt
   }
-  images {
+  media {
     url
   }
   created

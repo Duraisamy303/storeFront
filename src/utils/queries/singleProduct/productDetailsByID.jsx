@@ -59,7 +59,6 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     created
     description
-  
     defaultVariant {
       id
       name

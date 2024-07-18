@@ -266,7 +266,7 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
         edges {
           node {
             id
-            images {
+            media {
               url
               alt
             }
@@ -360,7 +360,7 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
 export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
-    query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+ query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
   products(filter: $filter, channel: $channel, first: $first, after: $after) {
     edges {
       node {
@@ -399,7 +399,7 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
           alt
         }
         created
-        images {
+        media {
           url
         }
         variants {
