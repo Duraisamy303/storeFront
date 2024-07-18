@@ -10,14 +10,8 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 
-const DetailsThumbWrapper = ({
-  imgWidth,
-  imgHeight,
-  videoId,
-  status,
-  product,
-  imgHeightMobile,
-}) => {
+const DetailsThumbWrapper = ({ product, relatedClick }) => {
+  const Router = useRouter();
 
   const imageUrls = product?.media?.map((item) => item?.url) || [];
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
