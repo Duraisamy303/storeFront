@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const ProductDetailsBreadcrumb = ({ category, title }) => {
+console.log('✌️category --->', category);
 
   const router = useRouter();
 
-  const categories = category.split(" / ");
+  const categories = category?.split(" / ");
   const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
 
   // Initialize ParentCategoryId

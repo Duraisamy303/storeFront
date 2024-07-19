@@ -12,7 +12,7 @@ const DetailsThumbWrapperQuick = ({
   status,
   product,
 }) => {
-  const imageUrls = product?.images?.map((item) => item?.url);
+  const imageUrls = product?.media?.map((item) => item?.url);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [activeImg, setActiveImg] = useState(imageUrls?.[0]);
   const [loading, setLoading] = useState(false);
@@ -44,13 +44,14 @@ const DetailsThumbWrapperQuick = ({
     });
   };
 
+  console.log("imageUrls", imageUrls);
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
         <nav
           className="product-side-nav-img"
           style={{
-            height: imageUrls?.length > 4 ? "420px" : "auto",
+            height: imageUrls?.length > 2 ? "420px" : "auto",
             overflow: "hidden",
           }}
         >
