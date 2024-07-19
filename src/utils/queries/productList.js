@@ -4,7 +4,7 @@ export const PRODUCT_LIST = ({ channel, first, sortBy }) => {
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy:ProductOrder) {
-      products(
+      productsSearch(
         first: $first
         after: $after
         channel: $channel
@@ -361,7 +361,7 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
  query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
-  products(filter: $filter, channel: $channel, first: $first, after: $after) {
+  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
     edges {
       node {
         id
