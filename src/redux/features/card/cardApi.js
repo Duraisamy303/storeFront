@@ -325,7 +325,12 @@ export const cardApi = apiSlice.injectEndpoints({
 
     updateShippingAddress: builder.mutation({
       query: ({ checkoutId, shippingAddress, note }) => {
-        console.log(" checkoutId, shippingAddress, note: ",  checkoutId, shippingAddress, note);
+        console.log(
+          " checkoutId, shippingAddress, note: ",
+          checkoutId,
+          shippingAddress,
+          note
+        );
         return configuration(
           UPDATE_SHIPPING_ADDRESS({
             checkoutId,
@@ -353,8 +358,8 @@ export const cardApi = apiSlice.injectEndpoints({
     }),
 
     getCheckoutDetails: builder.mutation({
-      query: () => {
-        const id = localStorage.getItem("checkoutId");
+      query: ({ id }) => {
+        // const id = localStorage.getItem("checkoutId");
         return configuration(
           GET_CHECKOUT_DETAILS({ id, languageCode: "EN_US" })
         );

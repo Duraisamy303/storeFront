@@ -8,7 +8,6 @@ import {
   useCheckoutCompleteMutation,
   useCheckoutUpdateMutation,
   useCreateCheckoutTokenMutation,
-  useGetCheckoutDetailsMutation,
   usePaymentMethodListMutation,
   useSubCatListMutation,
   useUpdateBillingAddressMutation,
@@ -40,6 +39,7 @@ import {
   useGetCartAllListQuery,
   useGetCheckoutDetailsQuery,
   useUpdateShippingAddressMutation,
+  useGetCheckoutDetailsMutation,
 } from "../../redux/features/card/cardApi";
 import {
   checkChannel,
@@ -81,9 +81,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [updateGiftWrap] = useUpdateGiftWrapMutation();
 
   const [paymentMethodUpdate] = usePaymentMethodUpdateMutation();
-  
-  const [removeCoupon] = useRemoveCouponMutation();
 
+  const [removeCoupon] = useRemoveCouponMutation();
 
   const [state, setState] = useSetState({
     firstName: "",
@@ -173,6 +172,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [createCheckoutId] = useCreateCheckoutIdMutation();
 
   const [updateDeliveryMethod] = useCheckoutUpdateMutation();
+  const [getCheckoutDetails] = useGetCheckoutDetailsMutation();
 
   const [updateDeliveryMethodCODAndGiftWrap] =
     useUpdateDeliveryMethodForCODAndGidtWrapMutation();
@@ -240,8 +240,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
         const tax =
           data?.data?.data?.checkoutCreate?.checkout?.totalPrice?.tax?.amount;
         setState({ total, tax });
+        getDetails(checkoutId);
         // verifyCoupenCode(checkoutId);
       }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const getDetails = async (id) => {
+    try {
+      const res = await getCheckoutDetails({
+        id,
+      });
+      console.log("res: ", res);
+
+      console.log("id: ", id);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -1847,7 +1861,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           </div>
                         ))
                       ) : (
-                        <div className=" text-danger">Currenly Not available payment Methods</div>
+                        <div className=" text-danger">
+                          Currenly Not available payment Methods
+                        </div>
                       )}
                       {state.selectedPaymentType == "Cash On Delivery" && (
                         <ol>
