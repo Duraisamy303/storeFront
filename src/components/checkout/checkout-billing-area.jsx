@@ -31,6 +31,7 @@ import {
   usePaymentListMutation,
   usePaymentMutation,
   usePaymentQuery,
+  useRemoveCouponMutation,
   useStateListQuery,
   useUpdateEmailMutation,
 } from "@/redux/features/productApi";
@@ -80,6 +81,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [updateGiftWrap] = useUpdateGiftWrapMutation();
 
   const [paymentMethodUpdate] = usePaymentMethodUpdateMutation();
+  
+  const [removeCoupon] = useRemoveCouponMutation();
+
 
   const [state, setState] = useSetState({
     firstName: "",

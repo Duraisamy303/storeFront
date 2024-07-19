@@ -31,6 +31,7 @@ import {
   UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION,
   TAG_NAME,
   PAYMENT_LIST,
+  DELETE_COUPON,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -545,6 +546,14 @@ export const productApi = apiSlice.injectEndpoints({
         return configuration(PAYMENT_LIST());
       },
     }),
+
+    removeCoupon: builder.mutation({
+      query: ({ checkoutId, promoCode }) => {
+        return configuration(
+          DELETE_COUPON({ checkoutId, languageCode: "EN_US", promoCode })
+        );
+      },
+    }),
   }),
 });
 
@@ -583,7 +592,7 @@ export const {
   useGetParentCategoryListQuery,
   useUpdateBillingAddressAddressSectionMutation,
   useUpdateShippingAddressAddressSectionMutation,
-
+  useRemoveCouponMutation,
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useSubCatListMutation,
