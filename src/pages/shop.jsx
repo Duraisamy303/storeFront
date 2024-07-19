@@ -142,7 +142,7 @@ const ShopPage = () => {
 
   const [cartUpdate, setCartUpdate] = useState(false);
 
-  let products = productsData?.data?.products?.edges;
+  let products = productsData?.data?.productsSearch?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [maxPrice, setMaxPrice] = useState(0);
@@ -190,10 +190,10 @@ const ShopPage = () => {
     if (
       productsData &&
       productsData?.data &&
-      productsData?.data?.products &&
-      productsData?.data?.products?.edges?.length > 0
+      productsData?.data?.productsSearch &&
+      productsData?.data?.productsSearch?.edges?.length > 0
     ) {
-      const list = productsData?.data?.products?.edges;
+      const list = productsData?.data?.productsSearch?.edges;
       setProductList(list);
     }
   };
@@ -237,7 +237,7 @@ const ShopPage = () => {
       const res = await getAllProducts({
         sortBy: sortBy,
       });
-      setProductList(res?.data?.data?.products?.edges);
+      setProductList(res?.data?.data?.productsSearch?.edges);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -308,7 +308,7 @@ const ShopPage = () => {
     priceFilter({
       filter: datas,
     }).then((res) => {
-      const list = res?.data?.data?.products?.edges;
+      const list = res?.data?.data?.productsSearch?.edges;
       setProductList(list);
     });
   };
@@ -322,7 +322,7 @@ const ShopPage = () => {
     priceFilter({
       filter: datas,
     }).then((res) => {
-      const list = res?.data?.data?.products?.edges;
+      const list = res?.data?.data?.productsSearch?.edges;
 
       setProductList(list);
     });
@@ -352,7 +352,7 @@ const ShopPage = () => {
       priceFilter({
         filter: datas,
       }).then((res) => {
-        const list = res?.data?.data?.products?.edges;
+        const list = res?.data?.data?.productsSearch?.edges;
         setProductList(list);
 
         dispatch(handleFilterSidebarClose());
@@ -373,7 +373,7 @@ const ShopPage = () => {
     priceFilter({
       filter: bodyData,
     }).then((res) => {
-      const list = res?.data?.data?.products?.edges;
+      const list = res?.data?.data?.productsSearch?.edges;
       setProductList(list);
 
       const body = {

@@ -40,7 +40,7 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -133,11 +133,21 @@ const WishlistItem = ({ product, refetchWishlist }) => {
     }
   };
 
+  const isHiddenCategory = data?.category?.some(
+    (item) => item.name === "Hidden"
+  );
+  console.log("✌️isHiddenCategory --->", isHiddenCategory);
+
   return (
-    <tr>
-      <td className="tp-cart-img">
-        <Link href={`/product-details/${variant}`}>
-          {/* <Image
+    <>
+      <tr
+        className={`${
+          isHiddenCategory ? "wishlistOpacity0" : "wishlistOpacity1"
+        }`}
+      >
+        <td className="tp-cart-img">
+          <Link href={`/product-details/${variant}`}>
+            {/* <Image
             src={
               profilePic(product?.product?.media[0]?.url) ||
               profilePic(data?.media[0]?.url)
@@ -146,33 +156,33 @@ const WishlistItem = ({ product, refetchWishlist }) => {
             height={100}
           /> */}
 
-<img
-            src={
-              profilePic(product?.product?.media[0]?.url) ||
-              profilePic(data?.media[0]?.url)
-            }
-            width={70}
-            height={100}
-          />
-        </Link>
-      </td>
-      <td className="tp-cart-title">
-        <Link href={`/product-details/${product?.product?.id}`}>{title}</Link>
-      </td>
-      <td>
-        <span>{product?.product?.name || data?.name}</span>
-      </td>
-      <td className="tp-cart-price">
-        <span>
-          {channelSelect == "india-channel" ? (
-            <>₹{roundOff(data?.indiaChannelPricing)}</>
-          ) : (
-            <>${roundOff(data?.defaultChannelPricing)}</>
-          )}
-        </span>
-      </td>
+            <img
+              src={
+                profilePic(product?.product?.media[0]?.url) ||
+                profilePic(data?.media[0]?.url)
+              }
+              width={70}
+              height={100}
+            />
+          </Link>
+        </td>
+        <td className="tp-cart-title">
+          <Link href={`/product-details/${product?.product?.id}`}>{title}</Link>
+        </td>
+        <td>
+          <span>{product?.product?.name || data?.name}</span>
+        </td>
+        <td className="tp-cart-price">
+          <span>
+            {channelSelect == "india-channel" ? (
+              <>₹{roundOff(data?.indiaChannelPricing)}</>
+            ) : (
+              <>${roundOff(data?.defaultChannelPricing)}</>
+            )}
+          </span>
+        </td>
 
-      {/* <td className="tp-cart-quantity">
+        {/* <td className="tp-cart-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
           <span
             onClick={() => handleDecrement(product)}
@@ -195,44 +205,50 @@ const WishlistItem = ({ product, refetchWishlist }) => {
         </div>
       </td> */}
 
-      <td className="tp-cart-add-to-cart">
-        <button
-          onClick={() => {
-            if (isAddToCart) {
-              router.push("/cart");
-            } else {
-              addToCartProductINR();
-              addToCartProductUSD();
-            }
+        <td
+          className="tp-cart-add-to-cart"
+          style={{
+            pointerEvents: isHiddenCategory ? "none" : "auto",
           }}
-          type="button"
-          className="tp-btn tp-btn-2 tp-btn-blue"
         >
-          {isAddToCart ? (
-            "View Cart"
-          ) : (
-            <>
-              {cartLoader ? (
-                <ButtonLoader loader={cartLoader} />
-              ) : (
-                "Add To Cart"
-              )}
-            </>
-          )}
-        </button>
-      </td>
+          <button
+            onClick={() => {
+              if (isAddToCart) {
+                router.push("/cart");
+              } else {
+                addToCartProductINR();
+                addToCartProductUSD();
+              }
+            }}
+            type="button"
+            className="tp-btn tp-btn-2 tp-btn-blue"
+          >
+            {isAddToCart ? (
+              "View Cart"
+            ) : (
+              <>
+                {cartLoader ? (
+                  <ButtonLoader loader={cartLoader} />
+                ) : (
+                  "Add To Cart"
+                )}
+              </>
+            )}
+          </button>
+        </td>
 
-      <td className="tp-cart-action">
-        <button
-          onClick={() => handleRemovePrd()}
-          className="tp-cart-action-btn"
-        >
-          {deleteLoader ?   <ClipLoader color="red" size={13} /> : <Close />}
+        <td className="tp-cart-action">
+          <button
+            onClick={() => handleRemovePrd()}
+            className="tp-cart-action-btn"
+          >
+            {deleteLoader ? <ClipLoader color="red" size={13} /> : <Close />}
 
-          <span> Remove</span>
-        </button>
-      </td>
-    </tr>
+            <span> Remove</span>
+          </button>
+        </td>
+      </tr>
+    </>
   );
 };
 

@@ -97,7 +97,7 @@ const PopularProducts = () => {
   };
 
   let content = null;
-  const products = productsData?.data?.products?.edges;
+  const products = productsData?.data?.productsSearch?.edges;
 
   if (isLoading) {
     content = <HomeTwoPopularPrdLoader loading={isLoading} />;

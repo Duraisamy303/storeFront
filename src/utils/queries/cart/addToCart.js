@@ -767,39 +767,43 @@ export const GET_WISHLIST_LIST = ({ userEmail }) => {
   return {
     query: `
     query GetWishListQuery($userEmail: String!) {
-      wishlists(first: 100, filter: {user: $userEmail}) {
-        edges {
-          node {
-            user {
-              firstName
-              email
-            }
-            variant
-            product {
-              name
-              slug
-              variants {
-                id
-                name
-              }
-              images {
-                url
-                alt
-              }
-              defaultVariant {
-                id
-                name
-              }
-              media {
-                url
-              }
-              defaultChannelPricing
-              indiaChannelPricing
-            }
+  wishlists(first: 100, filter: {user: $userEmail}) {
+    edges {
+      node {
+        user {
+          firstName
+          email
+        }
+        variant
+        product {
+          name
+          slug
+          variants {
+            id
+            name
+          }
+          images {
+            url
+            alt
+          }
+          defaultVariant {
+            id
+            name
+          }
+          media {
+            url
+          }
+          defaultChannelPricing
+          indiaChannelPricing
+          category {
+            id
+            name
           }
         }
       }
     }
+  }
+}
       `,
     variables: { userEmail },
   };

@@ -14,6 +14,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   const Router = useRouter();
 
   const imageUrls = product?.media?.map((item) => item?.url) || [];
+  console.log("✌️imageUrls --->", imageUrls);
   const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -72,6 +73,10 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
     relatedClick();
   };
 
+  const isImage = (url) => {
+    return /\.(jpg|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <div
@@ -89,13 +94,24 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                   onClick={() => handleImageActive(item)}
                   id={`image-${i}`}
                 >
-                  <img
-                    src={item}
-                    alt={`Product image ${i + 1}`}
-                    width={78}
-                    height={100}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  {isImage(item) ? (
+                    <img
+                      src={item}
+                      alt={`Product image ${i + 1}`}
+                      width={78}
+                      height={100}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <video
+                      src={item}
+                      width={78}
+                      height={100}
+                      style={{ width: "100%", height: "100%" }}
+                      muted
+                      loop
+                    />
+                  )}
                 </button>
               ))}
             </div>
@@ -129,13 +145,24 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     style={{ cursor: "zoom-in" }}
                     onClick={() => setIsOpen(true)}
                   >
-                    <img
-                      src={profilePic(activeImg)}
-                      alt="Active product image"
-                      style={{ width: "100%", height: "auto" }}
-                      onLoad={() => setLoading(false)}
-                      onError={() => setLoading(false)}
-                    />
+                    {isImage(activeImg) ? (
+                      <img
+                        src={profilePic(activeImg)}
+                        alt="Active product image"
+                        style={{ width: "100%", height: "auto" }}
+                        onLoad={() => setLoading(false)}
+                        onError={() => setLoading(false)}
+                      />
+                    ) : (
+                      <video
+                        src={activeImg}
+                        style={{ width: "100%", height: "auto" }}
+                        controls
+                        autoPlay
+                        onLoadedData={() => setLoading(false)}
+                        onError={() => setLoading(false)}
+                      />
+                    )}
                   </div>
                   {Router.route == "/gift-card" ? (
                     <></>
@@ -202,21 +229,36 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
           >
             <LeftOutlined />
           </button>
-          <img
-            src={
-              imageUrls[photoIndex]
-                ? imageUrls[photoIndex]
-                : profilePic(activeImg)
-            }
-            alt="Lightbox"
-            style={{
-              width: "100%",
-              height: "auto",
-              maxWidth: "none",
-              maxHeight: "none",
-              objectFit: "contain",
-            }}
-          />
+
+          {isImage(imageUrls[photoIndex]) ? (
+            <img
+              src={imageUrls[photoIndex] || profilePic(activeImg)}
+              alt="Lightbox"
+              style={{
+                width: "100%",
+                height: "auto",
+                maxWidth: "none",
+                maxHeight: "none",
+                objectFit: "contain",
+              }}
+              onLoad={() => setLoading(false)}
+              onError={() => setLoading(false)}
+            />
+          ) : (
+            <video
+              src={imageUrls[photoIndex] || profilePic(activeImg)}
+              style={{
+                width: "100%",
+                height: "auto",
+                maxWidth: "none",
+                maxHeight: "none",
+                objectFit: "contain",
+              }}
+              controls
+              onLoadedData={() => setLoading(false)}
+              onError={() => setLoading(false)}
+            />
+          )}
           <button
             onClick={handleLightboxClose}
             style={{

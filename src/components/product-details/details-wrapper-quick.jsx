@@ -91,7 +91,7 @@ const DetailsWrapper = ({
     refetch: productRefetch,
   } = useGetProductQuery({ productId: productItem?.id });
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
-  useGetCartAllListQuery({});
+    useGetCartAllListQuery({});
 
   const ProductData = productData?.data?.product;
 
@@ -446,13 +446,15 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
+  const CategoryList = productItem?.category;
+  console.log("✌️CategoryList --->", CategoryList);
 
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
           <ProductDetailsBreadcrumb
-            category={productItem?.category?.name}
+            category={productItem?.category[0]?.name}
             title={productItem?.name}
           />
         </div>
@@ -766,7 +768,24 @@ const DetailsWrapper = ({
             dispatch(handleModalClose());
           }}
         >
-          <b>Categories:</b> {ProductData?.category?.name}
+          <b>Categories:</b>{" "}
+          {productItem?.category?.map((category, index) => {
+            return (
+              <span
+                key={category?.id}
+                style={{ marginRight: "3px", cursor: "pointer" }}
+                onClick={() => {
+                  router.push({
+                    pathname: "/shop",
+                    query: { categoryId: category?.id }, // Your parameters
+                  });
+                }}
+              >
+                {category?.name}
+                {index < productItem.category.length - 1 ? ", " : ""}
+              </span>
+            );
+          })}
         </p>
         {ProductData?.tags?.length > 0 && (
           <p style={{ color: "#55585b" }}>
@@ -783,7 +802,6 @@ const DetailsWrapper = ({
                     });
                     dispatch(handleModalClose());
                   }}
-                
                 >
                   {tag?.name}
                   {index < ProductData.tags.length - 1 ? ", " : ""}
