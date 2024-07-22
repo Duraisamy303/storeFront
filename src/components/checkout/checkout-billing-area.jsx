@@ -53,6 +53,7 @@ import Link from "next/link";
 import { cart_list } from "@/redux/features/cartSlice";
 import ButtonLoader from "../loader/button-loader";
 import { pincode } from "@/utils/constant";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -144,6 +145,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     isGiftWrap: false,
     preOrderMsg: false,
     notes: "",
+    checkoutId: "",
   });
 
   useEffect(() => {
@@ -239,7 +241,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           data?.data?.data?.checkoutCreate?.checkout?.totalPrice?.gross?.amount;
         const tax =
           data?.data?.data?.checkoutCreate?.checkout?.totalPrice?.tax?.amount;
-        setState({ total, tax });
+        setState({ total, tax, checkoutId });
         getDetails(checkoutId);
         // verifyCoupenCode(checkoutId);
       }
@@ -248,18 +250,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
+  const [checkoutAllData, setCheckoutAllData] = useState({});
+
   const getDetails = async (id) => {
     try {
       const res = await getCheckoutDetails({
         id,
       });
-      console.log("res: ", res);
+      const checkoutDetails = res?.data?.data?.checkout;
+      setCheckoutAllData(checkoutDetails);
 
       console.log("id: ", id);
     } catch (error) {
       console.log("error: ", error);
     }
   };
+  console.log("checkoutAllData: ", checkoutAllData);
 
   const [Razorpay] = useRazorpay();
 
@@ -1028,6 +1034,36 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("error: ", error);
     }
   };
+
+  const handleRemoveDiscount = async () => {
+    try {
+      const res = await removeCoupon({
+        checkoutId: state.checkoutId,
+        promoCode: checkoutAllData?.voucherCode,
+      });
+
+      console.log("res", res);
+
+      const data = res?.data?.data?.checkoutRemovePromoCode;
+
+      if (data?.errors && data.errors.length > 0) {
+        notifyError(data.errors[0].message);
+      } else {
+        setState({
+          total: data.checkout.totalPrice.gross.amount,
+          tax: data.checkout.totalPrice.tax.amount,
+        });
+        getDetails(data.checkout.id);
+        notifySuccess("Coupon Removed Successfully");
+      }
+    } catch (err) {
+      console.error("Error while removing coupon:", err);
+      notifyError("Error while removing coupon");
+    }
+
+    console.log("removed");
+  };
+
   return (
     <>
       <section
@@ -1110,8 +1146,20 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </button>
                       </div>
                     )}
+                    {checkoutAllData?.voucherCode && (
+                      <p
+                        style={{
+                          color: "#c3935b",
+                          paddingTop: "10px",
+                          fontWeight: "500",
+                          fontSize: "18px",
+                        }}
+                      >
+                        coupon code applied successfully
+                      </p>
+                    )}
                   </div>
-                </div>
+                </div>{" "}
               </div>
             </div>
           )}
@@ -1730,10 +1778,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         <span> x {item?.quantity}</span>
                       </p>
                       {state.channel == "india-channel" ? (
-                        <span>
-                          &#8377;
-                          {addCommasToNumber(item?.totalPrice?.gross?.amount)}
-                        </span>
+                        <>
+                          <span>
+                            <del className="tp-color-variation-tootltip">
+                              {checkoutAllData?.discount &&
+                                checkoutAllData?.discount?.amount !== 0.0 && (
+                                  <>&#8377; {checkoutAllData.discount.amount}</>
+                                )}
+                            </del>
+                            &#8377;
+                            {addCommasToNumber(item?.totalPrice?.gross?.amount)}
+                          </span>
+                        </>
                       ) : (
                         <span>
                           ${roundOff(item?.totalPrice?.gross?.amount)}
@@ -1741,6 +1797,15 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       )}
                     </li>
                   ))}
+
+                  {checkoutAllData?.discount && checkoutAllData?.discount?.amount !== 0.0 && (
+                    <li className="tp-order-info-list-total">
+                      <span>Discount</span>
+                      <span>
+                        <DeleteOutlined onClick={handleRemoveDiscount} />
+                      </span>
+                    </li>
+                  )}
 
                   {/* total */}
                   {state?.shippingCost && (

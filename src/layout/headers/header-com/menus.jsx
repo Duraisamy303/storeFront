@@ -590,7 +590,7 @@ const Menus = () => {
 
       <li>
         <Link href="/sale" style={{ fontWeight: "500" }}>
-          SALE
+          LOOT SALE
         </Link>
       </li>
       <li>
