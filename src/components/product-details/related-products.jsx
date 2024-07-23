@@ -5,15 +5,16 @@ import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
 import ProductItem from "../products/beauty/product-item";
 import ErrorMsg from "../common/error-msg";
 import { HomeNewArrivalPrdLoader } from "../loader";
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import 'swiper/swiper-bundle.min.css';
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import "swiper/swiper-bundle.min.css";
+import { useRouter } from "next/router";
 
 const slider_setting = {
   slidesPerView: 4,
   spaceBetween: 10,
   navigation: {
-    prevEl: '.tp-related-slider-button-prev',
-    nextEl: '.tp-related-slider-button-next',
+    prevEl: ".tp-related-slider-button-prev",
+    nextEl: ".tp-related-slider-button-next",
   },
   autoplay: {
     delay: 5000,
@@ -41,8 +42,22 @@ const slider_setting = {
 };
 
 const RelatedProducts = ({ id }) => {
-  const { data: related_product, isError, isLoading } = useGetRelatedProductsQuery({ id });
-  const products = related_product?.data?.category?.products?.edges;
+  const Router = useRouter();
+
+  const {
+    data: related_product,
+    isError,
+    isLoading,
+  } = useGetRelatedProductsQuery({ id });
+  const productsList = related_product?.data?.category?.products?.edges;
+
+  const products = productsList?.filter((item) => {
+    return item?.node?.id !== Router?.query?.id;
+  });
+
+  console.log("products --->", products);
+
+  
 
   let content = null;
 
@@ -61,7 +76,11 @@ const RelatedProducts = ({ id }) => {
       >
         {products.map((item) => (
           <SwiperSlide key={item._id}>
-            <ProductItem product={item?.node} primary_style={true} data={products} />
+            <ProductItem
+              product={item?.node}
+              primary_style={true}
+              data={products}
+            />
           </SwiperSlide>
         ))}
         <div className="tp-related-slider-button-prev swiper-button-prev">
