@@ -74,7 +74,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   };
 
   const isImage = (url) => {
-    return /\.(jpg|jpeg|png|gif)$/i.test(url);
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
   return (
@@ -157,8 +157,10 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                       <video
                         src={activeImg}
                         style={{ width: "100%", height: "auto" }}
-                        controls
                         autoPlay
+                        muted // Ensure it's muted to autoplay without user interaction
+                        loop // Ensure it loops indefinitely
+                        playsInline // Ensure it plays inline on iOS devices
                         onLoadedData={() => setLoading(false)}
                         onError={() => setLoading(false)}
                       />

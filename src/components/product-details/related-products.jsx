@@ -51,13 +51,21 @@ const RelatedProducts = ({ id }) => {
   } = useGetRelatedProductsQuery({ id });
   const productsList = related_product?.data?.category?.products?.edges;
 
-  const products = productsList?.filter((item) => {
+  const sameProduct = productsList?.filter((item) => {
     return item?.node?.id !== Router?.query?.id;
   });
 
-  console.log("products --->", products);
-
+  const removeHiddenCategory = sameProduct?.filter((item) => {
+    return item?.node?.category.some((cat) => cat?.name === "Hidden");
+  });
   
+  const idsToRemove = removeHiddenCategory?.map((item) => item.node.id);
+
+  const products = sameProduct?.filter(
+    (item) => !idsToRemove.includes(item.node.id)
+  );
+
+  console.log("products --->", products);
 
   let content = null;
 

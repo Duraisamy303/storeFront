@@ -45,7 +45,7 @@ const InstagramAreaFour = () => {
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
   const [productList, setProduct] = useState([]);
@@ -62,7 +62,6 @@ const InstagramAreaFour = () => {
     getWishlistList();
   }, [wishlistData]);
 
-
   const [token, setToken] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -77,7 +76,20 @@ const InstagramAreaFour = () => {
           res.data?.data?.collections?.edges[0]?.node?.products?.edges;
         if (list?.length > 0) {
           const data = list?.map((item) => item.node);
-          setProduct(data);
+          console.log("✌️data --->", data);
+
+          const removeHiddenCategory = data?.filter((item) => {
+            return item?.category.some((cat) => cat?.name === "Hidden");
+          });
+
+          const idsToRemove = removeHiddenCategory?.map((item) => item.id);
+          console.log("✌️idsToRemove --->", idsToRemove);
+
+          const products = data?.filter(
+            (item) => !idsToRemove.includes(item.id)
+          );
+          console.log("✌️products --->", products);
+          setProduct(products);
         }
       }
     } catch (error) {
@@ -155,7 +167,7 @@ const InstagramAreaFour = () => {
       } else {
         notifyError(
           "Only logged-in users can add items to their wishlist or view it"
-        )
+        );
       }
 
       setWishlistLoader(false);
@@ -193,6 +205,10 @@ const InstagramAreaFour = () => {
     dispatch(compare_list(arr));
   };
   console.log("productList: ", productList);
+
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
   return (
     <>
       <section className="tp-instagram-area tp-instagram-style-4  pb-20">
@@ -241,10 +257,12 @@ const InstagramAreaFour = () => {
                                   handleWishlist(item);
                                 } else {
                                   // router.push("/wishlist");
-                                  if(token) {
+                                  if (token) {
                                     router.push("/wishlist");
-                                  }else{
-                                    notifyError("Only logged-in users can add items to their wishlist or view it")
+                                  } else {
+                                    notifyError(
+                                      "Only logged-in users can add items to their wishlist or view it"
+                                    );
                                   }
                                 }
                               }}
@@ -327,13 +345,37 @@ const InstagramAreaFour = () => {
                         className="actor-image"
                       /> */}
 
-                      <img
-                      src={profilePic(item?.thumbnail?.url)}
-                      width={300}
-                      height={320}
-                      alt="instagram img"
-                      className="actor-image"
-                    />
+                      {isImage(item?.thumbnail?.url) ? (
+                        <img
+                          src={item?.thumbnail?.url}
+                          width={300}
+                          height={320}
+                          alt="instagram img"
+                          className="actor-image"
+                        />
+                      ) : (
+                        <video
+                          src={item?.thumbnail?.url}
+                          width={300}
+                          muted
+                          loop
+                          height={320}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
+                          alt="instagram img"
+                          className="actor-image"
+                        />
+                      )}
+
+                      {/* <img
+                        src={profilePic(item?.thumbnail?.url)}
+                        width={300}
+                        height={320}
+                        alt="instagram img"
+                        className="actor-image"
+                      /> */}
                       <div className="tp-instagram-icon-2 text-center">
                         <p
                           className="actor-hov-para"
@@ -369,7 +411,8 @@ const InstagramAreaFour = () => {
                                   ₹{roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              <br />₹{roundOff(
+                              <br />₹
+                              {roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>
@@ -388,7 +431,8 @@ const InstagramAreaFour = () => {
                                   ${roundOff(item?.defaultVariant?.costPrice)}
                                 </span>
                               )}
-                              ${roundOff(
+                              $
+                              {roundOff(
                                 item?.pricing?.priceRange?.start?.gross?.amount
                               )}
                             </>

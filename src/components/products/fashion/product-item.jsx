@@ -220,6 +220,10 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     }
   }, []);
 
+const isImage = (url) => {
+  return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+};                                                          
+
   return (
     <div
       className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}${
@@ -235,8 +239,30 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             width={284}
             height={302}
           /> */}
+{
+  isImage(img) ? (
+    <img
+      src={profilePic(img)}
+      alt="product img"
+      width={284}
+      height={302}
+    />
+  ) : (
+    <video 
+      src={profilePic(img)}
+      alt="product img"  style={{
+        width: "100%",
+        height: "100%",
+      }}
+      // autoPlay
+      muted // Ensure it's muted to autoplay without user interaction
+      loop // Ensure it loops indefinitely
+      // playsInline // Ensure it plays inline on iOS devices
+    />
+  )
+}
 
-          <img src={profilePic(img)} width={284} height={302} />
+          {/* <img src={profilePic(img)} width={284} height={302} /> */}
         </Link>
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (

@@ -16,7 +16,10 @@ import {
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useAddToCartMutation, useGetCartAllListQuery } from "@/redux/features/card/cardApi";
+import {
+  useAddToCartMutation,
+  useGetCartAllListQuery,
+} from "@/redux/features/card/cardApi";
 import LoginForm from "@/components/forms/login-form";
 import { useRouter } from "next/router";
 import { checkWishlist, handleWishlistProduct } from "@/utils/common_function";
@@ -42,8 +45,8 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
-  useGetCartAllListQuery({});
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
+    useGetCartAllListQuery({});
 
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
@@ -187,7 +190,6 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
     }
   };
 
-
   const addToCartProductUSD = async () => {
     setCartLoader(true);
     try {
@@ -209,6 +211,10 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
     }
   };
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <div className="tp-category-item-4 p-relative z-index-1 fix text-center">
@@ -216,16 +222,32 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
           <div
             className="tp-category-thumb-4 include-bg"
             style={{
-              backgroundImage: `url(${profilePic(img)})`,
+              backgroundImage: isImage(img) ? `url(${img})` : "none",
               backgroundColor: "#FFFFFF",
               // backgroundPosition: "0px -80px",
             }}
-          ></div>
+          >
+            {!isImage(img) &&
+              img && ( // Ensure img is not empty before rendering <video>
+                <video
+                  src={img}
+                  autoPlay
+                  muted // Ensure it's muted to autoplay without user interaction
+                  loop // Ensure it loops indefinitely
+                  playsInline // Ensure it plays inline on iOS devices
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  alt="instagram video"
+                  className="actor-video"
+                />
+              )}
+          </div>
+
           <div className="tp-product-badge-2">
             {RelatedProduct?.defaultVariant?.quantityAvailable == 0 && (
-              <span
-                className="product-hot text-center soldout-badge"
-              >
+              <span className="product-hot text-center soldout-badge">
                 SOLD
                 <br /> OUT
               </span>

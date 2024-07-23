@@ -136,7 +136,7 @@
         &-3{
             position: absolute;
            
-            bottom: 0;
+            bottom: 20px;
             right: 93px;
             z-index: 1;
             visibility: hidden;
@@ -391,7 +391,7 @@
         }
     }
     & .tp-product-thumb-3 {
-        background-color: #FFFFFF;
+        background-color: transparent;
         & a{
             display: block;
         }
