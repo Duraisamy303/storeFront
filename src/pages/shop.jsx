@@ -455,7 +455,7 @@ const ShopPage = () => {
       <ShopArea
         all_products={productList}
         products={productList}
-        otherProps={otherProps}
+        otherProps={otherProps} productLoading={isLoading}
         updateData={() => setCartUpdate(true)}
         subtitle={shopTitle}
         updateRange={(range) => handleChanges(range)}

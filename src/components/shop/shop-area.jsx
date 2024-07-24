@@ -24,6 +24,7 @@ const ShopArea = ({
   subtitle,
   updateRange,
   maxPrice,
+  productLoading,
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -45,7 +46,6 @@ const ShopArea = ({
     setPageStart(startPage);
     setCountOfPage(pageCount);
   };
-
   const removeFilter = (item, type, i) => {
     if (item?.type === "price") {
       const removemin = filter.find((data) => data.type === item.type);
@@ -102,24 +102,14 @@ const ShopArea = ({
 
   const clearFilter = () => {
     dispatch(filterData([]));
-    updateRange([0,maxPrice]);
+    updateRange([0, maxPrice]);
   };
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (products?.length > 0) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
-  }, []);
-
-  function CommonLoader({ loading, spinner }) {
+  function CommonLoader({ loading }) {
     return (
       <div
         style={{
-          height: "100vh",
+          height: "50vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -161,10 +151,9 @@ const ShopArea = ({
 
   let content = null;
 
-  if (loading) {
-    content = <CommonLoader loading={loading} />;
-  }
-  if (all_products?.length == 0) {
+  if (productLoading === true) {
+    content = <CommonLoader loading={productLoading} />;
+  } else if (all_products?.length == 0) {
     content = (
       <div className="text-center mt-50 mb-50 mt-lg-40 mb-lg-40">
         <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
@@ -176,8 +165,7 @@ const ShopArea = ({
         </p>
       </div>
     );
-  }
-  if (all_products?.length > 0) {
+  } else if (all_products?.length > 0) {
     // Render product items...
     content = (
       <>
@@ -209,7 +197,6 @@ const ShopArea = ({
                       <div
                         key={item._id}
                         className="col-xl-4 col-md-6 col-sm-6 col-6 mb-20 mb-lg-50"
-                      
                       >
                         <ProductItem products={item} updateData={updateData} />
                       </div>
@@ -354,7 +341,6 @@ const ShopArea = ({
                         console.log("item: ", item);
                         return item?.type == "price" ? (
                           <>
-                           
                             {(item?.min || item?.min == 0) && (
                               <div
                                 style={{
@@ -369,7 +355,7 @@ const ShopArea = ({
                                 <span>Min {item.min}</span>
                               </div>
                             )}
-                             {item?.max && (
+                            {item?.max && (
                               <div
                                 style={{
                                   display: "flex",
