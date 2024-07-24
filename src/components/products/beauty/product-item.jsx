@@ -191,7 +191,7 @@ const ProductItem = ({
             width={282}
             height={320}
           /> */}
-          {isImage(thumbnail?.url) ? (
+          {isImage(profilePic(thumbnail?.url)) ? (
             <img
               src={profilePic(thumbnail?.url)}
               alt="product image"

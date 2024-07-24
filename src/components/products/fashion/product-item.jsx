@@ -220,9 +220,9 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     }
   }, []);
 
-const isImage = (url) => {
-  return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
-};                                                          
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
 
   return (
     <div
@@ -239,28 +239,27 @@ const isImage = (url) => {
             width={284}
             height={302}
           /> */}
-{
-  isImage(img) ? (
-    <img
-      src={profilePic(img)}
-      alt="product img"
-      width={284}
-      height={302}
-    />
-  ) : (
-    <video 
-      src={profilePic(img)}
-      alt="product img"  style={{
-        width: "100%",
-        height: "100%",
-      }}
-      // autoPlay
-      muted // Ensure it's muted to autoplay without user interaction
-      loop // Ensure it loops indefinitely
-      // playsInline // Ensure it plays inline on iOS devices
-    />
-  )
-}
+          {isImage(profilePic(img)) ? (
+            <img
+              src={profilePic(img)}
+              alt="product img"
+              width={284}
+              height={302}
+            />
+          ) : (
+            <video
+              src={profilePic(img)}
+              alt="product img"
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              // autoPlay
+              muted // Ensure it's muted to autoplay without user interaction
+              loop // Ensure it loops indefinitely
+              // playsInline // Ensure it plays inline on iOS devices
+            />
+          )}
 
           {/* <img src={profilePic(img)} width={284} height={302} /> */}
         </Link>

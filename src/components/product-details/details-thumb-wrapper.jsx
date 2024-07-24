@@ -94,7 +94,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                   onClick={() => handleImageActive(item)}
                   id={`image-${i}`}
                 >
-                  {isImage(item) ? (
+                  {isImage(profilePic(item)) ? (
                     <img
                       src={item}
                       alt={`Product image ${i + 1}`}
@@ -145,7 +145,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     style={{ cursor: "zoom-in" }}
                     onClick={() => setIsOpen(true)}
                   >
-                    {isImage(activeImg) ? (
+                    {isImage(profilePic(activeImg)) ? (
                       <img
                         src={profilePic(activeImg)}
                         alt="Active product image"
@@ -232,7 +232,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             <LeftOutlined />
           </button>
 
-          {isImage(imageUrls[photoIndex]) ? (
+          {isImage(profilePic(imageUrls[photoIndex])) ? (
             <img
               src={imageUrls[photoIndex] || profilePic(activeImg)}
               alt="Lightbox"

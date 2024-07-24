@@ -83,7 +83,7 @@ const DetailsThumbWrapperQuick = ({
                   height={100}
                   style={{ width: "100%", height: "100%" }}
                 /> */}
-                {isImage(item) ? (
+                {isImage(profilePic(item)) ? (
                   <img
                     src={profilePic(item)}
                     alt="thumbnail"

@@ -222,12 +222,12 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
           <div
             className="tp-category-thumb-4 include-bg"
             style={{
-              backgroundImage: isImage(img) ? `url(${img})` : "none",
+              backgroundImage: isImage(profilePic(img)) ? `url(${img})` : "none",
               backgroundColor: "#FFFFFF",
               // backgroundPosition: "0px -80px",
             }}
           >
-            {!isImage(img) &&
+            {!isImage(profilePic(img)) &&
               img && ( // Ensure img is not empty before rendering <video>
                 <video
                   src={img}

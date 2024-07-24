@@ -345,7 +345,7 @@ const InstagramAreaFour = () => {
                         className="actor-image"
                       /> */}
 
-                      {isImage(item?.thumbnail?.url) ? (
+                      {isImage(profilePic(item?.thumbnail?.url)) ? (
                         <img
                           src={item?.thumbnail?.url}
                           width={300}
