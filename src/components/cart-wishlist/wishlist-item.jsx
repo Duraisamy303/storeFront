@@ -138,6 +138,10 @@ const WishlistItem = ({ product, refetchWishlist }) => {
   );
   console.log("✌️isHiddenCategory --->", isHiddenCategory);
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <tr
@@ -155,15 +159,29 @@ const WishlistItem = ({ product, refetchWishlist }) => {
             width={70}
             height={100}
           /> */}
-
-            <img
-              src={
-                profilePic(product?.product?.media[0]?.url) ||
-                profilePic(data?.media[0]?.url)
-              }
-              width={70}
-              height={100}
-            />
+            {isImage(profilePic(product?.product?.media[0]?.url)) ||
+            isImage(profilePic(data?.media[0]?.url)) ? (
+              <img
+                src={
+                  profilePic(product?.product?.media[0]?.url) ||
+                  profilePic(data?.media[0]?.url)
+                }
+                width={70}
+                height={100}
+              />
+            ) : (
+              <video
+                src={product?.product?.media[0]?.url || data?.media[0]?.url}
+                width={70}
+                muted
+                loop
+                height={100}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            )}
           </Link>
         </td>
         <td className="tp-cart-title">

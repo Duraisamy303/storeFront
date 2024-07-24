@@ -41,7 +41,7 @@ const CompareArea = () => {
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
   const [getProducts] = useGetProductByIdMutation();
@@ -178,6 +178,10 @@ const CompareArea = () => {
     }
   };
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <section className="tp-compare-area pb-50 pt-50">
@@ -213,13 +217,22 @@ const CompareArea = () => {
                                   height={500}
                                   className=""
                                 /> */}
+                                {isImage(
+                                  profilePic(item?.node?.thumbnail?.url)
+                                ) ? (
+                                  <img
+                                    src={profilePic(item?.node?.thumbnail?.url)}
+                                    alt="compare"
+                                  />
+                                ) : (
+                                  <video
+                                    src={item?.node?.thumbnail?.url}
+                                    alt="compare"
+                                    muted
+                                    loop style={{ width: "100%", height: "100%" }}
+                                  />
+                                )}
 
-                                <img
-                                  src={profilePic(item?.node?.thumbnail?.url)}
-                                  alt="compare"
-                                
-                                  className=""
-                                />
                                 <div className="tp-product-badge-2">
                                   {item?.node?.defaultVariant
                                     ?.quantityAvailable == 0 && (
