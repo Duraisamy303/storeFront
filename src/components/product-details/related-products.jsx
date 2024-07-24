@@ -41,41 +41,22 @@ const slider_setting = {
   },
 };
 
-const RelatedProducts = ({ id }) => {
-  const Router = useRouter();
-
-  const {
-    data: related_product,
-    isError,
-    isLoading,
-  } = useGetRelatedProductsQuery({ id });
-  const productsList = related_product?.data?.category?.products?.edges;
-
-  const sameProduct = productsList?.filter((item) => {
-    return item?.node?.id !== Router?.query?.id;
-  });
-
-  const removeHiddenCategory = sameProduct?.filter((item) => {
-    return item?.node?.category.some((cat) => cat?.name === "Hidden");
-  });
-  
-  const idsToRemove = removeHiddenCategory?.map((item) => item.node.id);
-
-  const products = sameProduct?.filter(
-    (item) => !idsToRemove.includes(item.node.id)
-  );
-
-  console.log("products --->", products);
+const RelatedProducts = ({
+  id,
+  products,
+  relatedProductLoading,
+  relatedProductErr,
+}) => {
 
   let content = null;
 
-  if (isLoading) {
-    content = <HomeNewArrivalPrdLoader loading={isLoading} />;
-  } else if (isError) {
+  if (relatedProductLoading) {
+    content = <HomeNewArrivalPrdLoader loading={relatedProductLoading} />;
+  } else if (relatedProductErr) {
     content = <ErrorMsg msg="There was an error" />;
-  } else if (!isLoading && products?.length === 0) {
+  } else if (!relatedProductLoading && products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
-  } else if (!isLoading && products?.length > 0) {
+  } else if (!relatedProductLoading && products?.length > 0) {
     content = (
       <Swiper
         {...slider_setting}

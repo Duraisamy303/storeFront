@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Navigation, Autoplay } from "swiper";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { slider_setting } from "../../utils/functions";
-
+import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
 const ProductDetailsArea = ({
   productItem,
   pageTitle,
@@ -21,6 +21,31 @@ const ProductDetailsArea = ({
   const { media, imageURLs, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(null);
   const dispatch = useDispatch();
+
+  const id = productItem?.category[0]?.id;
+  const {
+    data: related_product,
+    isError,
+    isLoading,
+  } = useGetRelatedProductsQuery({ id });
+
+  const productsList = related_product?.data?.category?.products?.edges;
+
+  const sameProduct = productsList?.filter((item) => {
+    return item?.node?.id !== router?.query?.id;
+  });
+
+  const removeHiddenCategory = sameProduct?.filter((item) => {
+    return item?.node?.category.some((cat) => cat?.name === "Hidden");
+  });
+
+  const idsToRemove = removeHiddenCategory?.map((item) => item.node.id);
+
+  const relatedproducts = sameProduct?.filter(
+    (item) => !idsToRemove.includes(item.node.id)
+  );
+
+
   // active image change when img change
   useEffect(() => {
     setActiveImg(media);
@@ -37,7 +62,7 @@ const ProductDetailsArea = ({
 
   const relatedClicked = () => {
     // Scroll to the related products section
-    relatedProductsRef.current.scrollIntoView({ behavior: 'smooth' });
+    relatedProductsRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -59,7 +84,8 @@ const ProductDetailsArea = ({
                 imgHeight={740}
                 imgHeightMobile={540}
                 videoId={videoId}
-                status={status} relatedClick={() => relatedClicked()}
+                status={status}
+                relatedClick={() => relatedClicked()}
               />
               {/* product-details-thumb-wrapper end */}
             </div>
@@ -80,9 +106,7 @@ const ProductDetailsArea = ({
       </div>
 
       {/* product details description */}
-      <div className="tp-product-details-bottom pb-40">
-        
-      </div>
+      <div className="tp-product-details-bottom pb-40"></div>
       {/* product details description */}
 
       {router.route == "/gift-card" ? (
@@ -90,8 +114,11 @@ const ProductDetailsArea = ({
       ) : (
         <>
           {/* related products start */}
-          {productItem?.category?.length > 0 && (
-            <section className="tp-related-product pt-40"  ref={relatedProductsRef}>
+          {relatedproducts?.length > 0 && (
+            <section
+              className="tp-related-product pt-40"
+              ref={relatedProductsRef}
+            >
               <div className="container-fluid">
                 <div className="row">
                   <div className="tp-section-title-wrapper-6 mb-10">
@@ -101,7 +128,7 @@ const ProductDetailsArea = ({
                 </div>
 
                 <div className="row">
-                  <RelatedProducts id={productItem?.category[0]?.id} />
+                  <RelatedProducts products={relatedproducts} relatedProductLoading={isLoading} relatedProductErr={isError} id={productItem?.category[0]?.id} />
                 </div>
               </div>
             </section>
