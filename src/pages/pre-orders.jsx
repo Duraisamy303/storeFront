@@ -51,10 +51,10 @@ const PreOrders = () => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR == "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD == "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);
@@ -64,9 +64,10 @@ const PreOrders = () => {
       const data = await createCheckoutTokenWithoutEmail({
         channel: "india-channel",
       });
+      const datas = data?.json()
       localStorage.setItem(
         "checkoutTokenINR",
-        data?.data?.data?.checkoutCreate?.checkout?.token
+        datas?.data?.data?.checkoutCreate?.checkout?.token
       );
     } catch (error) {
       console.error("Error:", error);

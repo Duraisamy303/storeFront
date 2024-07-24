@@ -248,7 +248,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             />
           ) : (
             <video
-              src={profilePic(img)}
+              src={img}   width={284}
+              height={302}
               alt="product img"
               style={{
                 width: "100%",

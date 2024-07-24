@@ -39,10 +39,10 @@ const ProductDetailsPage = ({ query }) => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR == "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD == "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);
@@ -54,14 +54,13 @@ const ProductDetailsPage = ({ query }) => {
   useEffect(() => {
     const product = productData?.data?.product;
     const value = getValueByKey(product?.metadata, "keyword");
-      const meta = document.createElement("meta");
-      meta.name = "keyword";
-      meta.content = value?value:product?.name;
-      document.head.appendChild(meta);
-      return () => {
-        document.head.removeChild(meta);
-      };
-    
+    const meta = document.createElement("meta");
+    meta.name = "keyword";
+    meta.content = value ? value : product?.name;
+    document.head.appendChild(meta);
+    return () => {
+      document.head.removeChild(meta);
+    };
   }, [productData]);
 
   const createCheckoutTokenINR = async () => {
