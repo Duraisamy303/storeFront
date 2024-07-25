@@ -1780,12 +1780,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       {state.channel == "india-channel" ? (
                         <>
                           <span>
-                            <del className="tp-color-variation-tootltip">
-                              {checkoutAllData?.discount &&
-                                checkoutAllData?.discount?.amount !== 0.0 && (
-                                  <>&#8377; {checkoutAllData.discount.amount}</>
-                                )}
-                            </del>
                             &#8377;
                             {addCommasToNumber(item?.totalPrice?.gross?.amount)}
                           </span>
@@ -1798,14 +1792,34 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </li>
                   ))}
 
-                  {checkoutAllData?.discount && checkoutAllData?.discount?.amount !== 0.0 && (
-                    <li className="tp-order-info-list-total">
-                      <span>Discount</span>
-                      <span>
-                        <DeleteOutlined onClick={handleRemoveDiscount} />
-                      </span>
-                    </li>
-                  )}
+                  {checkoutAllData?.discount &&
+                    checkoutAllData?.discount?.amount !== 0.0 && (
+                      <li className="tp-order-info-list-total">
+                        <span style={{ fontSize: "14px", fontWeight: "400" }}>
+                          <b>Coupon:</b> {checkoutAllData?.voucherCode}
+                        </span>
+                        <p onClick={handleRemoveDiscount}>
+                          {" "}
+                          {checkoutAllData?.discount &&
+                            checkoutAllData?.discount?.amount !== 0.0 && (
+                              <span>
+                                -&#8377;{checkoutAllData.discount.amount}
+                              </span>
+                            )}
+                          {""}
+                          <span
+                            style={{
+                              color: "black",
+                              cursor: "pointer",
+                              paddingLeft: "3px",
+                              fontWeight: "300",
+                            }} 
+                          >
+                            [Remove]
+                          </span>
+                        </p>
+                      </li>
+                    )}
 
                   {/* total */}
                   {state?.shippingCost && (

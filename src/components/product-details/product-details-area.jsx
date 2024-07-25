@@ -62,7 +62,7 @@ const ProductDetailsArea = ({
 
   const relatedClicked = () => {
     // Scroll to the related products section
-    relatedProductsRef.current.scrollIntoView({ behavior: "smooth" });
+    relatedProductsRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
