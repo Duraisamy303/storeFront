@@ -206,12 +206,15 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(0, 8);
 
-      const CatList = lastTen.filter((item) => {
-        return item.node.name !== "Hidden";
+      const CategoriesList = catList.filter((item) => {
+        return (
+          item.node.name !== "Hidden" && item.node.products?.totalCount > 0
+        );
       });
-      setCategoryList(CatList);
+      const lastTen = CategoriesList?.slice(0, 8);
+
+      setCategoryList(lastTen);
     }
   }, [categoryData]);
 
