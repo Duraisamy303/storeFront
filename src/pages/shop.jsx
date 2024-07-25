@@ -207,7 +207,11 @@ const ShopPage = () => {
     ) {
       const catList = categoryData?.data?.categories?.edges;
       const lastTen = catList?.slice(0, 8);
-      setCategoryList(lastTen);
+
+      const CatList = lastTen.filter((item) => {
+        return item.node.name !== "Hidden";
+      });
+      setCategoryList(CatList);
     }
   }, [categoryData]);
 
@@ -455,7 +459,8 @@ const ShopPage = () => {
       <ShopArea
         all_products={productList}
         products={productList}
-        otherProps={otherProps} productLoading={isLoading}
+        otherProps={otherProps}
+        productLoading={isLoading}
         updateData={() => setCartUpdate(true)}
         subtitle={shopTitle}
         updateRange={(range) => handleChanges(range)}
