@@ -197,10 +197,10 @@ const CartMiniSidebar = () => {
                                   }
                                   alt="product img"
                                   width={70}
-                                  height={60} style={{ height: "100%" }}
+                                  height={60}
+                                  style={{ height: "100%" }}
                                   muted
                                   loop
-                                 
                                 />
                               )}
                               {/* <img
@@ -421,6 +421,16 @@ const CartMiniSidebar = () => {
                     Checkout
                   </Link>
                 )}
+
+                <button
+                  onClick={() => {
+                    router.push("/shop");
+                    handleCloseCartMini();
+                  }}
+                  className="tp-btn w-100 mt-20" 
+                >
+                  Continue to Shop
+                </button>
               </div>
             </div>
           )}
