@@ -209,7 +209,7 @@ const ShopPage = () => {
 
       const CategoriesList = catList.filter((item) => {
         return (
-          item.node.name !== "Hidden" && item.node.products?.totalCount > 0
+          item.node.name !== "Hidden" && item.node.productsWithoutHiddenCategory?.totalCount > 0
         );
       });
       const lastTen = CategoriesList?.slice(0, 8);
