@@ -114,6 +114,8 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
       name
       productId
     }
+    seoTitle
+    seoDescription
   }
 }
     `,
@@ -171,6 +173,8 @@ export const PREV_PRODUCT = ({ prevProductId, channel }) => {
             }
           }
         }
+       seoDescription
+       seoTitle
       }
     }
     

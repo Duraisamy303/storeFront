@@ -51,18 +51,49 @@ const ProductDetailsPage = ({ query }) => {
     getYouMayLikeData();
   }, [productData]);
 
+  // useEffect(() => {
+  //   const product = productData?.data?.product;
+  //   const value = getValueByKey(product?.metadata, "keyword");
+  //     const meta = document.createElement("meta");
+  //     meta.name = "keyword";
+  //     meta.content = value?value:product?.name;
+  //     document.head.appendChild(meta);
+  //     return () => {
+  //       document.head.removeChild(meta);
+  //     };
+
+  // }, [productData]);
+
   useEffect(() => {
     const product = productData?.data?.product;
-    const value = getValueByKey(product?.metadata, "keyword");
+
+    const addMetaTag = (name, content) => {
       const meta = document.createElement("meta");
-      meta.name = "keyword";
-      meta.content = value?value:product?.name;
+      meta.name = name;
+      meta.content = content;
       document.head.appendChild(meta);
-      return () => {
-        document.head.removeChild(meta);
-      };
-    
+      return meta;
+    };
+
+    const keywordValue =
+      getValueByKey(product?.metadata, "keyword") || product?.name;
+    const descriptionValue =
+      getValueByKey(product?.metadata, "description") ||
+      product?.seoDescription;
+    const titleValue =
+      getValueByKey(product?.metadata, "title") || product?.seoTitle;
+
+    const keywordMeta = addMetaTag("keyword", keywordValue);
+    const descriptionMeta = addMetaTag("description", descriptionValue);
+    const titleMeta = addMetaTag("title", titleValue);
+
+    return () => {
+      document.head.removeChild(keywordMeta);
+      document.head.removeChild(descriptionMeta);
+      document.head.removeChild(titleMeta);
+    };
   }, [productData]);
+
 
   const createCheckoutTokenINR = async () => {
     try {
