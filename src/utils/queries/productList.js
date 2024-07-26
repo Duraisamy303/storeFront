@@ -344,8 +344,8 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
           node {
             id
             name
-            slug
-            products(channel: $channel) {
+            slug            
+            productsWithoutHiddenCategory(channel: $channel) {
               totalCount
             }
           }

@@ -485,6 +485,10 @@ const DetailsWrapper = ({
     setVariantDetails(variantDetails);
   };
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -534,13 +538,31 @@ const DetailsWrapper = ({
                         width={100}
                         src={profilePic(previousProduct?.thumbnail?.url)}
                       /> */}
-
-                        <img
+                        {isImage(
+                          profilePic(previousProduct?.thumbnail?.url)
+                        ) ? (
+                          <img
+                            style={{ width: "100%" }}
+                            height={100}
+                            width={100}
+                            src={profilePic(previousProduct?.thumbnail?.url)}
+                          />
+                        ) : (
+                          <video
+                            style={{ width: "100%" }}
+                            height={100}
+                            width={100}
+                            src={previousProduct?.thumbnail?.url}
+                            muted
+                            loop
+                          />
+                        )}
+                        {/* <img
                           style={{ width: "100%" }}
                           height={100}
                           width={100}
                           src={profilePic(previousProduct?.thumbnail?.url)}
-                        />
+                        /> */}
                       </div>
                       <div
                         style={{
@@ -628,13 +650,29 @@ const DetailsWrapper = ({
                       height={100}
                       src={profilePic(nextProduct?.thumbnail?.url)}
                     /> */}
-
+                        {isImage(profilePic(nextProduct?.thumbnail?.url)) ? (
+                          <img
+                            style={{ width: "100%" }}
+                            width={100}
+                            height={100}
+                            src={profilePic(nextProduct?.thumbnail?.url)}
+                          />
+                        ) : (
+                          <video
+                            width={100}
+                            height={100}
+                            src={nextProduct?.thumbnail?.url}
+                            muted
+                            loop
+                          />
+                        )}
+                        {/*                         
                         <img
                           style={{ width: "100%" }}
                           width={100}
                           height={100}
                           src={profilePic(nextProduct?.thumbnail?.url)}
-                        />
+                        /> */}
                       </div>
                       <div
                         style={{
@@ -872,7 +910,7 @@ const DetailsWrapper = ({
         </div>
       )} */}
 
-      <div >
+      <div>
         <p style={{ fontSize: "16px", color: "black" }}>
           {variantDetails ? (
             <>
@@ -1463,29 +1501,27 @@ const DetailsWrapper = ({
                 : productItem?.defaultVariant?.sku}
             </p>
             {productItem?.category?.length > 0 && (
-            <p
-              style={{ color: "#55585b", cursor: "pointer" }}
-            
-            >
-              <b>Categories:</b>  {productItem?.category?.map((category, index) => {
-                return (
-                  <span
-                    key={category?.id}
-                    style={{ marginRight: "3px", cursor: "pointer" }} 
-                    onClick={() => {
-                      router.push({
-                        pathname: "/shop",
-                        query: { categoryId: category?.id }, // Your parameters
-                      });
-                    }}
-                  >
-                    {category?.name}
-                    {index < productItem.category.length - 1 ? ", " : ""}
-                  </span>
-                );
-              })}
-            </p>
-             )}
+              <p style={{ color: "#55585b", cursor: "pointer" }}>
+                <b>Categories:</b>{" "}
+                {productItem?.category?.map((category, index) => {
+                  return (
+                    <span
+                      key={category?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { categoryId: category?.id }, // Your parameters
+                        });
+                      }}
+                    >
+                      {category?.name}
+                      {index < productItem.category.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
             {productItem?.tags?.length > 0 && (
               <p style={{ color: "#55585b" }}>
                 <b>Tags:</b>{" "}

@@ -18,7 +18,11 @@ import {
 import { useRouter } from "next/router";
 import { notifyError } from "@/utils/toast";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { addCommasToNumber, checkChannel, roundOff } from "../../utils/functions";
+import {
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import { ClipLoader } from "react-spinners";
 
@@ -106,6 +110,10 @@ const CartItem = ({
     setChannel(channels);
   }, []);
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       {quantityAvailable >= quantity ? (
@@ -123,16 +131,31 @@ const CartItem = ({
                 height={100}
               /> */}
 
-<img
-                src={profilePic(img)}
-                alt="product img"
-                width={70}
-                height={100}
-              />
+              {isImage(profilePic(img)) ? (
+                <img
+                  src={profilePic(img)}
+                  alt="product img"
+                  width={70}
+                  height={100}
+                />
+              ) : (
+                <video
+                  src={img}
+                  alt="product video"
+                  width={70}
+                  height={100}
+                  style={{ height: "100%" }}
+                  muted
+                  loop
+                />
+              )}
+             
             </div>
           </td>
           <td className="tp-cart-title">
-            <Link href={`/product-details/${product?.variant?.product?.id}`}>{title}</Link>
+            <Link href={`/product-details/${product?.variant?.product?.id}`}>
+              {title}
+            </Link>
           </td>
 
           <td className="tp-cart-price">
@@ -187,18 +210,23 @@ const CartItem = ({
               {channel == "india-channel" ? (
                 <>
                   {!isQuantity ? (
-
-                    <span style={{color:"gray"}}>&#8377;{addCommasToNumber(price)}</span>
+                    <span style={{ color: "gray" }}>
+                      &#8377;{addCommasToNumber(price)}
+                    </span>
                   ) : (
-                    <span style={{color:"gray"}}>&#8377;{addCommasToNumber(price * quantity)}</span>
+                    <span style={{ color: "gray" }}>
+                      &#8377;{addCommasToNumber(price * quantity)}
+                    </span>
                   )}
                 </>
               ) : (
                 <>
                   {!isQuantity ? (
-                    <span style={{color:"gray"}}>${roundOff(price)}</span>
+                    <span style={{ color: "gray" }}>${roundOff(price)}</span>
                   ) : (
-                    <span style={{color:"gray"}}>${roundOff(price * quantity)}</span>
+                    <span style={{ color: "gray" }}>
+                      ${roundOff(price * quantity)}
+                    </span>
                   )}
                 </>
               )}
@@ -211,10 +239,13 @@ const CartItem = ({
               <button
                 onClick={() => handleRemovePrd()}
                 className="tp-cart-action-btn"
-              >{
-                productRemoveLoader ?   <ClipLoader color="red" size={13} /> : <Close />
-              }
-               
+              >
+                {productRemoveLoader ? (
+                  <ClipLoader color="red" size={13} />
+                ) : (
+                  <Close />
+                )}
+
                 <span> Remove</span>
               </button>
             </td>

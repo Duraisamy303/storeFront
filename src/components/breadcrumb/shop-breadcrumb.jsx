@@ -123,7 +123,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                               {item?.node?.name?.toUpperCase()}
                             </h5>
                             <p className="shop-banner-categoryList-count">
-                              {item?.node?.products?.totalCount} Products
+                              {item?.node?.productsWithoutHiddenCategory?.totalCount} Products
                             </p>
                           </li>
                         ))}

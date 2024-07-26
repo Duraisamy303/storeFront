@@ -78,7 +78,7 @@ const LoginForm = () => {
         // }
         //For india channel
         const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
-        if (!checkoutTokenINR) {
+        if (!checkoutTokenINR || checkoutTokenINR === "undefined") {
           createCheckoutTokenINR(data?.data?.data?.tokenCreate?.user?.email);
         } else {
           await checkoutTokenEmailUpdate({
@@ -89,7 +89,7 @@ const LoginForm = () => {
 
         //For default channel
         const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
-        if (!checkoutTokenUSD) {
+        if (!checkoutTokenUSD || checkoutTokenUSD === "undefined") {
           createCheckoutTokenUSD(data?.data?.data?.tokenCreate?.user?.email);
         } else {
           await checkoutTokenEmailUpdate({

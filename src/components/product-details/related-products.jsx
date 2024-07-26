@@ -5,15 +5,16 @@ import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
 import ProductItem from "../products/beauty/product-item";
 import ErrorMsg from "../common/error-msg";
 import { HomeNewArrivalPrdLoader } from "../loader";
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import 'swiper/swiper-bundle.min.css';
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import "swiper/swiper-bundle.min.css";
+import { useRouter } from "next/router";
 
 const slider_setting = {
   slidesPerView: 4,
   spaceBetween: 10,
   navigation: {
-    prevEl: '.tp-related-slider-button-prev',
-    nextEl: '.tp-related-slider-button-next',
+    prevEl: ".tp-related-slider-button-prev",
+    nextEl: ".tp-related-slider-button-next",
   },
   autoplay: {
     delay: 5000,
@@ -40,19 +41,22 @@ const slider_setting = {
   },
 };
 
-const RelatedProducts = ({ id }) => {
-  const { data: related_product, isError, isLoading } = useGetRelatedProductsQuery({ id });
-  const products = related_product?.data?.category?.products?.edges;
+const RelatedProducts = ({
+  id,
+  products,
+  relatedProductLoading,
+  relatedProductErr,
+}) => {
 
   let content = null;
 
-  if (isLoading) {
-    content = <HomeNewArrivalPrdLoader loading={isLoading} />;
-  } else if (isError) {
+  if (relatedProductLoading) {
+    content = <HomeNewArrivalPrdLoader loading={relatedProductLoading} />;
+  } else if (relatedProductErr) {
     content = <ErrorMsg msg="There was an error" />;
-  } else if (!isLoading && products?.length === 0) {
+  } else if (!relatedProductLoading && products?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
-  } else if (!isLoading && products?.length > 0) {
+  } else if (!relatedProductLoading && products?.length > 0) {
     content = (
       <Swiper
         {...slider_setting}
@@ -61,7 +65,11 @@ const RelatedProducts = ({ id }) => {
       >
         {products.map((item) => (
           <SwiperSlide key={item._id}>
-            <ProductItem product={item?.node} primary_style={true} data={products} />
+            <ProductItem
+              product={item?.node}
+              primary_style={true}
+              data={products}
+            />
           </SwiperSlide>
         ))}
         <div className="tp-related-slider-button-prev swiper-button-prev">

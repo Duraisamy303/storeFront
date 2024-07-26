@@ -17,7 +17,11 @@ import {
 } from "@/redux/features/card/cardApi";
 import { useRouter } from "next/router";
 import { useGetCartAllListQuery } from "../../redux/features/card/cardApi";
-import { addCommasToNumber, checkChannel, roundOff } from "../../utils/functions";
+import {
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import { isPreOrderAndGiftCart } from "../../redux/features/cartSlice";
 
@@ -114,6 +118,10 @@ const CartMiniSidebar = () => {
     return item?.variant?.quantityAvailable >= item.quantity;
   });
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <div
@@ -166,7 +174,36 @@ const CartMiniSidebar = () => {
                                 alt="product img"
                               /> */}
 
-                              <img
+                              {isImage(
+                                profilePic(
+                                  item?.variant?.product?.thumbnail?.url ||
+                                    item?.node?.thumbnail?.url
+                                )
+                              ) ? (
+                                <img
+                                  src={profilePic(
+                                    item?.variant?.product?.thumbnail?.url ||
+                                      item?.node?.thumbnail?.url
+                                  )}
+                                  width={70}
+                                  height={60}
+                                  alt="product img"
+                                />
+                              ) : (
+                                <video
+                                  src={
+                                    item?.variant?.product?.thumbnail?.url ||
+                                    item?.node?.thumbnail?.url
+                                  }
+                                  alt="product img"
+                                  width={70}
+                                  height={60}
+                                  style={{ height: "100%" }}
+                                  muted
+                                  loop
+                                />
+                              )}
+                              {/* <img
                                 src={profilePic(
                                   item?.variant?.product?.thumbnail?.url ||
                                     item?.node?.thumbnail?.url
@@ -174,7 +211,7 @@ const CartMiniSidebar = () => {
                                 width={70}
                                 height={60}
                                 alt="product img"
-                              />
+                              /> */}
                             </div>
                           </div>
                           <div className="cartmini__content">
@@ -191,7 +228,9 @@ const CartMiniSidebar = () => {
                               {channel == "india-channel" ? (
                                 <span className="cartmini__price">
                                   &#8377;
-                                  {addCommasToNumber(item?.totalPrice?.gross?.amount)}
+                                  {addCommasToNumber(
+                                    item?.totalPrice?.gross?.amount
+                                  )}
                                 </span>
                               ) : (
                                 <span className="cartmini__price">
@@ -382,6 +421,16 @@ const CartMiniSidebar = () => {
                     Checkout
                   </Link>
                 )}
+
+                <button
+                  onClick={() => {
+                    router.push("/shop");
+                    handleCloseCartMini();
+                  }}
+                  className="tp-btn w-100 mt-20" 
+                >
+                  Continue to Shop
+                </button>
               </div>
             </div>
           )}

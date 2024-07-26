@@ -66,10 +66,10 @@ const ShopPage = () => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR == "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD == "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);
@@ -206,7 +206,14 @@ const ShopPage = () => {
       categoryData?.data?.categories?.edges
     ) {
       const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(0, 8);
+
+      const CategoriesList = catList.filter((item) => {
+        return (
+          item.node.name !== "Hidden" && item.node.productsWithoutHiddenCategory?.totalCount > 0
+        );
+      });
+      const lastTen = CategoriesList?.slice(0, 8);
+
       setCategoryList(lastTen);
     }
   }, [categoryData]);
@@ -456,6 +463,7 @@ const ShopPage = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
+        productLoading={isLoading}
         updateData={() => setCartUpdate(true)}
         subtitle={shopTitle}
         updateRange={(range) => handleChanges(range)}

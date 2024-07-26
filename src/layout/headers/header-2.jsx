@@ -93,10 +93,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR === "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD === "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);
@@ -223,6 +223,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
     } catch (error) {
       console.log("error: ", error);
     }
+  };
+
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
   return (
@@ -360,47 +364,40 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                     borderBottom: "1px solid #dadada",
                                   }}
                                 >
-                                  {item.img ? (
-                                    <div
-                                      style={{
-                                        marginRight: "10px",
-                                        width: "50px",
-                                        height: "50px",
-                                      }}
-                                    >
-                                      {/* <Image
-                                        src={item?.img}
-                                        alt="Product Image"
-                                        width={50}
-                                        height={50}
-                                        style={{ borderRadius: "50%" }}
-                                      /> */}
-
+                                  <div
+                                    style={{
+                                      marginRight: "10px",
+                                      width: "50px",
+                                      height: "50px",
+                                    }}
+                                  >
+                                  
+                                    {isImage(profilePic(item?.img)) ? (
                                       <img
-                                        src={item?.img}
+                                        src={profilePic(item?.img)}
                                         alt="Product Image"
                                         width={50}
                                         height={50}
                                         style={{ borderRadius: "50%" }}
                                       />
-                                    </div>
-                                  ) : (
-                                    <div
-                                      style={{
-                                        marginRight: "10px",
-                                        width: "50px",
-                                        height: "50px",
-                                      }}
-                                    >
-                                      <Image
-                                        src={pradeLogo}
-                                        alt="Placeholder Image"
+                                    ) : (
+                                      <video
+                                        src={item?.img}
                                         width={50}
+                                        muted
+                                        loop
                                         height={50}
                                         style={{ borderRadius: "50%" }}
                                       />
-                                    </div>
-                                  )}
+                                    )}
+                                    {/* <img
+                                      src={profilePic(item?.img)}
+                                      alt="Product Image"
+                                      width={50}
+                                      height={50}
+                                      style={{ borderRadius: "50%" }}
+                                    /> */}
+                                  </div>
 
                                   <Link
                                     href={`/product-details/${item?.id}`}

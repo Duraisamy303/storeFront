@@ -24,10 +24,10 @@ const PaymentSucess = () => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR == "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD == "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);

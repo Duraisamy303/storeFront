@@ -9,11 +9,11 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import {
   useAddToCartMutation,
   useGetCartListQuery,
-  useGetCartAllListQuery
+  useGetCartAllListQuery,
 } from "@/redux/features/card/cardApi";
 import { cart_count } from "@/redux/features/card/cardSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { compare_list, openCartMini, } from "@/redux/features/cartSlice";
+import { compare_list, openCartMini } from "@/redux/features/cartSlice";
 import { handleWishlistProduct } from "@/utils/common_function";
 import { useRouter } from "next/router";
 import {
@@ -37,12 +37,13 @@ const ProductItem = ({
 }) => {
   const { id, thumbnail, name, discount, pricing, tags, status } =
     product || {};
+  console.log("✌️product --->", product);
 
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
 
-    const { data: AllListChannel, refetch: AllListChannelREfresh } =
+  const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
@@ -96,7 +97,6 @@ const ProductItem = ({
         cartRefetch();
         dispatch(openCartMini());
         AllListChannelREfresh();
-        
       }
       setCartLoader(false);
     } catch (error) {
@@ -173,6 +173,10 @@ const ProductItem = ({
     dispatch(compare_list(arr));
   };
 
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <div
       className={`tp-product-item-3 mb-50 ${
@@ -187,13 +191,34 @@ const ProductItem = ({
             width={282}
             height={320}
           /> */}
-
-          <img
+          {isImage(profilePic(thumbnail?.url)) ? (
+            <img
+              src={profilePic(thumbnail?.url)}
+              alt="product image"
+              width={282}
+              height={320}
+            />
+          ) : (
+            <video
+              src={thumbnail?.url}
+              autoPlay
+              muted // Ensure it's muted to autoplay without user interaction
+              loop // Ensure it loops indefinitely
+              playsInline // Ensure it plays inline on iOS devices
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              alt="instagram video"
+              className="actor-video"
+            />
+          )}
+          {/* <img
             src={profilePic(thumbnail?.url)}
             alt="product image"
             width={282}
             height={320}
-          />
+          /> */}
         </Link>
 
         {/* <div className="tp-product-badge">
@@ -394,7 +419,10 @@ const ProductItem = ({
                   style={{ textDecoration: "line-through", color: "gray" }}
                 >
                   {" "}
-                  &#8377;{addCommasToNumber(roundOff(product?.defaultVariant?.costPrice))}
+                  &#8377;
+                  {addCommasToNumber(
+                    roundOff(product?.defaultVariant?.costPrice)
+                  )}
                 </span>
               )}
               <span className="tp-product-price-3">

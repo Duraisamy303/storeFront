@@ -45,6 +45,11 @@ const DetailsThumbWrapperQuick = ({
   };
 
   console.log("imageUrls", imageUrls);
+
+  const isImage = (url) => {
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
+  };
+
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
@@ -63,7 +68,13 @@ const DetailsThumbWrapperQuick = ({
                 className={`nav-link ${item === activeImg ? "active" : ""}`}
                 onClick={() => handleImageActive(item)}
                 id={`image-${i}`}
-                style={{ border: "none", background: "none", padding: 0, width:'175px', height:'205px' }}
+                style={{
+                  border: "none",
+                  background: "none",
+                  padding: 0,
+                  width: "175px",
+                  height: "205px",
+                }}
               >
                 {/* <Image
                   src={profilePic(item)}
@@ -72,14 +83,24 @@ const DetailsThumbWrapperQuick = ({
                   height={100}
                   style={{ width: "100%", height: "100%" }}
                 /> */}
-
-<img
-                  src={profilePic(item)}
-                  alt="thumbnail"
-                  width={78}
-                  height={100}
-                  style={{ width: "100%", height: "100%" }}
-                />
+                {isImage(profilePic(item)) ? (
+                  <img
+                    src={profilePic(item)}
+                    alt="thumbnail"
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <video
+                    src={profilePic(item)}
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%" }}
+                    muted
+                    loop
+                  />
+                )}
               </button>
             ))}
           </div>
@@ -131,13 +152,32 @@ const DetailsThumbWrapperQuick = ({
                 //   width={imgWidth}
                 //   height={imgHeight}
                 // />
-
-                <img
-                src={profilePic(activeImg)}
-                alt="product img"
-                width={imgWidth}
-                height={imgHeight}
-              />
+                <>
+                  {isImage(activeImg) ? (
+                    <img
+                      src={profilePic(activeImg)}
+                      alt="product img"
+                      width={imgWidth}
+                      height={imgHeight}
+                    />
+                  ) : (
+                    <video
+                      src={profilePic(activeImg)}
+                      width={imgWidth}
+                      height={imgHeight}
+                      autoPlay
+                      muted // Ensure it's muted to autoplay without user interaction
+                      loop // Ensure it loops indefinitely
+                      playsInline // Ensure it plays inline on iOS devices
+                    />
+                  )}
+                  {/* <img
+                  src={profilePic(activeImg)}
+                  alt="product img"
+                  width={imgWidth}
+                  height={imgHeight}
+                /> */}
+                </>
               )}
 
               <div className="tp-product-badge">
@@ -148,9 +188,7 @@ const DetailsThumbWrapperQuick = ({
 
               <div className="tp-product-badge-2">
                 {product?.defaultVariant?.quantityAvailable == 0 && (
-                  <span
-                    className="product-hot text-center soldout-badge"
-                  >
+                  <span className="product-hot text-center soldout-badge">
                     SOLD
                     <br /> OUT
                   </span>

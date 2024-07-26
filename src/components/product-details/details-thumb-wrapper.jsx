@@ -74,7 +74,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   };
 
   const isImage = (url) => {
-    return /\.(jpg|jpeg|png|gif)$/i.test(url);
+    return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
   return (
@@ -94,7 +94,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                   onClick={() => handleImageActive(item)}
                   id={`image-${i}`}
                 >
-                  {isImage(item) ? (
+                  {isImage(profilePic(item)) ? (
                     <img
                       src={item}
                       alt={`Product image ${i + 1}`}
@@ -145,7 +145,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     style={{ cursor: "zoom-in" }}
                     onClick={() => setIsOpen(true)}
                   >
-                    {isImage(activeImg) ? (
+                    {isImage(profilePic(activeImg)) ? (
                       <img
                         src={profilePic(activeImg)}
                         alt="Active product image"
@@ -157,8 +157,10 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                       <video
                         src={activeImg}
                         style={{ width: "100%", height: "auto" }}
-                        controls
                         autoPlay
+                        muted // Ensure it's muted to autoplay without user interaction
+                        loop // Ensure it loops indefinitely
+                        playsInline // Ensure it plays inline on iOS devices
                         onLoadedData={() => setLoading(false)}
                         onError={() => setLoading(false)}
                       />
@@ -230,7 +232,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             <LeftOutlined />
           </button>
 
-          {isImage(imageUrls[photoIndex]) ? (
+          {isImage(profilePic(imageUrls[photoIndex])) ? (
             <img
               src={imageUrls[photoIndex] || profilePic(activeImg)}
               alt="Lightbox"

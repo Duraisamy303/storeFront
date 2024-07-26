@@ -51,10 +51,10 @@ const PreOrders = () => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
     const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
 
-    if (!checkoutTokenINR) {
+    if (!checkoutTokenINR || checkoutTokenINR == "undefined") {
       createCheckoutTokenINR();
     }
-    if (!checkoutTokenUSD) {
+    if (!checkoutTokenUSD || checkoutTokenUSD == "undefined") {
       createCheckoutTokenUSD();
     }
   }, []);
@@ -290,8 +290,8 @@ const PreOrders = () => {
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Sale"
-        subtitle="Sale"
+        title="Loot Sale"
+        subtitle="Loot Sale"
         bgImage={shopBanner}
         catList={categoryList}
       />
@@ -300,7 +300,7 @@ const PreOrders = () => {
         products={productList}
         otherProps={otherProps}
         updateData={() => setCartUpdate(true)}
-        subtitle="Pre Orders"
+        subtitle="Loot Sale"
         updateRange={(range) => handleChanges(range)}
         maxPrice={maxPrice}
       />
