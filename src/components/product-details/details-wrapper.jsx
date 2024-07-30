@@ -11,6 +11,7 @@ import {
   add_cart_product,
   cart_list,
   compare_list,
+  openCartMini,
 } from "@/redux/features/cartSlice";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
@@ -267,6 +268,7 @@ const DetailsWrapper = ({
         // notifyError(err);
       } else {
         notifySuccess(`Product added to cart successfully`);
+        dispatch(openCartMini());
         cartRefetch();
       }
       setCartLoader(false);
