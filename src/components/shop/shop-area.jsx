@@ -338,7 +338,6 @@ const ShopArea = ({
                       style={{ display: "flex", gap: 10, cursor: "pointer" }}
                     >
                       {filter?.map((item, index) => {
-                        console.log("item: ", item);
                         return item?.type == "price" ? (
                           <>
                             {(item?.min || item?.min == 0) && (

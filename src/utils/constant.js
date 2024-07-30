@@ -1242,3 +1242,16 @@ export const pincode = [
   635115, 741316, 636803, 360020, 515455, 788115, 788161, 788104, 788106,
   799013, 384160, 384135, 481990, 370150, 481776, 815302, 475330, 276141,
 ];
+
+export const filterByStock = [
+  {
+    id: "IN_STOCK",
+    type: "stock",
+    name: "In Stock",
+  },
+  {
+    id: "OUT_OF_STOCK",
+    type: "stock",
+    name: "Out Of Stock",
+  },
+];

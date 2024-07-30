@@ -248,7 +248,8 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             />
           ) : (
             <video
-              src={img}   width={284}
+              src={img}
+              width={284}
               height={302}
               alt="product img"
               style={{
@@ -486,37 +487,36 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
         </div> */}
           {channel == "india-channel" ? (
-            <div className="tp-product-price-wrapper ">
-              {RegularPrice(
-                addCommasToNumber(product?.defaultVariant?.costPrice),
-                addCommasToNumber(
-                  product?.pricing?.priceRange?.start?.gross?.amount
-                )
-              ) && (
-                <span
-                  className="tp-product-price-1 pr-5 line-through "
+            <div className="tp-product-price-wrapper">
+            <span
+              className="tp-product-price-2 new-price items-center"
+              style={{ display: "flex",justifyContent:"center"}}
+            >
+              {product?.pricing?.discount !== null && (
+                <div
+                  className=""
                   style={{
                     textDecoration: "line-through",
-                    color: "rgb(144 141 141)",
-                    fontSize: "14px",
+                    color: "grey",
+                    fontWeight: 400,
+                    marginRight: "10px"
                   }}
                 >
                   &#8377;
                   {addCommasToNumber(
-                    roundOff(product?.defaultVariant?.costPrice)
+                    product?.pricing?.priceRangeUndiscounted?.start?.gross?.amount
                   )}
-                </span>
+                </div>
               )}
-              <span
-                className="tp-product-price-2 new-price "
-                style={{ fontSize: "14px" }}
-              >
+              <div>
                 &#8377;
                 {addCommasToNumber(
                   product?.pricing?.priceRange?.start?.gross?.amount
                 )}
-              </span>
-            </div>
+              </div>
+            </span>
+          </div>
+          
           ) : (
             <div className="tp-product-price-wrapper-2">
               {RegularPrice(

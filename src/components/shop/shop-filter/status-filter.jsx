@@ -12,6 +12,7 @@ import {
 } from "@/redux/features/productApi";
 import { useGetStoneListQuery } from "../../../redux/features/productApi";
 import { mergeAndRemoveDuplicates } from "@/utils/functions";
+import { filterByStock } from "@/utils/constant";
 
 const FinishFilter = ({ setCurrPage, shop_right = false }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
@@ -51,6 +52,7 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
       }
     }
   }, [finishData]);
+
 
   useEffect(() => {
     if (
@@ -105,6 +107,7 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
       ...styleList,
       ...designList,
       ...stoneList,
+      ...filterByStock,
     ].filter((item) =>
       filter?.some(
         (checkedItem) =>
@@ -113,47 +116,52 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
     );
 
     setCheckedItem(initialCheckedItems);
-  }, [finishList, styleList, stoneList, designList,filter]);
+  }, [finishList, styleList, stoneList, designList, filter]);
 
   const handleCheckboxChange = (data, type) => {
     let item = {
       ...data,
       type,
     };
-    const isChecked = checkedItem?.some(
-      (selectedItem) => selectedItem.id === item.id
-    );
+    let allVal = [];
 
     let updatedItems = [];
-    if (isChecked) {
-      updatedItems = checkedItem?.filter(
-        (selectedItem) => selectedItem.id !== item.id
+
+    if (type === "stock") {
+      allVal = [item];
+      if (filter?.length > 0) {
+        const exceptStock = filter.filter((item) => item.type !== "stock");
+        allVal = [...exceptStock, item];
+      } else {
+        allVal = [item];
+      }
+    } else {
+      const isChecked = checkedItem?.some(
+        (selectedItem) => selectedItem.id === item.id
       );
-    } else {
-      updatedItems = [
-        item,
-        ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
-      ];
+
+      if (isChecked) {
+        updatedItems = checkedItem?.filter(
+          (selectedItem) => selectedItem.id !== item.id
+        );
+      } else {
+        updatedItems = [
+          item,
+          ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
+        ];
+      }
+      console.log("updatedItems: ", updatedItems);
+
+      console.log("filter: ", filter);
+
+      if (filter?.length > 0) {
+        const arr = mergeAndRemoveDuplicates(updatedItems, filter);
+        allVal = arr;
+      } else {
+        allVal = [...updatedItems];
+      }
+      console.log("allVal: ", allVal);
     }
-    console.log("updatedItems: ", updatedItems);
-
-    let allVal = [];
-    console.log("filter: ", filter);
-
-    if (filter?.length > 0) {
-      const arr = mergeAndRemoveDuplicates(updatedItems, filter);
-      allVal = arr;
-    } else {
-      allVal = [...updatedItems];
-    }
-
-    // if (filter?.length > 0) {
-    //   const findPrice = allVal?.find((item) => item.type == "price");
-    //   if (findPrice) {
-    //     allVal = [...allVal, findPrice];
-    //   }
-    // }
-
     setCheckedItem(allVal);
     dispatch(filterData(allVal));
     dispatch(handleFilterSidebarClose());
@@ -161,6 +169,35 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
 
   return (
     <>
+      <div className="tp-shop-widget mb-50">
+        <h3 className="tp-shop-widget-title">FILTER BY STOCK</h3>
+        <div className="tp-shop-widget-content">
+          <div className="tp-shop-widget-checkbox">
+            <ul className="filter-items filter-checkbox">
+              {filterByStock?.map((s, i) => (
+                <li key={s?.id} className="filter-item checkbox">
+                  <input
+                    id={s?.id}
+                    type="radio"
+                    name="stock" // Group all stock items under the same name to enforce radio behavior
+                    readOnly
+                    checked={checkedItem.some(
+                      (selectedItem) => selectedItem.id === s.id
+                    )}
+                    onChange={() => handleCheckboxChange(s, "stock")}
+                  />
+                  <label
+                    onClick={() => handleCheckboxChange(s, "stock")}
+                    htmlFor={s?.name}
+                  >
+                    {s?.name}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
       <div className="tp-shop-widget mb-50">
         <h3 className="tp-shop-widget-title">FILTER BY FINISH</h3>
         <div className="tp-shop-widget-content">

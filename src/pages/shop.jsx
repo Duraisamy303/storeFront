@@ -349,6 +349,8 @@ const ShopPage = () => {
           datas.prouctDesign = item?.id;
         } else if (item?.type === "stone") {
           datas.productStoneType = item?.id;
+        }else if (item.type === "stock") {
+          datas.stockAvailability = item.id;
         }
       });
       if (find !== undefined) {

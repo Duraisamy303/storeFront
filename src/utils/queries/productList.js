@@ -384,6 +384,18 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
             
           
           }
+            priceRangeUndiscounted {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+          discount {
+            gross {
+              amount
+            }
+          }
         }
             defaultVariant {
               id
@@ -788,8 +800,24 @@ export const PRE_ORDER_LIST = ({ first, after, channel, collectionid }) => {
               currency
             }
           }
+            
+        }
+          discount {
+      gross {
+        amount
+        currency
+      }
+    }
+    priceRangeUndiscounted {
+      start {
+        gross {
+          amount
+          currency
         }
       }
+    }
+      }
+        
       category {
         id
         name
@@ -809,10 +837,7 @@ export const PRE_ORDER_LIST = ({ first, after, channel, collectionid }) => {
         url
         alt
       }
-      defaultVariant {
-        id
-        quantityAvailable
-      }
+     
     }
     
     `,
