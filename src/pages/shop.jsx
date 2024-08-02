@@ -279,21 +279,6 @@ const ShopPage = () => {
     setProductList(shortDatas);
   };
 
-  function CommonLoader({ loading, spinner }) {
-    return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img src="/assets/img/Prade-Logo-Giff.gif" alt="Loading..." />
-      </div>
-    );
-  }
-
   useEffect(() => {
     if (router?.query?.categoryId) {
       filterByCategory();

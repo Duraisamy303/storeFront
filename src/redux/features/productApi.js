@@ -376,6 +376,16 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
+    lootSaleProduct: builder.query({
+      query: ({ filter }) => configuration(PRODUCT_FILTER({
+        channel: checkChannel(),
+        first: 500,
+        after: null,
+        filter,
+      })),
+      providesTags: ["Products"],
+    }),
+
     updateEmail: builder.mutation({
       query: ({ checkoutId, email }) => {
         console.log("checkoutId,email: ", checkoutId, email);
@@ -601,4 +611,5 @@ export const {
   useOrderCancelMutation,
   useGetYouMayLikeMutation,
   usePaymentListMutation,
+  useLootSaleProductQuery
 } = productApi;
