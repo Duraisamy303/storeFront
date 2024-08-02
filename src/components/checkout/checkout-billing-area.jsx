@@ -54,6 +54,8 @@ import { cart_list } from "@/redux/features/cartSlice";
 import ButtonLoader from "../loader/button-loader";
 import { pincode } from "@/utils/constant";
 import { DeleteOutlined } from "@ant-design/icons";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -1377,13 +1379,19 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         <label>
                           Phone <span>*</span>
                         </label>
-                        <input
+                        {/* <input
                           name="contactNo"
                           id="contactNo"
                           type="text"
                           placeholder="Phone"
                           value={state.phone}
                           onChange={(e) => handleInputChange(e, "phone")}
+                        /> */}
+                        <PhoneInput
+                          value={state.phone}
+                          defaultCountry="in"
+                          className="form-input custom-phone-input"
+                          onChange={(e) => setState({ phone: e })}
                         />
                         {state.errors.phone && (
                           <ErrorMsg msg={state.errors.phone} />
@@ -1707,13 +1715,19 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           <label>
                             Phone <span>*</span>
                           </label>
-                          <input
+                          {/* <input
                             name="contactNo"
                             id="contactNo"
                             type="text"
                             placeholder="Phone"
                             value={state.phone1}
                             onChange={(e) => handleInputChange(e, "phone1")}
+                          /> */}
+                          <PhoneInput
+                            value={state.phone1}
+                            defaultCountry="in"
+                            className="form-input"
+                            onChange={(e) => setState({ phone1: e })}
                           />
                           {state.errors.phone1 && (
                             <ErrorMsg msg={state.errors.phone1} />
@@ -1813,7 +1827,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                               cursor: "pointer",
                               paddingLeft: "3px",
                               fontWeight: "300",
-                            }} 
+                            }}
                           >
                             [Remove]
                           </span>
