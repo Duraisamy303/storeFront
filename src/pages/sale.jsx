@@ -38,6 +38,12 @@ const PreOrders = () => {
     collectionid: ["Q29sbGVjdGlvbjoy"],
   });
 
+
+
+
+
+
+
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { data: wishlistData } = useGetWishlistQuery();
@@ -137,6 +143,26 @@ const PreOrders = () => {
   useEffect(() => {
     productLists();
   }, [productsData]);
+
+
+  useEffect(() => {
+    filterByCategory();
+    }, []);
+  
+  
+    const filterByCategory = () => {
+      const datas = {
+        // categories: router?.query?.categoryId,
+        categories:"Q2F0ZWdvcnk6Mzk5OQ=="
+      };
+  
+      priceFilter({
+        filter: datas,
+      }).then((res) => {
+        const products = res?.data?.data?.productsSearch?.edges;
+        setProductList(products);
+      });
+    };
 
   const productLists = () => {
     if (
