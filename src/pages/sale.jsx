@@ -5,10 +5,8 @@ import HeaderTwo from "@/layout/headers/header-2";
 import ShopBreadcrumb from "@/components/breadcrumb/shop-breadcrumb";
 import ShopArea from "@/components/shop/shop-area";
 import {
-  useGetPreOrderProductsQuery,
-  useGetCategoryListQuery,
   usePriceFilterMutation,
-  useGetParentCategoryListQuery,
+  useLootSaleProductQuery,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -19,9 +17,7 @@ import { shortData } from "@/utils/functions";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useCreateCheckoutTokenWithoutEmailMutation,
-  useGetCartListQuery,
 } from "@/redux/features/card/cardApi";
-import { cart_list } from "@/redux/features/cartSlice";
 import {
   filterData,
   handleFilterSidebarClose,
@@ -30,25 +26,21 @@ import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 
 const PreOrders = () => {
+  const datas = {
+    categories: ["Q2F0ZWdvcnk6Mzk5OQ=="],
+  };
   const {
     data: productsData,
     isError,
     isLoading,
-  } = useGetPreOrderProductsQuery({
-    collectionid: ["Q29sbGVjdGlvbjoy"],
+  } = useLootSaleProductQuery({
+    filter: datas,
   });
-
-
-
-
-
-
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { data: wishlistData } = useGetWishlistQuery();
 
-  const { data: tokens } = useGetCartListQuery();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
@@ -108,21 +100,17 @@ const PreOrders = () => {
 
   const dispatch = useDispatch();
 
-  const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetParentCategoryListQuery();
-
   const [priceFilter, {}] = usePriceFilterMutation();
 
   const [cartUpdate, setCartUpdate] = useState(false);
   const [maxPrice, setMaxPrice] = useState(0);
 
-  let products =
-    productsData?.data?.collections?.edges[0]?.node?.products?.edges;
+  let products = productsData?.data?.productsSearch?.edges;
+  // productsData?.data?.collections?.edges[0]?.node?.products?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
 
   const [selectValue, setSelectValue] = useState("");
-  const [categoryList, setCategoryList] = useState("");
   const [productList, setProductList] = useState("");
   const [filterList, setFilterList] = useState([]);
 
@@ -144,51 +132,10 @@ const PreOrders = () => {
     productLists();
   }, [productsData]);
 
-
-  useEffect(() => {
-    filterByCategory();
-    }, []);
-  
-  
-    const filterByCategory = () => {
-      const datas = {
-        // categories: router?.query?.categoryId,
-        categories:"Q2F0ZWdvcnk6Mzk5OQ=="
-      };
-  
-      priceFilter({
-        filter: datas,
-      }).then((res) => {
-        const products = res?.data?.data?.productsSearch?.edges;
-        setProductList(products);
-      });
-    };
-
   const productLists = () => {
-    if (
-      productsData &&
-      productsData?.data &&
-      productsData?.data?.collections &&
-      productsData?.data?.collections?.edges?.length > 0
-    ) {
-      const list =
-        productsData?.data?.collections?.edges[0]?.node?.products?.edges;
-      setProductList(list);
-    }
+    const list = productsData?.data?.productsSearch?.edges;
+    setProductList(list);
   };
-
-  useEffect(() => {
-    if (
-      categoryData &&
-      categoryData?.data &&
-      categoryData?.data?.categories &&
-      categoryData?.data?.categories?.edges
-    ) {
-      const catList = categoryData?.data?.categories?.edges;
-      const lastTen = catList?.slice(0, 8);
-      setCategoryList(lastTen);
-    }
-  }, [categoryData]);
 
   const handleChanges = (val) => {
     setCurrPage(1);
@@ -263,7 +210,7 @@ const PreOrders = () => {
         datas.price = { gte: priceValue[0], lte: priceValue[1] };
         // setPriceValue([find.min, find.max]);
       }
-      datas.collections = ["Q29sbGVjdGlvbjoy"];
+      datas.categories = ["Q2F0ZWdvcnk6Mzk5OQ=="];
 
       priceFilter({
         filter: datas,
@@ -285,7 +232,7 @@ const PreOrders = () => {
   const filterByPrice = (type) => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
-      collections: ["Q29sbGVjdGlvbjoy"],
+      categories: ["Q2F0ZWdvcnk6Mzk5OQ=="],
     };
     priceFilter({
       filter: bodyData,
@@ -321,7 +268,7 @@ const PreOrders = () => {
         title="Loot Sale"
         subtitle="Loot Sale"
         bgImage={shopBanner}
-        catList={categoryList}
+        // catList={categoryList}
       />
       <ShopArea
         all_products={productList}

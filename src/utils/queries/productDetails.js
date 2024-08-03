@@ -21,6 +21,14 @@ fragment ProductListItem on Product {
     discount {
       currency
     }
+      priceRangeUndiscounted {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
   }
   category {
     id
