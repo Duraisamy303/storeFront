@@ -54,8 +54,8 @@ import { cart_list } from "@/redux/features/cartSlice";
 import ButtonLoader from "../loader/button-loader";
 import { pincode } from "@/utils/constant";
 import { DeleteOutlined } from "@ant-design/icons";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -192,7 +192,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
   useEffect(() => {
     if (stateList?.data?.addressValidationRules?.countryAreaChoices) {
       const list = stateList?.data?.addressValidationRules?.countryAreaChoices;
+      console.log("list: ", list);
       const uniqueStateList = getUniqueStates(list);
+      console.log("uniqueStateList: ", uniqueStateList);
       setState({
         stateList: uniqueStateList,
       });
@@ -261,13 +263,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
       });
       const checkoutDetails = res?.data?.data?.checkout;
       setCheckoutAllData(checkoutDetails);
-
-      console.log("id: ", id);
     } catch (error) {
       console.log("error: ", error);
     }
   };
-  console.log("checkoutAllData: ", checkoutAllData);
 
   const [Razorpay] = useRazorpay();
 
@@ -335,18 +334,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const enableCOD = async () => {
     try {
       const res = await paymentList();
-      console.log("paymentList: ", res.data?.data?.paymentGateways?.edges);
       const data = res.data?.data?.paymentGateways?.edges;
       const findCOD = data?.find(
         (item) => item.node?.name === "Cash On delivery"
       );
-      console.log("findCOD: ", findCOD);
 
       const filterExceptCOD = data?.filter(
         (item) => item.node?.name !== "Cash On delivery" && item.node.isActive
       );
-
-      console.log("filterExceptCOD: ", filterExceptCOD);
 
       let isShowCOD = false;
       let arr = filterExceptCOD?.map((item, index) => ({
@@ -362,8 +357,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
           checked: false,
         });
       }
-
-      console.log("arr: ", arr);
 
       const hasPreOrders = state.orderData?.lines?.some((line) =>
         line?.variant?.product?.collections?.some(
@@ -408,8 +401,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  console.log("paymentType: ", state.paymentType);
-
   const enableGiftWrap = async () => {
     try {
       let isGiftWrap = false;
@@ -446,6 +437,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const handleSubmit = async (data) => {
     try {
       const errors = validateInputs();
+      console.log("errors: ", errors);
       if (Object.keys(errors).length === 0) {
         if (state.createAccount) {
           await createAccount();
@@ -469,7 +461,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         lastName: state.lastName,
         streetAddress1: state.streetAddress1,
         city: state.city,
-        streetAddress2: state.streetAddress1,
+        streetAddress2: state.streetAddress2,
         cityArea: "",
         companyName: state.companyName,
         country: state.selectedCountry,
@@ -484,7 +476,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           // email: state.email,
           firstName: state.firstName1,
           lastName: state.lastName1,
-          streetAddress1: state.streetAddress2,
+          streetAddress1: state.streetAddress1,
           city: state.city1,
           streetAddress2: state.streetAddress2,
           cityArea: "",
@@ -497,6 +489,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       } else {
         shippingAddress = sample;
       }
+      console.log("shippingAddress: ", shippingAddress);
+
 
       const checkoutId = localStorage.getItem("checkoutId");
       if (checkoutId) {
@@ -716,9 +710,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handleSelectChange = async (e) => {
     try {
-      setState({ selectedCountry: e.target.value, selectedState: "" });
+      setState({
+        selectedCountry: e.target.value,
+        selectedState: "",
+        errors: { ...state.errors, selectedState: "" },
+      });
       stateRefetch();
-
       if (!state.diffAddress) {
         const checkoutId = localStorage.getItem("checkoutId");
         const res = await checkoutShippingAddressUpdate({
@@ -740,6 +737,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       setState({
         selectedCountry1: e.target.value,
         selectedState1: "",
+        errors:{...state.errors, selectedState1:""}
       });
       stateRefetch1();
       const checkoutId = localStorage.getItem("checkoutId");
@@ -761,21 +759,35 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { name: "firstName", label: "First name" },
       { name: "lastName", label: "Last name" },
       { name: "selectedCountry", label: "Country" },
-      { name: "selectedState", label: "State" },
       { name: "streetAddress1", label: "Street address" },
       { name: "city", label: "City" },
       { name: "postalCode", label: "PostalCode" },
-      { name: "phone", label: "Phone" },
       { name: "email", label: "Email" },
     ];
+    if (state.stateList?.length > 0) {
+      fieldsToValidate.push({ name: "selectedState", label: "State" });
+    }
+
+    console.log("fieldsToValidate: ", fieldsToValidate);
 
     const errors = {};
+    console.log("state.phone: ", state.phone);
+
+    const valid = state.phone && isValidPhoneNumber(state.phone);
+
+    console.log("valid: ", valid);
+    if (!valid) {
+      errors.phone = "Please enter a valid phone";
+    }
+    // }
 
     fieldsToValidate.forEach(({ name, label }) => {
       if (!state[name].trim()) {
         errors[name] = `${label} is required`;
       }
     });
+    console.log("errors: ", errors);
+
     if (state.selectedPaymentType == "") {
       errors.paymentType = "Payment type is required";
     }
@@ -803,14 +815,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
         { name: "firstName1", label: "First name" },
         { name: "lastName1", label: "Last name" },
         { name: "selectedCountry1", label: "Country" },
-        { name: "selectedState1", label: "State" },
         { name: "streetAddress2", label: "Street address" },
         { name: "city1", label: "City" },
         { name: "postalCode1", label: "PostalCode" },
-        { name: "phone1", label: "Phone" },
+        // { name: "phone1", label: "Phone" },
         { name: "email1", label: "Email" },
       ];
 
+      if (state.stateList1?.length > 0) {
+        fieldsToValidate2.push({ name: "selectedState1", label: "State" });
+      }
+      const valid = state.phone1 && isValidPhoneNumber(state.phone1);
+
+      console.log("valid: ", valid);
+      if (!valid) {
+        errors.phone1 = "Please enter a valid phone";
+      }
       fieldsToValidate2.forEach(({ name, label }) => {
         if (!state[name].trim()) {
           errors[name] = `${label} is required`;
@@ -1066,6 +1086,41 @@ const CheckoutBillingArea = ({ register, errors }) => {
     console.log("removed");
   };
 
+  const handlePhoneChange = (value) => {
+    const valid = value && isValidPhoneNumber(value);
+    console.log("valid: ", valid);
+    if (valid == false) {
+      setState({
+        errors: { ...state.errors, phone: "Please enter a valid phone number" },
+        phone: value,
+      });
+    } else {
+      setState({
+        errors: { ...state.errors, phone: "" },
+        phone: value,
+      });
+    }
+  };
+
+  const handlePhone1Change = (value) => {
+    const valid = value && isValidPhoneNumber(value);
+    console.log("valid: ", valid);
+    if (valid == false) {
+      setState({
+        errors: {
+          ...state.errors,
+          phone1: "Please enter a valid phone number",
+        },
+        phone1: value,
+      });
+    } else {
+      setState({
+        errors: { ...state.errors, phone1: "" },
+        phone1: value,
+      });
+    }
+  };
+
   return (
     <>
       <section
@@ -1231,25 +1286,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                     </div>
 
-                    {/* <div className="col-md-12">
-                  <div className="tp-checkout-input">
-                    <label>
-                      Country <span>*</span>
-                    </label>
-                    <input
-                      name="country"
-                      id="country"
-                      type="text"
-                      value={state.country}
-                      placeholder="United States (US)"
-                      onChange={(e) => handleInputChange(e, "country")}
-                    />
-                    {state.errors.country && (
-                      <ErrorMsg msg={state.errors.country} />
-                    )}
-                  </div>
-                </div> */}
-
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
                         <label htmlFor="country">
@@ -1278,9 +1314,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
                         <label htmlFor="state">
-                          State <span>*</span>
+                          State
+                          {state.stateList?.length > 0 && <span>*</span>}
                         </label>
                         <select
+                          disabled={state.stateList?.length == 0}
                           name="state"
                           id="state"
                           value={state.selectedState}
@@ -1379,19 +1417,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         <label>
                           Phone <span>*</span>
                         </label>
-                        {/* <input
-                          name="contactNo"
-                          id="contactNo"
-                          type="text"
-                          placeholder="Phone"
-                          value={state.phone}
-                          onChange={(e) => handleInputChange(e, "phone")}
-                        /> */}
+
                         <PhoneInput
+                          defaultCountry="IN"
                           value={state.phone}
-                          defaultCountry="in"
-                          className="form-input custom-phone-input"
-                          onChange={(e) => setState({ phone: e })}
+                          onChange={handlePhoneChange}
+                          international
                         />
                         {state.errors.phone && (
                           <ErrorMsg msg={state.errors.phone} />
@@ -1635,9 +1666,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       <div className="col-md-6">
                         <div className="tp-checkout-input">
                           <label htmlFor="state">
-                            State <span>*</span>
+                            State {state.stateList1?.length>0 &&<span>*</span>}
                           </label>
                           <select
+                          disabled={state.stateList1?.length == 0}
                             name="state"
                             id="state"
                             value={state.selectedState1}
@@ -1671,8 +1703,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                               handleInputChange(e, "streetAddress2")
                             }
                           />
-                          {state.errors.streetAddress1 && (
-                            <ErrorMsg msg={state.errors.streetAddress1} />
+                          {state.errors.streetAddress2 && (
+                            <ErrorMsg msg={state.errors.streetAddress2} />
                           )}
                         </div>
                       </div>
@@ -1715,19 +1747,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           <label>
                             Phone <span>*</span>
                           </label>
-                          {/* <input
-                            name="contactNo"
-                            id="contactNo"
-                            type="text"
-                            placeholder="Phone"
-                            value={state.phone1}
-                            onChange={(e) => handleInputChange(e, "phone1")}
-                          /> */}
-                          <PhoneInput
+                          {/* <PhoneInput
                             value={state.phone1}
                             defaultCountry="in"
                             className="form-input"
                             onChange={(e) => setState({ phone1: e })}
+                          /> */}
+
+                          <PhoneInput
+                            defaultCountry="IN"
+                            value={state.phone1}
+                            onChange={handlePhone1Change}
+                            international
                           />
                           {state.errors.phone1 && (
                             <ErrorMsg msg={state.errors.phone1} />

@@ -35,6 +35,7 @@
     "react-modal": "^3.16.1",
     "react-modal-video": "^2.0.0",
     "react-paginate": "^8.2.0",
+    "react-phone-number-input": "^3.4.5",
     "react-range": "^1.8.14",
     "react-range-slider-input": "^3.0.7",
     "react-razorpay": "^2.0.1",
