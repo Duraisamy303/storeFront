@@ -413,6 +413,10 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
         created
         media {
           url
+           alt
+          caption
+          description
+          title
         }
         variants {
           id

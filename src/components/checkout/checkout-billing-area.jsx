@@ -779,7 +779,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     if (!valid) {
       errors.phone = "Please enter a valid phone";
     }
-    // }
 
     fieldsToValidate.forEach(({ name, label }) => {
       if (!state[name].trim()) {

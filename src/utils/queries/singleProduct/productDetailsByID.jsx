@@ -35,7 +35,10 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     media {
       url
-      alt
+        alt
+      title
+      caption
+      description
     }
     variants {
       id

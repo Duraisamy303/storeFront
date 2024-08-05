@@ -51,7 +51,11 @@ fragment ProductListItem on Product {
   }
   media {
     id
-    url
+     alt
+      title
+      caption
+      description
+      url
   }
   metadata {
     key

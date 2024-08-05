@@ -56,7 +56,6 @@ const ProductDetailsArea = ({
     setActiveImg(item);
   };
 
-  const imageUrls = productItem?.images?.map((item) => item?.url);
   // Ref to the related products section
   const relatedProductsRef = useRef(null);
 

@@ -13,9 +13,8 @@ import { useRouter } from "next/router";
 const DetailsThumbWrapper = ({ product, relatedClick }) => {
   const Router = useRouter();
 
-  const imageUrls = product?.media?.map((item) => item?.url) || [];
-  console.log("✌️imageUrls --->", imageUrls);
-  const [activeImg, setActiveImg] = useState(imageUrls[0] || "");
+  console.log("product?.media: ", product?.media);
+  const [activeImg, setActiveImg] = useState(product?.media[0] || "");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -23,26 +22,30 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   const timeoutId = useRef(null);
   const [startIndex, setStartIndex] = useState(0);
   const [hover, setHover] = useState(false);
+
   const handleImageActive = (item) => {
     setActiveImg(item);
-    // setPhotoIndex(imageUrls.indexOf(item));
   };
 
   const handleNavigationClicking = (direction) => {
-    const currentIndex = imageUrls.indexOf(activeImg);
+    const currentIndex = product?.media?.indexOf(activeImg);
     let newIndex;
     if (direction === "prev") {
-      newIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+      newIndex =
+        (currentIndex - 1 + product?.media?.length) % product?.media?.length;
     } else {
-      newIndex = (currentIndex + 1) % imageUrls.length;
+      newIndex = (currentIndex + 1) % product?.media?.length;
     }
-    setActiveImg(imageUrls[newIndex]);
+    setActiveImg(product?.media[newIndex]);
     setPhotoIndex(newIndex);
 
     // Adjust start index to show the fifth image when navigating
     if (direction === "prev" && startIndex > 0) {
       setStartIndex((prev) => prev - 1);
-    } else if (direction === "next" && startIndex < imageUrls.length - 5) {
+    } else if (
+      direction === "next" &&
+      startIndex < product?.media?.length - 5
+    ) {
       setStartIndex((prev) => prev + 1);
     }
   };
@@ -81,41 +84,60 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
     <>
       <div
         className={`tp-product-details-thumb-wrapper tp-tab ${
-          imageUrls.length > 1 ? "d-lg-flex" : ""
+          product?.media.length > 1 ? "d-lg-flex" : ""
         } w-100`}
       >
-        {imageUrls?.length > 1 && (
+        {product?.media?.length > 1 && (
           <nav className="product-side-nav-img p-relative">
             <div className="nav nav-tabs flex-lg-column flex-nowrap justify-content-start">
-              {imageUrls.slice(startIndex, startIndex + 5).map((item, i) => (
-                <button
-                  key={i + startIndex}
-                  className={`nav-link ${item === activeImg ? "active" : ""}`}
-                  onClick={() => handleImageActive(item)}
-                  id={`image-${i}`}
-                >
-                  {isImage(profilePic(item)) ? (
-                    <img
-                      src={item}
-                      alt={`Product image ${i + 1}`}
-                      width={78}
-                      height={100}
-                      style={{ width: "100%", height: "100%" }}
-                    />
-                  ) : (
-                    <video
-                      src={item}
-                      width={78}
-                      height={100}
-                      style={{ width: "100%", height: "100%" }}
-                      muted
-                      loop
-                    />
-                  )}
-                </button>
-              ))}
+              {product?.media
+                ?.slice(startIndex, startIndex + 5)
+                .map((item, i) => (
+                  <button
+                    key={i + startIndex}
+                    className={`nav-link ${
+                      item?.url === activeImg?.url ? "active" : ""
+                    }`}
+                    onClick={() => handleImageActive(item)}
+                    id={`image-${i}`}
+                  >
+                    {isImage(profilePic(item?.url)) ? (
+                      <figure>
+                        <img
+                          src={item?.url}
+                          alt={item?.alt}
+                          width={78}
+                          height={100}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                        <figcaption>
+                          <strong>{item?.title}</strong> {/* Title */}
+                          <p>{item?.description}</p> {/* Description */}
+                          <em>{item?.caption}</em> {/* Caption */}
+                        </figcaption>
+                      </figure>
+                    ) : (
+                      <figure>
+                        <video
+                          src={item?.url}
+                          aria-label={item?.alt}
+                          width={78}
+                          height={100}
+                          style={{ width: "100%", height: "100%" }}
+                          muted
+                          loop
+                        />
+                        <figcaption>
+                          <strong>{item?.title}</strong> {/* Title */}
+                          <p>{item?.description}</p> {/* Description */}
+                          <em>{item?.caption}</em> {/* Caption */}
+                        </figcaption>
+                      </figure>
+                    )}
+                  </button>
+                ))}
             </div>
-            {imageUrls.length > 4 && (
+            {product?.media?.length > 4 && (
               <>
                 <UpOutlined
                   className="prev-btn"
@@ -132,7 +154,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
 
         <div
           className={`tab-content m-img ${
-            imageUrls.length === 1 ? "full-width-image" : ""
+            product?.media?.length === 1 ? "full-width-image" : ""
           }`}
         >
           <div className="tab-pane fade show active">
@@ -145,25 +167,40 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     style={{ cursor: "zoom-in" }}
                     onClick={() => setIsOpen(true)}
                   >
-                    {isImage(profilePic(activeImg)) ? (
-                      <img
-                        src={profilePic(activeImg)}
-                        alt="Active product image"
-                        style={{ width: "100%", height: "auto" }}
-                        onLoad={() => setLoading(false)}
-                        onError={() => setLoading(false)}
-                      />
+                    {isImage(profilePic(activeImg?.url)) ? (
+                      <figure>
+                        <img
+                          src={profilePic(activeImg?.url)}
+                          alt={activeImg.alt}
+                          style={{ width: "100%", height: "auto" }}
+                          onLoad={() => setLoading(false)}
+                          onError={() => setLoading(false)}
+                        />
+                        <figcaption>
+                          <strong>{activeImg?.title}</strong> {/* Title */}
+                          <p>{activeImg?.description}</p> {/* Description */}
+                          <em>{activeImg?.caption}</em> {/* Caption */}
+                        </figcaption>
+                      </figure>
                     ) : (
-                      <video
-                        src={activeImg}
-                        style={{ width: "100%", height: "auto" }}
-                        autoPlay
-                        muted // Ensure it's muted to autoplay without user interaction
-                        loop // Ensure it loops indefinitely
-                        playsInline // Ensure it plays inline on iOS devices
-                        onLoadedData={() => setLoading(false)}
-                        onError={() => setLoading(false)}
-                      />
+                      <figure>
+                        <video
+                          src={activeImg?.url}
+                          style={{ width: "100%", height: "auto" }}
+                          autoPlay
+                          muted // Ensure it's muted to autoplay without user interaction
+                          loop // Ensure it loops indefinitely
+                          playsInline // Ensure it plays inline on iOS devices
+                          onLoadedData={() => setLoading(false)}
+                          onError={() => setLoading(false)}
+                          aria-label={activeImg?.alt}
+                        />
+                        <figcaption>
+                          <strong>{activeImg?.title}</strong> {/* Title */}
+                          <p>{activeImg?.description}</p> {/* Description */}
+                          <em>{activeImg?.caption}</em> {/* Caption */}
+                        </figcaption>
+                      </figure>
                     )}
                   </div>
                   {Router.route == "/gift-card" ? (
@@ -232,9 +269,9 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             <LeftOutlined />
           </button>
 
-          {isImage(profilePic(imageUrls[photoIndex])) ? (
+          {isImage(profilePic(product?.media[photoIndex])) ? (
             <img
-              src={imageUrls[photoIndex] || profilePic(activeImg)}
+              src={product?.media[photoIndex] || profilePic(activeImg)}
               alt="Lightbox"
               style={{
                 width: "100%",
@@ -248,7 +285,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             />
           ) : (
             <video
-              src={imageUrls[photoIndex] || profilePic(activeImg)}
+              src={product?.media[photoIndex] || profilePic(activeImg?.url)}
               style={{
                 width: "100%",
                 height: "auto",
