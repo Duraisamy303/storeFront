@@ -13,7 +13,6 @@ import { useRouter } from "next/router";
 const DetailsThumbWrapper = ({ product, relatedClick }) => {
   const Router = useRouter();
 
-  console.log("product?.media: ", product?.media);
   const [activeImg, setActiveImg] = useState(product?.media[0] || "");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +27,9 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   };
 
   const handleNavigationClicking = (direction) => {
-    const currentIndex = product?.media?.indexOf(activeImg);
+    const currentIndex = product?.media?.findIndex(
+      (item) => item.url === activeImg?.url
+    );
     let newIndex;
     if (direction === "prev") {
       newIndex =
@@ -39,7 +40,6 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
     setActiveImg(product?.media[newIndex]);
     setPhotoIndex(newIndex);
 
-    // Adjust start index to show the fifth image when navigating
     if (direction === "prev" && startIndex > 0) {
       setStartIndex((prev) => prev - 1);
     } else if (
@@ -106,15 +106,18 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                         <img
                           src={item?.url}
                           alt={item?.alt}
+                          description={item?.description}
+                          caption={item?.caption}
+                          title={item?.title}
                           width={78}
                           height={100}
                           style={{ width: "100%", height: "100%" }}
                         />
-                        <figcaption>
-                          <strong>{item?.title}</strong> {/* Title */}
-                          <p>{item?.description}</p> {/* Description */}
-                          <em>{item?.caption}</em> {/* Caption */}
-                        </figcaption>
+                        {/* <figcaption className="hidden-for-seo">
+                          <strong>{item?.title}</strong> 
+                          <p>{item?.description}</p>
+                          <em>{item?.caption}</em> 
+                        </figcaption> */}
                       </figure>
                     ) : (
                       <figure>
@@ -126,12 +129,15 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                           style={{ width: "100%", height: "100%" }}
                           muted
                           loop
+                          description={item?.description}
+                          caption={item?.caption}
+                          title={item?.title}
                         />
-                        <figcaption>
-                          <strong>{item?.title}</strong> {/* Title */}
-                          <p>{item?.description}</p> {/* Description */}
-                          <em>{item?.caption}</em> {/* Caption */}
-                        </figcaption>
+                        {/* <figcaption className="hidden-for-seo">
+                          <strong>{item?.title}</strong> 
+                          <p>{item?.description}</p> 
+                          <em>{item?.caption}</em> 
+                        </figcaption> */}
                       </figure>
                     )}
                   </button>
@@ -170,17 +176,20 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     {isImage(profilePic(activeImg?.url)) ? (
                       <figure>
                         <img
+                         description={activeImg?.description}
+                         caption={activeImg?.caption}
+                         title={activeImg?.title}
                           src={profilePic(activeImg?.url)}
                           alt={activeImg.alt}
                           style={{ width: "100%", height: "auto" }}
                           onLoad={() => setLoading(false)}
                           onError={() => setLoading(false)}
                         />
-                        <figcaption>
-                          <strong>{activeImg?.title}</strong> {/* Title */}
-                          <p>{activeImg?.description}</p> {/* Description */}
-                          <em>{activeImg?.caption}</em> {/* Caption */}
-                        </figcaption>
+                        {/* <figcaption className="hidden-for-seo">
+                          <strong>{activeImg?.title}</strong> 
+                          <p>{activeImg?.description}</p>
+                          <em>{activeImg?.caption}</em> 
+                        </figcaption> */}
                       </figure>
                     ) : (
                       <figure>
@@ -194,12 +203,15 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                           onLoadedData={() => setLoading(false)}
                           onError={() => setLoading(false)}
                           aria-label={activeImg?.alt}
+                          description={activeImg?.description}
+                          caption={activeImg?.caption}
+                          title={activeImg?.title}
                         />
-                        <figcaption>
-                          <strong>{activeImg?.title}</strong> {/* Title */}
-                          <p>{activeImg?.description}</p> {/* Description */}
-                          <em>{activeImg?.caption}</em> {/* Caption */}
-                        </figcaption>
+                        {/* <figcaption className="hidden-for-seo">
+                          <strong>{activeImg?.title}</strong> 
+                          <p>{activeImg?.description}</p> 
+                          <em>{activeImg?.caption}</em> 
+                        </figcaption> */}
                       </figure>
                     )}
                   </div>
@@ -269,9 +281,13 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             <LeftOutlined />
           </button>
 
-          {isImage(profilePic(product?.media[photoIndex])) ? (
+          {isImage(
+            profilePic(activeImg?.url) || product?.media[photoIndex]?.url
+          ) ? (
             <img
-              src={product?.media[photoIndex] || profilePic(activeImg)}
+              src={
+                profilePic(activeImg?.url) || product?.media[photoIndex]?.url
+              }
               alt="Lightbox"
               style={{
                 width: "100%",
@@ -285,7 +301,9 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
             />
           ) : (
             <video
-              src={product?.media[photoIndex] || profilePic(activeImg?.url)}
+              src={
+                profilePic(activeImg?.url) || product?.media[photoIndex]?.url
+              }
               style={{
                 width: "100%",
                 height: "auto",
