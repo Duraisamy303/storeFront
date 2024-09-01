@@ -491,7 +491,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       }
       console.log("shippingAddress: ", shippingAddress);
 
-
       const checkoutId = localStorage.getItem("checkoutId");
       if (checkoutId) {
         const res = await updateBillingAddress({
@@ -712,6 +711,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
     try {
       setState({
         selectedCountry: e.target.value,
+        // selectedCountryCode: e.target.value
         selectedState: "",
         errors: { ...state.errors, selectedState: "" },
       });
@@ -737,7 +737,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       setState({
         selectedCountry1: e.target.value,
         selectedState1: "",
-        errors:{...state.errors, selectedState1:""}
+        errors: { ...state.errors, selectedState1: "" },
       });
       stateRefetch1();
       const checkoutId = localStorage.getItem("checkoutId");
@@ -763,10 +763,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { name: "city", label: "City" },
       { name: "postalCode", label: "PostalCode" },
       { name: "email", label: "Email" },
+      { name: "selectedState", label: "State" }
     ];
-    if (state.stateList?.length > 0) {
-      fieldsToValidate.push({ name: "selectedState", label: "State" });
-    }
+    // if (state.stateList?.length > 0) {
+    //   fieldsToValidate.push({ name: "selectedState", label: "State" });
+    // }
 
     console.log("fieldsToValidate: ", fieldsToValidate);
 
@@ -819,11 +820,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
         { name: "postalCode1", label: "PostalCode" },
         // { name: "phone1", label: "Phone" },
         { name: "email1", label: "Email" },
+        { name: "selectedState1", label: "State" }
       ];
 
-      if (state.stateList1?.length > 0) {
-        fieldsToValidate2.push({ name: "selectedState1", label: "State" });
-      }
+      // if (state.stateList1?.length > 0) {
+      //   fieldsToValidate2.push({ name: "selectedState1", label: "State" });
+      // }
       const valid = state.phone1 && isValidPhoneNumber(state.phone1);
 
       console.log("valid: ", valid);
@@ -1309,35 +1311,58 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         )}
                       </div>
                     </div>
-
-                    <div className="col-md-6">
-                      <div className="tp-checkout-input">
-                        <label htmlFor="state">
-                          State
-                          {state.stateList?.length > 0 && <span>*</span>}
-                        </label>
-                        <select
-                          disabled={state.stateList?.length == 0}
-                          name="state"
-                          id="state"
-                          value={state.selectedState}
-                          className="nice-select w-100"
-                          onChange={(e) =>
-                            setState({ selectedState: e.target.value })
-                          }
-                        >
-                          <option value="">Select State</option>
-                          {state.stateList?.map((item) => (
-                            <option key={item.raw} value={item.raw}>
-                              {item.raw}
-                            </option>
-                          ))}
-                        </select>
-                        {state.errors.selectedState && (
-                          <ErrorMsg msg={state.errors.selectedState} />
-                        )}
+                    {state.stateList?.length > 0 ? (
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label htmlFor="state">
+                            State
+                            {state.stateList?.length > 0 && <span>*</span>}
+                          </label>
+                          <select
+                            disabled={state.stateList?.length == 0}
+                            name="state"
+                            id="state"
+                            className="nice-select w-100"
+                            value={state.selectedState}
+                            onChange={(e) =>
+                              setState({ selectedState: e.target.value })
+                            }
+                          >
+                            <option value="">Select State</option>
+                            {state.stateList?.map((item) => (
+                              <option key={item.raw} value={item.raw}>
+                                {item.raw}
+                              </option>
+                            ))}
+                          </select>
+                          {state.errors.selectedState && (
+                            <ErrorMsg msg={state.errors.selectedState} />
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="col-md-6">
+                        <div className="tp-checkout-input">
+                          <label htmlFor="country">
+                            State <span>*</span>
+                          </label>
+                          <input
+                            name="state"
+                            id="state"
+                            type="text"
+                            required
+                            placeholder="Enter state name"
+                            value={state.selectedState}
+                            onChange={(e) =>
+                              setState({ selectedState: e.target.value })
+                            }
+                          />
+                          {state.errors.selectedState && (
+                            <ErrorMsg msg={state.errors.selectedState} />
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {/* <div className="col-md-12">
                   <div className="tp-checkout-input">
                   <label>
@@ -1418,7 +1443,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </label>
 
                         <PhoneInput
-                          defaultCountry="IN"
+                          defaultCountry={state.selectedCountry}
                           value={state.phone}
                           onChange={handlePhoneChange}
                           international
@@ -1661,34 +1686,57 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           )}
                         </div>
                       </div>
-
-                      <div className="col-md-6">
-                        <div className="tp-checkout-input">
-                          <label htmlFor="state">
-                            State {state.stateList1?.length>0 &&<span>*</span>}
-                          </label>
-                          <select
-                          disabled={state.stateList1?.length == 0}
-                            name="state"
-                            id="state"
-                            value={state.selectedState1}
-                            className="nice-select w-100"
-                            onChange={(e) =>
-                              setState({ selectedState1: e.target.value })
-                            }
-                          >
-                            <option value="">Select State</option>
-                            {state.stateList1?.map((item) => (
-                              <option key={item.raw} value={item.raw}>
-                                {item.raw}
-                              </option>
-                            ))}
-                          </select>
-                          {state.errors.selectedState1 && (
-                            <ErrorMsg msg={state.errors.selectedState1} />
-                          )}
+                      {state.stateList1?.length > 0 ? (
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label htmlFor="state">
+                              State{" "}
+                              {state.stateList1?.length > 0 && <span>*</span>}
+                            </label>
+                            <select
+                              name="state"
+                              id="state"
+                              className="nice-select w-100"
+                              value={state.selectedState1}
+                              onChange={(e) =>
+                                setState({ selectedState1: e.target.value })
+                              }
+                            >
+                              <option value="">Select State</option>
+                              {state.stateList1?.map((item) => (
+                                <option key={item.raw} value={item.raw}>
+                                  {item.raw}
+                                </option>
+                              ))}
+                            </select>
+                            {state.errors.selectedState1 && (
+                              <ErrorMsg msg={state.errors.selectedState1} />
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="col-md-6">
+                          <div className="tp-checkout-input">
+                            <label htmlFor="country">
+                              State <span>*</span>
+                            </label>
+                            <input
+                              name="state"
+                              id="state"
+                              type="text"
+                              required
+                              placeholder="Enter state name"
+                              value={state.selectedState1}
+                              onChange={(e) =>
+                                setState({ selectedState1: e.target.value })
+                              }
+                            />
+                            {state.errors.selectedState1 && (
+                              <ErrorMsg msg={state.errors.selectedState1} />
+                            )}
+                          </div>
+                        </div>
+                      )}
                       <div className="col-md-12">
                         <div className="tp-checkout-input">
                           <label>Street address</label>
@@ -1754,7 +1802,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           /> */}
 
                           <PhoneInput
-                            defaultCountry="IN"
+                            defaultCountry={state.selectedCountry1}
                             value={state.phone1}
                             onChange={handlePhone1Change}
                             international

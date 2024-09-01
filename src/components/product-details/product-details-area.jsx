@@ -16,6 +16,7 @@ const ProductDetailsArea = ({
   pageTitle,
   detailsRefetch,
   youMayLikeData,
+  isGiftCard
 }) => {
   const router = useRouter();
   const { media, imageURLs, videoId, status } = productItem || {};
@@ -97,6 +98,7 @@ const ProductDetailsArea = ({
                 activeImg={productItem?.media[0]?.url}
                 detailsBottom={false}
                 pageTitle={pageTitle}
+                isGiftCard={isGiftCard}
               />
               {/* product-details-wrapper end */}
             </div>

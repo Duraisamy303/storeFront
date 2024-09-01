@@ -203,6 +203,7 @@ const ProductDetailsPage = ({ query }) => {
           pageTitle={shopTitle}
           detailsRefetch={detailProductRefetch}
           youMayLikeData={youMayLikeData}
+          isGiftCard={false}
         />
       </>
     );

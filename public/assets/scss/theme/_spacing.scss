@@ -11,6 +11,23 @@
         padding-right: 40px;
         
     }
+   
+}
+.tp-cart-update{
+    @media #{$md, $sm, $xs}{
+        margin-right: 0px !important;
+        display: flex;
+    }
+}
+.tp-cart-area{
+    @media #{$md, $sm, $xs}{
+        padding-bottom: 0px !important;
+    }
+}
+.tp-cart-new{
+    @media #{$md, $sm, $xs}{
+        padding-bottom: 20px !important;
+    }
 }
 
 // spacing

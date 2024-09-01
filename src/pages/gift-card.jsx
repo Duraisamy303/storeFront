@@ -90,6 +90,7 @@ export default function GiftCart() {
           productItem={product}
           pageTitle={shopTitle}
           detailsRefetch={productRefetch}
+          isGiftCard={true}
         />
       </>
     );

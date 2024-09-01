@@ -54,6 +54,7 @@ const DetailsWrapper = ({
   activeImg,
   detailsBottom = false,
   pageTitle,
+  isGiftCard,
 }) => {
   const {
     sku,
@@ -69,6 +70,7 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
+  console.log("productItem: ", productItem);
 
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
@@ -805,15 +807,6 @@ const DetailsWrapper = ({
         )}
       </div>
 
-      {productItem?.metadata?.length > 1 && (
-        <p style={{ color: "black" }}>
-          {
-            productItem?.metadata?.filter(
-              (item) => item.key == "short_descripton"
-            )?.[0]?.value
-          }
-        </p>
-      )}
       {/* variations */}
       {imageURLs?.some((item) => item?.color && item?.color?.name) && (
         <div className="tp-product-details-variation">
@@ -858,7 +851,11 @@ const DetailsWrapper = ({
               className="text-bold text-lg"
               style={{ fontSize: "16px", color: "black" }}
             >
-              <span>Gift Card Amount:</span>
+              {isGiftCard ? (
+                <span>Select Amount:</span>
+              ) : (
+                <span>Select Variant:</span>
+              )}
             </div>
 
             <select
@@ -870,7 +867,11 @@ const DetailsWrapper = ({
                 variantsChange(e);
               }}
             >
-              <option value="">Select Amount</option>
+              {isGiftCard ? (
+                <option>Select Amount:</option>
+              ) : (
+                <option value="">Select Variant</option>
+              )}
               {productItem?.variants?.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item?.name}
@@ -938,6 +939,15 @@ const DetailsWrapper = ({
           )}
         </p>
       </div>
+      {productItem?.metadata?.length > 1 && (
+        <p style={{ color: "black" }}>
+          {
+            productItem?.metadata?.filter(
+              (item) => item.key == "short_description"
+            )?.[0]?.value
+          }
+        </p>
+      )}
       {productItem?.defaultVariant?.quantityAvailable != 0 && (
         <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
           <div className="tp-product-details-add-to-cart">

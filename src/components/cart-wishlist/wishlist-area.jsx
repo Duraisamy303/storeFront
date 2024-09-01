@@ -34,10 +34,10 @@ const WishlistArea = () => {
 
   return (
     <>
-      <section className="tp-cart-area pb-50 pt-50">
+      <section className="tp-cart-area pb-20 pt-30">
         <div className="container-fluid">
           {list?.length === 0 && (
-            <div className="text-center pt-50">
+            <div className="text-center pb-20">
               <h3 style={{ paddingBottom: "15px" }}>This wishlist is empty.</h3>
               <p style={{ color: "gray" }}>
                 You dont have any products in the wishlist yet.
@@ -77,7 +77,7 @@ const WishlistArea = () => {
                 <div className="tp-cart-bottom">
                   <div className="row align-items-end">
                     <div className="col-xl-6 col-md-4">
-                      <div className="tp-cart-update d-flex">
+                      <div className=" d-flex tp-cart-new">
                         <Link href="/cart" className="tp-cart-update-btn" style={{background:"#f1f1f1", }}>
                           Go To Cart
                         </Link>

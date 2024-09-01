@@ -205,17 +205,20 @@
     &-place{
         // place order
         padding: 44px 50px 50px;
+        // padding: 0px 35px 62px;
 
         @media #{$lg}{
             padding: 35px 30px;
         }
         @media #{$md, $sm, $xs}{
-            margin-top: 50px;
+            // margin-top: 50px;
+            padding: 0px 35px 62px;
         }
         &-title{
             font-size: 26px;
             font-weight: 600;
             margin-right: 37px;
+            padding-bottom: 20px;
         }
     }
     &-payment{
