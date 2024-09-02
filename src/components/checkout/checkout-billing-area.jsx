@@ -618,8 +618,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
             if (res?.razorpay_payment_id) {
               notifySuccess("Payment Successful");
               const data = await successPayment({
-                amountAuthorized: state.total,
-                amountCharged: state.total,
+                amountAuthorized: roundOff(total),
+                amountCharged: roundOff(total),
                 pspReference: res?.razorpay_payment_id,
               });
               localStorage.removeItem("checkoutTokenUSD");
@@ -707,6 +707,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
+  console.log("selectedCountry: ", state.selectedCountry);
+
   const handleSelectChange = async (e) => {
     try {
       setState({
@@ -763,7 +765,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       { name: "city", label: "City" },
       { name: "postalCode", label: "PostalCode" },
       { name: "email", label: "Email" },
-      { name: "selectedState", label: "State" }
+      { name: "selectedState", label: "State" },
     ];
     // if (state.stateList?.length > 0) {
     //   fieldsToValidate.push({ name: "selectedState", label: "State" });
@@ -820,7 +822,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         { name: "postalCode1", label: "PostalCode" },
         // { name: "phone1", label: "Phone" },
         { name: "email1", label: "Email" },
-        { name: "selectedState1", label: "State" }
+        { name: "selectedState1", label: "State" },
       ];
 
       // if (state.stateList1?.length > 0) {
@@ -1443,6 +1445,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </label>
 
                         <PhoneInput
+                          country={state.selectedCountry}
                           defaultCountry={state.selectedCountry}
                           value={state.phone}
                           onChange={handlePhoneChange}
