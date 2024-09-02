@@ -66,8 +66,8 @@ const Failed = ({ data, orderId }) => {
               notifySuccess("Payment Successful");
 
               const data = await successPayment({
-                amountAuthorized: Total,
-                amountCharged: Total,
+                amountAuthorized: total,
+                amountCharged: total,
                 pspReference: res?.razorpay_payment_id,
               });
               localStorage.removeItem("checkoutTokenUSD");

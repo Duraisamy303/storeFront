@@ -224,6 +224,15 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
+  const saveOff = () => {
+    const  discountedPrice = product?.pricing?.priceRange?.start?.gross?.amount
+    const originalPrice =
+      product?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
+    const discountPercentage =
+      ((originalPrice - discountedPrice) / originalPrice) * 100;
+      return discountPercentage.toFixed(2)
+  };
+
   return (
     <div
       className={`tp-product-item-2 ${style_2 ? "" : "mb-40"}${
@@ -488,35 +497,42 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
         </div> */}
           {channel == "india-channel" ? (
             <div className="tp-product-price-wrapper">
-            <span
-              className="tp-product-price-2 new-price items-center"
-              style={{ display: "flex",justifyContent:"center"}}
-            >
-              {product?.pricing?.discount !== null && (
-                <div
-                  className=""
-                  style={{
-                    textDecoration: "line-through",
-                    color: "grey",
-                    fontWeight: 400,
-                    marginRight: "10px"
-                  }}
-                >
+              <span
+                className="tp-product-price-2 new-price items-center"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                {product?.pricing?.discount !== null && (
+                  <div
+                    className=""
+                    style={{
+                      textDecoration: "line-through",
+                      color: "grey",
+                      fontWeight: 400,
+                      marginRight: "10px",
+                    }}
+                  >
+                    &#8377;
+                    {addCommasToNumber(
+                      product?.pricing?.priceRangeUndiscounted?.start?.gross
+                        ?.amount
+                    )}
+                  </div>
+                )}
+                <div>
                   &#8377;
                   {addCommasToNumber(
-                    product?.pricing?.priceRangeUndiscounted?.start?.gross?.amount
+                    product?.pricing?.priceRange?.start?.gross?.amount
                   )}
                 </div>
+              </span>
+              {product?.pricing?.discount !== null && (
+                <div  style={{
+                  color:"#c3935b",
+                  fontSize:"16px"
+                }}>{`Save ${saveOff()}% OFF`}</div>
+               
               )}
-              <div>
-                &#8377;
-                {addCommasToNumber(
-                  product?.pricing?.priceRange?.start?.gross?.amount
-                )}
-              </div>
-            </span>
-          </div>
-          
+            </div>
           ) : (
             <div className="tp-product-price-wrapper-2">
               {RegularPrice(

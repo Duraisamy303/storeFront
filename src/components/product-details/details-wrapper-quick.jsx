@@ -447,7 +447,16 @@ const DetailsWrapper = ({
   };
 
   const CategoryList = productItem?.category;
-  console.log("✌️CategoryList --->", CategoryList);
+
+  const saveOff = () => {
+    const discountedPrice =
+      productItem?.pricing?.priceRange?.start?.gross?.amount;
+    const originalPrice =
+    productItem?.defaultVariant?.costPrice;
+    const discountPercentage =
+      ((originalPrice - discountedPrice) / originalPrice) * 100;
+    return discountPercentage.toFixed(2);
+  };
 
   return (
     <div className="tp-product-details-wrapper">
@@ -470,7 +479,7 @@ const DetailsWrapper = ({
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
       {/* price */}
-      <div className="tp-product-details-price-wrapper mb-20">
+      <div className="tp-product-details-price-wrapper">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
             {RegularPrice(
@@ -545,12 +554,21 @@ const DetailsWrapper = ({
           </div>
         )}
       </div>
+      {productItem?.pricing?.discount !== null && (
+        <div
+          style={{
+            color: "#c3935b",
+            fontSize: "16px",
+            paddingBottom:"10px"
+          }}
+        >{`Save ${saveOff()}% OFF`}</div>
+      )}
 
       {productItem?.metadata?.length > 1 && (
         <p style={{ color: "black" }}>
           {
             productItem?.metadata?.filter(
-              (item) => item.key == "short_descripton"
+              (item) => item.key == "short_description"
             )?.[0]?.value
           }
         </p>

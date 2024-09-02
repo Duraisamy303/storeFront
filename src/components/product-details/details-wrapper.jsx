@@ -70,7 +70,6 @@ const DetailsWrapper = ({
     tags,
     offerDate,
   } = productItem || {};
-  console.log("productItem: ", productItem);
 
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
@@ -493,6 +492,16 @@ const DetailsWrapper = ({
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
+  const saveOff = () => {
+    const discountedPrice =
+      productItem?.pricing?.priceRange?.start?.gross?.amount;
+    const originalPrice =
+    productItem?.defaultVariant?.costPrice;
+    const discountPercentage =
+      ((originalPrice - discountedPrice) / originalPrice) * 100;
+    return discountPercentage.toFixed(2);
+  };
+
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -731,7 +740,7 @@ const DetailsWrapper = ({
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
       {/* price */}
-      <div className="tp-product-details-price-wrapper mb-15">
+      <div className="tp-product-details-price-wrapper">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
             {RegularPrice(
@@ -912,6 +921,15 @@ const DetailsWrapper = ({
           ))}
         </div>
       )} */}
+      {productItem?.pricing?.discount !== null && (
+        <div
+          style={{
+            color: "#c3935b",
+            fontSize: "16px",
+            paddingBottom:"10px"
+          }}
+        >{`Save ${saveOff()}% OFF`}</div>
+      )}
 
       <div>
         <p style={{ fontSize: "16px", color: "black" }}>
