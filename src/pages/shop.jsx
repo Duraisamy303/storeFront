@@ -40,7 +40,7 @@ const ShopPage = () => {
     isLoading,
     refetch: getProductRefetch,
   } = useGetAllProductsQuery({
-    sortBy: { direction: "ASC", field: "ORDER_NO" },
+    sortBy: {  direction: "DESC", field: "CREATED_AT" },
   });
 
   const [getAllProducts] = useGetAllProductMutation();

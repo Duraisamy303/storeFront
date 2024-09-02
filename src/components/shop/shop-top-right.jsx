@@ -15,10 +15,10 @@ const ShopTopRight = ({ selectHandleFilter }) => {
       <div className="tp-shop-top-select relative z-10">
         <NiceSelect
           options={[
+            { value: "New Added", text: "New Added" },
             { value: "Default Sorting", text: "Default Sorting" },
             { value: "Low to High", text: "Low to High" },
             { value: "High to Low", text: "High to Low" },
-            { value: "New Added", text: "New Added" },
             // { value: "On Sale", text: "On Sale" },
           ]}
           defaultCurrent={0}
