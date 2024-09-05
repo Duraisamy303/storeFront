@@ -707,15 +707,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  console.log("selectedCountry: ", state.selectedCountry);
-
   const handleSelectChange = async (e) => {
     try {
       setState({
         selectedCountry: e.target.value,
         // selectedCountryCode: e.target.value
         selectedState: "",
-        errors: { ...state.errors, selectedState: "" },
+        phone: "",
+        errors: { ...state.errors, selectedState: "", phone: "" },
       });
       stateRefetch();
       if (!state.diffAddress) {
@@ -739,7 +738,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       setState({
         selectedCountry1: e.target.value,
         selectedState1: "",
-        errors: { ...state.errors, selectedState1: "" },
+        phone1: "",
+        errors: { ...state.errors, selectedState1: "", phone1: "" },
       });
       stateRefetch1();
       const checkoutId = localStorage.getItem("checkoutId");
