@@ -144,7 +144,7 @@ const CompareArea = () => {
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
-        variantId: product?.defaultVariant?.id,
+        variantId: product?.node?.defaultVariant?.id,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -165,7 +165,7 @@ const CompareArea = () => {
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: product?.defaultVariant?.id,
+        variantId: product?.node?.defaultVariant?.id,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -229,7 +229,8 @@ const CompareArea = () => {
                                     src={item?.node?.thumbnail?.url}
                                     alt="compare"
                                     muted
-                                    loop style={{ width: "100%", height: "100%" }}
+                                    loop
+                                    style={{ width: "100%", height: "100%" }}
                                   />
                                 )}
 
@@ -335,7 +336,8 @@ const CompareArea = () => {
                                   <div className="tp-compare-add-to-cart">
                                     {datacartList?.data?.checkout?.lines?.some(
                                       (prd) =>
-                                        prd?.variant?.product?.id === item?.id
+                                        prd?.variant?.product?.id ===
+                                        item?.node?.id
                                     ) ? (
                                       <button
                                         onClick={() => router.push("/cart")}
