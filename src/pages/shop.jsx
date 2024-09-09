@@ -48,7 +48,7 @@ const ShopPage = () => {
   // const { data: newData, refetch: getProductRefetch } =
   //   useGetAllProductsQuery();
 
-  const [getCategoryName] = useGetCategoryNameMutation();
+  const [getCategoryName,{loading:categoryLoading}] = useGetCategoryNameMutation();
   const [getTagName] = useGetTagNameMutation();
 
   const router = useRouter();
@@ -157,6 +157,7 @@ const ShopPage = () => {
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
   const [tagName, setTagName] = useState("");
+  
   useEffect(() => {
     if (router?.query?.categoryId) {
       filterByCategoryName();
@@ -450,7 +451,7 @@ const ShopPage = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
-        productLoading={isLoading}
+        productLoading={isLoading || categoryLoading}
         updateData={() => setCartUpdate(true)}
         subtitle={shopTitle}
         updateRange={(range) => handleChanges(range)}

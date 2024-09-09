@@ -495,8 +495,7 @@ const DetailsWrapper = ({
   const saveOff = () => {
     const discountedPrice =
       productItem?.pricing?.priceRange?.start?.gross?.amount;
-    const originalPrice =
-    productItem?.defaultVariant?.costPrice;
+    const originalPrice = productItem?.defaultVariant?.costPrice;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
     return discountPercentage.toFixed(2);
@@ -926,7 +925,7 @@ const DetailsWrapper = ({
           style={{
             color: "#c3935b",
             fontSize: "16px",
-            paddingBottom:"10px"
+            paddingBottom: "10px",
           }}
         >{`Save ${saveOff()}% OFF`}</div>
       )}
@@ -957,12 +956,12 @@ const DetailsWrapper = ({
           )}
         </p>
       </div>
-      {productItem?.metadata?.length > 1 && (
+      {productItem?.metadata?.length > 0 && (
         <p style={{ color: "black" }}>
           {
-            productItem?.metadata?.filter(
-              (item) => item.key == "short_description"
-            )?.[0]?.value
+            productItem?.metadata?.find(
+              (item) => item.key === "short_description"
+            )?.value
           }
         </p>
       )}
