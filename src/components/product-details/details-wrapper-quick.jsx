@@ -18,6 +18,7 @@ import { add_to_compare } from "@/redux/features/compareSlice";
 import { handleModalClose } from "@/redux/features/productModalSlice";
 import {
   RegularPrice,
+  addCommasToNumber,
   capitalizeFLetter,
   checkChannel,
 } from "@/utils/functions";
@@ -449,14 +450,14 @@ const DetailsWrapper = ({
   const CategoryList = productItem?.category;
 
   const saveOff = () => {
-    const discountedPrice =
-      productItem?.pricing?.priceRange?.start?.gross?.amount;
+    const  discountedPrice = productItem?.pricing?.priceRange?.start?.gross?.amount
     const originalPrice =
-    productItem?.defaultVariant?.costPrice;
+    productItem?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-    return discountPercentage.toFixed(2);
+      return discountPercentage.toFixed(2)
   };
+
 
   return (
     <div className="tp-product-details-wrapper">
@@ -482,20 +483,22 @@ const DetailsWrapper = ({
       <div className="tp-product-details-price-wrapper">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
-            {RegularPrice(
-              productItem?.defaultVariant?.costPrice,
-              productItem?.pricing?.priceRange?.start?.gross?.amount
-            ) && (
-              <span
-                className="pr-5"
-                style={{ textDecoration: "line-through", color: "gray" }}
+            {productItem?.pricing?.discount !== null && (
+              <div
+                className=""
+                style={{
+                  textDecoration: "line-through",
+                  color: "grey",
+                  fontWeight: 400,
+                  marginRight: "10px",
+                }}
               >
-                {variantDetails ? (
-                  <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
-                ) : (
-                  <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
+                &#8377;
+                {addCommasToNumber(
+                  productItem?.pricing?.priceRangeUndiscounted?.start?.gross
+                    ?.amount
                 )}
-              </span>
+              </div>
             )}
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
@@ -503,7 +506,7 @@ const DetailsWrapper = ({
               ) : (
                 <>
                   &#8377;{" "}
-                  {roundOff(
+                  {addCommasToNumber(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
                         ?.amount
@@ -514,25 +517,22 @@ const DetailsWrapper = ({
           </div>
         ) : (
           <div className="tp-product-price-wrapper-2">
-            {RegularPrice(
-              productItem?.defaultVariant?.costPrice,
-              productItem?.pricing?.priceRange?.start?.gross?.amount
-            ) && (
-              <span
-                className="pr-5"
-                style={{ textDecoration: "line-through", color: "gray" }}
+            {productItem?.pricing?.discount !== null && (
+              <div
+                className=""
+                style={{
+                  textDecoration: "line-through",
+                  color: "grey",
+                  fontWeight: 400,
+                  marginRight: "10px",
+                }}
               >
-                {variantDetails ? (
-                  <>
-                    {"$"} {variantDetails?.pricing?.price?.gross?.amount}
-                  </>
-                ) : (
-                  <>
-                    {"$"}
-                    {roundOff(productItem?.defaultVariant?.costPrice)}
-                  </>
+                &#8377;
+                {addCommasToNumber(
+                  productItem?.pricing?.priceRangeUndiscounted?.start?.gross
+                    ?.amount
                 )}
-              </span>
+              </div>
             )}
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
@@ -543,7 +543,7 @@ const DetailsWrapper = ({
               ) : (
                 <>
                   {"$"}{" "}
-                  {roundOff(
+                  {addCommasToNumber(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
                         ?.amount
@@ -559,17 +559,17 @@ const DetailsWrapper = ({
           style={{
             color: "#c3935b",
             fontSize: "16px",
-            paddingBottom:"10px"
+            paddingBottom: "10px",
           }}
         >{`Save ${saveOff()}% OFF`}</div>
       )}
 
-      {productItem?.metadata?.length > 1 && (
+      {productItem?.metadata?.length > 0 && (
         <p style={{ color: "black" }}>
           {
-            productItem?.metadata?.filter(
+            productItem?.metadata?.find(
               (item) => item.key == "short_description"
-            )?.[0]?.value
+            )?.value
           }
         </p>
       )}

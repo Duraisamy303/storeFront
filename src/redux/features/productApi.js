@@ -377,12 +377,15 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     lootSaleProduct: builder.query({
-      query: ({ filter }) => configuration(PRODUCT_FILTER({
-        channel: checkChannel(),
-        first: 500,
-        after: null,
-        filter,
-      })),
+      query: ({ filter }) =>
+        configuration(
+          PRODUCT_FILTER({
+            channel: checkChannel(),
+            first: 500,
+            after: null,
+            filter,
+          })
+        ),
       providesTags: ["Products"],
     }),
 
@@ -449,7 +452,9 @@ export const productApi = apiSlice.injectEndpoints({
             channel,
             first: 6,
             after: null,
-            collectionid: ["Q29sbGVjdGlvbjo1"],
+            filter: {
+              categories: "Q2F0ZWdvcnk6MTIwMjQ=",
+            },
           })
         );
       },
@@ -611,5 +616,5 @@ export const {
   useOrderCancelMutation,
   useGetYouMayLikeMutation,
   usePaymentListMutation,
-  useLootSaleProductQuery
+  useLootSaleProductQuery,
 } = productApi;

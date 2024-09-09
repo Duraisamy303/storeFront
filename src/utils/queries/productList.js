@@ -1005,106 +1005,88 @@ export const PRODUCT_20_PERCENTAGE = ({
   channel,
   first,
   after,
-  collectionid,
+  filter,
 }) => {
   return JSON.stringify({
     query: `
-    query Product20percentageDiscount($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
-      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
-        edges {
-          node {
-            id
-            name
-            products(first: $first, after: $after) {
-              totalCount
-              edges {
-                node {
-                  ...ProductListItem
-                  id
-                  name
-                }
-                cursor
-              }
-              pageInfo {
-                endCursor
-                hasNextPage
-                hasPreviousPage
-                startCursor
-              }
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-        }
-      }
-    }
-    
-    fragment ProductListItem on Product {
-      id
-      name
-      slug
-      pricing {
-        priceRange {
-          start {
-            gross {
-              amount
-              currency
-            }
-          }
-          stop {
-            gross {
-              amount
-              currency
-            }
-          }
-        }
-        priceRangeUndiscounted {
-          start {
-            gross {
-              amount
-              currency
-            }
-            net {
-              amount
-              currency
-            }
-          }
-        }
-      }
-      category {
+   query discount20percentage($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
+    edges {
+      node {
         id
         name
         slug
-      }
-      thumbnail(size: 1024, format: WEBP) {
-        url
-        alt
-      }
-      media {
-        id
-        url
-        alt
-      }
-      defaultVariant {
-        id
-        quantityAvailable
-        costPrice
-        sku 
-      }
-      images {
-        id
-        url
-      }
-      metadata {
-        key
-        value
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              gross {
+                amount
+                currency
+              }
+            }
+            
+          
+          }
+            priceRangeUndiscounted {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+          discount {
+            gross {
+              amount
+            }
+          }
+        }
+            defaultVariant {
+              id
+              sku
+            }
+        category {
+          id
+          name
+          description
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        created
+        media {
+          url
+           alt
+          caption
+          description
+          title
+        }
+        variants {
+          id
+        }
+        description
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          id
+        }
+        seoDescription
+        seoTitle
       }
     }
+  }
+}
     
     `,
-    variables: { channel, first, after, collectionid },
+    variables: { channel, first, after, filter },
   });
 };
 

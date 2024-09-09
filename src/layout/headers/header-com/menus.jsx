@@ -63,17 +63,17 @@ const CategoryContent = ({
   const filterByCategory = async () => {
     let categoryId = "";
     if (categoryName === "Earrings") {
-      categoryId = "Q2F0ZWdvcnk6MTAwMjY=";
+      categoryId = "Q2F0ZWdvcnk6MTE5ODI=";
     } else if (categoryName === "Necklaces") {
-      categoryId = "Q2F0ZWdvcnk6OTY4Ng==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDI=";
     } else if (categoryName === "Bangles") {
-      categoryId = "Q2F0ZWdvcnk6OTY5MQ==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDc=";
     } else if (categoryName === "Rings") {
-      categoryId = "Q2F0ZWdvcnk6OTY5OQ==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NTU=";
     } else if (categoryName === "Anklets") {
-      categoryId = "Q2F0ZWdvcnk6MTAxOTY=";
+      categoryId = "Q2F0ZWdvcnk6MTIxNTI=";
     } else if (categoryName === "OtherAccessories") {
-      categoryId = "Q2F0ZWdvcnk6MTA0NTk=";
+      categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
     }
     setParentCategoryId(categoryId);
   };
@@ -186,29 +186,29 @@ const CategoryComponent = ({
   const filterByCategory = async () => {
     let categoryId = "";
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
-      categoryId ="Q2F0ZWdvcnk6MTAwMjY=";
+      categoryId ="Q2F0ZWdvcnk6MTE5ODI=";
     } else if (
       hoveredCategory === "Necklaces" ||
       lastHoveredCategory === "Necklaces"
     ) {
-      categoryId = "Q2F0ZWdvcnk6OTY4Ng==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDI=";
     } else if (
       hoveredCategory === "Bangles" ||
       lastHoveredCategory === "Bangles"
     ) {
-      categoryId = "Q2F0ZWdvcnk6OTY5MQ==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDc=";
     } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
-      categoryId = "Q2F0ZWdvcnk6OTY5OQ==";
+      categoryId = "Q2F0ZWdvcnk6MTE2NTU=";
     } else if (
       hoveredCategory === "Anklets" ||
       lastHoveredCategory === "Anklets"
     ) {
-      categoryId = "Q2F0ZWdvcnk6MTAxOTY=";
+      categoryId = "Q2F0ZWdvcnk6MTIxNTI=";
     } else if (
       hoveredCategory === "OtherAccessories" ||
       lastHoveredCategory === "OtherAccessories"
     ) {
-      categoryId = "Q2F0ZWdvcnk6MTA0NTk=";
+      categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
       console.log("categoryId: ", categoryId);
       console.log("hoveredCategory: ", hoveredCategory);
     }
@@ -361,7 +361,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTAwMjY=" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE5ODI=" }, // Your parameters
                     });
                   }}
                 >
@@ -395,7 +395,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId:"Q2F0ZWdvcnk6OTY4Ng==" }, // Your parameters
+                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
                     });
                   }}
                 >
@@ -429,7 +429,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6OTY5MQ==" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
                     });
                   }}
                 >
@@ -463,7 +463,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6OTY5OQ==" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
                     });
                   }}
                 >
@@ -497,7 +497,7 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTAxOTY="}, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI="}, // Your parameters
                     });
                   }}
                 >
@@ -533,7 +533,7 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTA0NTk=" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
                     });
                   }}
                 >

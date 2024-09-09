@@ -12,7 +12,12 @@ import {
   useGetWishlistQuery,
   useProduct20PercentageMutation,
 } from "@/redux/features/productApi";
-import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
+import {
+  RegularPrice,
+  addCommasToNumber,
+  checkChannel,
+  roundOff,
+} from "@/utils/functions";
 import { CompareThree, QuickView, Wishlist } from "@/svg";
 import {
   useAddToCartMutation,
@@ -27,9 +32,11 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { compare_list, openCartMini } from "@/redux/features/cartSlice";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../loader/button-loader";
+import Loader from "@/components/loader/loader";
 
 const InstagramAreaFour = () => {
-  const [discountProduct] = useProduct20PercentageMutation({});
+  const [discountProduct, { isLoading: loading }] =
+    useProduct20PercentageMutation({});
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
 
@@ -71,24 +78,20 @@ const InstagramAreaFour = () => {
   const getDicountProduct = async () => {
     try {
       const res = await discountProduct();
-      if (res.data?.data?.collections?.edges?.length > 0) {
-        const list =
-          res.data?.data?.collections?.edges[0]?.node?.products?.edges;
+      if (res.data?.data?.productsSearch?.edges?.length > 0) {
+        const list = res.data?.data?.productsSearch?.edges;
         if (list?.length > 0) {
           const data = list?.map((item) => item.node);
-          console.log("✌️data --->", data);
 
           const removeHiddenCategory = data?.filter((item) => {
             return item?.category.some((cat) => cat?.name === "Hidden");
           });
 
           const idsToRemove = removeHiddenCategory?.map((item) => item.id);
-          console.log("✌️idsToRemove --->", idsToRemove);
 
           const products = data?.filter(
             (item) => !idsToRemove.includes(item.id)
           );
-          console.log("✌️products --->", products);
           setProduct(products);
         }
       }
@@ -238,106 +241,112 @@ const InstagramAreaFour = () => {
                 mollit anim id est laborum.
               </p>
             </div>
+
             <div className="col-md-8">
               <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-2 gx-1 gy-1 gy-lg-0">
-                {productList?.map((item, i) => (
-                  <div className="col col-content-container" key={i}>
-                    <div className="tp-instagram-item-2 w-img">
-                      <div className="hi-message">
-                        <ul style={{ listStyle: "none" }}>
-                          <li>
-                            <button
-                              onClick={() => {
-                                const isProductInWishlist =
-                                  wishlistData?.data?.wishlists?.edges?.some(
-                                    (prd) => prd?.node?.variant === item?.id
-                                  );
-
-                                if (!isProductInWishlist) {
-                                  handleWishlist(item);
-                                } else {
-                                  // router.push("/wishlist");
-                                  if (token) {
-                                    router.push("/wishlist");
-                                  } else {
-                                    notifyError(
-                                      "Only logged-in users can add items to their wishlist or view it"
+                {loading ? (
+                  <Loader  />
+                ) : (
+                  productList?.map((item, i) => (
+                    <div className="col col-content-container" key={i}>
+                      <div className="tp-instagram-item-2 w-img">
+                        <div className="hi-message">
+                          <ul style={{ listStyle: "none" }}>
+                            <li>
+                              <button
+                                onClick={() => {
+                                  const isProductInWishlist =
+                                    wishlistData?.data?.wishlists?.edges?.some(
+                                      (prd) => prd?.node?.variant === item?.id
                                     );
+
+                                  if (!isProductInWishlist) {
+                                    handleWishlist(item);
+                                  } else {
+                                    // router.push("/wishlist");
+                                    if (token) {
+                                      router.push("/wishlist");
+                                    } else {
+                                      notifyError(
+                                        "Only logged-in users can add items to their wishlist or view it"
+                                      );
+                                    }
                                   }
-                                }
-                              }}
-                              style={{
-                                background:
-                                  wishlistData?.data?.wishlists?.edges?.some(
-                                    (prd) => prd?.node?.variant === item?.id
-                                  )
+                                }}
+                                style={{
+                                  background:
+                                    wishlistData?.data?.wishlists?.edges?.some(
+                                      (prd) => prd?.node?.variant === item?.id
+                                    )
+                                      ? "#c18634"
+                                      : "none",
+
+                                  border:
+                                    wishlistData?.data?.wishlists?.edges?.some(
+                                      (prd) => prd?.node?.variant === item?.id
+                                    )
+                                      ? "1px solid #c18634"
+                                      : "1px solid white",
+                                  padding: "3px 5px",
+                                }}
+                              >
+                                {wishlistLoader ? (
+                                  <ButtonLoader loading={wishlistLoader} />
+                                ) : (
+                                  <Wishlist />
+                                )}
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() => {
+                                  if (
+                                    compareList?.some((prd) => {
+                                      return prd?.id == item?.id;
+                                    })
+                                  ) {
+                                    router.push("/compare");
+                                  } else {
+                                    handleCompareProduct(item);
+                                  }
+                                }}
+                                style={{
+                                  background: compareList?.some((prd) => {
+                                    return prd?.id == item?.id;
+                                  })
                                     ? "#c18634"
                                     : "none",
 
-                                border:
-                                  wishlistData?.data?.wishlists?.edges?.some(
-                                    (prd) => prd?.node?.variant === item?.id
-                                  )
-                                    ? "1px solid #c18634"
-                                    : "1px solid white",
-                                padding: "3px 5px",
-                              }}
-                            >
-                              {wishlistLoader ? (
-                                <ButtonLoader loading={wishlistLoader} />
-                              ) : (
-                                <Wishlist />
-                              )}
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => {
-                                if (
-                                  compareList?.some((prd) => {
+                                  border: compareList?.some((prd) => {
                                     return prd?.id == item?.id;
                                   })
-                                ) {
-                                  router.push("/compare");
-                                } else {
-                                  handleCompareProduct(item);
+                                    ? "1px solid #c18634"
+                                    : "1px solid white",
+                                  padding: "3px 7px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <CompareThree />
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() =>
+                                  dispatch(handleProductModal(item))
                                 }
-                              }}
-                              style={{
-                                background: compareList?.some((prd) => {
-                                  return prd?.id == item?.id;
-                                })
-                                  ? "#c18634"
-                                  : "none",
-
-                                border: compareList?.some((prd) => {
-                                  return prd?.id == item?.id;
-                                })
-                                  ? "1px solid #c18634"
-                                  : "1px solid white",
-                                padding: "3px 7px",
-                                marginTop: "5px",
-                              }}
-                            >
-                              <CompareThree />
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => dispatch(handleProductModal(item))}
-                              style={{
-                                background: "none",
-                                border: "1px solid white",
-                                padding: "3px 5px",
-                                marginTop: "5px",
-                              }}
-                            >
-                              <QuickView />
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      {/* <Image
+                                style={{
+                                  background: "none",
+                                  border: "1px solid white",
+                                  padding: "3px 5px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <QuickView />
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <Image
                         src={profilePic(item?.thumbnail?.url)}
                         width={300}
                         height={320}
@@ -345,143 +354,154 @@ const InstagramAreaFour = () => {
                         className="actor-image"
                       /> */}
 
-                      {isImage(profilePic(item?.thumbnail?.url)) ? (
-                        <img
-                          src={item?.thumbnail?.url}
-                          width={300}
-                          height={320}
-                          alt="instagram img"
-                          className="actor-image"
-                        />
-                      ) : (
-                        <video
-                          src={item?.thumbnail?.url}
-                          width={300}
-                          muted
-                          loop
-                          height={320}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                          }}
-                          alt="instagram img"
-                          className="actor-image"
-                        />
-                      )}
+                        {isImage(profilePic(item?.thumbnail?.url)) ? (
+                          <img
+                            src={item?.thumbnail?.url}
+                            width={300}
+                            height={320}
+                            alt="instagram img"
+                            className="actor-image"
+                          />
+                        ) : (
+                          <video
+                            src={item?.thumbnail?.url}
+                            width={300}
+                            muted
+                            loop
+                            height={320}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                            }}
+                            alt="instagram img"
+                            className="actor-image"
+                          />
+                        )}
 
-                      {/* <img
+                        {/* <img
                         src={profilePic(item?.thumbnail?.url)}
                         width={300}
                         height={320}
                         alt="instagram img"
                         className="actor-image"
                       /> */}
-                      <div className="tp-instagram-icon-2 text-center">
-                        <p
-                          className="actor-hov-para"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {item?.name}
-                        </p>
-                        {item?.category && (
+                        <div className="tp-instagram-icon-2 text-center">
                           <p
                             className="actor-hov-para"
                             style={{ fontSize: "12px" }}
                           >
-                            {item?.category?.name}
+                            {item?.name}
                           </p>
-                        )}
-                        <p
-                          className="actor-hov-para"
-                          style={{ fontSize: "12px" }}
-                        >
-                          Price <br />
-                          {checkChannel() === "india-channel" ? (
-                            <>
-                              {RegularPrice(
-                                item?.defaultVariant?.costPrice,
-                                item?.pricing?.priceRange?.start?.gross?.amount
-                              ) && (
-                                <span
-                                  className="tp-product-price-1 pr-5 line-through "
-                                  style={{
-                                    textDecoration: "line-through red  ",
-                                  }}
-                                >
-                                  ₹{roundOff(item?.defaultVariant?.costPrice)}
-                                </span>
-                              )}
-                              <br />₹
-                              {roundOff(
-                                item?.pricing?.priceRange?.start?.gross?.amount
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {RegularPrice(
-                                item?.defaultVariant?.costPrice,
-                                item?.pricing?.priceRange?.start?.gross?.amount
-                              ) && (
-                                <span
-                                  className="tp-product-price-1 pr-5 line-through "
-                                  style={{
-                                    textDecoration: "line-through red  ",
-                                  }}
-                                >
-                                  ${roundOff(item?.defaultVariant?.costPrice)}
-                                </span>
-                              )}
-                              $
-                              {roundOff(
-                                item?.pricing?.priceRange?.start?.gross?.amount
-                              )}
-                            </>
+                          {item?.category && (
+                            <p
+                              className="actor-hov-para"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {item?.category?.name}
+                            </p>
                           )}
-                        </p>
-                        <button
-                          type="button"
-                          // className="actor-hover-btn"
-                          style={{
-                            fontSize: "12px",
-                            color: "white",
-                            border: "1px solid white",
-                            padding: "5px 5px",
-                            lineHeight: "14px",
-                          }}
-                          onClick={() => {
-                            console.log("onClick: ");
-                            if (
-                              cartList?.data?.checkout?.lines?.some(
-                                (prd) => prd?.variant?.product?.id == item?.id
-                              )
-                            ) {
-                              console.log(" if: ");
+                          <p
+                            className="actor-hov-para"
+                            style={{ fontSize: "12px" }}
+                          >
+                            Price <br />
+                            {checkChannel() === "india-channel" ? (
+                              <>
+                                {item?.pricing?.discount !== null && (
+                                  <div
+                                    className="tp-product-price-1 pr-5 line-through"
+                                    style={{
+                                      textDecoration: "line-through",
+                                      // color: "grey",
+                                      // fontWeight: 400,
+                                      // marginRight: "15px",
+                                    }}
+                                  >
+                                    &#8377;
+                                    {addCommasToNumber(
+                                      item?.pricing?.priceRangeUndiscounted
+                                        ?.start?.gross?.amount
+                                    )}
+                                  </div>
+                                )}
+                                <br />₹
+                                {addCommasToNumber(
+                                  item?.pricing?.priceRange?.start?.gross
+                                    ?.amount
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {item?.pricing?.discount !== null && (
+                                  <div
+                                    className=""
+                                    style={{
+                                      textDecoration: "line-through",
+                                      // color: "grey",
+                                      // fontWeight: 400,
+                                      // marginRight: "10px",
+                                    }}
+                                  >
+                                    &#8377;
+                                    {addCommasToNumber(
+                                      item?.pricing?.priceRangeUndiscounted
+                                        ?.start?.gross?.amount
+                                    )}
+                                  </div>
+                                )}
+                                $
+                                {roundOff(
+                                  item?.pricing?.priceRange?.start?.gross
+                                    ?.amount
+                                )}
+                              </>
+                            )}
+                          </p>
+                          <button
+                            type="button"
+                            // className="actor-hover-btn"
+                            style={{
+                              fontSize: "12px",
+                              color: "white",
+                              border: "1px solid white",
+                              padding: "5px 5px",
+                              lineHeight: "14px",
+                            }}
+                            onClick={() => {
+                              console.log("onClick: ");
+                              if (
+                                cartList?.data?.checkout?.lines?.some(
+                                  (prd) => prd?.variant?.product?.id == item?.id
+                                )
+                              ) {
+                                console.log(" if: ");
 
-                              router.push("/cart");
-                            } else {
-                              console.log(" else: ");
+                                router.push("/cart");
+                              } else {
+                                console.log(" else: ");
 
-                              addToCartProductINR(item);
-                              addToCartProductUSD(item);
-                            }
-                          }}
-                        >
-                          {cartLoader ? (
-                            <ButtonLoader loading={cartLoader} />
-                          ) : (
-                            <>
-                              {cartList?.data?.checkout?.lines?.some(
-                                (prd) => prd?.variant?.product?.id == item?.id
-                              )
-                                ? "View Cart"
-                                : "Add To Cart"}
-                            </>
-                          )}
-                        </button>
+                                addToCartProductINR(item);
+                                addToCartProductUSD(item);
+                              }
+                            }}
+                          >
+                            {cartLoader ? (
+                              <ButtonLoader loading={cartLoader} />
+                            ) : (
+                              <>
+                                {cartList?.data?.checkout?.lines?.some(
+                                  (prd) => prd?.variant?.product?.id == item?.id
+                                )
+                                  ? "View Cart"
+                                  : "Add To Cart"}
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

@@ -225,12 +225,12 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
   };
 
   const saveOff = () => {
-    const  discountedPrice = product?.pricing?.priceRange?.start?.gross?.amount
+    const discountedPrice = product?.pricing?.priceRange?.start?.gross?.amount;
     const originalPrice =
       product?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-      return discountPercentage.toFixed(2)
+    return discountPercentage.toFixed(2);
   };
 
   return (
@@ -526,16 +526,35 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 </div>
               </span>
               {product?.pricing?.discount !== null && (
-                <div  style={{
-                  color:"#c3935b",
-                  fontSize:"16px"
-                }}>{`Save ${saveOff()}% OFF`}</div>
-               
+                <div
+                  style={{
+                    color: "#c3935b",
+                    fontSize: "16px",
+                  }}
+                >{`Save ${saveOff()}% OFF`}</div>
               )}
             </div>
           ) : (
             <div className="tp-product-price-wrapper-2">
-              {RegularPrice(
+              {product?.pricing?.discount !== null && (
+                <div
+                  className=""
+                  style={{
+                    textDecoration: "line-through",
+                    color: "grey",
+                    fontWeight: 400,
+                    marginRight: "10px",
+                  }}
+                >
+                  {"$"}
+                  {addCommasToNumber(
+                    product?.pricing?.priceRangeUndiscounted?.start?.gross
+                      ?.amount
+                  )}
+                </div>
+              )}
+
+              {/* {RegularPrice(
                 product?.defaultVariant?.costPrice,
                 product?.pricing?.priceRange?.start?.gross?.amount
               ) && (
@@ -550,7 +569,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   {"$"}
                   {addCommasToNumber(product?.defaultVariant?.costPrice)}
                 </span>
-              )}
+              )} */}
               <span
                 className="tp-product-price-2 new-price"
                 style={{ fontSize: "14px" }}
@@ -560,6 +579,14 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   product?.pricing?.priceRange?.start?.gross?.amount
                 )}
               </span>
+              {product?.pricing?.discount !== null && (
+                <div
+                  style={{
+                    color: "#c3935b",
+                    fontSize: "16px",
+                  }}
+                >{`Save ${saveOff()}% OFF`}</div>
+              )}
             </div>
           )}
         </div>

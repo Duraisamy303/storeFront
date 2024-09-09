@@ -27,7 +27,7 @@ import { useGetWishlistQuery } from "@/redux/features/productApi";
 
 const PreOrders = () => {
   const datas = {
-    categories: ["Q2F0ZWdvcnk6Mzk5OQ=="],
+    categories: ["Q2F0ZWdvcnk6MTIwMjQ="],
   };
   const {
     data: productsData,
@@ -210,7 +210,7 @@ const PreOrders = () => {
         datas.price = { gte: priceValue[0], lte: priceValue[1] };
         // setPriceValue([find.min, find.max]);
       }
-      datas.categories = ["Q2F0ZWdvcnk6Mzk5OQ=="];
+      datas.categories = ["Q2F0ZWdvcnk6MTIwMjQ="];
 
       priceFilter({
         filter: datas,

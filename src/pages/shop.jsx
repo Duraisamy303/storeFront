@@ -40,7 +40,7 @@ const ShopPage = () => {
     isLoading,
     refetch: getProductRefetch,
   } = useGetAllProductsQuery({
-    sortBy: {  direction: "DESC", field: "CREATED_AT" },
+    sortBy: { direction: "DESC", field: "CREATED_AT" },
   });
 
   const [getAllProducts] = useGetAllProductMutation();
@@ -48,7 +48,8 @@ const ShopPage = () => {
   // const { data: newData, refetch: getProductRefetch } =
   //   useGetAllProductsQuery();
 
-  const [getCategoryName,{loading:categoryLoading}] = useGetCategoryNameMutation();
+  const [getCategoryName, { isLoading: categoryLoading }] =
+    useGetCategoryNameMutation();
   const [getTagName] = useGetTagNameMutation();
 
   const router = useRouter();
@@ -138,7 +139,7 @@ const ShopPage = () => {
   const { data: data } = useGetCartListQuery();
   const { data: categoryData } = useGetParentCategoryListQuery();
 
-  const [priceFilter, {}] = usePriceFilterMutation();
+  const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
 
   const [cartUpdate, setCartUpdate] = useState(false);
 
@@ -157,7 +158,7 @@ const ShopPage = () => {
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
   const [tagName, setTagName] = useState("");
-  
+
   useEffect(() => {
     if (router?.query?.categoryId) {
       filterByCategoryName();
@@ -210,7 +211,8 @@ const ShopPage = () => {
 
       const CategoriesList = catList.filter((item) => {
         return (
-          item.node.name !== "Hidden" && item.node.productsWithoutHiddenCategory?.totalCount > 0
+          item.node.name !== "Hidden" &&
+          item.node.productsWithoutHiddenCategory?.totalCount > 0
         );
       });
       const lastTen = CategoriesList?.slice(0, 8);
@@ -335,7 +337,7 @@ const ShopPage = () => {
           datas.prouctDesign = item?.id;
         } else if (item?.type === "stone") {
           datas.productStoneType = item?.id;
-        }else if (item.type === "stock") {
+        } else if (item.type === "stock") {
           datas.stockAvailability = item.id;
         }
       });
@@ -442,29 +444,28 @@ const ShopPage = () => {
         catList={categoryList}
         product={productList}
       />
-      {/* {isLoading ? (
+      {/* {isLoading || categoryLoading || filterLoading ? (
         <ShopLoader loading={isLoading} />
       ) : (
         <> */}
-
-      <ShopArea
-        all_products={productList}
-        products={productList}
-        otherProps={otherProps}
-        productLoading={isLoading || categoryLoading}
-        updateData={() => setCartUpdate(true)}
-        subtitle={shopTitle}
-        updateRange={(range) => handleChanges(range)}
-        maxPrice={maxPrice}
-      />
-      <ShopFilterOffCanvas
-        all_products={products}
-        otherProps={otherProps}
-        filterByPrice={(val) => filterByPrice("priceRange")}
-        maxPrice={maxPrice}
-      />
-      <FooterTwo primary_style={true} />
-      {/* </>
+          <ShopArea
+            all_products={productList}
+            products={productList}
+            otherProps={otherProps}
+            productLoading={isLoading || categoryLoading || filterLoading}
+            updateData={() => setCartUpdate(true)}
+            subtitle={shopTitle}
+            updateRange={(range) => handleChanges(range)}
+            maxPrice={maxPrice}
+          />
+          <ShopFilterOffCanvas
+            all_products={products}
+            otherProps={otherProps}
+            filterByPrice={(val) => filterByPrice("priceRange")}
+            maxPrice={maxPrice}
+          />
+          <FooterTwo primary_style={true} />
+        {/* </>
       )} */}
     </Wrapper>
   );
