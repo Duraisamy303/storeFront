@@ -160,7 +160,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
 
         <div
           className={`tab-content m-img ${
-            product?.media?.length === 1 ? "full-width-image" : ""
+            product?.media?.length === 1 ? "full-width-image" : "w-100"
           }`}
         >
           <div className="tab-pane fade show active">
@@ -174,7 +174,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     onClick={() => setIsOpen(true)}
                   >
                     {isImage(profilePic(activeImg?.url)) ? (
-                      <figure className="full-width-image" style={{marginBottom:"0px"}}>
+                      <figure className="detail-single-image" style={{marginBottom:"0px"}}>
                         <img
                          description={activeImg?.description}
                          caption={activeImg?.caption}
@@ -192,7 +192,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                         </figcaption> */}
                       </figure>
                     ) : (
-                      <figure style={{marginBottom:"0px"}}>
+                      <figure style={{marginBottom:"0px"}}  className="detail-single-image">
                         <video
                           src={activeImg?.url}
                           style={{ width: "100% !important", height: "680px" }}

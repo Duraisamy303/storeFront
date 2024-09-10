@@ -380,7 +380,6 @@
 
 .tp-product-details-nav-main-thumb img {
   transition: transform 0.25s;
-  width: 100% !important;
   height: 680px;
 }
 
@@ -795,22 +794,23 @@
   opacity: 1 !important;
 }
 
-.react-international-phone-country-selector-dropdown{
+.react-international-phone-country-selector-dropdown {
   z-index: 9999 !important;
 }
 
-.react-international-phone-input-container .react-international-phone-input{
-  height: var(--react-international-phone-height, 50px )!important;
-  border-radius: var(--react-international-phone-border-radius, 0px)!important;
+.react-international-phone-input-container .react-international-phone-input {
+  height: var(--react-international-phone-height, 50px) !important;
+  border-radius: var(--react-international-phone-border-radius, 0px) !important;
 }
-.react-international-phone-country-selector-button{
-  height: var(--react-international-phone-height, 50px)!important;
-  border-radius: var(--react-international-phone-border-radius, 0px)!important;
+.react-international-phone-country-selector-button {
+  height: var(--react-international-phone-height, 50px) !important;
+  border-radius: var(--react-international-phone-border-radius, 0px) !important;
 }
 
-.tp-checkout-input input:focus, .tp-checkout-input textarea:focus {
-  .react-international-phone-country-selector-button{
-    border-color: var(--tp-common-black)!important;
+.tp-checkout-input input:focus,
+.tp-checkout-input textarea:focus {
+  .react-international-phone-country-selector-button {
+    border-color: var(--tp-common-black) !important;
   }
   border-color: var(--tp-common-black);
 }
