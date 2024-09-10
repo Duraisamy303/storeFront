@@ -54,11 +54,15 @@ const PopularProducts = () => {
   } = useGetProductTypeQuery({ channel: "india-channel", first: 19 });
 
   const { data: featureProduct } = useFeatureProductQuery({
-    first: 20,
-    after: null,
     channel: "india-channel",
-    collectionid: ["Q29sbGVjdGlvbjoz"],
+    first: 500,
+    after: null,
+    filter: {
+      categories: ["Q2F0ZWdvcnk6MjQ5Njc="],
+    },
   });
+  console.log("featureProduct: ", featureProduct);
+
 
   const [featureProducts, setFeatureProducts] = useState([]);
   // decide what to render
@@ -69,39 +73,47 @@ const PopularProducts = () => {
 
   const featureProductData = () => {
     try {
-      if (featureProduct) {
-        if (
-          featureProduct?.data &&
-          featureProduct?.data?.collections &&
-          featureProduct?.data?.collections?.edges?.length > 0
-        ) {
-          if (featureProduct?.data?.collections?.edges[0]?.node) {
-            if (
-              featureProduct?.data?.collections?.edges[0]?.node?.products?.edges
-                ?.length > 0
-            ) {
-              const list =
-                featureProduct?.data?.collections?.edges[0]?.node?.products
-                  ?.edges;
 
-              const removeHiddenCategory = list?.filter((item) => {
-                return item?.node?.category.some(
-                  (cat) => cat?.name === "Hidden"
-                );
-              });
+      const data=featureProduct?.data?.productsSearch?.edges
+      console.log("data: ", data);
+      setFeatureProducts(data);
 
-              const idsToRemove = removeHiddenCategory?.map(
-                (item) => item.node.id
-              );
 
-              const products = list?.filter(
-                (item) => !idsToRemove.includes(item.node.id)
-              );
-              setFeatureProducts(products);
-            }
-          }
-        }
-      }
+      // if (featureProduct) {
+      //   console.log("featureProduct: ", featureProduct);
+      //   if (
+      //     featureProduct?.data &&
+      //     featureProduct?.data?.collections &&
+      //     featureProduct?.data?.collections?.edges?.length > 0
+      //   ) {
+      //     if (featureProduct?.data?.collections?.edges[0]?.node) {
+      //       if (
+      //         featureProduct?.data?.collections?.edges[0]?.node?.products?.edges
+      //           ?.length > 0
+      //       ) {
+      //         const list =
+      //           featureProduct?.data?.collections?.edges[0]?.node?.products
+      //             ?.edges;
+
+      //         const removeHiddenCategory = list?.filter((item) => {
+      //           return item?.node?.category.some(
+      //             (cat) => cat?.name === "Hidden"
+      //           );
+      //         });
+
+      //         const idsToRemove = removeHiddenCategory?.map(
+      //           (item) => item.node.id
+      //         );
+
+      //         const products = list?.filter(
+      //           (item) => !idsToRemove.includes(item.node.id)
+      //         );
+
+
+      //       }
+      //     }
+      //   }
+      // }
     } catch (error) {
       console.log("error: ", error);
     }
@@ -124,7 +136,7 @@ const PopularProducts = () => {
     content = (
       <Swiper
         {...slider_setting}
-        modules={[ Navigation]}
+        modules={[Navigation]}
         className="tp-category-slider-active-4 swiper-container"
       >
         {featureProducts?.map((item) => (

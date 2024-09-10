@@ -294,7 +294,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     featureProduct: builder.query({
-      query: ({ first, after, collectionid }) => {
+      query: ({ first, after, filter }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -303,7 +303,7 @@ export const productApi = apiSlice.injectEndpoints({
           channel = channels;
         }
         return configuration(
-          FEATURE_PRODUCT({ first, after, channel, collectionid })
+          FEATURE_PRODUCT({ first, after, channel, filter })
         );
       },
       providesTags: ["Products"],
@@ -402,7 +402,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getPreOrderProducts: builder.query({
-      query: ({ collectionid }) => {
+      query: ({ collectionid,filter }) => {
         let channel = "";
         if (checkChannel() == "india-channel") {
           channel = "india-channel";
@@ -416,7 +416,7 @@ export const productApi = apiSlice.injectEndpoints({
             first: 50,
             channel,
             after: null,
-            collectionid,
+            filter,
           })
         );
       },

@@ -59,6 +59,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
       >
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
+          
         </h3>
         <span>{content}</span>
         {title == "NECKLACES" ? (
@@ -69,7 +70,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6NzA=" }, // Your parameters
+                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -87,7 +88,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6Mzk0Nw==" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -131,7 +132,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6NzM1" }, // Your parameters
+                        query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}
@@ -171,7 +172,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6NQ==" }, // Your parameters
+                        query: { categoryId:"Q2F0ZWdvcnk6MTE5ODI="}, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}
@@ -215,7 +216,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTIwNw==" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU="}, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -233,7 +234,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6Njc=" }, // Your parameters
+                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDc="}, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}

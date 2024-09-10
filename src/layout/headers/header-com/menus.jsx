@@ -16,6 +16,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import MenusProductSlider from "./menus-product-slider";
 import { HomeTwoPopularPrdLoader } from "@/components/loader";
 import CommonImage from "@assets/img/earring-menu-pic-1.png";
+import Loader from "../../../components/loader/loader";
 
 const slider_setting = {
   slidesPerView: 4,
@@ -163,11 +164,11 @@ const CategoryComponent = ({
 }) => {
   const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [priceFilter, {}] = usePriceFilterMutation();
+  const [priceFilter, {isLoading: productLoading }] = usePriceFilterMutation();
   const [productList, setProductList] = useState([]);
   const [subCategoryLists, setSubCategoryLists] = useState([]);
 
-  const [subCatList] = useSubCatListMutation();
+  const [subCatList, { isLoading: loadingProduct }] = useSubCatListMutation();
 
   const handleCategoryHover = (category) => {
     setHoveredCategory(category);
@@ -186,7 +187,7 @@ const CategoryComponent = ({
   const filterByCategory = async () => {
     let categoryId = "";
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
-      categoryId ="Q2F0ZWdvcnk6MTE5ODI=";
+      categoryId = "Q2F0ZWdvcnk6MTE5ODI=";
     } else if (
       hoveredCategory === "Necklaces" ||
       lastHoveredCategory === "Necklaces"
@@ -209,10 +210,9 @@ const CategoryComponent = ({
       lastHoveredCategory === "OtherAccessories"
     ) {
       categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
-      console.log("categoryId: ", categoryId);
-      console.log("hoveredCategory: ", hoveredCategory);
     }
-
+    console.log("categoryId: ", categoryId);
+    console.log("hoveredCategory: ", hoveredCategory);
     const SubCategory = await subCatList({
       parentid: categoryId,
     });
@@ -227,7 +227,9 @@ const CategoryComponent = ({
   const renderContent = () => {
     if (productList?.length == 0) return null;
 
-    return (
+    return loadingProduct || productLoading ? (
+      <SingleLoader loading={loadingProduct} />
+    ) : productList?.length > 0 ? (
       <Swiper
         {...slider_setting}
         modules={[Pagination]}
@@ -245,6 +247,13 @@ const CategoryComponent = ({
           </div>
         ))}
       </Swiper>
+    ) : (
+      <div
+        className=""
+        style={{ backgroundColor: "black",fontSize:"30px" }}
+      >
+        Product No FOund
+      </div>
     );
   };
 
@@ -324,6 +333,17 @@ const CategoryComponent = ({
   return <div>{renderCategoryContent()}</div>;
 };
 
+function SingleLoader({ loading }) {
+  return (
+    <div
+      className="col-xl-3 col-lg-3 col-sm-6 d-flex align-items-center"
+      style={{ height: "300px" }}
+    >
+      <Loader loading={loading} />
+    </div>
+  );
+}
+
 const Menus = () => {
   const router = useRouter();
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
@@ -395,7 +415,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
                     });
                   }}
                 >
@@ -497,7 +517,7 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI="}, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
                     });
                   }}
                 >
