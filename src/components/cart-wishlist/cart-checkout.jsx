@@ -72,7 +72,7 @@ const CartCheckout = ({ cartData }) => {
         )}
       </div>
 
-      <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
+      {/* <div className="tp-cart-checkout-top d-flex align-items-center justify-content-between">
         <span className="tp-cart-checkout-top-title">SHIPPING</span>
         <span
           className="tp-cart-checkout-top-price"
@@ -81,9 +81,8 @@ const CartCheckout = ({ cartData }) => {
           Free shipping
           <br />
           Shipping to <b>Tamil Nadu</b>.<br />
-          {/* <span style={{ color: "#c3935b" }}>Change address</span> */}
         </span>
-      </div>
+      </div> */}
       {/* <div className="tp-cart-checkout-shipping">
         <h4 className="tp-cart-checkout-shipping-title">Shipping</h4>
         <div className="tp-cart-checkout-shipping-option-wrapper">

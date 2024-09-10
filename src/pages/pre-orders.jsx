@@ -35,7 +35,12 @@ const PreOrders = () => {
     isError,
     isLoading,
   } = useGetPreOrderProductsQuery({
-    collectionid: ["Q29sbGVjdGlvbjo0"],
+    channel: "india-channel",
+    first: 500,
+    after: null,
+    filter: {
+      categories: ["Q2F0ZWdvcnk6MTE3NDE="],
+    },
   });
 
   const filter = useSelector((state) => state.shopFilter.filterData);
@@ -110,9 +115,10 @@ const PreOrders = () => {
 
   const [cartUpdate, setCartUpdate] = useState(false);
   const [maxPrice, setMaxPrice] = useState(0);
+  console.log("productsData: ", productsData);
 
   let products =
-    productsData?.data?.collections?.edges[0]?.node?.products?.edges;
+    productsData?.data?.productsSearch?.edges;
 
   const [priceValue, setPriceValue] = useState([0, 0]);
 
@@ -140,16 +146,17 @@ const PreOrders = () => {
   }, [productsData]);
 
   const productLists = () => {
-    if (
-      productsData &&
-      productsData?.data &&
-      productsData?.data?.collections &&
-      productsData?.data?.collections?.edges?.length > 0
-    ) {
+    // if (
+    //   productsData &&
+    //   productsData?.data &&
+    //   productsData?.data?.collections &&
+    //   productsData?.data?.collections?.edges?.length > 0
+    // ) {
       const list =
-        productsData?.data?.collections?.edges[0]?.node?.products?.edges;
+      productsData?.data?.productsSearch?.edges;
+
       setProductList(list);
-    }
+    // }
   };
 
   useEffect(() => {

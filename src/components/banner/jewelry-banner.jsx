@@ -24,7 +24,7 @@ const slider_data = [
     img: slider_img_1,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
- shopId: "Q2F0ZWdvcnk6NQ=="
+ shopId: "Q2F0ZWdvcnk6MTE2NDU=" 
     },
   {
     subtitle: "Find the ideal gift",
@@ -33,7 +33,7 @@ const slider_data = [
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
 
-   shopId:"Q2F0ZWdvcnk6Njc="
+   shopId:"Q2F0ZWdvcnk6MTE2NDc="
     },
   {
     subtitle: "Fine Jewellery",
@@ -41,7 +41,7 @@ const slider_data = [
     img: slider_img_3,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
- shopId : "Q2F0ZWdvcnk6NzA="
+ shopId :  "Q2F0ZWdvcnk6MTE2NDI="
     },
   {
     subtitle: "Fine Jewellery",
@@ -49,17 +49,18 @@ const slider_data = [
     img: slider_img_4,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  shopId: "Q2F0ZWdvcnk6NzM1"
+  shopId: "Q2F0ZWdvcnk6MTIxNTI="
     },
 ];
 
 // slider nav data
 const slider_nav_data = [
-  { icon: nav_icon_1, title: <>EARRINGS</> },
-  { icon: nav_icon_2, title: <>Bangles & Bracelets</> },
-  { icon: nav_icon_3, title: <>NECKLACES</> },
-  { icon: nav_icon_4, title: <>ANKLETS</> },
+  { icon: nav_icon_1, title: <>EARRINGS</> ,id: "Q2F0ZWdvcnk6MTE2NDU="},
+  { icon: nav_icon_2, title: <>Bangles & Bracelets</> ,id: "Q2F0ZWdvcnk6MTE2NDc="},
+  { icon: nav_icon_3, title: <>NECKLACES</> ,id:"Q2F0ZWdvcnk6MTE2NDI="},
+  { icon: nav_icon_4, title: <>ANKLETS</>,id:"Q2F0ZWdvcnk6MTIxNTI=" },
 ];
+
 
 const JewelryBanner = () => {
   const [slider1, setSlider1] = useState(null);

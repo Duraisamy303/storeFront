@@ -339,19 +339,24 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($channel: String!) {
-      categories(first: 100, level: 0) {
-        edges {
-          node {
-            id
-            name
-            slug            
-            productsWithoutHiddenCategory(channel: $channel) {
-              totalCount
-            }
-          }
+  categories(
+    first: 100
+    level: 0
+    where: {}
+    filter: {ids: ["Q2F0ZWdvcnk6MTI0MTU=","Q2F0ZWdvcnk6MTIxNTI=","Q2F0ZWdvcnk6MTE3NDE=","Q2F0ZWdvcnk6MTE2NTU=","Q2F0ZWdvcnk6MTE2NTI=","Q2F0ZWdvcnk6MTE2NDc="]}
+  ) {
+    edges {
+      node {
+        id
+        name
+        slug
+        productsWithoutHiddenCategory(channel: $channel) {
+          totalCount
         }
       }
     }
+  }
+}
     `,
     variables: { channel },
   });
@@ -604,95 +609,87 @@ export const PAYMENT_SUCCESS = ({
   });
 };
 
-export const FEATURE_PRODUCT = ({ first, after, channel, collectionid }) => {
+export const FEATURE_PRODUCT = ({ first, after, channel, filter }) => {
   return JSON.stringify({
     query: `
-    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
-      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
-        edges {
-          node {
-            id
-            name
-            products(first: $first, after: $after,sortBy: {direction: DESC, field: CREATED_AT}) {
-              totalCount
-              edges {
-                node {
-                  ...ProductListItem
-                  id
-                  name
-                  metadata {
-                    key
-                    value
-                  }
-                }
-                cursor
-              }
-              pageInfo {
-                endCursor
-                hasNextPage
-                hasPreviousPage
-                startCursor
-              }
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-        }
-      }
-    }
-    
-    fragment ProductListItem on Product {
-      id
-      name
-      slug
-      pricing {
-        priceRange {
-          start {
-            gross {
-              amount
-              currency
-            }
-          }
-          stop {
-            gross {
-              amount
-              currency
-            }
-          }
-        }
-      }
-      category {
+   query Featuredproduct($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
+    edges {
+      node {
         id
         name
         slug
-      }
-      thumbnail(size: 1024, format: WEBP) {
-        url
-        alt
-      }
-      variants {
-        id
-        name
-        sku
-        quantityAvailable
-      }
-      media {
-        id
-        url
-        alt
-      }
-      defaultVariant {
-        id
-        quantityAvailable
-        costPrice
-        sku
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              gross {
+                amount
+                currency
+              }
+            }
+            
+          
+          }
+            priceRangeUndiscounted {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+          discount {
+            gross {
+              amount
+            }
+          }
+        }
+            defaultVariant {
+              id
+              sku
+            }
+        category {
+          id
+          name
+          description
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        created
+        media {
+          url
+           alt
+          caption
+          description
+          title
+        }
+        variants {
+          id
+        }
+        description
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          id
+        }
+        seoDescription
+        seoTitle
       }
     }
+  }
+}
     
     `,
-    variables: { first, after, channel, collectionid },
+    variables: { first, after, channel, filter },
   });
 };
 
@@ -746,106 +743,87 @@ export const STATE_LIST = ({ code }) => {
   });
 };
 
-export const PRE_ORDER_LIST = ({ first, after, channel, collectionid }) => {
+export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
   return JSON.stringify({
     query: `
-    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $collectionid: [ID!]!) {
-      collections(first: $first, channel: $channel, filter: {ids: $collectionid}) {
-        edges {
-          node {
-            id
-            name
-            products(first: $first, after: $after) {
-              totalCount
-              edges {
-                node {
-                  ...ProductListItem
-                  id
-                  name
-                  images {
-                    url
-                    id
-                    alt
-                  }
-                }
-                cursor
-              }
-              pageInfo {
-                endCursor
-                hasNextPage
-                hasPreviousPage
-                startCursor
-              }
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-        }
-      }
-    }
-    
-    fragment ProductListItem on Product {
-      id
-      name
-      slug
-      pricing {
-        priceRange {
-          start {
-            gross {
-              amount
-              currency
-            }
-          }
-          stop {
-            gross {
-              amount
-              currency
-            }
-          }
-            
-        }
-          discount {
-      gross {
-        amount
-        currency
-      }
-    }
-    priceRangeUndiscounted {
-      start {
-        gross {
-          amount
-          currency
-        }
-      }
-    }
-      }
-        
-      category {
+    query Featuredproduct($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
+    edges {
+      node {
         id
         name
         slug
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              gross {
+                amount
+                currency
+              }
+            }
+            
+          
+          }
+            priceRangeUndiscounted {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+          discount {
+            gross {
+              amount
+            }
+          }
+        }
+            defaultVariant {
+              id
+              sku
+            }
+        category {
+          id
+          name
+          description
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        created
+        media {
+          url
+           alt
+          caption
+          description
+          title
+        }
+        variants {
+          id
+        }
+        description
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          id
+        }
+        seoDescription
+        seoTitle
       }
-      thumbnail(size: 1024, format: WEBP) {
-        url
-        alt
-      }
-      description
-      defaultVariant {
-        id
-        quantityAvailable
-      }
-      media {
-        id
-        url
-        alt
-      }
-     
     }
+  }
+}
     
     `,
-    variables: { first, after, channel, collectionid },
+    variables: { first, after, channel, filter },
   });
 };
 
@@ -1001,12 +979,7 @@ export const PRODUCT_SEARCH = ({ search, channel }) => {
   });
 };
 
-export const PRODUCT_20_PERCENTAGE = ({
-  channel,
-  first,
-  after,
-  filter,
-}) => {
+export const PRODUCT_20_PERCENTAGE = ({ channel, first, after, filter }) => {
   return JSON.stringify({
     query: `
    query discount20percentage($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
