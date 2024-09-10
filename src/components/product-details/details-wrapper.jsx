@@ -36,7 +36,7 @@ import {
   useGetProductQuery,
   useGetWishlistQuery,
 } from "@/redux/features/productApi";
-import { roundOff } from "../../utils/functions";
+import { addCommasToNumber, roundOff } from "../../utils/functions";
 import ButtonLoader from "../loader/button-loader";
 import {
   RightOutlined,
@@ -751,19 +751,19 @@ const DetailsWrapper = ({
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
                 {variantDetails ? (
-                  <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
+                  <>&#8377;{addCommasToNumber( variantDetails?.pricing?.price?.gross?.amount)}</>
                 ) : (
-                  <>&#8377;{roundOff(productItem?.defaultVariant?.costPrice)}</>
+                  <>&#8377;{addCommasToNumber(productItem?.defaultVariant?.costPrice)}</>
                 )}
               </span>
             )}
             <span className="tp-product-price-2 new-price">
               {variantDetails ? (
-                <>&#8377;{variantDetails?.pricing?.price?.gross?.amount}</>
+                <>&#8377;{addCommasToNumber(variantDetails?.pricing?.price?.gross?.amount)}</>
               ) : (
                 <>
                   &#8377;
-                  {roundOff(
+                  {addCommasToNumber(
                     productItem?.pricing?.priceRange?.start?.gross?.amount ||
                       productItem?.node?.pricing?.priceRange?.start?.gross
                         ?.amount
