@@ -15,9 +15,7 @@ import FooterTwo from "@/layout/footers/footer-2";
 import shopBanner from "../../public/assets/img/shop-banner.jpg";
 import { shortData } from "@/utils/functions";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  useCreateCheckoutTokenWithoutEmailMutation,
-} from "@/redux/features/card/cardApi";
+import { useCreateCheckoutTokenWithoutEmailMutation } from "@/redux/features/card/cardApi";
 import {
   filterData,
   handleFilterSidebarClose,
@@ -34,13 +32,12 @@ const PreOrders = () => {
     isError,
     isLoading,
   } = useLootSaleProductQuery({
-    filter: datas,
+    filter: {},
   });
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { data: wishlistData } = useGetWishlistQuery();
-
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
@@ -274,6 +271,7 @@ const PreOrders = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
+        productLoading={isLoading}
         updateData={() => setCartUpdate(true)}
         subtitle="Loot Sale"
         updateRange={(range) => handleChanges(range)}
