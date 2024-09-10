@@ -1749,10 +1749,17 @@
   justify-content: center;
   transform: scale(1.5);
 }
+
+@media (max-width: 1024px) {
+    .mobile-view-hide {
+      display: none !important;
+    }
+    .mobile-view-width-change {
+        height: 500px;
+        width: 100%;
+      }
+}
 @media (max-width: 768px) {
-  .mobile-view-hide {
-    display: none !important;
-  }
 
   .mobile-view-width-change {
     height: 400px;
@@ -1770,6 +1777,6 @@
     width: 100%;
   }
   .tp-slider-height-4 {
-    min-height: 200px;
+    min-height: 200px !important;
   }
 }
