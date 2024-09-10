@@ -44,7 +44,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
       setStartIndex((prev) => prev - 1);
     } else if (
       direction === "next" &&
-      startIndex < product?.media?.length - 5
+      startIndex < product?.media?.length - 3
     ) {
       setStartIndex((prev) => prev + 1);
     }
@@ -91,7 +91,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
           <nav className="product-side-nav-img p-relative">
             <div className="nav nav-tabs flex-lg-column flex-nowrap justify-content-start">
               {product?.media
-                ?.slice(startIndex, startIndex + 5)
+                ?.slice(startIndex, startIndex + 3)
                 .map((item, i) => (
                   <button
                     key={i + startIndex}
@@ -143,7 +143,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                   </button>
                 ))}
             </div>
-            {product?.media?.length > 4 && (
+            {product?.media?.length > 3 && (
               <>
                 <UpOutlined
                   className="prev-btn"
@@ -174,14 +174,14 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     onClick={() => setIsOpen(true)}
                   >
                     {isImage(profilePic(activeImg?.url)) ? (
-                      <figure>
+                      <figure className="full-width-image" style={{marginBottom:"0px"}}>
                         <img
                          description={activeImg?.description}
                          caption={activeImg?.caption}
                          title={activeImg?.title}
                           src={profilePic(activeImg?.url)}
                           alt={activeImg.alt}
-                          style={{ width: "100%", height: "auto" }}
+                          style={{ width: "100% !important", height: "680px", minWidth: "100% !important" }}
                           onLoad={() => setLoading(false)}
                           onError={() => setLoading(false)}
                         />
@@ -192,10 +192,10 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                         </figcaption> */}
                       </figure>
                     ) : (
-                      <figure>
+                      <figure style={{marginBottom:"0px"}}>
                         <video
                           src={activeImg?.url}
-                          style={{ width: "100%", height: "auto" }}
+                          style={{ width: "100% !important", height: "680px" }}
                           autoPlay
                           muted // Ensure it's muted to autoplay without user interaction
                           loop // Ensure it loops indefinitely

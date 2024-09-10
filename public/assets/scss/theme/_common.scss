@@ -380,8 +380,8 @@
 
 .tp-product-details-nav-main-thumb img {
   transition: transform 0.25s;
-  // width: 100%;
-  // height: auto;
+  width: 100% !important;
+  height: 680px;
 }
 
 .tp-product-details-nav-main-thumb:hover img {
