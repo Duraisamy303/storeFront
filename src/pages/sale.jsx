@@ -271,6 +271,7 @@ const PreOrders = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
+        productLoading={isLoading}
         updateData={() => setCartUpdate(true)}
         subtitle="Loot Sale"
         updateRange={(range) => handleChanges(range)}
