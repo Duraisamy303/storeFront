@@ -118,14 +118,14 @@ const JewelryBanner = () => {
               className="tp-slider-item-4 tp-slider-height-4 p-relative khaki-bg d-flex align-items-center"
             >
               <div className="tp-slider-thumb-4">
-                <Image src={item.img} alt="slider img" />
+                <Image src={item.img} alt="slider img" className="mobile-view-width-change" />
                 <div className="tp-slider-thumb-4-shape">
                   <span className="tp-slider-thumb-4-shape-1"></span>
                   <span className="tp-slider-thumb-4-shape-2"></span>
                 </div>
               </div>
 
-              <div className="tp-slider-video-wrapper">
+              <div className="tp-slider-video-wrapper mobile-view-hide ">
                 {/* <!-- video --> */}
                 <div
                   className={`tp-slider-video transition-3 ${
@@ -154,7 +154,7 @@ const JewelryBanner = () => {
                 </div> */}
               </div>
 
-              <div className="container">
+              <div className="container mobile-view-hide">
                 <div className="row align-items-center">
                   <div className="col-xl-6 col-lg-6 col-md-8">
                     <div className="tp-slider-content-4 p-relative z-index-1">
@@ -199,7 +199,7 @@ const JewelryBanner = () => {
         </div>
         {/* arrow end */}
 
-        <div className="tp-slider-nav">
+        <div className="tp-slider-nav mobile-view-hide">
           <Slider
             {...nav_slider_setting}
             asNavFor={slider1}
