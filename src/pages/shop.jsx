@@ -43,7 +43,7 @@ const ShopPage = () => {
     sortBy: { direction: "DESC", field: "CREATED_AT" },
   });
 
-  const [getAllProducts] = useGetAllProductMutation();
+  const [getAllProducts,{isLoading:productLoading}] = useGetAllProductMutation();
 
   // const { data: newData, refetch: getProductRefetch } =
   //   useGetAllProductsQuery();
@@ -452,7 +452,7 @@ const ShopPage = () => {
             all_products={productList}
             products={productList}
             otherProps={otherProps}
-            productLoading={isLoading || categoryLoading || filterLoading}
+            productLoading={isLoading || categoryLoading || filterLoading || productLoading}
             updateData={() => setCartUpdate(true)}
             subtitle={shopTitle}
             updateRange={(range) => handleChanges(range)}
