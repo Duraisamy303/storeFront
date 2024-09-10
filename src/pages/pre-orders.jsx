@@ -154,7 +154,6 @@ const PreOrders = () => {
     // ) {
       const list =
       productsData?.data?.productsSearch?.edges;
-      console.log("list: ", list);
 
       setProductList(list);
     // }

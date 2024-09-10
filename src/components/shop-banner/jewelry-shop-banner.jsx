@@ -172,7 +172,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId:"Q2F0ZWdvcnk6MTE5ODI="}, // Your parameters
+                        query: { categoryId:"Q2F0ZWdvcnk6MTE2NDU="}, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}

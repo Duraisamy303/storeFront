@@ -64,7 +64,7 @@ const CategoryContent = ({
   const filterByCategory = async () => {
     let categoryId = "";
     if (categoryName === "Earrings") {
-      categoryId = "Q2F0ZWdvcnk6MTE5ODI=";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDU=";
     } else if (categoryName === "Necklaces") {
       categoryId = "Q2F0ZWdvcnk6MTE2NDI=";
     } else if (categoryName === "Bangles") {
@@ -187,7 +187,7 @@ const CategoryComponent = ({
   const filterByCategory = async () => {
     let categoryId = "";
     if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
-      categoryId = "Q2F0ZWdvcnk6MTE5ODI=";
+      categoryId = "Q2F0ZWdvcnk6MTE2NDU=";
     } else if (
       hoveredCategory === "Necklaces" ||
       lastHoveredCategory === "Necklaces"
@@ -381,7 +381,7 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE5ODI=" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
                     });
                   }}
                 >
