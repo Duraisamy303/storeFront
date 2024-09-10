@@ -73,6 +73,8 @@ const CategoryContent = ({
       categoryId = "Q2F0ZWdvcnk6MTE2NTU=";
     } else if (categoryName === "Anklets") {
       categoryId = "Q2F0ZWdvcnk6MTIxNTI=";
+    } else if (categoryName === "Idols") {
+      categoryId = "Q2F0ZWdvcnk6MTM1ODc=";
     } else if (categoryName === "OtherAccessories") {
       categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
     }
@@ -164,7 +166,7 @@ const CategoryComponent = ({
 }) => {
   const router = useRouter();
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [priceFilter, {isLoading: productLoading }] = usePriceFilterMutation();
+  const [priceFilter, { isLoading: productLoading }] = usePriceFilterMutation();
   const [productList, setProductList] = useState([]);
   const [subCategoryLists, setSubCategoryLists] = useState([]);
 
@@ -210,9 +212,10 @@ const CategoryComponent = ({
       lastHoveredCategory === "OtherAccessories"
     ) {
       categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
+    } else if (hoveredCategory === "Idols" || lastHoveredCategory === "Idols") {
+    
+      categoryId = "Q2F0ZWdvcnk6MTM1ODc=";
     }
-    console.log("categoryId: ", categoryId);
-    console.log("hoveredCategory: ", hoveredCategory);
     const SubCategory = await subCatList({
       parentid: categoryId,
     });
@@ -248,11 +251,8 @@ const CategoryComponent = ({
         ))}
       </Swiper>
     ) : (
-      <div
-        className=""
-        style={{ backgroundColor: "black",fontSize:"30px" }}
-      >
-        Product No FOund
+      <div className="" style={{ backgroundColor: "black", fontSize: "30px" }}>
+        Product No Found
       </div>
     );
   };
@@ -307,6 +307,17 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL ANKLETS"
+            commonImage={CommonImage}
+            lists={subCategoryLists}
+            categoryName={lastHoveredCategory}
+          >
+            {renderContent()}
+          </CategoryContent>
+        );
+      case "Idols":
+        return (
+          <CategoryContent
+            title="IDOLS"
             commonImage={CommonImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
@@ -533,6 +544,40 @@ const Menus = () => {
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
                       lastHoveredCategory === "Anklets" ? "active" : ""
+                    }`}
+                  />
+                </li>
+
+                <li
+                  className={`shop-submenu-catageroy-list ${
+                    lastHoveredCategory === "Idols" ? "active" : ""
+                  }`}
+                  onMouseEnter={() => setLastHoveredCategory("Idols")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingRight: "10px",
+                  }}
+                  onClick={() => {
+                    router?.push({
+                      pathname: "/shop",
+                      query: { categoryId: "Q2F0ZWdvcnk6MTM1ODc=" }, // Your parameters
+                    });
+                  }}
+                >
+                  <p
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Idols" ? "active" : ""
+                    }`}
+                  >
+                    Idols
+                  </p>
+                  <RightOutlined
+                    style={{ cursor: "pointer", marginBottom: "0px" }}
+                    className={`shop-submenu-catageroy-list-a ${
+                      lastHoveredCategory === "Idols" ? "active" : ""
                     }`}
                   />
                 </li>

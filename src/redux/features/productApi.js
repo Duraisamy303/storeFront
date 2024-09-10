@@ -45,6 +45,7 @@ import {
   DESIGN_LIST,
   STONE_LIST,
   STATE_LIST,
+  LOOT_LIST,
 } from "../../utils/queries/productList";
 import {
   GET_WISHLIST_LIST,
@@ -379,7 +380,7 @@ export const productApi = apiSlice.injectEndpoints({
     lootSaleProduct: builder.query({
       query: ({ filter }) =>
         configuration(
-          PRODUCT_FILTER({
+          LOOT_LIST({
             channel: checkChannel(),
             first: 500,
             after: null,

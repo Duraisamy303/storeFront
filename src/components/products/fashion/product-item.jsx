@@ -133,7 +133,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: product?.defaultVariant?.id,
+        variantId: product?.defaultVariant?.id
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;

@@ -445,6 +445,93 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
   });
 };
 
+export const LOOT_LIST = ({ channel, first, after, filter }) => {
+  return JSON.stringify({
+    query: `
+    query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
+  productsSearch(
+    filter: $filter
+    channel: $channel
+    first: $first
+    after: $after
+    where: {category: {eq: "Q2F0ZWdvcnk6MTIwMjQ="}}
+  ) {
+    edges {
+      node {
+        id
+        name
+        slug
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+          priceRangeUndiscounted {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+          discount {
+            gross {
+              amount
+            }
+          }
+        }
+        defaultVariant {
+          id
+          sku
+        }
+        category {
+          id
+          name
+          description
+        }
+        thumbnail(size: 1024, format: WEBP) {
+          url
+          alt
+        }
+        created
+        media {
+          url
+          alt
+          caption
+          description
+          title
+        }
+        variants {
+          id
+        }
+        description
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          id
+        }
+        seoDescription
+        seoTitle
+      }
+    }
+  }
+}
+    `,
+    variables: { channel, first, after, filter },
+  });
+};
+
 export const FINISH_LIST = () => {
   return JSON.stringify({
     query: `
