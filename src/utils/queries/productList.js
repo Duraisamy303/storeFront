@@ -339,19 +339,24 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
   return JSON.stringify({
     query: `
     query MyQuery($channel: String!) {
-      categories(first: 100, level: 0) {
-        edges {
-          node {
-            id
-            name
-            slug            
-            productsWithoutHiddenCategory(channel: $channel) {
-              totalCount
-            }
-          }
+  categories(
+    first: 100
+    level: 0
+    where: {}
+    filter: {ids: ["Q2F0ZWdvcnk6MTI0MTU=","Q2F0ZWdvcnk6MTIxNTI=","Q2F0ZWdvcnk6MTE3NDE=","Q2F0ZWdvcnk6MTE2NTU=","Q2F0ZWdvcnk6MTE2NTI=","Q2F0ZWdvcnk6MTE2NDc="]}
+  ) {
+    edges {
+      node {
+        id
+        name
+        slug
+        productsWithoutHiddenCategory(channel: $channel) {
+          totalCount
         }
       }
     }
+  }
+}
     `,
     variables: { channel },
   });
