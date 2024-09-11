@@ -571,8 +571,6 @@
     left: 25px;
     top: -50px;
   }
-
- 
 }
 
 @media (max-width: 768px) {
@@ -830,4 +828,17 @@
     border-color: var(--tp-common-black) !important;
   }
   border-color: var(--tp-common-black);
+}
+
+.home-section-heading {
+  padding-bottom: 40px;
+  padding-top: 45px;
+}
+
+
+@media(max-width:500px){
+  .home-section-heading{
+    padding-bottom: 0px;
+    padding-top: 20px;
+    }
 }
