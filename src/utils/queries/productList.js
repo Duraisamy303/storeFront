@@ -770,6 +770,9 @@ export const FEATURE_PRODUCT = ({ first, after, channel, filter }) => {
         }
         seoDescription
         seoTitle
+        video {
+          url
+        }
       }
     }
   }
