@@ -437,6 +437,11 @@
   .shop-banner-title {
     padding-bottom: 10px;
   }
+
+  .tp-product-details-nav-main-thumb img {
+    transition: transform 0.25s;
+    height: 400px;
+  }
 }
 
 .about-section-brand {
@@ -567,17 +572,7 @@
     top: -50px;
   }
 
-  .prev-btn {
-    top: 40%;
-    left: 10px;
-    rotate: 270deg;
-  }
-
-  .next-btn {
-    bottom: 45%;
-    left: 95%;
-    rotate: 270deg;
-  }
+ 
 }
 
 @media (max-width: 768px) {
@@ -612,6 +607,17 @@
   .contact-section1 {
     padding-bottom: 30px;
   }
+  .prev-btn {
+    top: 40%;
+    left: 10px;
+    rotate: 270deg;
+  }
+
+  .next-btn {
+    bottom: 45%;
+    left: 95%;
+    rotate: 270deg;
+  }
 }
 
 @media (max-width: 500px) {
@@ -624,8 +630,13 @@
     left: 65px;
     top: -60px;
   }
+  .prev-btn {
+    top: 35%;
+    left: 10px;
+    rotate: 270deg;
+  }
   .next-btn {
-    bottom: 45%;
+    bottom: 40%;
     left: 90%;
     rotate: 270deg;
   }
@@ -656,6 +667,12 @@
     width: 350px;
     left: 0px;
     top: -60px;
+  }
+
+  .next-btn {
+    bottom: 40%;
+    left: 88%;
+    rotate: 270deg;
   }
 }
 

@@ -44,7 +44,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
       setStartIndex((prev) => prev - 1);
     } else if (
       direction === "next" &&
-      startIndex < product?.media?.length - 3
+      startIndex < product?.media?.length - 4
     ) {
       setStartIndex((prev) => prev + 1);
     }
@@ -84,14 +84,14 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
     <>
       <div
         className={`tp-product-details-thumb-wrapper tp-tab ${
-          product?.media.length > 1 ? "d-lg-flex" : ""
+          product?.media.length > 1 ? "d-md-flex" : ""
         } w-100`}
       >
         {product?.media?.length > 1 && (
           <nav className="product-side-nav-img p-relative">
-            <div className="nav nav-tabs flex-lg-column flex-nowrap justify-content-start">
+            <div className="nav nav-tabs flex-md-column flex-nowrap justify-content-start">
               {product?.media
-                ?.slice(startIndex, startIndex + 3)
+                ?.slice(startIndex, startIndex + 4)
                 .map((item, i) => (
                   <button
                     key={i + startIndex}
@@ -175,13 +175,12 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                   >
                     {isImage(profilePic(activeImg?.url)) ? (
                       <figure className="detail-single-image" style={{marginBottom:"0px"}}>
-                        <img
+                        <img  className="product-details-image"
                          description={activeImg?.description}
                          caption={activeImg?.caption}
                          title={activeImg?.title}
                           src={profilePic(activeImg?.url)}
                           alt={activeImg.alt}
-                          style={{ width: "100% !important", height: "680px", minWidth: "100% !important" }}
                           onLoad={() => setLoading(false)}
                           onError={() => setLoading(false)}
                         />
@@ -193,7 +192,7 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                       </figure>
                     ) : (
                       <figure style={{marginBottom:"0px"}}  className="detail-single-image">
-                        <video
+                        <video 
                           src={activeImg?.url}
                           style={{ width: "100% !important", height: "680px" }}
                           autoPlay

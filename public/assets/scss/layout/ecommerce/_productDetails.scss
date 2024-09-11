@@ -53,8 +53,8 @@
           margin-right: 0;
         }
         & .nav-link {
-          width: 147px;
-          height: 220px;
+          width: 140px;
+          height: 163px;
           position: relative;
           background-color: #f4f5f7;
 
@@ -82,8 +82,15 @@
               border-color: #c3935b;
             }
           }
-          figure{
-            height: 220px;
+          figure {
+            height: 163px;
+
+            @media (max-width: 500px) {
+              height: 100px;
+            }
+            @media (max-width: 400px) {
+              height: 75px;
+            }
           }
           & img {
             width: 100%;
@@ -1613,6 +1620,22 @@
   height: auto !important;
 }
 
+.mobile-view-width-change {
+  width: 100%;
+}
+
+.detail-single-image {
+  display: flex;
+  justify-content: center;
+  transform: scale(1.5);
+}
+
+.product-details-image {
+  width: 100% !important;
+  height: 680px;
+  min-width: 100% !important;
+}
+
 @media (max-width: 1600px) {
   .details-section-main-image {
     width: 79% !important;
@@ -1638,10 +1661,6 @@
   .details-section-main-image-cover {
     width: 100%;
   }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 175px;
-    height: 220px !important;
-  }
 }
 
 @media (max-width: 1400px) {
@@ -1650,10 +1669,6 @@
   }
   .details-section-main-image-cover {
     width: 100%;
-  }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 175px;
-    height: 210px !important;
   }
 }
 
@@ -1664,10 +1679,6 @@
   .details-section-main-image-cover {
     width: 100%;
   }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 175px;
-    height: 170px !important;
-  }
 }
 
 @media (max-width: 1150px) {
@@ -1676,10 +1687,6 @@
   }
   .details-section-main-image-cover {
     width: 100%;
-  }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 175px;
-    height: 130px !important;
   }
 }
 
@@ -1690,10 +1697,6 @@
   .details-section-main-image-cover {
     width: 100%;
   }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 132px;
-    height: 135px !important;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -1703,29 +1706,38 @@
   .details-section-main-image-cover {
     width: 100%;
   }
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 132px;
-    height: 122px !important;
+
+  .mobile-view-hide {
+    display: none !important;
+  }
+  .mobile-view-width-change {
+    height: 500px;
+    width: 100%;
   }
 }
 
-@media (max-width: 992px) {
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 100px;
-    height: 126px !important;
-  }
-}
+// @media (max-width: 992px) {
+//   .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
+//     width: 100px;
+//     height: 126px !important;
+//   }
+// }
 
 @media (max-width: 768px) {
-  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 140px;
-    height: 122px !important;
+ 
+  .mobile-view-width-change {
+    height: 400px;
+    width: 100%;
+  }
+
+  .tp-slider-height-4 {
+    min-height: 400px;
   }
 }
 
 @media (max-width: 500px) {
   .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
-    width: 140px;
+    width: 100px;
     height: 100px !important;
   }
 
@@ -1738,45 +1750,24 @@
     width: 100%;
     height: 450px !important;
   }
-}
 
-.mobile-view-width-change {
-  width: 100%;
-}
-
-.detail-single-image {
-  display: flex;
-  justify-content: center;
-  transform: scale(1.5);
-}
-
-@media (max-width: 1024px) {
-    .mobile-view-hide {
-      display: none !important;
-    }
-    .mobile-view-width-change {
-        height: 500px;
-        width: 100%;
-      }
-}
-@media (max-width: 768px) {
-
-  .mobile-view-width-change {
-    height: 400px;
-    width: 100%;
-  }
-
-  .tp-slider-height-4 {
-    min-height: 400px;
-  }
-}
-
-@media (max-width: 500px) {
   .mobile-view-width-change {
     height: 200px;
     width: 100%;
   }
   .tp-slider-height-4 {
     min-height: 200px !important;
+  }
+
+  .product-details-image {
+    height: 500px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .tp-product-details-thumb-wrapper .nav-tabs .nav-link {
+    width: 100px;
+    height: 75px !important;
   }
 }
