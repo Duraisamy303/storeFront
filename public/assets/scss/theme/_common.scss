@@ -835,10 +835,16 @@
   padding-top: 45px;
 }
 
-
-@media(max-width:500px){
-  .home-section-heading{
+.featured-product-section {
+  margin-bottom: 50px;
+}
+@media (max-width: 500px) {
+  .home-section-heading {
     padding-bottom: 0px;
     padding-top: 20px;
-    }
+  }
+
+  .featured-product-section {
+    margin-bottom: 20px;
+  }
 }
