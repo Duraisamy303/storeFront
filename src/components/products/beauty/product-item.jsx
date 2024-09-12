@@ -156,7 +156,7 @@ const ProductItem = ({
   };
   return (
     <div
-      className={`tp-product-item-3 featured-product-section mb-50 ${
+      className={`tp-product-item-3 featured-product-section ${
         primary_style ? "tp-product-style-primary" : ""
       } ${prdCenter ? "text-center" : ""}`}
     >

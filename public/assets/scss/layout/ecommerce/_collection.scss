@@ -290,7 +290,7 @@
         &-wrapper-4{
             height: 100%;
             @media #{$md, $sm, $xs}{
-                min-height: 600px;
+              padding-bottom: 20px;
             }
         }
         &-4{

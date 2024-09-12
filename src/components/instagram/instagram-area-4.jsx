@@ -359,7 +359,7 @@ const InstagramAreaFour = () => {
                             src={item?.thumbnail?.url}
                             width={300}
                             height={320}
-                            alt="instagram img"
+                            alt="loot slae images"
                             className="actor-image"
                           />
                         ) : (
@@ -373,7 +373,7 @@ const InstagramAreaFour = () => {
                               width: "100%",
                               height: "100%",
                             }}
-                            alt="instagram img"
+                            alt="loot slae images"
                             className="actor-image"
                           />
                         )}
