@@ -174,11 +174,15 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                     onClick={() => setIsOpen(true)}
                   >
                     {isImage(profilePic(activeImg?.url)) ? (
-                      <figure className="detail-single-image" style={{marginBottom:"0px"}}>
-                        <img  className="product-details-image"
-                         description={activeImg?.description}
-                         caption={activeImg?.caption}
-                         title={activeImg?.title}
+                      <figure
+                        className="detail-single-image"
+                        style={{ marginBottom: "0px" }}
+                      >
+                        <img
+                          className="product-details-image"
+                          description={activeImg?.description}
+                          caption={activeImg?.caption}
+                          title={activeImg?.title}
                           src={profilePic(activeImg?.url)}
                           alt={activeImg.alt}
                           onLoad={() => setLoading(false)}
@@ -191,10 +195,13 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
                         </figcaption> */}
                       </figure>
                     ) : (
-                      <figure style={{marginBottom:"0px"}}  className="detail-single-image">
-                        <video 
+                      <figure
+                        style={{ marginBottom: "0px" }}
+                        className="detail-single-image"
+                      >
+                        <video
+                          className="product-details-image"
                           src={activeImg?.url}
-                          style={{ width: "100% !important", height: "680px" }}
                           autoPlay
                           muted // Ensure it's muted to autoplay without user interaction
                           loop // Ensure it loops indefinitely

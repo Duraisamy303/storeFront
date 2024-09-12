@@ -16,7 +16,7 @@ const ContactBreadcrumb = () => {
             >
               <h3
                 className="breadcrumb__title"
-                style={{ color: "white", fontSize: "70px" }}
+                style={{ color: "white"}}
               >
                 Contact Us
               </h3>
