@@ -16,6 +16,7 @@ import DesignFilter from "../shop/shop-filter/design-filter";
 import StoneFilter from "../shop/shop-filter/stone-filter";
 import InputRange from "@/ui/input-range";
 import { checkChannel } from "@/utils/functions";
+import { addCommasToNumber } from "../../utils/functions";
 
 const ShopFilterOffCanvas = ({
   all_products,
@@ -80,9 +81,9 @@ const ShopFilterOffCanvas = ({
                   <div className="tp-shop-widget-filter-info d-flex align-items-center justify-content-between">
                     <span className="input-range">
                       {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[0] ? priceValue[0] : 0} -{" "}
+                      {priceValue[0] ?addCommasToNumber( priceValue[0]) : 0} -{" "}
                       {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[1] ? priceValue[1] : maxPrice}
+                      {priceValue[1] ? addCommasToNumber(priceValue[1]) : addCommasToNumber(maxPrice)}
                     </span>
                     <button
                       className="tp-shop-widget-filter-btn"
