@@ -6,12 +6,18 @@ import { Wishlist } from "@/svg";
 import {
   useGetProductByIdQuery,
   useGetWishlistQuery,
+  useGetWishlistDefaultQuery,
 } from "@/redux/features/productApi";
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
+import { checkChannel } from "@/utils/functions";
 
 const WishlistArea = () => {
   const [ids, setIds] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+
+  const { data: wishlistDefaultData, refetch: wishlistDefaultRefetch } =
+    useGetWishlistDefaultQuery();
+  console.log("✌️wishlistDefaultData --->", wishlistDefaultData);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -20,12 +26,23 @@ const WishlistArea = () => {
     getWishlistList();
   }, [wishlistData]);
 
-  const list =wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+  useEffect(() => {
+    wishlistDefaultRefetch();
+  }, []);
+
+  const list =
+    checkChannel() == "india-channel"
+      ? wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+      : wishlistDefaultData?.data?.wishlists?.edges?.map((item) => item?.node);
+
+  console.log("list", list);
 
   const getWishlistList = async (prd) => {
     try {
       if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-        setWishlist(wishlistData?.data?.wishlists?.edges?.map((item) => item?.node))
+        setWishlist(
+          wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -50,43 +67,58 @@ const WishlistArea = () => {
             </div>
           )}
           {list?.length > 0 && (
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="tp-cart-list mb-45 mr-30">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th colSpan="2" className="tp-cart-header-product">
-                          PRODUCT
-                        </th>
-                        <th className="tp-cart-header-quantity">
-                          PRODUCT NAME
-                        </th>
-                        <th className="tp-cart-header-price">PRICE</th>
-                        <th>ADD TO CART</th>
-                        <th>ACTION</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list?.map((item, i) => (
-                        <WishlistItem key={i} product={item} refetchWishlist={wishlistRefetch} />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="tp-cart-bottom">
-                  <div className="row align-items-end">
-                    <div className="col-xl-6 col-md-4">
-                      <div className=" d-flex tp-cart-new">
-                        <Link href="/cart" className="tp-cart-update-btn" style={{background:"#f1f1f1", }}>
-                          Go To Cart
-                        </Link>
+            <>
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="tp-cart-list mb-45 mr-30">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th colSpan="2" className="tp-cart-header-product">
+                            PRODUCT
+                          </th>
+                          <th className="tp-cart-header-quantity">
+                            PRODUCT NAME
+                          </th>
+                          <th className="tp-cart-header-price">PRICE</th>
+                          <th>ADD TO CART</th>
+                          <th>ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list?.map((item, i) => {
+                          return (
+                            <WishlistItem
+                              key={i}
+                              product={item}
+                              refetchWishlist={wishlistRefetch}
+                              refetchWishlistDefault={
+                                wishlistDefaultRefetch
+                              }
+                            />
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="tp-cart-bottom">
+                    <div className="row align-items-end">
+                      <div className="col-xl-6 col-md-4">
+                        <div className=" d-flex tp-cart-new">
+                          <Link
+                            href="/cart"
+                            className="tp-cart-update-btn"
+                            style={{ background: "#f1f1f1" }}
+                          >
+                            Go To Cart
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </section>

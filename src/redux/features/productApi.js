@@ -51,6 +51,7 @@ import {
 } from "../../utils/queries/productList";
 import {
   GET_WISHLIST_LIST,
+  GET_WISHLIST_LIST_DEFAULT_CHANNEL,
   UPDATE_BILLING_ADDRESS,
 } from "@/utils/queries/cart/addToCart";
 import { checkChannel } from "@/utils/functions";
@@ -241,6 +242,21 @@ export const productApi = apiSlice.injectEndpoints({
           userEmail = users.user.email;
         }
         return configuration(GET_WISHLIST_LIST({ userEmail: userEmail }));
+      },
+      providesTags: ["Products"],
+    }),
+
+    getWishlistDefault: builder.query({
+      query: () => {
+        const user = localStorage.getItem("userInfo");
+        let userEmail = "";
+        if (user) {
+          const users = JSON.parse(user);
+          userEmail = users.user.email;
+        }
+        return configuration(
+          GET_WISHLIST_LIST_DEFAULT_CHANNEL({ userEmail: userEmail })
+        );
       },
       providesTags: ["Products"],
     }),
@@ -737,6 +753,7 @@ export const {
   useMyOrderListQuery,
   useAddWishlistMutation,
   useGetWishlistQuery,
+  useGetWishlistDefaultQuery,
   useGetProductByIdMutation,
   useGetCategoryListQuery,
   useGetAddressListQuery,

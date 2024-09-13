@@ -763,48 +763,125 @@ export const DELETE_WISHLIST = ({ user, variant }) => {
   };
 };
 
+// export const GET_WISHLIST_LIST = ({ userEmail }) => {
+//   return {
+//     query: `
+//     query GetWishListQuery($userEmail: String!) {
+//   wishlists(first: 100, filter: {user: $userEmail}) {
+//     edges {
+//       node {
+//         user {
+//           firstName
+//           email
+//         }
+//         variant
+//         product {
+//           name
+//           slug
+//           variants {
+//             id
+//             name
+//           }
+//           images {
+//             url
+//             alt
+//           }
+//           defaultVariant {
+//             id
+//             name
+//           }
+//           media {
+//             url
+//           }
+//           defaultChannelPricing
+//           indiaChannelPricing
+//           category {
+//             id
+//             name
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+//       `,
+//     variables: { userEmail },
+//   };
+// };
+
 export const GET_WISHLIST_LIST = ({ userEmail }) => {
   return {
     query: `
-    query GetWishListQuery($userEmail: String!) {
+      query GetWishListQueryForIndiaChannel($userEmail: String!) {
   wishlists(first: 100, filter: {user: $userEmail}) {
     edges {
       node {
-        user {
-          firstName
-          email
-        }
-        variant
         product {
-          name
-          slug
-          variants {
-            id
-            name
-          }
-          images {
+          thumbnail {
             url
-            alt
+          }
+            id
+          name
+          pricing {
+            priceRange {
+              start {
+                gross {
+                  amount
+                  currency
+                }
+              }
+            }
           }
           defaultVariant {
             id
-            name
-          }
-          media {
-            url
-          }
-          defaultChannelPricing
-          indiaChannelPricing
-          category {
-            id
-            name
           }
         }
       }
     }
   }
 }
-      `,
+
+        `,
+    variables: { userEmail },
+  };
+};
+
+export const GET_WISHLIST_LIST_DEFAULT_CHANNEL = ({ userEmail }) => {
+  return {
+    query: `
+     query GetWishListQueryForDefaultChannel($userEmail: String!) {
+  wishlists(first: 100, filter: {user: $userEmail}) {
+    edges {
+      node {
+        defaultChannelProduct {
+          thumbnail {
+            url
+          }
+          id
+          name
+          pricing {
+            priceRange {
+              start {
+                gross {
+                  amount
+                  currency
+                }
+              }
+            }
+          }
+          defaultVariant {
+            id
+          }
+        }
+        defaultChannelProduct {
+          id
+        }
+      }
+    }
+  }
+}
+
+        `,
     variables: { userEmail },
   };
 };
