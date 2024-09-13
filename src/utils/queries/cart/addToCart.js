@@ -816,6 +816,7 @@ export const GET_WISHLIST_LIST = ({ userEmail }) => {
   wishlists(first: 100, filter: {user: $userEmail}) {
     edges {
       node {
+      variant
         product {
           thumbnail {
             url
