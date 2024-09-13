@@ -83,86 +83,81 @@ const DetailsThumbWrapper = ({ product, relatedClick }) => {
   return (
     <>
       <div
-        className={`tp-product-details-thumb-wrapper tp-tab ${
-          product?.media.length > 1 ? "d-md-flex" : ""
-        } w-100`}
+        className={`tp-product-details-thumb-wrapper tp-tab d-md-flex
+        w-100`}
       >
-        {product?.media?.length > 1 && (
-          <nav className="product-side-nav-img p-relative">
-            <div className="nav nav-tabs flex-md-column flex-nowrap justify-content-start">
-              {product?.media
-                ?.slice(startIndex, startIndex + 4)
-                .map((item, i) => (
-                  <button
-                    key={i + startIndex}
-                    className={`nav-link ${
-                      item?.url === activeImg?.url ? "active" : ""
-                    }`}
-                    onClick={() => handleImageActive(item)}
-                    id={`image-${i}`}
-                  >
-                    {isImage(profilePic(item?.url)) ? (
-                      <figure>
-                        <img
-                          src={item?.url}
-                          alt={item?.alt}
-                          description={item?.description}
-                          caption={item?.caption}
-                          title={item?.title}
-                          width={78}
-                          height={100}
-                          style={{ width: "100%", height: "100%" }}
-                        />
-                        {/* <figcaption className="hidden-for-seo">
+        {/* {product?.media?.length > 1 && ( */}
+        <nav className="product-side-nav-img p-relative">
+          <div className="nav nav-tabs flex-md-column flex-nowrap justify-content-start">
+            {product?.media
+              ?.slice(startIndex, startIndex + 4)
+              .map((item, i) => (
+                <button
+                  key={i + startIndex}
+                  className={`nav-link ${
+                    item?.url === activeImg?.url ? "active" : ""
+                  }`}
+                  onClick={() => handleImageActive(item)}
+                  id={`image-${i}`}
+                >
+                  {isImage(profilePic(item?.url)) ? (
+                    <figure>
+                      <img
+                        src={item?.url}
+                        alt={item?.alt}
+                        description={item?.description}
+                        caption={item?.caption}
+                        title={item?.title}
+                        width={78}
+                        height={100}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                      {/* <figcaption className="hidden-for-seo">
                           <strong>{item?.title}</strong> 
                           <p>{item?.description}</p>
                           <em>{item?.caption}</em> 
                         </figcaption> */}
-                      </figure>
-                    ) : (
-                      <figure>
-                        <video
-                          src={item?.url}
-                          aria-label={item?.alt}
-                          width={78}
-                          height={100}
-                          style={{ width: "100%", height: "100%" }}
-                          muted
-                          loop
-                          description={item?.description}
-                          caption={item?.caption}
-                          title={item?.title}
-                        />
-                        {/* <figcaption className="hidden-for-seo">
+                    </figure>
+                  ) : (
+                    <figure>
+                      <video
+                        src={item?.url}
+                        aria-label={item?.alt}
+                        width={78}
+                        height={100}
+                        style={{ width: "100%", height: "100%" }}
+                        muted
+                        loop
+                        description={item?.description}
+                        caption={item?.caption}
+                        title={item?.title}
+                      />
+                      {/* <figcaption className="hidden-for-seo">
                           <strong>{item?.title}</strong> 
                           <p>{item?.description}</p> 
                           <em>{item?.caption}</em> 
                         </figcaption> */}
-                      </figure>
-                    )}
-                  </button>
-                ))}
-            </div>
-            {product?.media?.length > 3 && (
-              <>
-                <UpOutlined
-                  className="prev-btn"
-                  onClick={() => handleNavigationClicking("prev")}
-                />
-                <DownOutlined
-                  className="next-btn"
-                  onClick={() => handleNavigationClicking("next")}
-                />
-              </>
-            )}
-          </nav>
-        )}
+                    </figure>
+                  )}
+                </button>
+              ))}
+          </div>
+          {product?.media?.length > 3 && (
+            <>
+              <UpOutlined
+                className="prev-btn"
+                onClick={() => handleNavigationClicking("prev")}
+              />
+              <DownOutlined
+                className="next-btn"
+                onClick={() => handleNavigationClicking("next")}
+              />
+            </>
+          )}
+        </nav>
+        {/* )} */}
 
-        <div
-          className={`tab-content m-img ${
-            product?.media?.length === 1 ? "full-width-image" : "w-100"
-          }`}
-        >
+        <div className={`tab-content m-img full-width-image`}>
           <div className="tab-pane fade show active">
             <div className="tp-product-details-nav-main-thumb p-relative">
               {loading ? (

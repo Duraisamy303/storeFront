@@ -74,7 +74,7 @@ const ProductDetailsArea = ({
         <div className="container">
           <div className="row">
             <div
-              className="col-xl-7 col-lg-7"
+              className="col-xl-6 col-lg-6"
               style={{ maxWidth: "100%", overflow: "hidden" }}
             >
               {/* product-details-thumb-wrapper start */}
@@ -89,7 +89,7 @@ const ProductDetailsArea = ({
               />
               {/* product-details-thumb-wrapper end */}
             </div>
-            <div className="col-xl-5 col-lg-5">
+            <div className="col-xl-6 col-lg-6">
               {/* product-details-wrapper start */}
               <DetailsWrapper
                 productItem={productItem}

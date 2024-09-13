@@ -439,8 +439,10 @@
   }
 
   .tp-product-details-nav-main-thumb img {
-    transition: transform 0.25s;
-    height: 400px;
+    // transition: transform 0.25s;
+    // height: 550px;
+    width: 100%;
+    height: auto;
   }
 }
 
