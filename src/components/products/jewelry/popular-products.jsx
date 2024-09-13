@@ -165,13 +165,13 @@ const PopularProducts = () => {
   return (
     <>
       <section
-        className="tp-category-area pt-50 tp-category-plr-85"
+        className="tp-category-area tp-category-plr-85"
         style={{ backgroundColor: `#EFF1F5` }}
       >
         <div className="container-fluid">
           <div className="row">
             <div className="col-xl-12">
-              <div className="tp-section-title-wrapper-4 mb-60 text-center">
+              <div className="tp-section-title-wrapper-4  home-section-heading  text-center">
                 <h5
                   className="popular-adipisicing"
                   style={{ fontWeight: "400" }}

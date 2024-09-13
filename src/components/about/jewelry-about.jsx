@@ -61,29 +61,18 @@ const JewelryAbout = () => {
                     lineHeight: "30px",
                   }}
                 >
-                  PraDe Jewels is a leading luxury jewellery label founded in
-                  2017 and is based out of South India. PraDe deals in Pure 925
-                  Silver Jewellery. We at PraDe bring you a different
-                  perspective on authentic handcrafted Silver Jewellery with
-                  high standards.
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontWeight: "400",
-                    fontSize: "14px",
-                    marginBottom: "5px",
-                    lineHeight: "30px",
-                  }}
-                >
-                  PraDe strives to encapsulate Indian values and sentiments
-                  through its designs. We look forward to maintain the Indian
-                  heritage and bring out the tradition and culture.
+                  Since its founding in 2017, PraDe Jewels & Drapes Private
+                  Limited has emerged as a top luxury jewelry brand based in
+                  South India. PraDe is renowned for its exquisite collection of
+                  pure 925 silver jewelry.
                 </p>
               </div>
             </div>
 
-            <div className="col-md-6  mt-30 mt-lg-0" style={{ position: "relative" }}>
+            <div
+              className="col-md-6  mt-30 mt-lg-0"
+              style={{ position: "relative" }}
+            >
               <div className="about-section-logo">
                 <img
                   src="/assets/img/prade-about-logo.jpg"
@@ -115,38 +104,29 @@ const JewelryAbout = () => {
                 <p
                   style={{
                     color: "#777",
-                    fontWeight: "100",
-                    fontSize: "14px",
-                    marginBottom: "5px",
-                    lineHeight: "30px",
-                  }}
-                >
-                  Deepthi Muthusamy, born and raised in Chennai, is a
-                  self-trained fashion entrepreneur who is passionate about
-                  jewellery designing. Born with an inhouse aesthetic sense,
-                  inherited knowledge with a vast exposure and interest towards
-                  creating designs.
-                </p>
-                <p
-                  style={{
-                    color: "#777",
                     fontWeight: "400",
                     fontSize: "14px",
                     marginBottom: "5px",
                     lineHeight: "30px",
                   }}
                 >
-                  She brings the best out of it and launches the most
-                  breath-taking and wearable traditional as well as contemporary
-                  designs which creates a craze for all our customers every
-                  time.
+                  Deepthi Muthusamy, with her roots in Chennai, is an
+                  independent jewelry designer with a keen eye for creative
+                  pieces . Possessing an innate sense of aesthetics and a wealth
+                  of inherited knowledge, she combines her extensive experience
+                  and interest in design to create stunning and wearable pieces.
+                  Her creations, both traditional and contemporary, consistently
+                  captivate and delight our customers.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="row align-items-center ">
-            <div className="col-md-6 mt-30 mt-lg-50" style={{ position: "relative" }}>
+            <div
+              className="col-md-6 mt-30 mt-lg-50"
+              style={{ position: "relative" }}
+            >
               <div className="about-section-logo">
                 <img
                   src="/assets/img/prade-about-logo.jpg"
@@ -207,7 +187,10 @@ const JewelryAbout = () => {
               </div>
             </div>
 
-            <div className="col-md-6  mt-30 mt-lg-0" style={{ position: "relative" }}>
+            <div
+              className="col-md-6  mt-30 mt-lg-0"
+              style={{ position: "relative" }}
+            >
               <div className="about-section-logo">
                 <img
                   src="/assets/img/prade-about-logo.jpg"

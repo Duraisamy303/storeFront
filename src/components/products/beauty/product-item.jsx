@@ -28,57 +28,43 @@ import {
 } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "@/components/loader/button-loader";
-
 const ProductItem = ({
   product,
   prdCenter = false,
   primary_style = false,
   data,
 }) => {
-  const { id, thumbnail, name, discount, pricing, tags, status } =
+  const { id, thumbnail, name, discount, pricing, tags, status, video } =
     product || {};
-
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
     useAddToCartMutation();
-
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
-
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
-
   const router = useRouter();
-
   const { cart_products } = useSelector((state) => state.cart);
-
   const compareList = useSelector((state) => state.cart.compare_list);
-
   const { wishlist } = useSelector((state) => state.wishlist);
 
   const isAddedToCart = cart?.some(
     (prd) => prd?.variant?.product?.id === product?.id
   );
-
   // const isAddedToCart = cart_products.some((prd) => prd.id === id);
   // const isAddedToWishlist = data?.some((prd) => prd.id === id);
   const dispatch = useDispatch();
-
   const [cartLoader, setCartLoader] = useState(false);
   const [wishlistLoader, setWishlistLoader] = useState(false);
-
   // wishlist added and show
   const { data: wishlistData, refetch: wishlistRefetch } = useGetWishlistQuery(
     {}
   );
-
   const isAddedToWishlist = wishlistData?.data?.wishlists?.edges?.some(
     (prd) => {
       return prd?.node?.variant === product?.id;
     }
   );
-
   const [addWishlist, {}] = useAddWishlistMutation();
-
   const addToCartProductINR = async () => {
     setCartLoader(true);
     try {
@@ -102,7 +88,6 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-
   const addToCartProductUSD = async () => {
     setCartLoader(true);
     try {
@@ -123,15 +108,12 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-
   // handle wishlist product
-
   const addWishlistProduct = async (product) => {
     try {
       setWishlistLoader(true);
       const user = localStorage.getItem("userInfo");
       const Token = localStorage.getItem("token");
-
       if (Token) {
         const users = JSON.parse(user);
         const input = {
@@ -140,7 +122,6 @@ const ProductItem = ({
             variant: product?.id,
           },
         };
-
         const res = await addWishlist(input);
         notifySuccess("Product added to wishlist");
         wishlistRefetch();
@@ -156,11 +137,9 @@ const ProductItem = ({
       console.error("Error:", error);
     }
   };
-
   const handleCompareProduct = (prd) => {
     const products = product || product.node;
     const compare = localStorage.getItem("compareList");
-
     let arr = [];
     if (!compare) {
       arr = [];
@@ -168,29 +147,42 @@ const ProductItem = ({
       arr = JSON.parse(compare);
     }
     arr.push(products);
+
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
   };
-
   const isImage = (url) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
-
   return (
     <div
-      className={`tp-product-item-3 mb-50 ${
+      className={`tp-product-item-3 featured-product-section ${
         primary_style ? "tp-product-style-primary" : ""
       } ${prdCenter ? "text-center" : ""}`}
     >
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
         <Link href={`/product-details/${id}`}>
           {/* <Image
-            src={profilePic(thumbnail?.url)}
-            alt="product image"
-            width={282}
-            height={320}
-          /> */}
-          {isImage(profilePic(thumbnail?.url)) ? (
+src={profilePic(thumbnail?.url)}
+alt="product image"
+width={282}
+height={320}
+/> */}
+          {video ? (
+            <video
+              src={video?.url}
+              autoPlay
+              muted // Ensure it's muted to autoplay without user interaction
+              loop // Ensure it loops indefinitely
+              playsInline // Ensure it plays inline on iOS devices
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              alt="instagram video"
+              className="actor-video"
+            />
+          ) : isImage(profilePic(thumbnail?.url)) ? (
             <img
               src={profilePic(thumbnail?.url)}
               alt="product image"
@@ -213,19 +205,17 @@ const ProductItem = ({
             />
           )}
           {/* <img
-            src={profilePic(thumbnail?.url)}
-            alt="product image"
-            width={282}
-            height={320}
-          /> */}
+src={profilePic(thumbnail?.url)}
+alt="product image"
+width={282}
+height={320}
+/> */}
         </Link>
-
         {/* <div className="tp-product-badge">
-          {status === "out-of-stock" && (
-            <span className="product-hot">out-stock</span>
-          )}
-        </div> */}
-
+{status === "out-of-stock" && (
+<span className="product-hot">out-stock</span>
+)}
+</div> */}
         <div className="tp-product-badge">
           {status === "out-of-stock" ? (
             <span className="product-hot">
@@ -236,7 +226,6 @@ const ProductItem = ({
             <div style={{ display: "none" }}></div>
           )}
         </div>
-
         <div className="tp-product-badge-2">
           {product?.defaultVariant?.quantityAvailable == 0 && (
             <span
@@ -248,7 +237,6 @@ const ProductItem = ({
             </span>
           )}
         </div>
-
         <div
           className={`${
             product?.defaultVariant?.quantityAvailable == 0
@@ -270,11 +258,9 @@ const ProductItem = ({
                 </span>
               ))}
         </div>
-
         {/* <div className="tp-product-badge-2">
-          <span className="product-hot">HOT</span>
-        </div> */}
-
+<span className="product-hot">HOT</span>
+</div> */}
         {/* product action */}
         <div className="tp-product-action-3 tp-product-action-blackStyle">
           <div className="tp-product-action-item-3 d-flex ">
@@ -288,7 +274,7 @@ const ProductItem = ({
                     } tp-product-add-cart-btn text-center`}
                   >
                     <Cart />
-                    <span className="tp-product-tooltip  tp-product-tooltip-top">
+                    <span className="tp-product-tooltip tp-product-tooltip-top">
                       View Cart
                     </span>
                   </Link>
@@ -327,7 +313,6 @@ const ProductItem = ({
                 Quick View
               </span>
             </button>
-
             {isAddedToWishlist === true ? (
               <button
                 disabled={status === "out-of-stock"}
@@ -351,7 +336,6 @@ const ProductItem = ({
                 </span>
               </button>
             )}
-
             <button
               type="button"
               className={`tp-product-action-btn-3 ${
@@ -375,26 +359,26 @@ const ProductItem = ({
             </button>
           </div>
         </div>
-
         {/* <div className="tp-product-add-cart-btn-large-wrapper">
-          {isAddedToCart ? (
-            <Link
-              href="/cart"
-              className="tp-product-add-cart-btn-large text-center"
-            >
-              View Cart
-            </Link>
-          ) : (
-            <button
-              onClick={() => handleAddProduct(product)}
-              type="button"
-              className="tp-product-add-cart-btn-large"
-              disabled={status === "out-of-stock"}
-            >
-              Add To Cart
-            </button>
-          )}
-        </div> */}
+{isAddedToCart ? (
+<Link
+href="/cart"
+className="tp-product-add-cart-btn-large text-center"
+>
+
+View Cart
+</Link>
+) : (
+<button
+onClick={() => handleAddProduct(product)}
+type="button"
+className="tp-product-add-cart-btn-large"
+disabled={status === "out-of-stock"}
+>
+Add To Cart
+</button>
+)}
+</div> */}
       </div>
       <div className="tp-product-content-3" style={{ textAlign: "center" }}>
         {/* <div className="tp-product-tag-3"><span>{tags[1]}</span></div> */}
@@ -453,5 +437,4 @@ const ProductItem = ({
     </div>
   );
 };
-
 export default ProductItem;

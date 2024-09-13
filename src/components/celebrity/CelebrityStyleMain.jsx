@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import CelebrityData from "@/data/celebrity";
+import {
+  UpOutlined,
+  DownOutlined,
+  MergeCellsOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 
 const CelebrityStyleMain = () => {
   const [showLightbox, setShowLightbox] = useState(false);
@@ -38,14 +45,9 @@ const CelebrityStyleMain = () => {
       <div className="container">
         <div className="row">
           {CelebrityData.map((item, index) => (
-            <div className="col-md-3" key={item?.id}>
+            <div className=" col-lg-3 col-6 col-md-4" key={item?.id}>
               <div
-                style={{
-                  paddingTop: "30px",
-                  height: "300px",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                }}
+                className="celebrity-img-outer"
                 onClick={() => handleImageClick(index)}
               >
                 <Image
@@ -70,6 +72,85 @@ const CelebrityStyleMain = () => {
             width: "100%",
             height: "100%",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
+            // display: "flex",
+            // justifyContent: "center",
+            // alignItems: "center",
+            zIndex: 999,
+            overflow: "auto", // Enable scrolling
+            // Hide scrollbar for IE, Edge and Firefox
+            msOverflowStyle: "none", // IE and Edge
+            scrollbarWidth: "none", // Firefox
+          }}
+          onClick={handleLightboxClose}
+        >
+          <button
+            onClick={handleNavigationClick}
+            name="prev"
+            style={{
+              fontSize: "18px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
+              color: "white",
+              position: "fixed",
+              left: "20px",
+              top: "50vh",
+            }}
+          >
+            &lt;
+          </button>
+
+          <Image
+            src={CelebrityData[selectedImageIndex]?.img}
+            alt="Lightbox"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
+            onClick={handleNavigationClick}
+          />
+          <button
+            onClick={handleLightboxClose}
+            style={{
+              position: "fixed",
+              top: "20px",
+              right: "20px",
+              background: "none",
+              border: "none",
+              fontSize: "18px",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            <i className="fal fa-times"></i>
+          </button>
+          <button
+            onClick={handleNavigationClick}
+            name="next"
+            style={{
+              fontSize: "18px",
+              background: "rgb(0 0 0 / 40%)",
+              padding: "5px 10px",
+              color: "white",
+              position: "fixed",
+              right: "20px",
+              top: "50vh",
+            }}
+          >
+            &gt;
+          </button>
+        </div>
+      )}
+      {/* {showLightbox && (
+        <div
+          className="lightbox"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -77,7 +158,6 @@ const CelebrityStyleMain = () => {
           }}
           onClick={handleLightboxClose}
         >
-         
           <button
             className="prev-btn"
             onClick={handleNavigationClick}
@@ -104,7 +184,7 @@ const CelebrityStyleMain = () => {
             }}
             onClick={handleNavigationClick}
           />
-           <button
+          <button
             onClick={handleLightboxClose}
             style={{
               position: "absolute",
@@ -135,7 +215,7 @@ const CelebrityStyleMain = () => {
             &gt;
           </button>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

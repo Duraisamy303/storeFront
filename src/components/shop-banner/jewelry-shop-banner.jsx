@@ -54,12 +54,11 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
         style={{ backgroundImage: `url(${bg?.src})` }}
       ></div>
       <div
-        className="tp-banner-content-4 first-card"
+        className="first-card"
         // style={{ textAlign: "center", width: "350px", fontSize: "14px" }}
       >
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
-          
         </h3>
         <span>{content}</span>
         {title == "NECKLACES" ? (
@@ -70,10 +69,10 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
                     });
                   }}
-                  style={{ textDecoration: "underline" }}
+                  style={{ textDecoration: "underline", color: "white" }}
                 >
                   VIEW PRODUCTS
                 </button>
@@ -91,7 +90,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                       query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
                     });
                   }}
-                  style={{ textDecoration: "underline" }}
+                  style={{ textDecoration: "underline", color: "white" }}
                 >
                   VIEW PRODUCTS
                 </button>
@@ -143,7 +142,11 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
               )}
             </div>
             <div>
-              <img src={img?.src} alt="category-product" />
+              <img
+                src={img?.src}
+                alt="category-product"
+                style={{ width: "100%" }}
+              />
             </div>
           </div>
         </div>
@@ -158,7 +161,11 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
           ></div>
           <div className="tp-banner-content-4 last-card">
             <div>
-              <img src={img?.src} alt="category-product" />
+              <img
+                src={img?.src}
+                alt="category-product"
+                style={{ width: "100%", paddingBottom: "10px" }}
+              />
             </div>
             <div className="last-card-body">
               <h3 className="tp-banner-title-4">
@@ -172,7 +179,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId:"Q2F0ZWdvcnk6MTE2NDU="}, // Your parameters
+                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}
@@ -203,7 +210,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
         style={{ backgroundColor: `#${bg_clr}` }}
       ></div>
       <div className="tp-banner-content-4" style={{ textAlign: "center" }}>
-        <img src={img?.src} alt="category-product" />
+        <img src={img?.src} alt="category-product" style={{ width: "100%" }} />
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
         </h3>
@@ -216,7 +223,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU="}, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -234,7 +241,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId:"Q2F0ZWdvcnk6MTE2NDc="}, // Your parameters
+                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -275,7 +282,7 @@ const JewelryShopBanner = () => {
                   />
                 </div>
 
-                <div className="col-md-6 col-sm-6 gx-0 gy-0">
+                <div className="col-md-6 col-sm-6 col-6 gx-0 gy-0">
                   <BannerItem3
                     cls="has-green sm-banner"
                     bg_clr="131418"
@@ -291,7 +298,7 @@ const JewelryShopBanner = () => {
                   />
                 </div>
 
-                <div className="col-md-6 col-sm-6 gx-0 gy-0">
+                <div className="col-md-6 col-sm-6 col-6 gx-0 gy-0">
                   <BannerItem3
                     cls="has-brown sm-banner"
                     bg_clr="090a0f"
@@ -326,7 +333,7 @@ const JewelryShopBanner = () => {
                   />
                 </div>
 
-                <div className="col-xl-12 gx-0 gy-0">
+                <div className="col-xl-12 col-md-12 col-6 gx-0 gy-0">
                   <BannerItem2
                     className="category-left-two"
                     bg_clr="0e0f14"
@@ -342,7 +349,7 @@ const JewelryShopBanner = () => {
                   />
                 </div>
 
-                <div className="col-xl-12 gx-0 gy-0">
+                <div className="col-xl-12 col-md-12 col-6  gx-0 gy-0">
                   <BannerItem2
                     className="category-left-two"
                     bg_clr="1b1b1d"

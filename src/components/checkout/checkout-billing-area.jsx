@@ -1388,7 +1388,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
                     <div className="col-md-12">
                       <div className="tp-checkout-input">
-                        <label>Street address</label>
+                        <label>
+                          Street address <span>*</span>
+                        </label>
                         <input
                           name="address"
                           id="address"
@@ -1406,7 +1408,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </div>
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
-                        <label>Town / City</label>
+                        <label>Town / City <span>*</span></label>
                         <input
                           name="city"
                           id="city"
@@ -1742,7 +1744,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       )}
                       <div className="col-md-12">
                         <div className="tp-checkout-input">
-                          <label>Street address</label>
+                          <label>Street address <span>*</span></label>
                           <input
                             name="address"
                             id="address"
@@ -1760,7 +1762,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                       <div className="col-md-6">
                         <div className="tp-checkout-input">
-                          <label>Town / City</label>
+                          <label>Town / City <span>*</span></label>
                           <input
                             name="city1"
                             id="city1"
@@ -1776,7 +1778,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                       <div className="col-md-6">
                         <div className="tp-checkout-input">
-                          <label>Postcode ZIP</label>
+                          <label>Postcode ZIP <span>*</span></label>
                           <input
                             name="zipCode"
                             id="zipCode"
