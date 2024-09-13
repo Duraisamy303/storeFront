@@ -53,9 +53,9 @@ const PopularProducts = () => {
     isLoading,
   } = useGetProductTypeQuery({ channel: "india-channel", first: 19 });
 
-  const { data: featureProduct } = useFeatureProductQuery({
+  const { data: featureProduct,isLoading:loading } = useFeatureProductQuery({
     channel: "india-channel",
-    first: 500,
+    first: 21,
     after: null,
     filter: {
       categories: ["Q2F0ZWdvcnk6MjQ5Njc="],
@@ -65,6 +65,7 @@ const PopularProducts = () => {
 
 
   const [featureProducts, setFeatureProducts] = useState([]);
+  console.log("featureProducts: ", featureProducts);
   // decide what to render
 
   useEffect(() => {
@@ -122,16 +123,16 @@ const PopularProducts = () => {
   let content = null;
   const products = productsData?.data?.productsSearch?.edges;
 
-  if (isLoading) {
-    content = <HomeTwoPopularPrdLoader loading={isLoading} />;
+  if (loading) {
+    content = <HomeTwoPopularPrdLoader loading={loading} />;
   }
-  if (!isLoading && isError) {
+  if (!loading ) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && products?.length === 0) {
+  if (!loading &&  featureProducts?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
   }
-  if (!isLoading && !isError && products?.length > 0) {
+  if (!loading  && featureProducts?.length > 0) {
     // const product_items = products.slice(0, 8);
     content = (
       <Swiper

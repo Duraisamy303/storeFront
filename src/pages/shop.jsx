@@ -206,7 +206,7 @@ const ShopPage = () => {
 
   useEffect(() => {
     getProductMaxPrice();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -306,8 +306,6 @@ const ShopPage = () => {
       if (list?.length > 0) {
         const maxPrice =
           list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
-        console.log("maxPrice: ", maxPrice);
-
         setPriceValue([0, maxPrice]);
         setMaxPrice(maxPrice);
       } else {

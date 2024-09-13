@@ -1,7 +1,10 @@
 import { GridTab, ListTab } from "@/svg";
 import React from "react";
 
-const ShopTopLeft = ({total,showing=9}) => {
+const ShopTopLeft = ({total,showing=1}) => {
+  const itemsPerPage = 21;
+  const startItem = (showing - 1) * itemsPerPage + 1;
+  const endItem = Math.min(showing * itemsPerPage, total);
   return (
     <>
       <div className="tp-shop-top-left d-flex align-items-center ">
@@ -40,7 +43,10 @@ const ShopTopLeft = ({total,showing=9}) => {
           </ul>
         </div> */}
         <div className="tp-shop-top-result">
-          <p>Showing 1–{showing} of {total} results</p>
+          {/* <p>Showing {showing}–{showing * 21} of {total} results</p> */}
+          <p>
+        Showing {startItem}–{endItem} of {total} results
+      </p>
         </div>
       </div>
     </>

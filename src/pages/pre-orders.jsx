@@ -28,29 +28,108 @@ import {
 } from "@/redux/features/shop-filter-slice";
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
+import Pagination from "../pagination/pagination";
+import {
+  useMaxPriceMutation,
+  useNewPreOrderProductsMutation,
+  useShopPaginationMutation,
+} from "../redux/features/productApi";
+import { useRouter } from "next/router";
 
 const PreOrders = () => {
+  const PAGE_LIMIT = 21;
+  const filter = useSelector((state) => state.shopFilter.filterData);
+
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const [priceValue, setPriceValue] = useState([0, 0]);
+  const [cartUpdate, setCartUpdate] = useState(false);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [categoryList, setCategoryList] = useState("");
+  const [productList, setProductList] = useState("");
+  const [filterList, setFilterList] = useState([]);
+  const [sortBy, setSortBy] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [prevPage, setPrevPage] = useState(1);
+  const [startCursor, setStartCursor] = useState(null);
+  const [endCursor, setEndCursor] = useState(null);
+  const [currPage, setCurrPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filterByOtherAttribute = () => {
+    let datas = {};
+
+    // if (find == undefined) {
+    if (filter?.length > 0) {
+      filter?.forEach((item) => {
+        if (item?.type === "finish") {
+          datas.productFinish = item?.id;
+        } else if (item?.type === "style") {
+          datas.productstyle = item?.id;
+        } else if (item?.type === "design") {
+          datas.prouctDesign = item?.id;
+        } else if (item?.type === "stone") {
+          datas.productStoneType = item?.id;
+        } else if (item.type === "stock") {
+          datas.stockAvailability = item.id;
+        }
+      });
+    }
+
+    return datas;
+  };
+
+  const commonFilter = () => {
+    let filters = {};
+    filters.categories = ["Q2F0ZWdvcnk6MTE3NDE="];
+
+    if (filter?.length > 0) {
+      const find = filter?.find((item) => item?.type == "price");
+      filters.price = {
+        gte: find?.min ? find?.min : priceValue[0],
+        lte: find?.max ? find?.max : priceValue[1],
+      };
+
+      const otherFilters = filterByOtherAttribute();
+      filters = {
+        ...filters, // Keep the existing price filter
+        ...otherFilters, // Merge other filters
+      };
+    }
+    return filters;
+  };
+
   const {
     data: productsData,
     isError,
     isLoading,
   } = useGetPreOrderProductsQuery({
-    channel: "india-channel",
-    first: 500,
-    after: null,
-    filter: {
-      categories: ["Q2F0ZWdvcnk6MTE3NDE="],
-    },
+    first: PAGE_LIMIT,
+    filter:
+      // categories: ["Q2F0ZWdvcnk6MTE3NDE="], original ID
+      commonFilter(),
   });
 
-  const filter = useSelector((state) => state.shopFilter.filterData);
+  const [productListRefetch, { isLoading: productListLoading }] =
+    useNewPreOrderProductsMutation();
 
   const { data: wishlistData } = useGetWishlistQuery();
 
-  const { data: tokens } = useGetCartListQuery();
+  const [maximumPrice, { isLoading: maxPriceLoading }] = useMaxPriceMutation();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
+
+  const { data: categoryData, isLoading: categoryLoading } =
+    useGetParentCategoryListQuery();
+
+  const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
+
+  const [shopPagination, { isLoading: shopPaginationLoading }] =
+  useShopPaginationMutation();
 
   useEffect(() => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
@@ -106,58 +185,21 @@ const PreOrders = () => {
     }
   }, [wishlistData]);
 
-  const dispatch = useDispatch();
-
-  const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetParentCategoryListQuery();
-
-  const [priceFilter, {}] = usePriceFilterMutation();
-
-  const [cartUpdate, setCartUpdate] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(0);
-  console.log("productsData: ", productsData);
-
-  let products =
-    productsData?.data?.productsSearch?.edges;
-
-  const [priceValue, setPriceValue] = useState([0, 0]);
-
-  const [selectValue, setSelectValue] = useState("");
-  const [categoryList, setCategoryList] = useState("");
-  const [productList, setProductList] = useState("");
-  const [filterList, setFilterList] = useState([]);
-
-  const [currPage, setCurrPage] = useState(1);
-
   useEffect(() => {
-    if (!isLoading && !isError && products?.length > 0) {
-      const maxPrice = products?.reduce((max, item) => {
-        const price =
-          item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-        return price > max ? price : max;
-      }, 0);
-      setPriceValue([0, maxPrice]);
-      setMaxPrice(maxPrice);
-    }
-  }, [isLoading, isError, products]);
-
-  useEffect(() => {
-    productLists();
+    initialList();
   }, [productsData]);
 
-  const productLists = () => {
-    // if (
-    //   productsData &&
-    //   productsData?.data &&
-    //   productsData?.data?.collections &&
-    //   productsData?.data?.collections?.edges?.length > 0
-    // ) {
-      const list =
-      productsData?.data?.productsSearch?.edges;
+  useEffect(() => {
+    if (filter?.length > 0) {
+      filters();
+    } else {
+      initialList();
+    }
+  }, [filter]);
 
-      setProductList(list);
-    // }
-  };
+  useEffect(() => {
+    getProductMaxPrice();
+  }, [router]);
 
   useEffect(() => {
     if (
@@ -172,14 +214,66 @@ const PreOrders = () => {
     }
   }, [categoryData]);
 
+  const getProductMaxPrice = () => {
+    const filter = commonFilter();
+    maximumPrice({
+      filter,
+      first: 1,
+      sortBy: sortBy || { direction: "DESC", field: "PRICE" },
+    }).then((res) => {
+      const list = res.data?.data?.productsSearch?.edges;
+      if (list?.length > 0) {
+        const maxPrice =
+          list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
+        setPriceValue([0, maxPrice]);
+        setMaxPrice(maxPrice);
+      } else {
+        setPriceValue([0, 0]);
+        setMaxPrice(0);
+      }
+    });
+  };
+
+  const initialList = async () => {
+    try {
+      const res = await productListRefetch({
+        first: PAGE_LIMIT,
+        filter:
+          // categories: ["Q2F0ZWdvcnk6MTE3NDE="], original ID
+          commonFilter(),
+      });
+      setCursorAndList(res);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   const handleChanges = (val) => {
     setCurrPage(1);
     setPriceValue(val);
   };
 
-  const selectHandleFilter = (e) => {
-    console.log("e: ", e);
-    setSelectValue(e.value);
+  const selectHandleFilter = async (e) => {
+    try {
+      let sortBy = {};
+      if (e.value == "Default Sorting") {
+        sortBy = { direction: "ASC", field: "ORDER_NO" };
+      }
+      if (e.value == "Low to High") {
+        sortBy = { direction: "ASC", field: "PRICE" };
+      }
+      if (e.value == "High to Low") {
+        sortBy = { direction: "DESC", field: "PRICE" };
+      }
+      if (e.value == "New Added") {
+        sortBy = { direction: "DESC", field: "CREATED_AT" };
+      }
+      setSortBy(sortBy);
+      finalInitialFilterData(sortBy);
+      setCurrentPage(1);
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   const otherProps = {
@@ -192,88 +286,57 @@ const PreOrders = () => {
     setCurrPage,
   };
 
-  useEffect(() => {
-    if (selectValue !== "") {
-      sortingFilter();
-    }
-  }, [selectValue]);
-
-  useEffect(() => {
-    if (filter?.length > 0) {
-      filters();
-    } else {
-      productLists();
-    }
-  }, [filter]);
-
-  const sortingFilter = () => {
-    const shortDatas = shortData(selectValue, productList);
-    setProductList(shortDatas);
-  };
-
-  let content = null;
-
-  if (isLoading) {
-    content = <ShopLoader loading={isLoading} />;
-  } else if (isError) {
-    content = <ErrorMsg msg="There was an error" />;
-  } else if (products?.length === 0) {
-    content = <ErrorMsg msg="No Products found!" />;
-  } else {
-    // Render product items...
-  }
-
   const filters = () => {
-    let datas = {};
+    let filters = {};
     const find = filter?.find((item) => item?.type == "price");
-    // if (find == undefined) {
+    filters.price = {
+      gte: find?.min ? find?.min : priceValue[0],
+      lte: find?.max ? find?.max : priceValue[1],
+    };
     if (filter?.length > 0) {
-      filter.forEach((item) => {
-        if (item.type === "finish") {
-          datas.productFinish = item.id;
-        } else if (item.type === "style") {
-          datas.productstyle = item.id;
-        } else if (item.type === "design") {
-          datas.prouctDesign = item.id;
-        } else if (item.type === "stone") {
-          datas.productStoneType = item.id;
-        } else if (item.type === "stock") {
-          datas.stockAvailability = item.id;
-        }
-      });
-      if (find !== undefined) {
-        datas.price = { gte: priceValue[0], lte: priceValue[1] };
-        // setPriceValue([find.min, find.max]);
-      }
-      datas.collections = ["Q29sbGVjdGlvbjo0"];
-
-      priceFilter({
-        filter: datas,
-      }).then((res) => {
-        const list = res?.data?.data?.productsSearch?.edges;
-        setProductList(list);
-
-        dispatch(handleFilterSidebarClose());
-      });
+      const otherFilters = filterByOtherAttribute();
+      filters = {
+        ...filters, // Keep the existing price filter
+        ...otherFilters, // Merge other filters
+      };
     } else {
-      productLists();
-
       let datas = [...filter, find];
       dispatch(filterData(datas));
     }
-    // }
+    filters.categories = ["Q2F0ZWdvcnk6MTE3NDE="];
+
+    priceFilter({
+      filter: filters,
+      first: PAGE_LIMIT,
+      sortBy: sortBy ? sortBy : { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
+      setCursorAndList(res);
+      dispatch(handleFilterSidebarClose());
+    });
   };
 
   const filterByPrice = (type) => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
-      collections: ["Q29sbGVjdGlvbjo0"],
     };
+    bodyData.categories = ["Q2F0ZWdvcnk6MTE3NDE="];
+
     priceFilter({
       filter: bodyData,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
-      const list = res?.data?.data?.products?.edges;
-      setProductList(list);
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
 
       const body = {
         type: "price",
@@ -295,6 +358,187 @@ const PreOrders = () => {
     });
   };
 
+  const handlePageChange = (number) => {
+    if (prevPage === null) {
+      setPrevPage(currentPage);
+    } else {
+      console.log("else1: ");
+      if (number === prevPage + 1) {
+        if (filter?.length > 0) {
+          filterNextData();
+        } else {
+          console.log("else2: ");
+          finalNextData();
+        }
+      } else if (number === prevPage - 1) {
+        if (filter?.length > 0) {
+          filterPrevData();
+        } else {
+          finalPrevData();
+        }
+      } else {
+        if (number == 1) {
+          if (filter?.length > 0) {
+            finalInitialFilterData(sortBy);
+          } else {
+            finalInitialData(sortBy);
+          }
+        } else {
+          finalDynamicPaginationData(number);
+        }
+      }
+    }
+    setPrevPage(number);
+    setCurrentPage(number);
+    return number;
+  };
+
+  const filterNextData = async () => {
+    const datas = commonFilter();
+    console.log("datas: ", datas);
+    const res = await priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    });
+    setCursorAndList(res);
+  };
+
+  const filterPrevData = async () => {
+    const datas = commonFilter();
+    console.log("datas: ", datas);
+    const res = await priceFilter({
+      filter: datas,
+      last: PAGE_LIMIT,
+      before: startCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    });
+    setCursorAndList(res);
+  };
+
+  const finalNextData = async () => {
+    console.log("endCursor: ", endCursor);
+    const res = await productListRefetch({
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || {
+        direction: "DESC",
+        field: "CREATED_AT",
+      },
+      filter: commonFilter(),
+    });
+    console.log("res: ", res);
+
+    setCursorAndList(res);
+  };
+
+  const finalPrevData = async () => {
+    const res = await productListRefetch({
+      last: PAGE_LIMIT,
+      before: startCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    });
+    setCursorAndList(res);
+  };
+
+  const finalInitialData = async (sortBy) => {
+    let body = {
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    };
+    const res = await productListRefetch(body);
+    setCursorAndList(res);
+  };
+
+  const finalInitialFilterData = async (sortBy) => {
+    const datas = commonFilter();
+    priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      setCursorAndList(res);
+    });
+  };
+
+  const finalDynamicPaginationData = async (number) => {
+    const filter = commonFilter();
+    const res = await shopPagination({
+      before: null,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      page: number,
+      filter,
+    });
+
+    const data = res?.data?.data?.findProductsEndcursor;
+    if (router?.query?.categoryId || router?.query?.tag || filter?.length > 0) {
+      dynamicFilterPageData(data?.pageInfo?.endCursor);
+    } else {
+      dynamicPageData(data?.pageInfo?.endCursor);
+    }
+  };
+
+  const dynamicFilterPageData = async (endCursor) => {
+    const datas = commonFilter();
+    priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
+    });
+  };
+
+  const dynamicPageData = async (endCursor) => {
+    const res = await productListRefetch({
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    });
+    setCursorAndList(res);
+  };
+
+  const setCursorAndList = (res) => {
+    const data = res?.data?.data?.productsSearch;
+    console.log("data: ", data);
+    const list = data?.edges;
+    setProductList(list);
+    setStartCursor(data?.pageInfo?.startCursor);
+    setEndCursor(data?.pageInfo?.endCursor);
+    const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+    setTotalPages(totalPages);
+    setTotalCount(data?.totalCount);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  let content = null;
+
+  if (isLoading) {
+    content = <ShopLoader loading={isLoading} />;
+  } else if (isError) {
+    content = <ErrorMsg msg="There was an error" />;
+  } else if (productList?.length === 0) {
+    content = <ErrorMsg msg="No Products found!" />;
+  } else {
+    // Render product items...
+  }
+
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
@@ -309,17 +553,61 @@ const PreOrders = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
-        productLoading={isLoading}
+        productLoading={
+          isLoading ||
+          filterLoading ||
+          productListLoading ||
+          maxPriceLoading ||
+          categoryLoading ||
+          shopPaginationLoading
+        }
         updateData={() => setCartUpdate(true)}
         subtitle="Pre Orders"
         updateRange={(range) => handleChanges(range)}
         maxPrice={maxPrice}
+        totalCount={totalCount}
+        page={currentPage}
       />
+      {productList?.length > 0 &&
+        !isLoading &&
+        !filterLoading &&
+        !productListLoading &&
+        !maxPriceLoading &&
+        !categoryLoading && !shopPaginationLoading && (
+          <div>
+            <div
+              className="mb-20 "
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Pagination
+                activeNumber={handlePageChange}
+                totalPages={totalPages}
+                currentPages={currentPage}
+              />
+            </div>
+          </div>
+        )}
       <ShopFilterOffCanvas
-        all_products={products}
         otherProps={otherProps}
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
+        resetFilter={() => {
+          if (
+            router?.query?.categoryId ||
+            router?.query?.tag ||
+            filter?.length > 0
+          ) {
+            finalInitialFilterData(sortBy);
+          } else {
+            finalInitialData(sortBy);
+          }
+          dispatch(filterData([]));
+          dispatch(handleFilterSidebarClose());
+        }}
       />
       <FooterTwo primary_style={true} />
     </Wrapper>

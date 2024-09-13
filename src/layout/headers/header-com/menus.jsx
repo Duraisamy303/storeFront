@@ -213,7 +213,6 @@ const CategoryComponent = ({
     ) {
       categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
     } else if (hoveredCategory === "Idols" || lastHoveredCategory === "Idols") {
-    
       categoryId = "Q2F0ZWdvcnk6MTM1ODc=";
     }
     const SubCategory = await subCatList({
@@ -222,7 +221,10 @@ const CategoryComponent = ({
 
     setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
 
-    priceFilter({ filter: { categories: categoryId } }).then((res) => {
+    priceFilter({
+      filter: { categories: categoryId },
+      sortBy: { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
       const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
       setProductList(list);
     });
@@ -251,7 +253,7 @@ const CategoryComponent = ({
         ))}
       </Swiper>
     ) : (
-      <div className="" style={{ backgroundColor: "black", fontSize: "30px" }}>
+      <div className="" style={{  fontSize: "20px",display:"flex",alignItems:"center",justifyContent:"center" }}>
         Product No Found
       </div>
     );

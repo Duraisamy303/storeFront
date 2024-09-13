@@ -22,6 +22,8 @@ const ShopFilterOffCanvas = ({
   otherProps,
   right_side = false,
   filterByPrice,
+  maxPrice,
+  resetFilter,
 }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -32,10 +34,10 @@ const ShopFilterOffCanvas = ({
   const { filterSidebar } = useSelector((state) => state.shopFilter);
   const dispatch = useDispatch();
 
-  const maxPrice = all_products?.reduce((max, item) => {
-    const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-    return price > max ? price : max;
-  }, 0);
+  // const maxPrice = all_products?.reduce((max, item) => {
+  //   const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
+  //   return price > max ? price : max;
+  // }, 0);
 
   return (
     <>
@@ -70,7 +72,7 @@ const ShopFilterOffCanvas = ({
                     <InputRange
                       STEP={1}
                       MIN={0}
-                      MAX={maxPrice}
+                      MAX={maxPrice ? maxPrice : 1}
                       values={priceValue}
                       handleChanges={handleChanges}
                     />
@@ -122,7 +124,10 @@ const ShopFilterOffCanvas = ({
             <TopRatedProducts />
             <ProductBrand setCurrPage={setCurrPage} shop_right={right_side} /> */}
             {/* reset filter */}
-            <ResetButton shop_right={right_side} />
+            <ResetButton
+              shop_right={right_side}
+              onClick={() => resetFilter()}
+            />
           </div>
         </div>
       </div>
