@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Pagination = (props) => {
   const { activeNumber, totalPages, currentPages } = props;
@@ -29,26 +29,34 @@ const Pagination = (props) => {
 
   const renderPageNumbers = () => {
     let pageNumbers = [];
-    if (currentPage < 5) {
-      // Show 1 2 3 4 ... 20
+    const pageBuffer = 2;
+
+    if (totalPages <= 6) {
+      // If total pages are small, just show all the pages
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else if (currentPage <= 3) {
+      // Show first 5 pages and '... last'
       for (let i = 1; i <= Math.min(5, totalPages); i++) {
         pageNumbers.push(i);
       }
       if (totalPages > 5) pageNumbers.push("...", totalPages);
-    } else if (currentPage >= 5 && currentPage <= totalPages - 4) {
-      // Show 1 ... currentPage-1 currentPage currentPage+1 ... totalPages
-      pageNumbers.push(1, "...");
-      for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-        pageNumbers.push(i);
-      }
-      pageNumbers.push("...", totalPages);
-    } else {
-      // Show 1 ... 17 18 19 20
+    } else if (currentPage >= totalPages - 3) {
+      // Show '1 ... last 5 pages'
       pageNumbers.push(1, "...");
       for (let i = totalPages - 4; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
+    } else {
+      // Show '1 ... currentPage-2 currentPage currentPage+2 ... totalPages'
+      pageNumbers.push(1, "...");
+      for (let i = currentPage - pageBuffer; i <= currentPage + pageBuffer; i++) {
+        pageNumbers.push(i);
+      }
+      pageNumbers.push("...", totalPages);
     }
+
     return pageNumbers;
   };
 

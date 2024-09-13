@@ -816,6 +816,7 @@ export const GET_WISHLIST_LIST = ({ userEmail }) => {
   wishlists(first: 100, filter: {user: $userEmail}) {
     edges {
       node {
+      variant
         product {
           thumbnail {
             url
@@ -846,7 +847,7 @@ export const GET_WISHLIST_LIST = ({ userEmail }) => {
   };
 };
 
-export const GET_WISHLIST_LIST_dEFAULT_CHANNEL = ({ userEmail }) => {
+export const GET_WISHLIST_LIST_DEFAULT_CHANNEL = ({ userEmail }) => {
   return {
     query: `
      query GetWishListQueryForDefaultChannel($userEmail: String!) {

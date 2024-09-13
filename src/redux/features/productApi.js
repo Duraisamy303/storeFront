@@ -51,7 +51,7 @@ import {
 } from "../../utils/queries/productList";
 import {
   GET_WISHLIST_LIST,
-  GET_WISHLIST_LIST_dEFAULT_CHANNEL,
+  GET_WISHLIST_LIST_DEFAULT_CHANNEL,
   UPDATE_BILLING_ADDRESS,
 } from "@/utils/queries/cart/addToCart";
 import { checkChannel } from "@/utils/functions";
@@ -255,7 +255,7 @@ export const productApi = apiSlice.injectEndpoints({
           userEmail = users.user.email;
         }
         return configuration(
-          GET_WISHLIST_LIST_dEFAULT_CHANNEL({ userEmail: userEmail })
+          GET_WISHLIST_LIST_DEFAULT_CHANNEL({ userEmail: userEmail })
         );
       },
       providesTags: ["Products"],
