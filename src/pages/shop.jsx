@@ -12,6 +12,8 @@ import {
   useGetParentCategoryListQuery,
   useGetTagNameMutation,
   usePriceFilterMutation,
+  useNewProductListMutation,
+  useShopPaginationMutation,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -32,36 +34,151 @@ import {
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { useRouter } from "next/router";
+import Pagination from "../pagination/pagination";
+import { useMaxPriceMutation } from "../redux/features/productApi";
 
 const ShopPage = () => {
-  const {
-    data: productsData,
-    isError,
-    isLoading,
-    refetch: getProductRefetch,
-  } = useGetAllProductsQuery({
-    sortBy: { direction: "DESC", field: "CREATED_AT" },
-  });
-
-  const [getAllProducts,{isLoading:productLoading}] = useGetAllProductMutation();
-
-  // const { data: newData, refetch: getProductRefetch } =
-  //   useGetAllProductsQuery();
-
-  const [getCategoryName, { isLoading: categoryLoading }] =
-    useGetCategoryNameMutation();
-  const [getTagName] = useGetTagNameMutation();
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
   const filter = useSelector((state) => state.shopFilter.filterData);
 
+  const [after, setAfter] = useState(null);
+  const [before, setBefore] = useState(null);
+  const [priceValue, setPriceValue] = useState([0, 0]);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categoryList, setCategoryList] = useState([]);
+  const [productList, setProductList] = useState("");
+  const [filterList, setFilterList] = useState([]);
+
+  const [currPage, setCurrPage] = useState(1);
+
+  const [catName, setCatName] = useState("");
+  const [parentCatName, setParentCatName] = useState("");
+  const [tagName, setTagName] = useState("");
+  const [pageInfo, setPageInfo] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [prevPage, setPrevPage] = useState(1);
+  const [startCursor, setStartCursor] = useState(null);
+  const [endCursor, setEndCursor] = useState(null);
+  const [isNext, setIsNext] = useState(false);
+  const [isPrev, setIsPrev] = useState(false);
+  const [sortBy, setSortBy] = useState(null);
+
+  const PAGE_LIMIT = 21;
+
+  const filterByOtherAttribute = () => {
+    let datas = {};
+
+    // if (find == undefined) {
+    if (filter?.length > 0) {
+      filter?.forEach((item) => {
+        if (item?.type === "finish") {
+          datas.productFinish = item?.id;
+        } else if (item?.type === "style") {
+          datas.productstyle = item?.id;
+        } else if (item?.type === "design") {
+          datas.prouctDesign = item?.id;
+        } else if (item?.type === "stone") {
+          datas.productStoneType = item?.id;
+        } else if (item.type === "stock") {
+          datas.stockAvailability = item.id;
+        }
+      });
+    }
+
+    return datas;
+  };
+
+  const commonFilter = () => {
+    let filters = {};
+
+    if (router?.query?.categoryId) {
+      filters.categories = router?.query?.categoryId;
+    }
+
+    if (router?.query?.tag) {
+      filters.tag = router?.query?.tag;
+    }
+
+    if (filter?.length > 0) {
+      const find = filter?.find((item) => item?.type == "price");
+      filters.price = {
+        gte: find?.min ? find?.min : priceValue[0],
+        lte: find?.max ? find?.max : priceValue[1],
+      };
+
+      const otherFilters = filterByOtherAttribute();
+      filters = {
+        ...filters, // Keep the existing price filter
+        ...otherFilters, // Merge other filters
+      };
+    }
+    return filters;
+  };
+
+  const {
+    data: productsData,
+    isLoading: productLoadings,
+    refetch: productListRefetch,
+    error: isError,
+  } = useGetAllProductsQuery({
+    sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    first: PAGE_LIMIT,
+    after: after,
+    before: before,
+    filter: commonFilter(),
+  });
+
+  const { data: categoryData } = useGetParentCategoryListQuery();
+
+  const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
+  const [maximumPrice] = useMaxPriceMutation();
+
+  const [shopPagination, { isLoading: shopPaginationLoading }] =
+    useShopPaginationMutation();
+
   const { data: wishlistData } = useGetWishlistQuery();
 
-  const { data: tokens } = useGetCartListQuery();
+  const [newProductList, { isLoading: productPagiLoading }] =
+    useNewProductListMutation();
+
+  const [getCategoryName, { isLoading: categoryLoading }] =
+    useGetCategoryNameMutation();
+
+  const [getTagName] = useGetTagNameMutation();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
+
+  let products = productsData?.data?.productsSearch?.edges;
+
+  const { categoryId, tag } = router?.query || {};
+  let shopTitle = "Shop";
+
+  if (categoryId) {
+    shopTitle = `Shop / ${
+      parentCatName ? `${parentCatName} / ` : ""
+    }${catName}`;
+  } else if (tag) {
+    shopTitle = `Shop / ${tagName}`;
+  }
+
+  useEffect(() => {
+    if (wishlistData) {
+      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
+        const modify = wishlistData?.data?.wishlists.edges;
+        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
+      } else {
+        dispatch(get_wishlist_products([]));
+      }
+    } else {
+      dispatch(get_wishlist_products([]));
+    }
+  }, [wishlistData]);
 
   useEffect(() => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
@@ -75,23 +192,61 @@ const ShopPage = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   getProductList();
-  // }, []);
+  useEffect(() => {
+    if (router?.query?.categoryId) {
+      filterByCategoryName();
+    }
+  }, [router]);
 
-  // const getProductList = async () => {
-  //   try {
-  //     const res = await getAllProducts({
-  //       sortBy: {
-  //         direction: "DESC",
-  //         field: "CREATED_AT",
-  //       },
-  //     });
-  //     setProductList(res?.data?.data?.products?.edges);
-  //   } catch (error) {
-  //     console.log("error: ", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (router?.query?.tag) {
+      filterByTagName();
+    }
+  }, [router]);
+
+  useEffect(() => {
+    getProductMaxPrice();
+  }, [router]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [totalCount]);
+
+  useEffect(() => {
+    if (router?.asPath === "/shop") {
+      productLists();
+    }
+  }, [productsData, router]);
+
+  useEffect(() => {
+    getCategoryList();
+  }, [categoryData]);
+
+  useEffect(() => {
+    if (filter?.length > 0) {
+      filters();
+    } else {
+      if (router?.query?.categoryId) {
+        filterByCategory();
+      } else if (router?.query?.tag) {
+        filterByTags();
+      } else {
+        productLists();
+      }
+    }
+  }, [filter]);
+
+  useEffect(() => {
+    if (router?.query?.categoryId) {
+      filterByCategory();
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (router?.query?.tag) {
+      filterByTags();
+    }
+  }, [router]);
 
   const createCheckoutTokenINR = async () => {
     try {
@@ -121,73 +276,6 @@ const ShopPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (wishlistData) {
-      if (wishlistData?.data?.wishlists?.edges?.length > 0) {
-        const modify = wishlistData?.data?.wishlists.edges;
-        dispatch(get_wishlist_products(modify?.map((item) => item.node)));
-      } else {
-        dispatch(get_wishlist_products([]));
-      }
-    } else {
-      dispatch(get_wishlist_products([]));
-    }
-  }, [wishlistData]);
-
-  const dispatch = useDispatch();
-
-  const { data: data } = useGetCartListQuery();
-  const { data: categoryData } = useGetParentCategoryListQuery();
-
-  const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
-
-  const [cartUpdate, setCartUpdate] = useState(false);
-
-  let products = productsData?.data?.productsSearch?.edges;
-
-  const [priceValue, setPriceValue] = useState([0, 0]);
-  const [maxPrice, setMaxPrice] = useState(0);
-
-  const [selectValue, setSelectValue] = useState("");
-  const [categoryList, setCategoryList] = useState([]);
-  const [productList, setProductList] = useState("");
-  const [filterList, setFilterList] = useState([]);
-
-  const [currPage, setCurrPage] = useState(1);
-
-  const [catName, setCatName] = useState("");
-  const [parentCatName, setParentCatName] = useState("");
-  const [tagName, setTagName] = useState("");
-
-  useEffect(() => {
-    if (router?.query?.categoryId) {
-      filterByCategoryName();
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (router?.query?.tag) {
-      filterByTagName();
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (!isLoading && !isError && products?.length > 0) {
-      const maxPrice = products?.reduce((max, item) => {
-        const price =
-          item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-        return price > max ? price : max;
-      }, 0);
-      setPriceValue([0, maxPrice]);
-      setMaxPrice(maxPrice);
-    }
-  }, [isLoading, isError]);
-
-  useEffect(() => {
-    if (router?.asPath === "/shop") {
-      productLists();
-    }
-  }, [productsData, router]);
   const productLists = () => {
     if (
       productsData &&
@@ -195,12 +283,39 @@ const ShopPage = () => {
       productsData?.data?.productsSearch &&
       productsData?.data?.productsSearch?.edges?.length > 0
     ) {
-      const list = productsData?.data?.productsSearch?.edges;
+      const data = productsData?.data?.productsSearch;
+      const list = data?.edges;
       setProductList(list);
+      setStartCursor(data?.pageInfo?.startCursor);
+      setEndCursor(data?.pageInfo?.endCursor);
+      setIsPrev(data?.pageInfo?.hasPreviousPage);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
     }
   };
 
-  useEffect(() => {
+  const getProductMaxPrice = () => {
+    const filter = commonFilter();
+    maximumPrice({
+      filter,
+      first: 1,
+      sortBy : { direction: "DESC", field: "PRICE" }
+    }).then((res) => {
+      const list = res.data?.data?.productsSearch?.edges;
+      if (list?.length > 0) {
+        const maxPrice =
+          list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
+        setPriceValue([0, maxPrice]);
+        setMaxPrice(maxPrice);
+      } else {
+        setPriceValue([0, 0]);
+        setMaxPrice(0);
+      }
+    });
+  };
+
+  const getCategoryList = () => {
     if (
       categoryData &&
       categoryData?.data &&
@@ -219,7 +334,7 @@ const ShopPage = () => {
 
       setCategoryList(lastTen);
     }
-  }, [categoryData]);
+  };
 
   const handleChanges = (val) => {
     setCurrPage(1);
@@ -227,8 +342,6 @@ const ShopPage = () => {
   };
 
   const selectHandleFilter = async (e) => {
-    setSelectValue(e.value);
-
     try {
       let sortBy = {};
       if (e.value == "Default Sorting") {
@@ -243,11 +356,9 @@ const ShopPage = () => {
       if (e.value == "New Added") {
         sortBy = { direction: "DESC", field: "CREATED_AT" };
       }
-
-      const res = await getAllProducts({
-        sortBy: sortBy,
-      });
-      setProductList(res?.data?.data?.productsSearch?.edges);
+      setSortBy(sortBy);
+      finalInitialFilterData(sortBy);
+      setCurrentPage(1);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -263,103 +374,80 @@ const ShopPage = () => {
     setCurrPage,
   };
 
-  useEffect(() => {
-    if (selectValue !== "") {
-      sortingFilter();
-    }
-  }, [selectValue]);
-
-  useEffect(() => {
-    if (filter?.length > 0) {
-      filters();
-    } else {
-      productLists();
-    }
-  }, [filter]);
-
-  const sortingFilter = () => {
-    const shortDatas = shortData(selectValue, productList);
-    setProductList(shortDatas);
-  };
-
-  useEffect(() => {
-    if (router?.query?.categoryId) {
-      filterByCategory();
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (router?.query?.tag) {
-      filterByTags();
-    }
-  }, [router]);
-
   const filterByCategory = () => {
     const datas = {
       categories: router?.query?.categoryId,
-      // categories:"Q2F0ZWdvcnk6MTE2Mg=="
     };
 
     priceFilter({
       filter: datas,
+      first: PAGE_LIMIT,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
-      const list = res?.data?.data?.productsSearch?.edges;
-      setProductList(list);
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
     });
   };
 
   const filterByTags = () => {
     const datas = {
       tag: router?.query?.tag,
-      // tag:"VGFnOjg="
     };
 
     priceFilter({
       filter: datas,
+      first: PAGE_LIMIT,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
-      const list = res?.data?.data?.productsSearch?.edges;
-
-      setProductList(list);
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
     });
   };
 
   const filters = () => {
-    let datas = {};
+    let filters = {};
     const find = filter?.find((item) => item?.type == "price");
-    // if (find == undefined) {
+    filters.price = {
+      gte: find?.min ? find?.min : priceValue[0],
+      lte: find?.max ? find?.max : priceValue[1],
+    };
     if (filter?.length > 0) {
-      filter?.forEach((item) => {
-        if (item?.type === "finish") {
-          datas.productFinish = item?.id;
-        } else if (item?.type === "style") {
-          datas.productstyle = item?.id;
-        } else if (item?.type === "design") {
-          datas.prouctDesign = item?.id;
-        } else if (item?.type === "stone") {
-          datas.productStoneType = item?.id;
-        } else if (item.type === "stock") {
-          datas.stockAvailability = item.id;
-        }
-      });
-      if (find !== undefined) {
-        datas.price = { gte: priceValue[0], lte: priceValue[1] };
-        // setPriceValue([find.min, find.max]);
-      }
-
-      priceFilter({
-        filter: datas,
-      }).then((res) => {
-        const list = res?.data?.data?.productsSearch?.edges;
-        setProductList(list);
-
-        dispatch(handleFilterSidebarClose());
-      });
+      const otherFilters = filterByOtherAttribute();
+      filters = {
+        ...filters, // Keep the existing price filter
+        ...otherFilters, // Merge other filters
+      };
     } else {
-      productLists();
-
       let datas = [...filter, find];
       dispatch(filterData(datas));
     }
+    if (router?.query?.categoryId) {
+      filters.categories = router?.query?.categoryId;
+    }
+
+    if (router?.query?.tag) {
+      filters.tag = router?.query?.tag;
+    }
+    priceFilter({
+      filter: filters,
+      first: PAGE_LIMIT,
+      sortBy: sortBy ? sortBy : { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
+      setCursorAndList(res);
+      dispatch(handleFilterSidebarClose());
+    });
+
     // }
   };
 
@@ -367,11 +455,23 @@ const ShopPage = () => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
+    if (router?.query?.categoryId) {
+      bodyData.categories = router?.query?.categoryId;
+    }
+    if (router?.query?.tag) {
+      bodyData.categories = router?.query?.tag;
+    }
     priceFilter({
       filter: bodyData,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
-      const list = res?.data?.data?.productsSearch?.edges;
-      setProductList(list);
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
 
       const body = {
         type: "price",
@@ -421,16 +521,185 @@ const ShopPage = () => {
     }
   };
 
-  const { categoryId, tag } = router?.query || {};
-  let shopTitle = "Shop";
+  const handlePageChange = (number) => {
+    if (prevPage === null) {
+      setPrevPage(currentPage);
+    } else {
+      if (number === prevPage + 1) {
+        if (
+          router?.query?.categoryId ||
+          router?.query?.tag ||
+          filter?.length > 0
+        ) {
+          filterNextData();
+        } else {
+          finalNextData();
+        }
+      } else if (number === prevPage - 1) {
+        if (
+          router?.query?.categoryId ||
+          router?.query?.tag ||
+          filter?.length > 0
+        ) {
+          filterPrevData();
+        } else {
+          finalPrevData();
+        }
+      } else {
+        if (number == 1) {
+          if (
+            router?.query?.categoryId ||
+            router?.query?.tag ||
+            filter?.length > 0
+          ) {
+            finalInitialFilterData(sortBy);
+          } else {
+            finalInitialData(sortBy);
+          }
+        } else {
+          finalDynamicPaginationData(number);
+        }
+      }
+    }
+    setPrevPage(number);
+    setCurrentPage(number);
+    return number;
+  };
+  // --------------------------SHOP --------------------------------------
 
-  if (categoryId) {
-    shopTitle = `Shop / ${
-      parentCatName ? `${parentCatName} / ` : ""
-    }${catName}`;
-  } else if (tag) {
-    shopTitle = `Shop / ${tagName}`;
-  }
+  const finalNextData = async () => {
+    const res = await newProductList({
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    });
+    setCursorAndList(res);
+  };
+
+  const finalPrevData = async () => {
+    const res = await newProductList({
+      last: PAGE_LIMIT,
+      before: startCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    });
+    setCursorAndList(res);
+  };
+
+  const dynamicPageData = async (endCursor) => {
+    const res = await newProductList({
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    });
+    setCursorAndList(res);
+  };
+
+  const finalInitialData = async (sortBy) => {
+    let body = {
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: commonFilter(),
+    };
+    const res = await newProductList(body);
+    setCursorAndList(res);
+  };
+  // --------------------------SHOP --------------------------------------
+
+  const finalDynamicPaginationData = async (number) => {
+    const filter = commonFilter();
+    const res = await shopPagination({
+      before: null,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      page: number,
+      filter,
+    });
+
+    const data = res?.data?.data?.findProductsEndcursor;
+    if (router?.query?.categoryId || router?.query?.tag || filter?.length > 0) {
+      dynamicFilterPageData(data?.pageInfo?.endCursor);
+    } else {
+      dynamicPageData(data?.pageInfo?.endCursor);
+    }
+  };
+
+  // --------------------------CATEGORY FILTER --------------------------------------
+
+  const filterNextData = async () => {
+    const datas = commonFilter();
+    console.log("datas: ", datas);
+    const res = await priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    });
+    setCursorAndList(res);
+  };
+
+  const filterPrevData = async () => {
+    const datas = commonFilter();
+    console.log("datas: ", datas);
+    const res = await priceFilter({
+      filter: datas,
+      last: PAGE_LIMIT,
+      before: startCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    });
+    setCursorAndList(res);
+  };
+
+  const dynamicFilterPageData = async (endCursor) => {
+    const datas = commonFilter();
+    priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: endCursor,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      const data = res?.data?.data?.productsSearch;
+      setCursorAndList(res);
+      const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+      setTotalPages(totalPages);
+      setTotalCount(data?.totalCount);
+    });
+  };
+
+  const finalInitialFilterData = async (sortBy) => {
+    const datas = commonFilter();
+    priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      setCursorAndList(res);
+    });
+  };
+  // --------------------------CATEGORY FILTER --------------------------------------
+
+  const setCursorAndList = (res) => {
+    const data = res?.data?.data?.productsSearch;
+    const list = data?.edges;
+    setProductList(list);
+    setStartCursor(data?.pageInfo?.startCursor);
+    setEndCursor(data?.pageInfo?.endCursor);
+    setIsNext(data?.pageInfo?.hasNextPage);
+    setIsPrev(data?.pageInfo?.hasPreviousPage);
+    const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
+    setTotalPages(totalPages);
+    setTotalCount(data?.totalCount);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
 
   return (
     <Wrapper>
@@ -448,24 +717,67 @@ const ShopPage = () => {
         <ShopLoader loading={isLoading} />
       ) : (
         <> */}
-          <ShopArea
-            all_products={productList}
-            products={productList}
-            otherProps={otherProps}
-            productLoading={isLoading || categoryLoading || filterLoading || productLoading}
-            updateData={() => setCartUpdate(true)}
-            subtitle={shopTitle}
-            updateRange={(range) => handleChanges(range)}
-            maxPrice={maxPrice}
-          />
-          <ShopFilterOffCanvas
-            all_products={products}
-            otherProps={otherProps}
-            filterByPrice={(val) => filterByPrice("priceRange")}
-            maxPrice={maxPrice}
-          />
-          <FooterTwo primary_style={true} />
-        {/* </>
+      <ShopArea
+        all_products={productList}
+        products={productList}
+        otherProps={otherProps}
+        productLoading={
+          productLoadings ||
+          productPagiLoading ||
+          filterLoading ||
+          shopPaginationLoading
+        }
+        updateData={() => {}}
+        subtitle={shopTitle}
+        updateRange={(range) => handleChanges(range)}
+        maxPrice={maxPrice}
+        totalCount={totalCount}
+        page={currentPage}
+      />
+      {productList?.length > 0 &&
+        !productLoadings &&
+        !productPagiLoading &&
+        !filterLoading &&
+        !shopPaginationLoading && (
+          <div>
+            <div
+              className="mb-20 "
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Pagination
+                activeNumber={handlePageChange}
+                totalPages={totalPages}
+                currentPages={currentPage}
+              />
+            </div>
+          </div>
+        )}
+
+      <ShopFilterOffCanvas
+        all_products={products}
+        otherProps={otherProps}
+        filterByPrice={(val) => filterByPrice("priceRange")}
+        maxPrice={maxPrice}
+        resetFilter={() => {
+          if (
+            router?.query?.categoryId ||
+            router?.query?.tag ||
+            filter?.length > 0
+          ) {
+            finalInitialFilterData(sortBy);
+          } else {
+            finalInitialData(sortBy);
+          }
+          dispatch(filterData([]));
+          dispatch(handleFilterSidebarClose());
+        }}
+      />
+      <FooterTwo primary_style={true} />
+      {/* </>
       )} */}
     </Wrapper>
   );

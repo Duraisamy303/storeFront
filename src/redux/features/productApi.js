@@ -32,6 +32,7 @@ import {
   TAG_NAME,
   PAYMENT_LIST,
   DELETE_COUPON,
+  SHOP_PAGINATION,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -46,6 +47,7 @@ import {
   STONE_LIST,
   STATE_LIST,
   LOOT_LIST,
+  MAX_PRICE,
 } from "../../utils/queries/productList";
 import {
   GET_WISHLIST_LIST,
@@ -58,7 +60,7 @@ export const productApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getAllProduct: builder.mutation({
-      query: ({ sortBy }) => {
+      query: ({ first, after, before, sortBy, filter = {} }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -66,14 +68,24 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_LIST({ channel, first: 500, sortBy }));
+
+        return configuration(
+          PRODUCT_LIST({
+            first,
+            after,
+            before,
+            channel,
+            sortBy,
+            filter: { ...filter, isPublished: true },
+          })
+        );
       },
 
       providesTags: ["Products"],
     }),
 
     getAllProducts: builder.query({
-      query: ({ sortBy }) => {
+      query: ({ first, after, before, sortBy, filter = {} }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -81,7 +93,16 @@ export const productApi = apiSlice.injectEndpoints({
         } else {
           channel = channels;
         }
-        return configuration(PRODUCT_LIST({ channel, first: 500, sortBy }));
+        return configuration(
+          PRODUCT_LIST({
+            first,
+            after,
+            before,
+            channel,
+            sortBy,
+            filter: { ...filter, isPublished: true },
+          })
+        );
       },
 
       providesTags: ["Products"],
@@ -372,7 +393,14 @@ export const productApi = apiSlice.injectEndpoints({
 
     //filters
     priceFilter: builder.mutation({
-      query: ({ sortByField, sortByDirection, filter }) => {
+      query: ({
+        first = null,
+        after = null,
+        sortBy={},
+        filter = {},
+        last = null,
+        before = null,
+      }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -383,11 +411,12 @@ export const productApi = apiSlice.injectEndpoints({
         return configuration(
           PRODUCT_FILTER({
             channel: checkChannel(),
-            first: 500,
-            after: null,
-            sortByField,
-            sortByDirection,
+            first,
+            after,
+            sortBy,
             filter,
+            last,
+            before,
           })
         );
       },
@@ -419,25 +448,64 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     getPreOrderProducts: builder.query({
-      query: ({ collectionid, filter }) => {
+      query: ({
+        filter = {},
+        first = null,
+        after = null,
+        sortBy = { direction: "DESC", field: "CREATED_AT" },
+        last = null,
+        before = null,
+      }) => {
         let channel = "";
         if (checkChannel() == "india-channel") {
           channel = "india-channel";
         } else {
           channel = "default-channel";
         }
-        console.log("channel: ", channel);
-
         return configuration(
           PRE_ORDER_LIST({
-            first: 50,
+            first,
             channel,
-            after: null,
+            after,
             filter,
+            last,
+            sortBy,
+            before,
           })
         );
       },
 
+      providesTags: ["Products"],
+    }),
+
+    newPreOrderProducts: builder.mutation({
+      query: ({
+        filter = {},
+        first = null,
+        after = null,
+        sortBy = { direction: "DESC", field: "CREATED_AT" },
+        last = null,
+        before = null,
+      }) => {
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+        return configuration(
+          PRE_ORDER_LIST({
+            first,
+            channel,
+            after,
+            filter,
+            last,
+            sortBy,
+            before,
+          })
+        );
+      },
       providesTags: ["Products"],
     }),
 
@@ -586,10 +654,91 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    newProductList: builder.mutation({
+      query: ({
+        first = null,
+        last = null,
+        after = null,
+        before = null,
+        sortBy,
+        filter = {},
+      }) => {
+        console.log("after: ", after);
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+
+        return configuration(
+          PRODUCT_LIST({ first, last, after, before, channel, sortBy, filter })
+        );
+      },
+    }),
+
+    shopPagination: builder.mutation({
+      query: ({ first = null, after = null, sortBy, page, filter = {} }) => {
+        console.log("shopPagination: ", filter);
+
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+
+        return configuration(
+          SHOP_PAGINATION({
+            first,
+            after,
+            channel,
+            sortBy,
+            page,
+            filter: filter,
+          })
+        );
+      },
+    }),
+
+    maxPrice: builder.mutation({
+      query: ({
+        first = null,
+        after = null,
+        sortBy = {},
+        filter = {},
+      }) => {
+
+        let channel = "";
+        const channels = localStorage.getItem("channel");
+        if (!channels) {
+          channel = "india-channel";
+        } else {
+          channel = channels;
+        }
+
+        return configuration(
+          MAX_PRICE({
+            channel,
+            first,
+            sortBy,
+            filter,
+            after,
+          })
+        );
+      },
+    }),
   }),
 });
 
 export const {
+  useNewPreOrderProductsMutation,
+  useMaxPriceMutation,
+  useShopPaginationMutation,
+  useNewProductListMutation,
   useGetAllProductMutation,
   useGetAllProductsQuery,
   useGetProductTypeQuery,

@@ -1,40 +1,53 @@
 import { PRODUCT_LIST_ITEM_FRAGMENT } from "./productDetails";
 
-export const PRODUCT_LIST = ({ channel, first, sortBy }) => {
+export const PRODUCT_LIST = ({
+  first,
+  last,
+  after,
+  before,
+  channel,
+  sortBy,
+  filter,
+}) => {
+  console.log("filter: ", filter);
+
   return JSON.stringify({
     query: `
-    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy:ProductOrder) {
-      productsSearch(
-        first: $first
-        after: $after
-        channel: $channel
-        filter: {isPublished: true}
-        sortBy: $sortBy
-      ) {
-        totalCount
-        edges {
-          node {
-            ...ProductListItem
-            variants {
-              id
-              name
-              sku
-            }
-          }
-          cursor
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-          hasPreviousPage
-          startCursor
+query ProductListPaginated($first: Int, $last :Int, $after: String, $before: String, $channel: String!, $sortBy: ProductOrder,$filter:ProductFilterInput!) {
+  productsSearch(
+    first: $first
+    last : $last
+    after: $after
+    before: $before
+    channel: $channel
+    filter: $filter
+    sortBy: $sortBy
+  ) {
+    totalCount
+     edges {
+      node {
+        ...ProductListItem
+        variants {
+          id
+          name
+          sku
         }
       }
+      cursor
     }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
     
       ${PRODUCT_LIST_ITEM_FRAGMENT}
     `,
-    variables: { channel, first, sortBy },
+    variables: { first, last, after, before, channel, sortBy, filter },
   });
 };
 
@@ -362,11 +375,19 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
   });
 };
 
-export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
+export const PRODUCT_FILTER = ({
+  channel,
+  first,
+  after,
+  filter,
+  sortBy,
+  last,
+  before,
+}) => {
   return JSON.stringify({
     query: `
- query FilterProducts($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
-  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
+ query FilterProducts($channel: String!, $first: Int, $after: String, $filter: ProductFilterInput!,$sortBy:ProductOrder,$last: Int,$before:String) {
+  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after,sortBy:$sortBy,last:$last,before:$before) {
     edges {
       node {
         id
@@ -438,10 +459,17 @@ export const PRODUCT_FILTER = ({ channel, first, after, filter }) => {
         seoTitle
       }
     }
+        totalCount
+        pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
   }
 }
     `,
-    variables: { channel, first, after, filter },
+    variables: { channel, first, after, filter, sortBy, last, before },
   });
 };
 
@@ -529,6 +557,67 @@ export const LOOT_LIST = ({ channel, first, after, filter }) => {
 }
     `,
     variables: { channel, first, after, filter },
+  });
+};
+
+export const MAX_PRICE = ({ first, channel, filter, after, sortBy }) => {
+  console.log("first, channel, filter, after, sortBy : ", first, channel, filter, after, sortBy );
+  return JSON.stringify({
+    query: `
+    query ProductListPaginated($first: Int, $after: String, $channel: String!, $sortBy: ProductOrder, $filter: ProductFilterInput!) {
+  productsSearch(
+    first: $first
+    after: $after
+    channel: $channel
+    filter: $filter
+    sortBy: $sortBy
+  ) {
+    edges {
+      node {
+        ...ProductListItem
+        variants {
+          id
+          name
+        }
+      }
+      cursor
+    }
+    totalCount
+  }
+}
+
+fragment ProductListItem on Product {
+  slug
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+      stop {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    discount {
+      currency
+    }
+    priceRangeUndiscounted {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+  }
+}
+    `,
+    variables: { channel, first, after, filter, sortBy },
   });
 };
 
@@ -783,6 +872,122 @@ export const FEATURE_PRODUCT = ({ first, after, channel, filter }) => {
   });
 };
 
+export const SHOP_PAGINATION = ({
+  first,
+  after,
+  channel,
+  sortBy,
+  page,
+  filter,
+}) => {
+  console.log(
+    "first, after, channel, filter, page: ",
+    first,
+    after,
+    channel,
+    filter,
+    page
+  );
+  return JSON.stringify({
+    query: `
+    query ProductListPaginated($first: Int!, $after: String, $channel: String!, $sortBy: ProductOrder,$page:Int,$filter: ProductFilterInput!) {
+  findProductsEndcursor(
+    first: $first
+    after: $after
+    channel: $channel
+    sortBy: $sortBy
+    page: $page
+    filter: $filter
+  ) {
+    totalCount
+    edges {
+      node {
+        ...ProductListItem
+        variants {
+          id
+          name
+          sku
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+fragment ProductListItem on Product {
+  id
+  name
+  slug
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+      stop {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    discount {
+      currency
+    }
+    priceRangeUndiscounted {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+  }
+  category {
+    id
+    name
+  }
+  thumbnail(size: 1024) {
+    url
+    alt
+  }
+  media {
+    url
+  }
+  created
+  description
+  defaultVariant {
+    id
+    quantityAvailable
+    costPrice
+    sku
+  }
+  media {
+    id
+    alt
+    title
+    caption
+    description
+    url
+  }
+  metadata {
+    key
+    value
+  }
+}
+    `,
+    variables: { first, after, channel, sortBy, page, filter },
+  });
+};
+
 export const COUNTRY_LIST = () => {
   return JSON.stringify({
     query: `
@@ -833,11 +1038,11 @@ export const STATE_LIST = ({ code }) => {
   });
 };
 
-export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
+export const PRE_ORDER_LIST = ({ first, after, channel, filter,sortBy,last,before }) => {
   return JSON.stringify({
     query: `
-    query Featuredproduct($channel: String!, $first: Int!, $after: String, $filter: ProductFilterInput!) {
-  productsSearch(filter: $filter, channel: $channel, first: $first, after: $after) {
+    query Featuredproduct($channel: String!, $first: Int, $after: String, $filter: ProductFilterInput!,$sortBy:ProductOrder,$last:Int,$before:String) {
+    productsSearch(filter: $filter, channel: $channel, first: $first, after: $after,sortBy:$sortBy, last: $last, before: $before) {
     edges {
       node {
         id
@@ -857,10 +1062,8 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
                 currency
               }
             }
-            
-          
           }
-            priceRangeUndiscounted {
+          priceRangeUndiscounted {
             start {
               gross {
                 amount
@@ -873,10 +1076,10 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
             }
           }
         }
-            defaultVariant {
-              id
-              sku
-            }
+        defaultVariant {
+          id
+          sku
+        }
         category {
           id
           name
@@ -889,7 +1092,7 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
         created
         media {
           url
-           alt
+          alt
           caption
           description
           title
@@ -909,11 +1112,18 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter }) => {
         seoTitle
       }
     }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
   }
 }
     
     `,
-    variables: { first, after, channel, filter },
+    variables: { first, after, channel, filter,sortBy,last,before },
   });
 };
 

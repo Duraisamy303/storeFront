@@ -25,9 +25,12 @@ const ShopArea = ({
   updateRange,
   maxPrice,
   productLoading,
+  totalCount,
+  page
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
+
 
   const { priceValue, handleChanges } = priceFilterValues;
 
@@ -41,11 +44,11 @@ const ShopArea = ({
   const [pageStart, setPageStart] = useState(0);
   const [countOfPage, setCountOfPage] = useState(12);
 
-  const paginatedData = (items, startPage, pageCount) => {
-    setFilteredRows(items);
-    setPageStart(startPage);
-    setCountOfPage(pageCount);
-  };
+  // const paginatedData = (items, startPage, pageCount) => {
+  //   setFilteredRows(items);
+  //   setPageStart(startPage);
+  //   setCountOfPage(pageCount);
+  // };
   const removeFilter = (item, type, i) => {
     if (item?.type === "price") {
       const removemin = filter.find((data) => data.type === item.type);
@@ -153,33 +156,10 @@ const ShopArea = ({
 
   if (productLoading === true) {
     content = <CommonLoader loading={productLoading} />;
-  } else if (all_products?.length == 0) {
-    content = (
-      <div className="text-center mt-50 mb-50 mt-lg-40 mb-lg-40">
-        <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
-        <p
-          className="mt-20"
-          style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
-        >
-          No Product Found
-        </p>
-      </div>
-    );
   } else if (all_products?.length > 0) {
     // Render product items...
     content = (
       <>
-        {/* {products?.length === 0 && (
-          <div className="text-center">
-            <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
-            <p
-              className="mt-20"
-              style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
-            >
-              No Product Found
-            </p>
-          </div>
-        )} */}
         {products?.length > 0 && (
           <div className="tp-shop-items-wrapper tp-shop-item-primary">
             <div className="tab-content" id="productTabContent">
@@ -191,9 +171,7 @@ const ShopArea = ({
                 tabIndex="0"
               >
                 <div className="row gx-1 gx-lg-3">
-                  {filteredRows
-                    ?.slice(pageStart, pageStart + countOfPage)
-                    ?.map((item) => (
+                  {products?.map((item) => (
                       <div
                         key={item._id}
                         className="col-xl-4 col-md-6 col-sm-6 col-6 mb-20 mb-lg-50"
@@ -225,7 +203,7 @@ const ShopArea = ({
             </div>
           </div>
         )}
-        {products?.length > 0 && (
+        {/* {products?.length > 0 && (
           <div className="tp-shop-pagination mt-20 mb-20">
             <div className="tp-pagination">
               <Pagination
@@ -237,14 +215,26 @@ const ShopArea = ({
               />
             </div>
           </div>
-        )}
+        )} */}
       </>
+    );
+  } else  {
+    content = (
+      <div className="text-center mt-50 mb-50 mt-lg-40 mb-lg-40">
+        <img src="assets/img/product/cartmini/empty-cart.png" />{" "}
+        <p
+          className="mt-20"
+          style={{ fontSize: "20px", color: "rgb(194, 136, 43)" }}
+        >
+          No Product Found
+        </p>
+      </div>
     );
   }
 
   return (
     <>
-      <section className="tp-shop-area pb-50 mt-50">
+      <section className="tp-shop-area  mt-50">
         <div className="container-fluid">
           <div
             style={{
@@ -288,15 +278,8 @@ const ShopArea = ({
                   <div className="row">
                     <div className="col-md-6">
                       <ShopTopLeft
-                        showing={
-                          products?.length === 0
-                            ? 0
-                            : filteredRows?.slice(
-                                pageStart,
-                                pageStart + countOfPage
-                              ).length
-                        }
-                        total={all_products?.length}
+                        showing={page}
+                        total={totalCount}
                       />
                       {/* <ShopTopLeft
                         showing={

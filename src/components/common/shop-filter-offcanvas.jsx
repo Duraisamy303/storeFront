@@ -16,12 +16,15 @@ import DesignFilter from "../shop/shop-filter/design-filter";
 import StoneFilter from "../shop/shop-filter/stone-filter";
 import InputRange from "@/ui/input-range";
 import { checkChannel } from "@/utils/functions";
+import { addCommasToNumber } from "../../utils/functions";
 
 const ShopFilterOffCanvas = ({
   all_products,
   otherProps,
   right_side = false,
   filterByPrice,
+  maxPrice,
+  resetFilter,
 }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -32,10 +35,10 @@ const ShopFilterOffCanvas = ({
   const { filterSidebar } = useSelector((state) => state.shopFilter);
   const dispatch = useDispatch();
 
-  const maxPrice = all_products?.reduce((max, item) => {
-    const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-    return price > max ? price : max;
-  }, 0);
+  // const maxPrice = all_products?.reduce((max, item) => {
+  //   const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
+  //   return price > max ? price : max;
+  // }, 0);
 
   return (
     <>
@@ -70,7 +73,7 @@ const ShopFilterOffCanvas = ({
                     <InputRange
                       STEP={1}
                       MIN={0}
-                      MAX={maxPrice}
+                      MAX={maxPrice ? maxPrice : 1}
                       values={priceValue}
                       handleChanges={handleChanges}
                     />
@@ -78,9 +81,9 @@ const ShopFilterOffCanvas = ({
                   <div className="tp-shop-widget-filter-info d-flex align-items-center justify-content-between">
                     <span className="input-range">
                       {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[0] ? priceValue[0] : 0} -{" "}
+                      {priceValue[0] ?addCommasToNumber( priceValue[0]) : 0} -{" "}
                       {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[1] ? priceValue[1] : maxPrice}
+                      {priceValue[1] ? addCommasToNumber(priceValue[1]) : addCommasToNumber(maxPrice)}
                     </span>
                     <button
                       className="tp-shop-widget-filter-btn"
@@ -122,7 +125,10 @@ const ShopFilterOffCanvas = ({
             <TopRatedProducts />
             <ProductBrand setCurrPage={setCurrPage} shop_right={right_side} /> */}
             {/* reset filter */}
-            <ResetButton shop_right={right_side} />
+            <ResetButton
+              shop_right={right_side}
+              onClick={() => resetFilter()}
+            />
           </div>
         </div>
       </div>
