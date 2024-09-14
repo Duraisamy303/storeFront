@@ -125,12 +125,10 @@ const CategoryContent = ({
         ) : (
           <div>
             <div>
-              <Image
+              <img
                 src={commonImage}
-                width={100}
-                height={200}
                 alt="category image"
-                style={{ width: "100%", height: "200px" }}
+                style={{ width: "100%", height: "250px" }}
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
