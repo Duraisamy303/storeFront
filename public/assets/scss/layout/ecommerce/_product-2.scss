@@ -84,13 +84,17 @@
     &-action{
         &-2{
             position: absolute;
-            left: 150px !important ;
+            left: 215px !important ;
             right: auto;
             bottom: 20px;
             z-index: 1;
             visibility: hidden;
             opacity: 0;
             @extend %tp-transition;
+
+            @media(max-width:1600px) {
+                left: 150px !important ;
+            }
 
             @media(max-width:820px){
                 left: 110px !important ;

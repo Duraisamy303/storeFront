@@ -210,7 +210,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
         style={{ backgroundColor: `#${bg_clr}` }}
       ></div>
       <div className="tp-banner-content-4" style={{ textAlign: "center" }}>
-        <img src={img?.src} alt="category-product" style={{ width: "100%" }} />
+        <img src={img?.src} alt="category-product home-category3-image"/>
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
         </h3>
