@@ -1104,8 +1104,167 @@ const DetailsWrapper = ({
               (item) => item.key === "description"
             )?.[0]?.value
           }
+
+          <div style={{ borderBottom: "1px dashed #d3d1d1" }}>
+            <div style={{ paddingBottom: "5px" }}>
+              You will get following coupon(s) when you buy this item:{" "}
+            </div>
+
+            <div
+              className="tp-product-details-price-wrapper"
+              style={{ paddingBottom: "20px" }}
+            >
+              {channel == "india-channel" ? (
+                <div className="tp-product-price-wrapper-2">
+                  {RegularPrice(
+                    productItem?.defaultVariant?.costPrice,
+                    productItem?.pricing?.priceRange?.start?.gross?.amount
+                  ) && (
+                    <span
+                      className="pr-5"
+                      style={{
+                        textDecoration: "line-through",
+                        color: "gray",
+                      }}
+                    >
+                      {variantDetails ? (
+                        <>
+                          &#8377;
+                          {addCommasToNumber(
+                            variantDetails?.pricing?.price?.gross?.amount
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          &#8377;
+                          {addCommasToNumber(
+                            productItem?.defaultVariant?.costPrice
+                          )}
+                        </>
+                      )}
+                    </span>
+                  )}
+                  <p style={{ color: "grey", marginBottom: "0px" }}>
+                    {variantDetails ? (
+                      <>
+                        E-Gift Vouchure of{" "}
+                        <span
+                          style={{ fontWeight: "bold", paddingLeft: "3px" }}
+                        >
+                          &#8377;
+                          {addCommasToNumber(
+                            variantDetails?.pricing?.price?.gross?.amount
+                          )}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        E-Gift Vouchure of{" "}
+                        <span
+                          style={{ fontWeight: "bold", paddingLeft: "3px" }}
+                        >
+                          {" "}
+                          &#8377;
+                          {addCommasToNumber(
+                            productItem?.pricing?.priceRange?.start?.gross
+                              ?.amount ||
+                              productItem?.node?.pricing?.priceRange?.start
+                                ?.gross?.amount
+                          )}
+                        </span>
+                      </>
+                    )}
+                  </p>
+                </div>
+              ) : (
+                <div className="tp-product-price-wrapper-2">
+                  {RegularPrice(
+                    productItem?.defaultVariant?.costPrice,
+                    productItem?.pricing?.priceRange?.start?.gross?.amount
+                  ) && (
+                    <span
+                      className="pr-5"
+                      style={{
+                        textDecoration: "line-through",
+                        color: "gray",
+                      }}
+                    >
+                      {variantDetails ? (
+                        <>
+                          E-Gift Vouchure of{" "}
+                          <span
+                            style={{ fontWeight: "bold", paddingLeft: "3px" }}
+                          >
+                            {"$"}{" "}
+                            {variantDetails?.pricing?.price?.gross?.amount}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          E-Gift Vouchure of{" "}
+                          <span
+                            style={{ fontWeight: "bold", paddingLeft: "3px" }}
+                          >
+                            {"$"}
+                            {roundOff(productItem?.defaultVariant?.costPrice)}
+                          </span>
+                        </>
+                      )}
+                    </span>
+                  )}
+                  <p style={{ color: "grey", marginBottom: "0px" }}>
+                    {variantDetails ? (
+                      <>
+                        {"$"}
+                        {variantDetails?.pricing?.price?.gross?.amount}
+                      </>
+                    ) : (
+                      <>
+                        {"$"}
+                        {roundOff(
+                          productItem?.pricing?.priceRange?.start?.gross
+                            ?.amount ||
+                            productItem?.node?.pricing?.priceRange?.start?.gross
+                              ?.amount
+                        )}
+                      </>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+            {productItem?.tags?.length > 0 && (
+              <p style={{ color: "#55585b" }}>
+                <b>Tags:</b>{" "}
+                {productItem?.tags?.map((tag, index) => {
+                  return (
+                    <span
+                      key={tag?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { tag: tag?.id }, // Your parameters
+                        });
+                      }}
+                    >
+                      {tag?.name}
+                      {index < productItem.tags.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+          </div>
           <div>
-            <p style={{ color: "#55585b" }}>
+            <p
+              style={{
+                color: "#55585b",
+                marginBottom: "0px",
+                borderBottom: "1px dashed  #d3d1d1",
+                padding: "5px 0px",
+              }}
+            >
               <b>SKU:</b>{" "}
               {variantDetails
                 ? variantDetails?.sku
@@ -1128,28 +1287,6 @@ const DetailsWrapper = ({
                     >
                       {category?.name}
                       {index < productItem.category.length - 1 ? ", " : ""}
-                    </span>
-                  );
-                })}
-              </p>
-            )}
-            {productItem?.tags?.length > 0 && (
-              <p style={{ color: "#55585b" }}>
-                <b>Tags:</b>{" "}
-                {productItem?.tags?.map((tag, index) => {
-                  return (
-                    <span
-                      key={tag?.id}
-                      style={{ marginRight: "3px", cursor: "pointer" }}
-                      onClick={() => {
-                        router.push({
-                          pathname: "/shop",
-                          query: { tag: tag?.id }, // Your parameters
-                        });
-                      }}
-                    >
-                      {tag?.name}
-                      {index < productItem.tags.length - 1 ? ", " : ""}
                     </span>
                   );
                 })}
