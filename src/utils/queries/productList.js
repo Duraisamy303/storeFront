@@ -431,6 +431,7 @@ export const PRODUCT_FILTER = ({
           id
           name
           description
+          backgroundImageUrl
         }
         thumbnail(size: 1024, format: WEBP) {
           url
