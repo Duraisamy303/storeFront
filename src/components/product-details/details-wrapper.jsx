@@ -738,8 +738,12 @@ const DetailsWrapper = ({
       <h3 className="tp-product-details-title">
         {capitalizeFLetter(productItem?.name || productItem?.node?.name)}
       </h3>
+      <div className="is-divider small"></div>
       {/* price */}
-      <div className="tp-product-details-price-wrapper">
+      <div
+        className="tp-product-details-price-wrapper"
+        style={{ paddingBottom: "15px" }}
+      >
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
             {RegularPrice(
@@ -751,15 +755,31 @@ const DetailsWrapper = ({
                 style={{ textDecoration: "line-through", color: "gray" }}
               >
                 {variantDetails ? (
-                  <>&#8377;{addCommasToNumber( variantDetails?.pricing?.price?.gross?.amount)}</>
+                  <>
+                    &#8377;
+                    {addCommasToNumber(
+                      variantDetails?.pricing?.price?.gross?.amount
+                    )}
+                  </>
                 ) : (
-                  <>&#8377;{addCommasToNumber(productItem?.defaultVariant?.costPrice)}</>
+                  <>
+                    &#8377;
+                    {addCommasToNumber(productItem?.defaultVariant?.costPrice)}
+                  </>
                 )}
               </span>
             )}
-            <span className="tp-product-price-2 new-price">
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ fontSize: "22px", fontWeight: "500" }}
+            >
               {variantDetails ? (
-                <>&#8377;{addCommasToNumber(variantDetails?.pricing?.price?.gross?.amount)}</>
+                <>
+                  &#8377;
+                  {addCommasToNumber(
+                    variantDetails?.pricing?.price?.gross?.amount
+                  )}
+                </>
               ) : (
                 <>
                   &#8377;
@@ -794,7 +814,10 @@ const DetailsWrapper = ({
                 )}
               </span>
             )}
-            <span className="tp-product-price-2 new-price">
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ fontSize: "22px", fontWeight: "500" }}
+            >
               {variantDetails ? (
                 <>
                   {"$"}
@@ -854,7 +877,16 @@ const DetailsWrapper = ({
       </p> */}
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
-          <div className="flex flex-wrap gap-3">
+          <div
+            className=" gap-3"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              paddingBottom: "20px",
+              borderBottom: "1px dashed #ddd",
+              marginBottom: "20px",
+            }}
+          >
             <div
               className="text-bold text-lg"
               style={{ fontSize: "16px", color: "black" }}
@@ -992,82 +1024,138 @@ const DetailsWrapper = ({
       )}
 
       {/* product-details-action-sm start */}
-      <div
-        className="tp-product-details-action-sm"
-        style={{
-          paddingTop: "20px",
-        }}
-      >
-        <button
-          disabled={status === "out-of-stock"}
-          onClick={() => {
-            if (compareList?.some((prd) => prd?.id === productItem?.id)) {
-              dispatch(handleModalClose());
-              router.push("/compare");
-            } else {
-              handleCompareProduct(productItem);
-            }
-          }}
-          // onClick={() => handleCompareProduct(productItem)}
-          type="button"
-          className="tp-product-details-action-sm-btn"
-        >
-          <CompareTwo />
-          {compareList?.some((prd) => prd?.id === productItem?.id)
-            ? " View Compare"
-            : " Add  Compare"}
-        </button>
-        {}
 
-        {isAddedToWishlist === true ? (
+      {router?.route !== "/gift-card" && (
+        <div
+          className="tp-product-details-action-sm"
+          style={{
+            paddingTop: "20px",
+          }}
+        >
           <button
             disabled={status === "out-of-stock"}
             onClick={() => {
-              if (token) {
-                router.push("/wishlist");
+              if (compareList?.some((prd) => prd?.id === productItem?.id)) {
+                dispatch(handleModalClose());
+                router.push("/compare");
               } else {
-                notifyError(
-                  "Only logged-in users can add items to their wishlist or view it"
-                );
+                handleCompareProduct(productItem);
               }
-              // router.push("/wishlist");
             }}
-            // onClick={() => handleWishlistProduct(productItem)}
+            // onClick={() => handleCompareProduct(productItem)}
             type="button"
             className="tp-product-details-action-sm-btn"
           >
-            <WishlistTwo />
-            View Wishlist
+            <CompareTwo />
+            {compareList?.some((prd) => prd?.id === productItem?.id)
+              ? " View Compare"
+              : " Add  Compare"}
           </button>
-        ) : (
-          <button
-            disabled={status === "out-of-stock"}
-            onClick={() => handleWishlist(productItem)}
-            // onClick={() => handleWishlistProduct(productItem)}
-            type="button"
-            className="tp-product-details-action-sm-btn"
-          >
-            <WishlistTwo />
-            {wishlistLoader ? "Loading..." : "Add To Wishlist"}
-          </button>
-        )}
+          {}
 
-        {/* <button type="button" className="tp-product-details-action-sm-btn">
-          <AskQuestion />
-          Ask a question
-        </button> */}
-      </div>
+          {isAddedToWishlist === true ? (
+            <button
+              disabled={status === "out-of-stock"}
+              onClick={() => {
+                if (token) {
+                  router.push("/wishlist");
+                } else {
+                  notifyError(
+                    "Only logged-in users can add items to their wishlist or view it"
+                  );
+                }
+                // router.push("/wishlist");
+              }}
+              // onClick={() => handleWishlistProduct(productItem)}
+              type="button"
+              className="tp-product-details-action-sm-btn"
+            >
+              <WishlistTwo />
+              View Wishlist
+            </button>
+          ) : (
+            <button
+              disabled={status === "out-of-stock"}
+              onClick={() => handleWishlist(productItem)}
+              // onClick={() => handleWishlistProduct(productItem)}
+              type="button"
+              className="tp-product-details-action-sm-btn"
+            >
+              <WishlistTwo />
+              {wishlistLoader ? "Loading..." : "Add To Wishlist"}
+            </button>
+          )}
+
+          {/* <button type="button" className="tp-product-details-action-sm-btn">
+      <AskQuestion />
+      Ask a question
+    </button> */}
+        </div>
+      )}
+
       {/* product-details-action-sm end */}
 
       {/* dESCRIPTION */}
 
       {router?.route == "/gift-card" ? (
-        <div className="pb-20" style={{ fontSize: "16px" }}>
+        <div className="pt-20 pb-20" style={{ fontSize: "16px" }}>
           {
             productItem?.metadata?.filter(
               (item) => item.key === "description"
             )?.[0]?.value
           }
+          <div>
+            <p style={{ color: "#55585b" }}>
+              <b>SKU:</b>{" "}
+              {variantDetails
+                ? variantDetails?.sku
+                : productItem?.defaultVariant?.sku}
+            </p>
+            {productItem?.category?.length > 0 && (
+              <p style={{ color: "#55585b", cursor: "pointer" }}>
+                <b>Categories:</b>{" "}
+                {productItem?.category?.map((category, index) => {
+                  return (
+                    <span
+                      key={category?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { categoryId: category?.id }, // Your parameters
+                        });
+                      }}
+                    >
+                      {category?.name}
+                      {index < productItem.category.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+            {productItem?.tags?.length > 0 && (
+              <p style={{ color: "#55585b" }}>
+                <b>Tags:</b>{" "}
+                {productItem?.tags?.map((tag, index) => {
+                  return (
+                    <span
+                      key={tag?.id}
+                      style={{ marginRight: "3px", cursor: "pointer" }}
+                      onClick={() => {
+                        router.push({
+                          pathname: "/shop",
+                          query: { tag: tag?.id }, // Your parameters
+                        });
+                      }}
+                    >
+                      {tag?.name}
+                      {index < productItem.tags.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+          </div>
         </div>
       ) : (
         <>

@@ -133,7 +133,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenUSD,
-        variantId: product?.defaultVariant?.id
+        variantId: product?.defaultVariant?.id,
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
@@ -479,19 +479,22 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
           ))}
         </div>
         <div style={{ textAlign: "center" }}>
+          <h3
+            className="tp-product-title-2"
+            style={{
+              fontSize: "12px",
+              color: "rgb(144 141 141)",
+              textTransform: "uppercase",
+            }}
+          >
+            {capitalizeFLetter(product?.category[0]?.name)}
+          </h3>
           <h3 className="tp-product-title-2">
-            <Link href={`/product-details/${_id}`}>
+            <Link href={`/product-details/${product?.id}`}>
               {capitalizeFLetter(product?.name)}
             </Link>
           </h3>
-          <h3
-            className="tp-product-title-2"
-            style={{ fontSize: "14px", color: "rgb(144 141 141)" }}
-          >
-            <Link href={`/product-details/${_id}`}>
-              {capitalizeFLetter(product?.category?.name)}
-            </Link>
-          </h3>
+
           {/* <div className="tp-product-rating-icon tp-product-rating-icon-2">
           <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
         </div> */}

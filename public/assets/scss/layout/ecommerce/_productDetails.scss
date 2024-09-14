@@ -210,9 +210,9 @@
   }
   &-title {
     font-size: 32px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1;
-    margin-bottom: 15px;
+    margin-bottom:15px;
   }
   &-stock {
     margin-right: 12px;
@@ -1635,6 +1635,15 @@
   // width: 100% !important;
   height: 680px;
   // min-width: 100% !important;
+}
+
+.is-divider {
+  background-color: rgba(0, 0, 0, .1);
+  display: block;
+  height: 3px;
+  margin: 1em 0;
+  max-width: 30px;
+  width: 100%;
 }
 
 @media (max-width: 1600px) {
