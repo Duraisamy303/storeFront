@@ -224,6 +224,8 @@ const CategoryComponent = ({
     priceFilter({
       filter: { categories: categoryId },
       sortBy: { direction: "DESC", field: "CREATED_AT" },
+      first: 12,
+      after: null,
     }).then((res) => {
       const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
       setProductList(list);
@@ -253,7 +255,15 @@ const CategoryComponent = ({
         ))}
       </Swiper>
     ) : (
-      <div className="" style={{  fontSize: "20px",display:"flex",alignItems:"center",justifyContent:"center" }}>
+      <div
+        className=""
+        style={{
+          fontSize: "20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         Product No Found
       </div>
     );
