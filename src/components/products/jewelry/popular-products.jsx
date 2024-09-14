@@ -186,7 +186,7 @@ const PopularProducts = () => {
               </div>
             </div>
           </div>
-          <div className="row">
+          <div className="row pb-30">
             <div className="col-xl-12">
               <div className="tp-category-slider-4">
                 {content}
