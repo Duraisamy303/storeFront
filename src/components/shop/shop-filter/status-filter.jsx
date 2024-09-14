@@ -53,7 +53,6 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
     }
   }, [finishData]);
 
-
   useEffect(() => {
     if (
       styleData &&
@@ -123,48 +122,53 @@ const FinishFilter = ({ setCurrPage, shop_right = false }) => {
       ...data,
       type,
     };
-    let allVal = [];
-
-    let updatedItems = [];
+    let filters = [...filter];
 
     if (type === "stock") {
-      allVal = [item];
-      if (filter?.length > 0) {
-        const exceptStock = filter.filter((item) => item.type !== "stock");
-        allVal = [...exceptStock, item];
-      } else {
-        allVal = [item];
-      }
-    } else {
-      const isChecked = checkedItem?.some(
-        (selectedItem) => selectedItem.id === item.id
+      let allVal;
+      const isChecked = filters?.some(
+        (selectedItem) =>
+          selectedItem.id === item.id && selectedItem.type === item.type
       );
-
       if (isChecked) {
-        updatedItems = checkedItem?.filter(
-          (selectedItem) => selectedItem.id !== item.id
+        allVal = filters.filter(
+          (selectedItem) => selectedItem.type !== item.type
         );
       } else {
-        updatedItems = [
+        allVal = [
+          ...filters.filter((selectedItem) => selectedItem.type !== item.type),
           item,
-          ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
         ];
       }
-      console.log("updatedItems: ", updatedItems);
 
-      console.log("filter: ", filter);
+      setCheckedItem(allVal);
+      dispatch(filterData(allVal));
+      dispatch(handleFilterSidebarClose());
+    } else {
+      const isChecked = filters?.some(
+        (selectedItem) =>
+          selectedItem.id === item.id && selectedItem.type === item.type
+      );
 
-      if (filter?.length > 0) {
-        const arr = mergeAndRemoveDuplicates(updatedItems, filter);
-        allVal = arr;
+      let updatedItems;
+      if (isChecked) {
+        updatedItems = filters?.filter(
+          (selectedItem) =>
+            selectedItem.id !== item.id || selectedItem.type !== item.type
+        );
+        filters = updatedItems;
       } else {
-        allVal = [...updatedItems];
+        updatedItems = [
+          ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
+          item,
+        ];
       }
-      console.log("allVal: ", allVal);
+
+      const arr = mergeAndRemoveDuplicates(updatedItems, filters);
+      setCheckedItem(arr);
+      dispatch(filterData(arr));
+      dispatch(handleFilterSidebarClose());
     }
-    setCheckedItem(allVal);
-    dispatch(filterData(allVal));
-    dispatch(handleFilterSidebarClose());
   };
 
   return (

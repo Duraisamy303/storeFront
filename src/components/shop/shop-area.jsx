@@ -26,7 +26,8 @@ const ShopArea = ({
   maxPrice,
   productLoading,
   totalCount,
-  page
+  page,
+  clearFilter
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -101,11 +102,6 @@ const ShopArea = ({
       }
       return true; // keep the item if it's not a price type
     });
-  };
-
-  const clearFilter = () => {
-    dispatch(filterData([]));
-    updateRange([0, maxPrice]);
   };
 
   function CommonLoader({ loading }) {

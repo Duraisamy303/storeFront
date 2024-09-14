@@ -17,6 +17,10 @@ import MenusProductSlider from "./menus-product-slider";
 import { HomeTwoPopularPrdLoader } from "@/components/loader";
 import CommonImage from "@assets/img/earring-menu-pic-1.png";
 import Loader from "../../../components/loader/loader";
+import { useDispatch } from "react-redux";
+import {
+  filterData,
+} from "@/redux/features/shop-filter-slice";
 
 const slider_setting = {
   slidesPerView: 4,
@@ -369,7 +373,13 @@ function SingleLoader({ loading }) {
 
 const Menus = () => {
   const router = useRouter();
+
+  const dispatch=useDispatch()
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
+
+  useEffect(()=>{
+    dispatch(filterData([]));
+  },[router])
 
   return (
     <ul style={{ display: "flex", justifyContent: "end" }}>

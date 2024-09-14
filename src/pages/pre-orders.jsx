@@ -58,6 +58,7 @@ const PreOrders = () => {
   const [endCursor, setEndCursor] = useState(null);
   const [currPage, setCurrPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [initialMaxPrice, setInitialMaxPrice] = useState(0);
 
   const filterByOtherAttribute = () => {
     let datas = {};
@@ -129,7 +130,7 @@ const PreOrders = () => {
   const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
 
   const [shopPagination, { isLoading: shopPaginationLoading }] =
-  useShopPaginationMutation();
+    useShopPaginationMutation();
 
   useEffect(() => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
@@ -227,6 +228,7 @@ const PreOrders = () => {
           list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
         setPriceValue([0, maxPrice]);
         setMaxPrice(maxPrice);
+        setInitialMaxPrice(maxPrice);
       } else {
         setPriceValue([0, 0]);
         setMaxPrice(0);
@@ -527,6 +529,23 @@ const PreOrders = () => {
     });
   };
 
+  const refresh = async (sortBy) => {
+    let body = {
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: {
+        categories: ["Q2F0ZWdvcnk6MTE3NDE="],
+      },
+    };
+    const res = await productListRefetch(body);
+    dispatch(filterData([]));
+    setPriceValue([0, initialMaxPrice]);
+    setInitialMaxPrice(initialMaxPrice);
+    dispatch(handleFilterSidebarClose());
+    setCursorAndList(res);
+  };
+
   let content = null;
 
   if (isLoading) {
@@ -567,13 +586,16 @@ const PreOrders = () => {
         maxPrice={maxPrice}
         totalCount={totalCount}
         page={currentPage}
+        clearFilter={()=>refresh()}
+
       />
       {productList?.length > 0 &&
         !isLoading &&
         !filterLoading &&
         !productListLoading &&
         !maxPriceLoading &&
-        !categoryLoading && !shopPaginationLoading && (
+        !categoryLoading &&
+        !shopPaginationLoading && (
           <div>
             <div
               className="mb-20 "
@@ -596,17 +618,7 @@ const PreOrders = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
-          if (
-            router?.query?.categoryId ||
-            router?.query?.tag ||
-            filter?.length > 0
-          ) {
-            finalInitialFilterData(sortBy);
-          } else {
-            finalInitialData(sortBy);
-          }
-          dispatch(filterData([]));
-          dispatch(handleFilterSidebarClose());
+          refresh();
         }}
       />
       <FooterTwo primary_style={true} />

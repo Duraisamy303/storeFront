@@ -35,6 +35,7 @@ import {
   useShopPaginationMutation,
 } from "../redux/features/productApi";
 import { useRouter } from "next/router";
+import { sortingBy } from "../utils/functions";
 
 const PreOrders = () => {
   const PAGE_LIMIT = 21;
@@ -58,6 +59,7 @@ const PreOrders = () => {
   const [endCursor, setEndCursor] = useState(null);
   const [currPage, setCurrPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [initialMaxPrice, setInitialMaxPrice] = useState(0);
 
   const filterByOtherAttribute = () => {
     let datas = {};
@@ -129,7 +131,7 @@ const PreOrders = () => {
   const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
 
   const [shopPagination, { isLoading: shopPaginationLoading }] =
-  useShopPaginationMutation();
+    useShopPaginationMutation();
 
   useEffect(() => {
     const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
@@ -227,6 +229,7 @@ const PreOrders = () => {
           list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
         setPriceValue([0, maxPrice]);
         setMaxPrice(maxPrice);
+        setInitialMaxPrice(maxPrice);
       } else {
         setPriceValue([0, 0]);
         setMaxPrice(0);
@@ -255,19 +258,7 @@ const PreOrders = () => {
 
   const selectHandleFilter = async (e) => {
     try {
-      let sortBy = {};
-      if (e.value == "Default Sorting") {
-        sortBy = { direction: "ASC", field: "ORDER_NO" };
-      }
-      if (e.value == "Low to High") {
-        sortBy = { direction: "ASC", field: "PRICE" };
-      }
-      if (e.value == "High to Low") {
-        sortBy = { direction: "DESC", field: "PRICE" };
-      }
-      if (e.value == "New Added") {
-        sortBy = { direction: "DESC", field: "CREATED_AT" };
-      }
+      const sortBy = sortingBy(e);
       setSortBy(sortBy);
       finalInitialFilterData(sortBy);
       setCurrentPage(1);
@@ -527,6 +518,23 @@ const PreOrders = () => {
     });
   };
 
+  const refresh = async () => {
+    let body = {
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: {
+        categories: ["Q2F0ZWdvcnk6MTIwMjQ="],
+      },
+    };
+    const res = await productListRefetch(body);
+    dispatch(filterData([]));
+    setPriceValue([0, initialMaxPrice]);
+    setInitialMaxPrice(initialMaxPrice);
+    dispatch(handleFilterSidebarClose());
+    setCursorAndList(res);
+  };
+
   let content = null;
 
   if (isLoading) {
@@ -544,8 +552,8 @@ const PreOrders = () => {
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
-        title="Pre Orders"
-        subtitle="Pre Orders"
+        title="Loot Sale"
+        subtitle="Loot Sale"
         bgImage={shopBanner}
         catList={categoryList}
       />
@@ -562,18 +570,20 @@ const PreOrders = () => {
           shopPaginationLoading
         }
         updateData={() => setCartUpdate(true)}
-        subtitle="Pre Orders"
+        subtitle="Loot Sale"
         updateRange={(range) => handleChanges(range)}
         maxPrice={maxPrice}
         totalCount={totalCount}
         page={currentPage}
+        clearFilter={()=>refresh()}
       />
       {productList?.length > 0 &&
         !isLoading &&
         !filterLoading &&
         !productListLoading &&
         !maxPriceLoading &&
-        !categoryLoading && !shopPaginationLoading && (
+        !categoryLoading &&
+        !shopPaginationLoading && (
           <div>
             <div
               className="mb-20 "
@@ -596,17 +606,7 @@ const PreOrders = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
-          if (
-            router?.query?.categoryId ||
-            router?.query?.tag ||
-            filter?.length > 0
-          ) {
-            finalInitialFilterData(sortBy);
-          } else {
-            finalInitialData(sortBy);
-          }
-          dispatch(filterData([]));
-          dispatch(handleFilterSidebarClose());
+          refresh();
         }}
       />
       <FooterTwo primary_style={true} />

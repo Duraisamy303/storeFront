@@ -207,3 +207,20 @@ export const getValueByKey = (metadata, keyToFind) => {
   const foundItem = metadata?.find((item) => item?.key === keyToFind);
   return foundItem ? foundItem?.value : null;
 };
+
+export const sortingBy = (e) => {
+  let sortBy;
+  if (e.value == "Default Sorting") {
+    sortBy = { direction: "ASC", field: "ORDER_NO" };
+  }
+  if (e.value == "Low to High") {
+    sortBy = { direction: "ASC", field: "PRICE" };
+  }
+  if (e.value == "High to Low") {
+    sortBy = { direction: "DESC", field: "PRICE" };
+  }
+  if (e.value == "New Added") {
+    sortBy = { direction: "DESC", field: "CREATED_AT" };
+  }
+  return sortBy;
+};
