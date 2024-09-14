@@ -48,6 +48,7 @@ const ShopPage = () => {
   const [before, setBefore] = useState(null);
   const [priceValue, setPriceValue] = useState([0, 0]);
   const [maxPrice, setMaxPrice] = useState(0);
+  const [initialMaxPrice, setInitialMaxPrice] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryList, setCategoryList] = useState([]);
   const [productList, setProductList] = useState("");
@@ -111,6 +112,27 @@ const ShopPage = () => {
         lte: find?.max ? find?.max : priceValue[1],
       };
 
+      const otherFilters = filterByOtherAttribute();
+      filters = {
+        ...filters, // Keep the existing price filter
+        ...otherFilters, // Merge other filters
+      };
+    }
+    return filters;
+  };
+
+  const initialFilter = () => {
+    let filters = {};
+
+    if (router?.query?.categoryId) {
+      filters.categories = router?.query?.categoryId;
+    }
+
+    if (router?.query?.tag) {
+      filters.tag = router?.query?.tag;
+    }
+
+    if (filter?.length > 0) {
       const otherFilters = filterByOtherAttribute();
       filters = {
         ...filters, // Keep the existing price filter
@@ -300,13 +322,14 @@ const ShopPage = () => {
     maximumPrice({
       filter,
       first: 1,
-      sortBy : { direction: "DESC", field: "PRICE" }
+      sortBy: { direction: "DESC", field: "PRICE" },
     }).then((res) => {
       const list = res.data?.data?.productsSearch?.edges;
       if (list?.length > 0) {
         const maxPrice =
           list[0]?.node?.pricing?.priceRange?.start?.gross?.amount;
         setPriceValue([0, maxPrice]);
+        setInitialMaxPrice(maxPrice);
         setMaxPrice(maxPrice);
       } else {
         setPriceValue([0, 0]);
@@ -607,6 +630,17 @@ const ShopPage = () => {
     const res = await newProductList(body);
     setCursorAndList(res);
   };
+
+  const refresh = async (sortBy) => {
+    let body = {
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+      filter: {},
+    };
+    const res = await newProductList(body);
+    setCursorAndList(res);
+  };
   // --------------------------SHOP --------------------------------------
 
   const finalDynamicPaginationData = async (number) => {
@@ -681,6 +715,18 @@ const ShopPage = () => {
       setCursorAndList(res);
     });
   };
+
+  const refreshFilterData = async (sortBy) => {
+    const datas = initialFilter();
+    priceFilter({
+      filter: datas,
+      first: PAGE_LIMIT,
+      after: null,
+      sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
+    }).then((res) => {
+      setCursorAndList(res);
+    });
+  };
   // --------------------------CATEGORY FILTER --------------------------------------
 
   const setCursorAndList = (res) => {
@@ -699,7 +745,6 @@ const ShopPage = () => {
       behavior: "smooth",
     });
   };
-
 
   return (
     <Wrapper>
@@ -733,6 +778,8 @@ const ShopPage = () => {
         maxPrice={maxPrice}
         totalCount={totalCount}
         page={currentPage}
+        clearFilter={()=>refresh()}
+
       />
       {productList?.length > 0 &&
         !productLoadings &&
@@ -763,16 +810,14 @@ const ShopPage = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
-          if (
-            router?.query?.categoryId ||
-            router?.query?.tag ||
-            filter?.length > 0
-          ) {
-            finalInitialFilterData(sortBy);
+          if (router?.query?.categoryId || router?.query?.tag) {
+            refreshFilterData(sortBy);
           } else {
-            finalInitialData(sortBy);
+            refresh();
           }
           dispatch(filterData([]));
+          setPriceValue([0, initialMaxPrice]);
+          setInitialMaxPrice(initialMaxPrice);
           dispatch(handleFilterSidebarClose());
         }}
       />
