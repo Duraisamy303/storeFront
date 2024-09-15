@@ -231,7 +231,7 @@ const CategoryComponent = ({
     }).then((res) => {
       const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
       const cat = list?.map((item) => item.node?.category);
-      const result = cat.flatMap((subArray) =>
+      const result = cat?.flatMap((subArray) =>
         subArray.find(
           (item) => item.id === categoryId && item.backgroundImageUrl !== ""
         )

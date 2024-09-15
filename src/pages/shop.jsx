@@ -778,8 +778,10 @@ const ShopPage = () => {
         maxPrice={maxPrice}
         totalCount={totalCount}
         page={currentPage}
-        clearFilter={()=>refresh()}
-
+        clearFilter={() => {
+          dispatch(filterData([]));
+          refresh();
+        }}
       />
       {productList?.length > 0 &&
         !productLoadings &&
