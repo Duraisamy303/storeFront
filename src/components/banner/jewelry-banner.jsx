@@ -14,10 +14,11 @@ import slider_img_7 from "@assets/img/banner/other.jpg";
 import nav_icon_1 from "@assets/img/slider/4/nav/icon-1.png";
 import nav_icon_2 from "@assets/img/slider/4/nav/icon-2.png";
 import nav_icon_3 from "@assets/img/slider/4/nav/icon-3.png";
-import nav_icon_4 from "@assets/img/slider/4/nav/icon-4.png";
-import nav_icon_5 from "@assets/img/slider/4/nav/icon-4.png";
-import nav_icon_6 from "@assets/img/slider/4/nav/icon-3.png";
-import nav_icon_7 from "@assets/img/slider/4/nav/icon-2.png";
+import nav_icon_4 from "@assets/img/slider/4/nav/icon-7.png";
+import nav_icon_5 from "@assets/img/slider/4/nav/icon-5.png";
+import nav_icon_6 from "@assets/img/slider/4/nav/icon-7.png";
+import nav_icon_7 from "@assets/img/slider/4/nav/icon-6.png";
+import nav_icon_8 from "@assets/img/slider/4/nav/icon-8.png";
 import { ArrowNextTwo, ArrowPrevTwo, Pause, Play } from "@/svg";
 import text_shape from "@assets/img/slider/4/shape/rounded-test.png";
 import Link from "next/link";
@@ -94,9 +95,9 @@ const slider_nav_data = [
     title: <>BANGLES & BRACELETS</>,
     id: "Q2F0ZWdvcnk6MTE2NDc=",
   },
-  { icon: nav_icon_5, title: <>RINGS</>, id: "Q2F0ZWdvcnk6MTE2NTU=" },
-  { icon: nav_icon_4, title: <>ANKLETS</>, id: "Q2F0ZWdvcnk6MTIxNTI=" },
-  { icon: nav_icon_6, title: <>IDOLS</>, id: "Q2F0ZWdvcnk6MTM1ODc=" },
+  { icon: nav_icon_4, title: <>RINGS</>, id: "Q2F0ZWdvcnk6MTE2NTU=" },
+  { icon: nav_icon_5, title: <>ANKLETS</>, id: "Q2F0ZWdvcnk6MTIxNTI=" },
+  { icon: nav_icon_8, title: <>IDOLS</>, id: "Q2F0ZWdvcnk6MTM1ODc=" },
   {
     icon: nav_icon_7,
     title: <>OTHER ACCESSORIES</>,
