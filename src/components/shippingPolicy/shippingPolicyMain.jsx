@@ -4,6 +4,10 @@ const ShippingPolicyMain = () => {
   return (
     <section className="tp-about-area pt-0 pb-30">
       <div className="container">
+        <h3 className="terms-heading" style={{ fontWeight: "500" }}>
+          Shipping and Exchange Policy
+        </h3>
+
         <div>
           <p className="terms-para">
             We at PraDe are keen on providing customers with the best hence, we
@@ -106,7 +110,9 @@ const ShippingPolicyMain = () => {
             original payment method.
           </p>
 
-          <p className="terms-para">Products purchased during the sale are non-refundable.</p>
+          <p className="terms-para">
+            Products purchased during the sale are non-refundable.
+          </p>
 
           <p className="terms-para">
             All exchanges and returns will be processed within a week time, for

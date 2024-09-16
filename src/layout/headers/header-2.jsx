@@ -253,9 +253,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                         fontSize: "14px",
                         padding: "8px 0px",
                       }}
-                    >
-                      ADD ANYTHING HERE OR JUST REMOVE IT...
-                    </p>
+                    ></p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -371,7 +369,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                       height: "50px",
                                     }}
                                   >
-                                  
                                     {isImage(profilePic(item?.img)) ? (
                                       <img
                                         src={profilePic(item?.img)}

@@ -964,7 +964,7 @@ const DetailsWrapper = ({
 
       <div>
         <p style={{ fontSize: "16px", color: "black" }}>
-          {variantDetails ? (
+          {/* {variantDetails ? (
             <>
               {variantDetails?.quantityAvailable == 0
                 ? ""
@@ -977,7 +977,7 @@ const DetailsWrapper = ({
                 : productItem?.defaultVariant?.quantityAvailable}
             </>
           )}
-          {""}{" "}
+          {""}{" "} */}
           {variantDetails?.quantityAvailable == 0 ||
           productItem?.defaultVariant?.quantityAvailable == 0 ? (
             <span style={{ color: "red", fontWeight: "500" }}>

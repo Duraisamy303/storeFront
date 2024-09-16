@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Slider from "react-slick";
 // internal
-import slider_img_1 from "@assets/img/prade-banner-2.jpg";
-import slider_img_2 from "@assets/img/prade-banner-2.jpg";
-import slider_img_3 from "@assets/img/prade-banner-2.jpg";
-import slider_img_4 from "@assets/img/prade-banner-2.jpg";
+import slider_img_1 from "@assets/img/banner/earrings.jpg";
+import slider_img_2 from "@assets/img/banner/necklace.jpg";
+import slider_img_3 from "@assets/img/banner/bangles.jpg";
+import slider_img_4 from "@assets/img/banner/ring.jpg";
+import slider_img_5 from "@assets/img/banner/anklet.jpg";
+import slider_img_6 from "@assets/img/banner/idol.jpg";
+import slider_img_7 from "@assets/img/banner/other.jpg";
+
 // nav icon
 import nav_icon_1 from "@assets/img/slider/4/nav/icon-1.png";
 import nav_icon_2 from "@assets/img/slider/4/nav/icon-2.png";
 import nav_icon_3 from "@assets/img/slider/4/nav/icon-3.png";
 import nav_icon_4 from "@assets/img/slider/4/nav/icon-4.png";
+import nav_icon_5 from "@assets/img/slider/4/nav/icon-4.png";
+import nav_icon_6 from "@assets/img/slider/4/nav/icon-3.png";
+import nav_icon_7 from "@assets/img/slider/4/nav/icon-2.png";
 import { ArrowNextTwo, ArrowPrevTwo, Pause, Play } from "@/svg";
 import text_shape from "@assets/img/slider/4/shape/rounded-test.png";
 import Link from "next/link";
@@ -24,8 +31,8 @@ const slider_data = [
     img: slider_img_1,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
- shopId: "Q2F0ZWdvcnk6MTE2NDU=" 
-    },
+    shopId: "Q2F0ZWdvcnk6MTE2NDU=",
+  },
   {
     subtitle: "Find the ideal gift",
     title: "JEWELLERY WITH A MODERN TWIST",
@@ -33,34 +40,69 @@ const slider_data = [
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
 
-   shopId:"Q2F0ZWdvcnk6MTE2NDc="
-    },
+    shopId: "Q2F0ZWdvcnk6MTE2NDI=",
+  },
   {
     subtitle: "Fine Jewellery",
     title: "LUXURY CAN BE AFFORDABLE",
     img: slider_img_3,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
- shopId :  "Q2F0ZWdvcnk6MTE2NDI="
-    },
+    shopId: "Q2F0ZWdvcnk6MTE2NDc=",
+  },
   {
     subtitle: "Fine Jewellery",
     title: "LUXURY CAN BE AFFORDABLE",
     img: slider_img_4,
     content:
       "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
-  shopId: "Q2F0ZWdvcnk6MTIxNTI="
-    },
+    shopId: "Q2F0ZWdvcnk6MTE2NTU=",
+  },
+  {
+    subtitle: "Fine Jewellery",
+    title: "LUXURY CAN BE AFFORDABLE",
+    img: slider_img_5,
+    content:
+      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+    shopId: "Q2F0ZWdvcnk6MTIxNTI=",
+  },
+  {
+    subtitle: "Fine Jewellery",
+    title: "LUXURY CAN BE AFFORDABLE",
+    img: slider_img_6,
+    content:
+      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+    shopId: "Q2F0ZWdvcnk6MTM1ODc=",
+  },
+  {
+    subtitle: "Fine Jewellery",
+    title: "LUXURY CAN BE AFFORDABLE",
+    img: slider_img_7,
+    content:
+      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+    shopId: "Q2F0ZWdvcnk6MTI0MTU=",
+  },
 ];
 
 // slider nav data
 const slider_nav_data = [
-  { icon: nav_icon_1, title: <>EARRINGS</> ,id: "Q2F0ZWdvcnk6MTE2NDU="},
-  { icon: nav_icon_2, title: <>Bangles & Bracelets</> ,id: "Q2F0ZWdvcnk6MTE2NDc="},
-  { icon: nav_icon_3, title: <>NECKLACES</> ,id:"Q2F0ZWdvcnk6MTE2NDI="},
-  { icon: nav_icon_4, title: <>ANKLETS</>,id:"Q2F0ZWdvcnk6MTIxNTI=" },
-];
+  { icon: nav_icon_1, title: <>EARRINGS</>, id: "Q2F0ZWdvcnk6MTE2NDU=" },
+  { icon: nav_icon_3, title: <>NECKLACES</>, id: "Q2F0ZWdvcnk6MTE2NDI=" },
 
+  {
+    icon: nav_icon_2,
+    title: <>BANGLES & BRACELETS</>,
+    id: "Q2F0ZWdvcnk6MTE2NDc=",
+  },
+  { icon: nav_icon_5, title: <>RINGS</>, id: "Q2F0ZWdvcnk6MTE2NTU=" },
+  { icon: nav_icon_4, title: <>ANKLETS</>, id: "Q2F0ZWdvcnk6MTIxNTI=" },
+  { icon: nav_icon_6, title: <>IDOLS</>, id: "Q2F0ZWdvcnk6MTM1ODc=" },
+  {
+    icon: nav_icon_7,
+    title: <>OTHER ACCESSORIES</>,
+    id: "Q2F0ZWdvcnk6MTI0MTU=",
+  },
+];
 
 const JewelryBanner = () => {
   const [slider1, setSlider1] = useState(null);
@@ -118,7 +160,11 @@ const JewelryBanner = () => {
               className="tp-slider-item-4 tp-slider-height-4 p-relative khaki-bg d-flex align-items-center"
             >
               <div className="tp-slider-thumb-4">
-                <Image src={item.img} alt="slider img" className="mobile-view-width-change" />
+                <Image
+                  src={item.img}
+                  alt="slider img"
+                  className="mobile-view-width-change"
+                />
                 <div className="tp-slider-thumb-4-shape">
                   <span className="tp-slider-thumb-4-shape-1"></span>
                   <span className="tp-slider-thumb-4-shape-2"></span>

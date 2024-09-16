@@ -4,6 +4,10 @@ const PrivacyPolicyMain = () => {
   return (
     <section className="tp-about-area pt-0 pb-30">
       <div className="container">
+        <h3 className="terms-heading" style={{ fontWeight: "500" }}>
+          Privacy Policy
+        </h3>
+
         <div>
           <p className="terms-para">
             This Privacy Policy is intended to inform you about how the personal
@@ -155,7 +159,17 @@ const PrivacyPolicyMain = () => {
           <p className="terms-para">
             For more information about our privacy practices, if you have
             questions, or if you would like to make a complaint, please contact
-            us by e‑mail at <a href="mailto:support@prade.in" style={{textDecoration: 'underline', color: '#c28430', cursor: 'pointer'}}>support@prade.in</a>
+            us by e‑mail at{" "}
+            <a
+              href="mailto:support@prade.in"
+              style={{
+                textDecoration: "underline",
+                color: "#c28430",
+                cursor: "pointer",
+              }}
+            >
+              support@prade.in
+            </a>
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 // internal
 import social_data from "@/data/social-data";
-import { Email, Location } from "@/svg";
+import { Email, Facebook, Location } from "@/svg";
 import logo from "@assets/img/prade-logo.png";
 import pay from "@assets/img/footer/footer-pay.png";
 import footerInstaPost from "@assets/img/footer-instapost-1.png";
@@ -12,40 +12,26 @@ import { MobileOutlined } from "@ant-design/icons";
 import { getPaddingAndBorder } from "react-range/lib/utils";
 import { Avatar } from "antd";
 import {
-  FacebookFilled,
+  FacebookOutlined,
   TwitterOutlined,
   InstagramOutlined,
   YoutubeFilled,
   PinterestOutlined,
 } from "@ant-design/icons";
 
-const FacebookIcon = () => (
-  <Avatar
-    shape="circle"
-    style={{
-      backgroundColor: "#1877f2", // Facebook blue color
-    }}
-    icon={<FacebookFilled style={{ color: "white" }} />}
-  />
-);
-
-const TwitterIcon = () => (
-  <Avatar
-    shape="circle"
-    style={{
-      backgroundColor: "#1DA1F2", // Twitter blue color
-    }}
-    icon={<TwitterOutlined style={{ color: "white" }} />}
-  />
-);
-
 const InstagramIcon = () => (
   <Avatar
     shape="circle"
     style={{
-      backgroundColor: "#E1306C", // Instagram's gradient color
+      background: "#f09433", // Single fallback color
+      background:
+        "-moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)", // For older Firefox versions
+      background:
+        "-webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)", // For older Safari versions
+      background:
+        "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)", // Standard linear gradient
     }}
-    icon={<InstagramOutlined style={{ color: "white" }} />} // Use a custom Instagram icon if needed
+    icon={<InstagramOutlined style={{ color: "white" }} />} // Instagram icon with white color
   />
 );
 
@@ -74,7 +60,12 @@ const FooterTwo = () => {
                 <div className="row">
                   <div className="col-lg-3 col-md-6 col-sm-6">
                     <div className="tp-footer-widget footer-col-4-1 mb-50">
-                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>ABOUT US</h4>
+                      <h4
+                        className="tp-footer-widget-title"
+                        style={{ fontWeight: "400" }}
+                      >
+                        ABOUT US
+                      </h4>
                       <div className="tp-footer-logo">
                         <Link href="/">
                           <Image src={logo} alt="logo" />
@@ -94,7 +85,12 @@ const FooterTwo = () => {
 
                   <div className="  col-lg-3 col-md-6 col-sm-12 footer-quicklinks">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
-                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>QUICK LINKS</h4>
+                      <h4
+                        className="tp-footer-widget-title"
+                        style={{ fontWeight: "400" }}
+                      >
+                        QUICK LINKS
+                      </h4>
                       <div className="tp-footer-widget-content">
                         <ul>
                           <li>
@@ -145,7 +141,12 @@ const FooterTwo = () => {
 
                   <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-2 mb-50">
-                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>STORE ADDRESS</h4>
+                      <h4
+                        className="tp-footer-widget-title"
+                        style={{ fontWeight: "400" }}
+                      >
+                        STORE ADDRESS
+                      </h4>
                       <div className="tp-footer-widget-content">
                         <div className="tp-footer-contact">
                           <div className="tp-footer-contact-item d-flex align-items-start">
@@ -160,9 +161,9 @@ const FooterTwo = () => {
                                   href="https://maps.app.goo.gl/RoQg5oRAZ6fawCVh6"
                                   target="_blank"
                                 >
-                                  Prade Jewels and Drapes Pvt Ltd <br/>No.28, 1st
-                                  floor, Vijay building,<br/> Near Andhra club,
-                                  Vijaya Raghava road,
+                                  Prade Jewels and Drapes Pvt Ltd <br />
+                                  No.28, 1st floor, Vijay building,
+                                  <br /> Near Andhra club, Vijaya Raghava road,
                                   <br /> Chennai – 600017.
                                 </a>
                               </p>
@@ -200,14 +201,17 @@ const FooterTwo = () => {
                           </div>
                           <div style={{ display: "flex", paddingTop: "15px" }}>
                             <div style={{ paddingRight: "15px" }}>
-                              <Link
+                              <Link className="fb-outline" 
                                 href="https://www.facebook.com/PraDeJewels"
                                 target="_blank"
                               >
-                                <FacebookIcon />
+                                <Facebook />
                               </Link>
                             </div>
-                            <div style={{ paddingRight: "15px" }}>
+                            <div
+                              style={{ paddingRight: "15px" }}
+                              className="insta-outline"
+                            >
                               <Link
                                 href="https://www.instagram.com/pradejewels/"
                                 target="_blank"
@@ -231,14 +235,23 @@ const FooterTwo = () => {
 
                   <div className="col-lg-3 col-md-6 col-sm-12">
                     <div className="tp-footer-widget footer-col-4-4 mb-50">
-                      <h4 className="tp-footer-widget-title" style={{fontWeight:"400"}}>STORE LOCATION</h4>
+                      <h4
+                        className="tp-footer-widget-title"
+                        style={{ fontWeight: "400" }}
+                      >
+                        STORE LOCATION
+                      </h4>
                       <div
                         className="tp-footer-widget-content"
                         style={{ overflow: "hidden" }}
                       >
                         <iframe
                           src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7960308.336715554!2d80.242347!3d13.04399!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267e3de37ce75%3A0xd50eb41608bccab6!2sPraDe%20Jewels!5e0!3m2!1sen!2sin!4v1715580579688!5m2!1sen!2sin"
-                          style={{ border: "0", width: "100%", height:"220px" }}
+                          style={{
+                            border: "0",
+                            width: "100%",
+                            height: "220px",
+                          }}
                           allowfullscreen=""
                           loading="lazy"
                           referrerpolicy="no-referrer-when-downgrade"
@@ -252,15 +265,19 @@ const FooterTwo = () => {
           </div>
           <div className="tp-footer-bottom">
             <div className="container-fluid">
-              <div  className="footer-spacing">
+              <div className="footer-spacing">
                 <div className="tp-footer-bottom-wrapper">
                   <div className="row align-items-center">
                     <div className="col-md-12">
                       <div className="tp-footer-copyright">
                         <p>
                           Copyright {new Date().getFullYear()} © PraDe Jewels,
-                          Concept by 
-                           <Link href="https://irepute.in/" target="blank" style={{paddingLeft:"3px"}}>
+                          Concept by
+                          <Link
+                            href="https://irepute.in/"
+                            target="blank"
+                            style={{ paddingLeft: "3px" }}
+                          >
                             repute
                           </Link>
                           .

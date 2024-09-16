@@ -4,6 +4,7 @@ const TermsAndConditionsMain = () => {
   return (
     <section className="tp-about-area  pt-0 pb-30">
       <div className="container">
+      <h3 className="terms-heading" style={{fontWeight:"500"}}>Terms And Conditions</h3>
         <div>
           <p className="terms-para">
             This website is owned, maintained and operated by PraDe Jewels
