@@ -91,9 +91,12 @@ export default function App({ Component, pageProps }) {
   ];
 
   const handleChannelChange = (newChannel) => {
-    localStorage.setItem("channel", newChannel);
-    setChannel(newChannel);
-    window.location.reload();
+    const channel = localStorage.getItem("channel");
+    if (channel != newChannel) {
+      localStorage.setItem("channel", newChannel);
+      setChannel(newChannel);
+      window.location.reload();
+    }
   };
 
   const paths = [
@@ -105,20 +108,21 @@ export default function App({ Component, pageProps }) {
     "/register",
     "/order-success",
     "/order-failed",
-    "/password_reset"
+    "/password_reset",
   ];
 
   const isOrderSuccessPath = router.pathname.startsWith("/order-success");
   const isOrderFailedPath = router.pathname.startsWith("/order-failed");
   const isOrderDetailsPath = router.pathname.startsWith("/order-details");
 
-
   useEffect(() => {
     // Initialize dataLayer and gtag on client side only
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-7TTX2YVRPQ');
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-7TTX2YVRPQ");
   }, []); // Empty dependency array ensures this runs once on mount
 
   return (
