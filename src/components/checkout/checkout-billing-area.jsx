@@ -1149,14 +1149,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           {cart?.length > 0 && (
             <div className="row">
               <div className=" ">
-                <div
-                  className="tp-checkout-verify"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 10,
-                  }}
-                >
+                <div className="tp-checkout-verify">
                   <div className="col-xl-6 col-lg-12">
                     {!state.token && <CheckoutLogin />}
                   </div>
@@ -1408,7 +1401,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     </div>
                     <div className="col-md-6">
                       <div className="tp-checkout-input">
-                        <label>Town / City <span>*</span></label>
+                        <label>
+                          Town / City <span>*</span>
+                        </label>
                         <input
                           name="city"
                           id="city"
@@ -1744,7 +1739,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       )}
                       <div className="col-md-12">
                         <div className="tp-checkout-input">
-                          <label>Street address <span>*</span></label>
+                          <label>
+                            Street address <span>*</span>
+                          </label>
                           <input
                             name="address"
                             id="address"
@@ -1762,7 +1759,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                       <div className="col-md-6">
                         <div className="tp-checkout-input">
-                          <label>Town / City <span>*</span></label>
+                          <label>
+                            Town / City <span>*</span>
+                          </label>
                           <input
                             name="city1"
                             id="city1"
@@ -1778,7 +1777,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </div>
                       <div className="col-md-6">
                         <div className="tp-checkout-input">
-                          <label>Postcode ZIP <span>*</span></label>
+                          <label>
+                            Postcode ZIP <span>*</span>
+                          </label>
                           <input
                             name="zipCode"
                             id="zipCode"
