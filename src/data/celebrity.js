@@ -69,7 +69,7 @@ const CelebrityData = [
   {
     id: 4,
     img: Celebrity4,
-    name: "Dhivyadharshini (dd)",
+    name: "Dhivyadharshini (DD)",
     designation: "Actor",
   },
   {
@@ -82,13 +82,13 @@ const CelebrityData = [
   {
     id: 6,
     img: Celebrity6,
-    name: "Dhivyadharshini (dd)",
+    name: "Dhivyadharshini (DD)",
     designation: "Actor",
   },
   {
     id: 7,
     img: Celebrity7,
-    name: "Dhivyadharshini (dd)",
+    name: "Dhivyadharshini (DD)",
     designation: "Actor",
   },
   {
@@ -106,7 +106,7 @@ const CelebrityData = [
   {
     id: 10,
     img: Celebrity10,
-    name: "",
+    name: "Nakshathra",
     designation: "Actor",
   },
 
@@ -119,7 +119,7 @@ const CelebrityData = [
   {
     id: 12,
     img: Celebrity12,
-    name: "",
+    name: "Aahana Krishnan",
     designation: "Actor",
   },
   {
@@ -137,13 +137,13 @@ const CelebrityData = [
   {
     id: 15,
     img: Celebrity15,
-    name: "",
+    name: "Regina Cassandra",
     designation: "Actor",
   },
   {
     id: 16,
     img: Celebrity16,
-    name: "",
+    name: "Dhivyadharshini (DD)",
     designation: "Actor",
   },
   {
@@ -173,13 +173,13 @@ const CelebrityData = [
   {
     id: 21,
     img: Celebrity21,
-    name: "",
+    name: "Janani Iyer",
     designation: "Actor",
   },
   {
     id: 22,
     img: Celebrity22,
-    name: "",
+    name: "Ramya Subramaniyan",
     designation: "Actor",
   },
   {
@@ -191,7 +191,7 @@ const CelebrityData = [
   {
     id: 24,
     img: Celebrity24,
-    name: "",
+    name: "Shalini Pandey",
     designation: "Actor",
   },
   {
@@ -215,13 +215,13 @@ const CelebrityData = [
   {
     id: 28,
     img: Celebrity28,
-    name: "",
+    name: "Vani Bhojan",
     designation: "Actor",
   },
   {
     id: 29,
     img: Celebrity29,
-    name: "",
+    name: "Janani Iyer",
     designation: "Actor",
   },
   {
@@ -233,55 +233,55 @@ const CelebrityData = [
   {
     id: 31,
     img: Celebrity31,
-    name: "",
+    name: "Kashmira Pardeshi",
     designation: "Actor",
   },
   {
     id: 32,
     img: Celebrity32,
-    name: "",
+    name: "Aishwarya Rajesh",
     designation: "Actor",
   },
 
   {
     id: 33,
     img: Celebrity33,
-    name: "Bramarambika",
+    name: "Ramya Subramaniyan",
     designation: "Actor",
   },
 
   {
     id: 34,
     img: Celebrity34,
-    name: "",
+    name: "Anju Kurian",
     designation: "Actor",
   },
 
   {
     id: 35,
     img: Celebrity35,
-    name: "Bhavani Sre",
+    name: "Vimala Raman",
     designation: "Actor",
   },
 
   {
     id: 36,
     img: Celebrity36,
-    name: "",
+    name: "Parvathy Nair",
     designation: "Actor",
   },
 
   {
     id: 37,
     img: Celebrity37,
-    name: "Vimala Raman",
+    name: "Anjana Rangan",
     designation: "Actor",
   },
 
   {
     id: 38,
     img: Celebrity38,
-    name: "Parvati Nair",
+    name: "Bhavani Sre ",
     designation: "Actor",
   },
 
@@ -295,14 +295,14 @@ const CelebrityData = [
   {
     id: 40,
     img: Celebrity40,
-    name: "Bhavani Sre",
+    name: "Vimala Raman",
     designation: "Actor",
   },
 
   {
     id: 41,
     img: Celebrity41,
-    name: "",
+    name: "Gouri G. kishan",
     designation: "Actor",
   },
 
@@ -321,7 +321,7 @@ const CelebrityData = [
   {
     id: 44,
     img: Celebrity44,
-    name: "",
+    name: "Vani Bhojan",
     designation: "Actor",
   },
 
@@ -340,7 +340,7 @@ const CelebrityData = [
   {
     id: 47,
     img: Celebrity47,
-    name: "",
+    name: "Suma kanakala",
     designation: "Actor",
   },
 ];
