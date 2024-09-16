@@ -855,31 +855,31 @@ const DetailsWrapper = ({
           // </div>
           <div className="tp-product-price-wrapper-2">
             {productItem?.variants?.length <= 1 &&
-                RegularPrice(
-                  productItem?.defaultVariant?.costPrice,
-                  productItem?.pricing?.priceRange?.start?.gross?.amount
-                ) && (
-                  <span
-                    className="pr-5"
-                    style={{ textDecoration: "line-through", color: "gray" }}
-                  >
-                    {variantDetails ? (
-                      <>
-                        {"$"}
-                        {addCommasToNumber(
-                          variantDetails?.pricing?.price?.gross?.amount
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {"$"}
-                        {addCommasToNumber(
-                          productItem?.defaultVariant?.costPrice
-                        )}
-                      </>
-                    )}
-                  </span>
-                )}
+              RegularPrice(
+                productItem?.defaultVariant?.costPrice,
+                productItem?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="pr-5"
+                  style={{ textDecoration: "line-through", color: "gray" }}
+                >
+                  {variantDetails ? (
+                    <>
+                      {"$"}
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {"$"}
+                      {addCommasToNumber(
+                        productItem?.defaultVariant?.costPrice
+                      )}
+                    </>
+                  )}
+                </span>
+              )}
             <span
               className="tp-product-price-2 new-price"
               style={{ fontSize: "22px", fontWeight: "500" }}
@@ -948,56 +948,59 @@ const DetailsWrapper = ({
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
           <>
-            {variantId && (
-              <div className="">
-                <button
-                  onClick={() => {
-                    setVariantId("");
-                    setVariantDetails("");
-                  }}
-                >
-                  Clear
-                </button>
-              </div>
-            )}
             <div
               className="text-bold text-lg gap-3"
               style={{
                 fontSize: "16px",
                 color: "black",
                 display: "flex",
-                alignItems: "center",
+                alignItems: "end",
                 paddingBottom: "10px",
                 borderBottom: "1px dashed #ddd",
                 marginBottom: "10px",
               }}
             >
-              {isGiftCard ? (
-                <span>Select Amount:</span>
-              ) : (
-                <span>Select Variant:</span>
-              )}
-
-              <select
-                name="country"
-                id="country"
-                value={variantId}
-                className="nice-select"
-                onChange={(e) => {
-                  variantsChange(e);
-                }}
-              >
+              <div>
                 {isGiftCard ? (
-                  <option>Select Amount:</option>
+                  <span>Select Amount:</span>
                 ) : (
-                  <option value="">Select Variant</option>
+                  <span>Select Variant:</span>
                 )}
-                {productItem?.variants?.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item?.name}
-                  </option>
-                ))}
-              </select>
+              </div>
+              <div style={{textAlign: "end"}}>
+                {variantId && (
+                  <div className="">
+                    <button style={{fontSize:"14px"}}
+                      onClick={() => {
+                        setVariantId("");
+                        setVariantDetails("");
+                      }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+                <select
+                  name="country"
+                  id="country"
+                  value={variantId}
+                  className="nice-select"
+                  onChange={(e) => {
+                    variantsChange(e);
+                  }}
+                >
+                  {isGiftCard ? (
+                    <option>Select Amount:</option>
+                  ) : (
+                    <option value="">Select Variant</option>
+                  )}
+                  {productItem?.variants?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             {variantDetails && (
               <span
