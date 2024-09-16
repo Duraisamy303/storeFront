@@ -19,7 +19,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['file.prade.in'], // Add your image domain here
+    domains: ['file.prade.in','prade.blr1.cdn.digitaloceanspaces.com','prade.blr1.digitaloceanspaces.com'], // Add your image domain here
   },
 };
 

@@ -851,6 +851,10 @@
   bottom: 3px;
   right: 20px;
   visibility: hidden;
+
+  @media (max-width:1600px) {
+    right: 10px;
+  }
 }
 .tp-menu-product-name {
   position: absolute;

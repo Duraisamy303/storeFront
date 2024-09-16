@@ -215,7 +215,7 @@ const InstagramAreaFour = () => {
   return (
     <>
       <section className="tp-instagram-area tp-instagram-style-4  pb-20">
-        <div className="container-fluid pl-20 pr-20 pt-30">
+        <div className="container-fluid pl-20 pr-20 pt-20">
           {/* <div className="row">
             <div className="col-xl-12">
               <div className="tp-section-title-wrapper-4 mb-50 text-center">
@@ -225,7 +225,7 @@ const InstagramAreaFour = () => {
             </div>
           </div> */}
 
-          <div className="row">
+          <div className="row " style={{alignItems:"center"}}>
             <div className="col-md-4">
               <div className="main-discount">
                 <span className="discound-1">DISCOUNT OF</span> <br />

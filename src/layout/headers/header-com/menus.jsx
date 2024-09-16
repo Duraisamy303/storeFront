@@ -18,9 +18,7 @@ import { HomeTwoPopularPrdLoader } from "@/components/loader";
 import CommonImage from "@assets/img/earring-menu-pic-1.png";
 import Loader from "../../../components/loader/loader";
 import { useDispatch } from "react-redux";
-import {
-  filterData,
-} from "@/redux/features/shop-filter-slice";
+import { filterData } from "@/redux/features/shop-filter-slice";
 
 const slider_setting = {
   slidesPerView: 4,
@@ -59,7 +57,6 @@ const CategoryContent = ({
   categoryName,
 }) => {
   const router = useRouter();
-
   useEffect(() => {
     filterByCategory();
   }, [categoryName]);
@@ -128,10 +125,10 @@ const CategoryContent = ({
         ) : (
           <div>
             <div>
-              <Image
+              <img
                 src={commonImage}
                 alt="category image"
-                style={{ width: "100%", height: "200px" }}
+                style={{ width: "100%", height: "250px" }}
               />
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
@@ -172,6 +169,7 @@ const CategoryComponent = ({
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [priceFilter, { isLoading: productLoading }] = usePriceFilterMutation();
   const [productList, setProductList] = useState([]);
+  const [categoryImage, setCategoryImage] = useState([]);
   const [subCategoryLists, setSubCategoryLists] = useState([]);
 
   const [subCatList, { isLoading: loadingProduct }] = useSubCatListMutation();
@@ -232,6 +230,17 @@ const CategoryComponent = ({
       after: null,
     }).then((res) => {
       const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
+      const cat = list?.map((item) => item.node?.category);
+      const result = cat?.flatMap((subArray) =>
+        subArray.find(
+          (item) => item.id === categoryId && item.backgroundImageUrl !== ""
+        )
+      );
+      if (result?.length > 0) {
+        setCategoryImage(result[0]?.backgroundImageUrl);
+      }else{
+        setCategoryImage(CommonImage)
+      }
       setProductList(list);
     });
   };
@@ -279,7 +288,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL EARRINGS"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -290,7 +299,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL NECKLACES"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -301,7 +310,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL BANGLES & BRACELETS"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -312,7 +321,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL RINGS"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -323,7 +332,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL ANKLETS"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -334,7 +343,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="IDOLS"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -345,7 +354,7 @@ const CategoryComponent = ({
         return (
           <CategoryContent
             title="ALL OTHER ACCESSORIES"
-            commonImage={CommonImage}
+            commonImage={categoryImage}
             lists={subCategoryLists}
             categoryName={lastHoveredCategory}
           >
@@ -374,12 +383,12 @@ function SingleLoader({ loading }) {
 const Menus = () => {
   const router = useRouter();
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(filterData([]));
-  },[router])
+  }, [router]);
 
   return (
     <ul style={{ display: "flex", justifyContent: "end" }}>

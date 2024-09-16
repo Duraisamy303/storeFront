@@ -78,6 +78,9 @@ const DetailsWrapper = ({
   const [wishlistLoader, setWishlistLoader] = useState(false);
   const [index, setIndex] = useState(0);
   const [variantId, setVariantId] = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
+  const [variantDetails, setVariantDetails] = useState("");
 
   const [visibility, setVisibility] = useState({
     description: false,
@@ -126,6 +129,18 @@ const DetailsWrapper = ({
     const arr = JSON.parse(compareList);
     dispatch(compare_list(arr));
   }, []);
+
+  useEffect(() => {
+    if (isGiftCard || productItem?.variants?.length > 1) {
+      const amounts = productItem?.variants?.map(
+        (product) => product.pricing.price.gross.amount
+      );
+      const minAmount = Math.min(...amounts);
+      const maxAmount = Math.max(...amounts);
+      setMaxAmount(maxAmount);
+      setMinAmount(minAmount);
+    }
+  }, [productItem]);
 
   const [isAddWishlist, setWishlist] = useState(false);
 
@@ -478,7 +493,6 @@ const DetailsWrapper = ({
     }
   };
 
-  const [variantDetails, setVariantDetails] = useState();
   const variantsChange = (e) => {
     setVariantId(e.target.value);
     productRefetch();
@@ -746,93 +760,149 @@ const DetailsWrapper = ({
       >
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
-            {RegularPrice(
-              productItem?.defaultVariant?.costPrice,
-              productItem?.pricing?.priceRange?.start?.gross?.amount
-            ) && (
-              <span
-                className="pr-5"
-                style={{ textDecoration: "line-through", color: "gray" }}
-              >
-                {variantDetails ? (
-                  <>
-                    &#8377;
-                    {addCommasToNumber(
-                      variantDetails?.pricing?.price?.gross?.amount
-                    )}
-                  </>
-                ) : (
-                  <>
-                    &#8377;
-                    {addCommasToNumber(productItem?.defaultVariant?.costPrice)}
-                  </>
-                )}
-              </span>
-            )}
+            {productItem?.variants?.length <= 1 &&
+              RegularPrice(
+                productItem?.defaultVariant?.costPrice,
+                productItem?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="pr-5"
+                  style={{ textDecoration: "line-through", color: "gray" }}
+                >
+                  {variantDetails ? (
+                    <>
+                      &#8377;
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      &#8377;
+                      {addCommasToNumber(
+                        productItem?.defaultVariant?.costPrice
+                      )}
+                    </>
+                  )}
+                </span>
+              )}
             <span
               className="tp-product-price-2 new-price"
               style={{ fontSize: "22px", fontWeight: "500" }}
             >
-              {variantDetails ? (
-                <>
-                  &#8377;
-                  {addCommasToNumber(
-                    variantDetails?.pricing?.price?.gross?.amount
-                  )}
-                </>
-              ) : (
-                <>
-                  &#8377;
-                  {addCommasToNumber(
-                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                      productItem?.node?.pricing?.priceRange?.start?.gross
-                        ?.amount
-                  )}
-                </>
-              )}
+              <>
+                {/* For normal product */}
+                {isGiftCard || productItem?.variants?.length > 1 ? (
+                  <>
+                    &#8377;{addCommasToNumber(minAmount)} - &#8377;
+                    {addCommasToNumber(maxAmount)}
+                  </>
+                ) : (
+                  <>
+                    &#8377;
+                    {addCommasToNumber(
+                      productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                        productItem?.node?.pricing?.priceRange?.start?.gross
+                          ?.amount
+                    )}
+                  </>
+                )}
+              </>
             </span>
           </div>
         ) : (
+          // <div className="tp-product-price-wrapper-2">
+          //   {RegularPrice(
+          //     productItem?.defaultVariant?.costPrice,
+          //     productItem?.pricing?.priceRange?.start?.gross?.amount
+          //   ) && (
+          //     <span
+          //       className="pr-5"
+          //       style={{ textDecoration: "line-through", color: "gray" }}
+          //     >
+          //       {variantDetails ? (
+          //         <>
+          //           {"$"} {variantDetails?.pricing?.price?.gross?.amount}
+          //         </>
+          //       ) : (
+          //         <>
+          //           {"$"}
+          //           {roundOff(productItem?.defaultVariant?.costPrice)}
+          //         </>
+          //       )}
+          //     </span>
+          //   )}
+          //   <span
+          //     className="tp-product-price-2 new-price"
+          //     style={{ fontSize: "22px", fontWeight: "500" }}
+          //   >
+          //     {variantDetails ? (
+          //       <>
+          //         {"$"}
+          //         {variantDetails?.pricing?.price?.gross?.amount}
+          //       </>
+          //     ) : (
+          //       <>
+          //         {"$"}
+          //         {roundOff(
+          //           productItem?.pricing?.priceRange?.start?.gross?.amount ||
+          //             productItem?.node?.pricing?.priceRange?.start?.gross
+          //               ?.amount
+          //         )}
+          //       </>
+          //     )}
+          //   </span>
+          // </div>
           <div className="tp-product-price-wrapper-2">
-            {RegularPrice(
-              productItem?.defaultVariant?.costPrice,
-              productItem?.pricing?.priceRange?.start?.gross?.amount
-            ) && (
-              <span
-                className="pr-5"
-                style={{ textDecoration: "line-through", color: "gray" }}
-              >
-                {variantDetails ? (
+            {productItem?.variants?.length <= 1 &&
+                RegularPrice(
+                  productItem?.defaultVariant?.costPrice,
+                  productItem?.pricing?.priceRange?.start?.gross?.amount
+                ) && (
+                  <span
+                    className="pr-5"
+                    style={{ textDecoration: "line-through", color: "gray" }}
+                  >
+                    {variantDetails ? (
+                      <>
+                        {"$"}
+                        {addCommasToNumber(
+                          variantDetails?.pricing?.price?.gross?.amount
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {"$"}
+                        {addCommasToNumber(
+                          productItem?.defaultVariant?.costPrice
+                        )}
+                      </>
+                    )}
+                  </span>
+                )}
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ fontSize: "22px", fontWeight: "500" }}
+            >
+              <>
+                {/* For normal product */}
+                {isGiftCard || productItem?.variants?.length > 1 ? (
                   <>
-                    {"$"} {variantDetails?.pricing?.price?.gross?.amount}
+                    {"$"}
+                    {addCommasToNumber(minAmount)} - {"$"}
+                    {addCommasToNumber(maxAmount)}
                   </>
                 ) : (
                   <>
                     {"$"}
-                    {roundOff(productItem?.defaultVariant?.costPrice)}
+                    {addCommasToNumber(
+                      productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                        productItem?.node?.pricing?.priceRange?.start?.gross
+                          ?.amount
+                    )}
                   </>
                 )}
-              </span>
-            )}
-            <span
-              className="tp-product-price-2 new-price"
-              style={{ fontSize: "22px", fontWeight: "500" }}
-            >
-              {variantDetails ? (
-                <>
-                  {"$"}
-                  {variantDetails?.pricing?.price?.gross?.amount}
-                </>
-              ) : (
-                <>
-                  {"$"}
-                  {roundOff(
-                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                      productItem?.node?.pricing?.priceRange?.start?.gross
-                        ?.amount
-                  )}
-                </>
-              )}
+              </>
             </span>
           </div>
         )}
@@ -877,48 +947,88 @@ const DetailsWrapper = ({
       </p> */}
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
-          <div
-            className=" gap-3"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              paddingBottom: "20px",
-              borderBottom: "1px dashed #ddd",
-              marginBottom: "20px",
-            }}
-          >
+          <>
+            {variantId && (
+              <div className="">
+                <button
+                  onClick={() => {
+                    setVariantId("");
+                    setVariantDetails("");
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
+            )}
             <div
-              className="text-bold text-lg"
-              style={{ fontSize: "16px", color: "black" }}
+              className="text-bold text-lg gap-3"
+              style={{
+                fontSize: "16px",
+                color: "black",
+                display: "flex",
+                alignItems: "center",
+                paddingBottom: "10px",
+                borderBottom: "1px dashed #ddd",
+                marginBottom: "10px",
+              }}
             >
               {isGiftCard ? (
                 <span>Select Amount:</span>
               ) : (
                 <span>Select Variant:</span>
               )}
-            </div>
 
-            <select
-              name="country"
-              id="country"
-              value={variantId}
-              className="nice-select"
-              onChange={(e) => {
-                variantsChange(e);
-              }}
-            >
-              {isGiftCard ? (
-                <option>Select Amount:</option>
-              ) : (
-                <option value="">Select Variant</option>
-              )}
-              {productItem?.variants?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item?.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              <select
+                name="country"
+                id="country"
+                value={variantId}
+                className="nice-select"
+                onChange={(e) => {
+                  variantsChange(e);
+                }}
+              >
+                {isGiftCard ? (
+                  <option>Select Amount:</option>
+                ) : (
+                  <option value="">Select Variant</option>
+                )}
+                {productItem?.variants?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item?.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {variantDetails && (
+              <span
+                className="tp-product-price-2 new-price "
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "500",
+                  paddingBottom: "10px",
+                }}
+              >
+                <>
+                  {/* giftwrap changed price product */}
+                  {checkChannel() === "india-channel" ? (
+                    <>
+                      &#8377;{" "}
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      $
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  )}
+                </>
+              </span>
+            )}
+          </>
         )}
       </div>
 
