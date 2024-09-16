@@ -951,10 +951,10 @@ const DetailsWrapper = ({
             <div
               className="text-bold text-lg gap-3"
               style={{
+                alignItems: variantId ? "end" : "center",
                 fontSize: "16px",
                 color: "black",
                 display: "flex",
-                alignItems: "end",
                 paddingBottom: "10px",
                 borderBottom: "1px dashed #ddd",
                 marginBottom: "10px",
@@ -967,10 +967,11 @@ const DetailsWrapper = ({
                   <span>Select Variant:</span>
                 )}
               </div>
-              <div style={{textAlign: "end"}}>
+              <div style={{ textAlign: "end" }}>
                 {variantId && (
                   <div className="">
-                    <button style={{fontSize:"14px"}}
+                    <button
+                      style={{ fontSize: "14px" }}
                       onClick={() => {
                         setVariantId("");
                         setVariantDetails("");
