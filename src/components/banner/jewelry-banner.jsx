@@ -89,7 +89,6 @@ const slider_data = [
 const slider_nav_data = [
   { icon: nav_icon_1, title: <>EARRINGS</>, id: "Q2F0ZWdvcnk6MTE2NDU=" },
   { icon: nav_icon_3, title: <>NECKLACES</>, id: "Q2F0ZWdvcnk6MTE2NDI=" },
-
   {
     icon: nav_icon_2,
     title: <>BANGLES & BRACELETS</>,

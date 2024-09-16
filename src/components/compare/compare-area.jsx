@@ -129,14 +129,22 @@ const CompareArea = () => {
     if (item) {
       try {
         const jsonObject = JSON.parse(item);
-        const textValues = jsonObject?.blocks?.map((value) => {
-          return value?.data?.text;
-        });
-        return textValues;
+        const items =
+          jsonObject?.blocks?.find((block) => block.type === "list")?.data
+            ?.items || [];
+        return (
+          <ul>
+            {items.map((text, index) => (
+              <li key={index}>{text}</li>
+            ))}
+          </ul>
+        );
       } catch (e) {
         console.error("Invalid JSON:", e);
+        return <span>Invalid description</span>;
       }
     }
+    return null;
   };
 
   const addToCartProductINR = async (product) => {
@@ -182,6 +190,8 @@ const CompareArea = () => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
+  console.log("compareData", compareData);
+
   return (
     <>
       <section className="tp-compare-area pb-50 pt-50">
@@ -223,6 +233,15 @@ const CompareArea = () => {
                                   <img
                                     src={profilePic(item?.node?.thumbnail?.url)}
                                     alt="compare"
+                                    style={
+                                      compareData?.length === 1|| compareData?.length === 2
+                                        ? { width: "300px" }
+                                        : {
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                          }
+                                    }
                                   />
                                 ) : (
                                   <video
@@ -230,7 +249,15 @@ const CompareArea = () => {
                                     alt="compare"
                                     muted
                                     loop
-                                    style={{ width: "100%", height: "100%" }}
+                                    style={
+                                      compareData?.length === 1 || compareData?.length === 2
+                                        ? { width: "300px" }
+                                        : {
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                          }
+                                    }
                                   />
                                 )}
 
