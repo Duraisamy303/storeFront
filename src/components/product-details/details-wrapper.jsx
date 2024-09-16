@@ -968,10 +968,10 @@ const DetailsWrapper = ({
                 )}
               </div>
               <div style={{ textAlign: "end" }}>
-                {variantId && (
+                {variantId && variantDetails && (
                   <div className="">
                     <button
-                      style={{ fontSize: "14px" }}
+                      style={{ fontSize: "14px", color: "grey" }}
                       onClick={() => {
                         setVariantId("");
                         setVariantDetails("");
