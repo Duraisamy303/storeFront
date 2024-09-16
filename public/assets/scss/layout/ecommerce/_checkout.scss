@@ -464,3 +464,13 @@
         }
     }
 }
+
+.tp-checkout-verify{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    @media(max-width:1199px) { 
+        display: block;
+    }
+}
