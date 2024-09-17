@@ -423,16 +423,16 @@
   overflow: hidden;
   cursor: pointer;
 
-  @media #{$lg} {
-    height: 250px;
-  }
-  @media #{$md} {
-    height: 200px;
-  }
-  @media #{$sm} {
-    height: 180px;
-  }
-  @media #{$xs} {
-    height: 150px;
-  }
+  // @media #{$lg} {
+  //   height: 250px;
+  // }
+  // @media #{$md} {
+  //   height: 200px;
+  // }
+  // @media #{$sm} {
+  //   height: 180px;
+  // }
+  // @media #{$xs} {
+  //   height: 150px;
+  // }
 }
