@@ -172,7 +172,7 @@ const Failed = ({ data, orderId }) => {
                       <>
                         <td>
                           &#8377;
-                          {paymentMethod == "Cash On delivery" && giftWrap
+                          {giftWrap
                             ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
                             : Number(roundOff(ShippingAmount)).toFixed(2)}
                         </td>
