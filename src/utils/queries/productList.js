@@ -433,6 +433,7 @@ export const PRODUCT_FILTER = ({
             defaultVariant {
               id
               sku
+              quantityAvailable
             }
         category {
           id
@@ -569,7 +570,14 @@ export const LOOT_LIST = ({ channel, first, after, filter }) => {
 };
 
 export const MAX_PRICE = ({ first, channel, filter, after, sortBy }) => {
-  console.log("first, channel, filter, after, sortBy : ", first, channel, filter, after, sortBy );
+  console.log(
+    "first, channel, filter, after, sortBy : ",
+    first,
+    channel,
+    filter,
+    after,
+    sortBy
+  );
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int, $after: String, $channel: String!, $sortBy: ProductOrder, $filter: ProductFilterInput!) {
@@ -836,6 +844,7 @@ export const FEATURE_PRODUCT = ({ first, after, channel, filter }) => {
             defaultVariant {
               id
               sku
+              quantityAvailable
             }
         category {
           id
@@ -856,6 +865,17 @@ export const FEATURE_PRODUCT = ({ first, after, channel, filter }) => {
         }
         variants {
           id
+          name
+          sku
+           pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+
         }
         description
         metadata {
@@ -1046,7 +1066,15 @@ export const STATE_LIST = ({ code }) => {
   });
 };
 
-export const PRE_ORDER_LIST = ({ first, after, channel, filter,sortBy,last,before }) => {
+export const PRE_ORDER_LIST = ({
+  first,
+  after,
+  channel,
+  filter,
+  sortBy,
+  last,
+  before,
+}) => {
   return JSON.stringify({
     query: `
     query Featuredproduct($channel: String!, $first: Int, $after: String, $filter: ProductFilterInput!,$sortBy:ProductOrder,$last:Int,$before:String) {
@@ -1087,6 +1115,7 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter,sortBy,last,befor
         defaultVariant {
           id
           sku
+          quantityAvailable
         }
         category {
           id
@@ -1131,7 +1160,7 @@ export const PRE_ORDER_LIST = ({ first, after, channel, filter,sortBy,last,befor
 }
     
     `,
-    variables: { first, after, channel, filter,sortBy,last,before },
+    variables: { first, after, channel, filter, sortBy, last, before },
   });
 };
 
@@ -1330,6 +1359,7 @@ export const PRODUCT_20_PERCENTAGE = ({ channel, first, after, filter }) => {
             defaultVariant {
               id
               sku
+              quantityAvailable
             }
         category {
           id
@@ -1350,6 +1380,16 @@ export const PRODUCT_20_PERCENTAGE = ({ channel, first, after, filter }) => {
         }
         variants {
           id
+          name
+          sku
+           pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
         }
         description
         metadata {

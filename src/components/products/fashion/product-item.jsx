@@ -230,7 +230,11 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       product?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-    return discountPercentage.toFixed(2);
+    if (discountPercentage) {
+      return discountPercentage.toFixed(2);
+    } else {
+      return 0;
+    }
   };
 
   return (
@@ -518,14 +522,14 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                     {addCommasToNumber(
                       product?.pricing?.priceRangeUndiscounted?.start?.gross
                         ?.amount
-                    )}
+                    )|| 0}
                   </div>
                 )}
                 <div>
                   &#8377;
                   {addCommasToNumber(
                     product?.pricing?.priceRange?.start?.gross?.amount
-                  )}
+                  )|| 0}
                 </div>
               </span>
               {product?.pricing?.discount !== null && (
@@ -553,7 +557,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                   {addCommasToNumber(
                     product?.pricing?.priceRangeUndiscounted?.start?.gross
                       ?.amount
-                  )}
+                  )|| 0}
                 </div>
               )}
 
@@ -580,7 +584,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
                 {"$"}
                 {addCommasToNumber(
                   product?.pricing?.priceRange?.start?.gross?.amount
-                )}
+                )|| 0}
               </span>
               {product?.pricing?.discount !== null && (
                 <div
