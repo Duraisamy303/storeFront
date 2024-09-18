@@ -174,8 +174,16 @@ const Success = ({ data }) => {
                 boxShadow: "3px 3px 5px #f1f1f1",
               }}
             >
-              <p style={{ color: "gray", fontSize: "18px", fontWeight: "600" }}>
-                Thank You. Your order has been received.
+              <p
+                style={{
+                  color: "gray",
+                  fontSize: "22px",
+                  fontWeight: "600",
+                  color: "green",
+                }}
+              >
+                Thank You!
+                <br /> Your order has been received.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
                 <li style={{ paddingBottom: "8px" }}>
