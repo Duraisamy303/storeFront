@@ -31,6 +31,13 @@ query ProductListPaginated($first: Int, $last :Int, $after: String, $before: Str
           id
           name
           sku
+           pricing {
+            price {
+              gross {
+                amount
+              }
+            }
+          }
         }
       }
       cursor

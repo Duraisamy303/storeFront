@@ -253,7 +253,7 @@ const OrderList = () => {
                 </tbody>
               </table>
             </div>
-            <div className="pagination-controls" >
+            <div className="pagination-controls">
               {/* <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                 Previous
               </button> */}
