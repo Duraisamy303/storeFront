@@ -85,24 +85,24 @@ const CelebrityData = [
     name: "Dhivyadharshini (DD)",
     designation: "Actor",
   },
-  {
-    id: 7,
-    img: Celebrity7,
-    name: "Dhivyadharshini (DD)",
-    designation: "Actor",
-  },
+  // {
+  //   id: 7,
+  //   img: Celebrity7,
+  //   name: "Dhivyadharshini (DD)",
+  //   designation: "Actor",
+  // },
   {
     id: 8,
     img: Celebrity8,
     name: "Keerthy Suresh",
     designation: "Actor",
   },
-  {
-    id: 9,
-    img: Celebrity9,
-    name: "",
-    designation: "Actor",
-  },
+  // {
+  //   id: 9,
+  //   img: Celebrity9,
+  //   name: "",
+  //   designation: "Actor",
+  // },
   {
     id: 10,
     img: Celebrity10,
@@ -140,36 +140,36 @@ const CelebrityData = [
     name: "Regina Cassandra",
     designation: "Actor",
   },
-  {
-    id: 16,
-    img: Celebrity16,
-    name: "Dhivyadharshini (DD)",
-    designation: "Actor",
-  },
+  // {
+  //   id: 16,
+  //   img: Celebrity16,
+  //   name: "Dhivyadharshini (DD)",
+  //   designation: "Actor",
+  // },
   {
     id: 17,
     img: Celebrity17,
     name: "Jyothika",
     designation: "Actor",
   },
-  {
-    id: 18,
-    img: Celebrity18,
-    name: "Keerthy Suresh",
-    designation: "Actor",
-  },
-  {
-    id: 19,
-    img: Celebrity19,
-    name: "",
-    designation: "Actor",
-  },
-  {
-    id: 20,
-    img: Celebrity20,
-    name: "",
-    designation: "Actor",
-  },
+  // {
+  //   id: 18,
+  //   img: Celebrity18,
+  //   name: "Keerthy Suresh",
+  //   designation: "Actor",
+  // },
+  // {
+  //   id: 19,
+  //   img: Celebrity19,
+  //   name: "",
+  //   designation: "Actor",
+  // },
+  // {
+  //   id: 20,
+  //   img: Celebrity20,
+  //   name: "",
+  //   designation: "Actor",
+  // },
   {
     id: 21,
     img: Celebrity21,
@@ -194,24 +194,24 @@ const CelebrityData = [
     name: "Shalini Pandey",
     designation: "Actor",
   },
-  {
-    id: 25,
-    img: Celebrity25,
-    name: "",
-    designation: "Actor",
-  },
+  // {
+  //   id: 25,
+  //   img: Celebrity25,
+  //   name: "",
+  //   designation: "Actor",
+  // },
   {
     id: 26,
     img: Celebrity26,
     name: "aparna balamurali ",
     designation: "Actor",
   },
-  {
-    id: 27,
-    img: Celebrity27,
-    name: "",
-    designation: "Actor",
-  },
+  // {
+  //   id: 27,
+  //   img: Celebrity27,
+  //   name: "",
+  //   designation: "Actor",
+  // },
   {
     id: 28,
     img: Celebrity28,
@@ -236,12 +236,12 @@ const CelebrityData = [
     name: "Kashmira Pardeshi",
     designation: "Actor",
   },
-  {
-    id: 32,
-    img: Celebrity32,
-    name: "Aishwarya Rajesh",
-    designation: "Actor",
-  },
+  // {
+  //   id: 32,
+  //   img: Celebrity32,
+  //   name: "Aishwarya Rajesh",
+  //   designation: "Actor",
+  // },
 
   {
     id: 33,
@@ -306,12 +306,12 @@ const CelebrityData = [
     designation: "Actor",
   },
 
-  {
-    id: 42,
-    img: Celebrity42,
-    name: "",
-    designation: "Actor",
-  },
+  // {
+  //   id: 42,
+  //   img: Celebrity42,
+  //   name: "",
+  //   designation: "Actor",
+  // },
   {
     id: 43,
     img: Celebrity43,
@@ -325,24 +325,24 @@ const CelebrityData = [
     designation: "Actor",
   },
 
-  {
-    id: 45,
-    img: Celebrity45,
-    name: "Keerthy Suresh",
-    designation: "Actor",
-  },
+  // {
+  //   id: 45,
+  //   img: Celebrity45,
+  //   name: "Keerthy Suresh",
+  //   designation: "Actor",
+  // },
   {
     id: 46,
     img: Celebrity46,
     name: "Vani Bhojan",
     designation: "Actor",
   },
-  {
-    id: 47,
-    img: Celebrity47,
-    name: "Suma kanakala",
-    designation: "Actor",
-  },
+  // {
+  //   id: 47,
+  //   img: Celebrity47,
+  //   name: "Suma kanakala",
+  //   designation: "Actor",
+  // },
 ];
 
 export default CelebrityData;
