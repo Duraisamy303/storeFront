@@ -396,7 +396,7 @@ export const productApi = apiSlice.injectEndpoints({
       query: ({
         first = null,
         after = null,
-        sortBy={},
+        sortBy = {},
         filter = {},
         last = null,
         before = null,
@@ -539,6 +539,7 @@ export const productApi = apiSlice.injectEndpoints({
             after: null,
             filter: {
               categories: "Q2F0ZWdvcnk6MTIwMjQ=",
+              isPublished: true,
             },
           })
         );
@@ -705,13 +706,7 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     maxPrice: builder.mutation({
-      query: ({
-        first = null,
-        after = null,
-        sortBy = {},
-        filter = {},
-      }) => {
-
+      query: ({ first = null, after = null, sortBy = {}, filter = {} }) => {
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {

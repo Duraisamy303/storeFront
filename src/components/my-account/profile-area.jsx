@@ -16,12 +16,12 @@ const ProfileArea = ({ orderData }) => {
           <div className="profile__inner p-relative">
             <ProfileShape />
             <div className="row">
-              <div className="col-xxl-4 col-lg-4">
+              <div className="col-xxl-3 col-lg-3">
                 <div className="profile__tab mr-40">
                   <ProfileNavTab />
                 </div>
               </div>
-              <div className="col-xxl-8 col-lg-8">
+              <div className="col-xxl-9 col-lg-9">
                 <div className="profile__tab-content">
                   <div className="tab-content" id="profile-tabContent">
                     <div

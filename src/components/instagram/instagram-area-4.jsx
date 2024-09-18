@@ -33,6 +33,7 @@ import { compare_list, openCartMini } from "@/redux/features/cartSlice";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../loader/button-loader";
 import Loader from "@/components/loader/loader";
+import Link from "next/link";
 
 const InstagramAreaFour = () => {
   const [discountProduct, { isLoading: loading }] =
@@ -225,7 +226,7 @@ const InstagramAreaFour = () => {
             </div>
           </div> */}
 
-          <div className="row " style={{alignItems:"center"}}>
+          <div className="row " style={{ alignItems: "center" }}>
             <div className="col-md-4">
               <div className="main-discount">
                 <span className="discound-1">DISCOUNT OF</span> <br />
@@ -245,7 +246,7 @@ const InstagramAreaFour = () => {
             <div className="col-md-8">
               <div className="row row-cols-lg-6 row-cols-md-3 row-cols-sm-2 row-cols-2 gx-1 gy-1 gy-lg-0">
                 {loading ? (
-                  <Loader  />
+                  <Loader />
                 ) : (
                   productList?.map((item, i) => (
                     <div className="col col-content-container" key={i}>
@@ -388,10 +389,12 @@ const InstagramAreaFour = () => {
                         <div className="tp-instagram-icon-2 text-center">
                           <p
                             className="actor-hov-para"
-                            style={{ fontSize: "12px" }}
+                            style={{ fontSize: "12px", cursor:"pointer" }}
+                            onClick={() => router.push(`/product-details/${item?.id}`)}
                           >
                             {item?.name}
                           </p>
+
                           {item?.category && (
                             <p
                               className="actor-hov-para"

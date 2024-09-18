@@ -16,105 +16,159 @@ const MyOrderDetails = ({ data }) => {
   return (
     <section className="tp-checkout-area pb-50 pt-50">
       <div className="container">
-        <p style={{ color: "gray" }}>
-          Order #<span style={{ color: "black" }}>{Data?.number}</span> was
-          placed on <span style={{ color: "black" }}>{FormatDate}</span> and is
-          currently{" "}
-          <span style={{ color: "black" }}>{Data?.statusDisplay}</span>.
+        <p
+          style={{
+            color: "gray",
+            borderBottom: "1px solid #e6e6e6",
+            paddingBottom: "10px",
+          }}
+        >
+          Order
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            {" "}
+            #{Data?.number}
+          </span>{" "}
+          was placed on{" "}
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            {FormatDate}
+          </span>{" "}
+          and is currently{" "}
+          <span style={{ color: "black", fontWeight: "bold" }}>
+            {Data?.statusDisplay}
+          </span>
+          .
         </p>
-        <div className="pb-20 pt-20">
-          <h3 style={{ fontWeight: "400", fontSize: "18px" }}>ORDER UPDATES</h3>
-          <p style={{ color: "gray", marginBottom: "5px" }}>
-            Monday 22nd of April 2024, 03:38pm
-          </p>
-          {/* <p style={{ color: "gray" }}>hi mam</p> */}
-        </div>
-        <h3 style={{ fontWeight: "400", fontSize: "18px" }}>ORDER DETAILS</h3>
-        <div className="responsive-table">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">PRODUCT</th>
-                <th scope="col">TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Data?.lines.map((item, i) => (
-                <tr key={i}>
-                  <td scope="row">
-                    {item.productName} ({item?.quantity})
-                  </td>
 
-                  <td>
-                    {item?.totalPrice?.gross?.currency === "USD" ? "$" : "₹"}
-                    {addCommasToNumber(item?.totalPrice?.gross?.amount)}
-                  </td>
-                </tr>
-              ))}
+        <div className="row pt-20 pb-20">
+          <div className="col-lg-6 col-md-6">
+            <h3 style={{ fontWeight: "400", fontSize: "18px" }}>
+              ORDER UPDATES
+            </h3>
 
-              <tr>
-                <td>Subtotal</td>
+            <div className="timeline-container">
+              <ul className="timeline">
+                {Data?.events?.map((item, i) => (
+                  <li key={i} className="timeline-item">
+                    <div className="timeline-content">{item.type}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-                <td>
-                  {SubTotal?.currency == "USD" ? "$" : "₹"}
-                  {addCommasToNumber(SubTotal?.amount)}
-                </td>
-              </tr>
+          <div className="col-lg-6 col-md-6">
+            <h3 style={{ fontWeight: "400", fontSize: "18px" }}>
+              ORDER DETAILS
+            </h3>
+            <div className="responsive-table">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">PRODUCT</th>
+                    <th scope="col">TOTAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Data?.lines.map((item, i) => (
+                    <tr key={i}>
+                      <td scope="row">
+                        {item.productName} ({item?.quantity})
+                      </td>
 
-              <tr>
-                <td>
-                  {paymentMethod == "Cash On delivery" ? "COD Fee" : "Shipping"}
-                </td>
+                      <td>
+                        {item?.totalPrice?.gross?.currency === "USD"
+                          ? "$"
+                          : "₹"}
+                        {addCommasToNumber(item?.totalPrice?.gross?.amount)}
+                      </td>
+                    </tr>
+                  ))}
 
-                {checkChannel() === "india-channel" ? (
-                  <>
+                  <tr>
+                    <td>Subtotal</td>
+
                     <td>
-                      &#8377;
-                      {paymentMethod == "Cash On delivery" || giftWrap
-                        ? Number(roundOff(ShippingAmount?.gross?.amount) - 50).toFixed(2)
-                        : Number(roundOff(ShippingAmount?.gross?.amount)).toFixed(2)}
+                      {SubTotal?.currency == "USD" ? "$" : "₹"}
+                      {addCommasToNumber(SubTotal?.amount)}
                     </td>
-                  </>
-                ) : (
-                  <>
-                    <td>${roundOff(ShippingAmount?.gross?.amount)}</td>
-                  </>
-                )}
-              </tr>
+                  </tr>
 
-              {giftWrap && (
-                <tr>
-                  <td>Gift Wrap</td>
+                  <tr>
+                    <td>
+                      {paymentMethod == "Cash On delivery"
+                        ? "COD Fee"
+                        : "Shipping"}
+                    </td>
 
-                  <td>&#8377;50.00</td>
-                </tr>
-              )}
+                    {checkChannel() === "india-channel" ? (
+                      <>
+                        <td>
+                          &#8377;
+                          {paymentMethod == "Cash On delivery" || giftWrap
+                            ? Number(
+                                roundOff(ShippingAmount?.gross?.amount) - 50
+                              ).toFixed(2)
+                            : Number(
+                                roundOff(ShippingAmount?.gross?.amount)
+                              ).toFixed(2)}
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td>${roundOff(ShippingAmount?.gross?.amount)}</td>
+                      </>
+                    )}
+                  </tr>
 
-              {GiftCard && GiftCard.length > 0 && (
-                <tr>
-                  <td>Coupon</td>
-                  <td>
-                    {GiftCard[0]?.initialBalance?.currency == "USD" ? "$" : "₹"}
-                    {GiftCard[0]?.initialBalance?.amount}
-                  </td>
-                </tr>
-              )}
+                  <tr>
+                    <td>Payment Status</td>
 
-              <tr>
-                <td style={{ fontSize: "20px" }}>TOTAL:</td>
+                    <td>{Data?.paymentStatus}</td>
+                  </tr>
 
-                <td style={{ fontSize: "20px" }}>
-                  {Total?.currency == "USD" ? "$" : "₹"}
+                  <tr>
+                    <td>Payment Method</td>
 
-                  {addCommasToNumber(Total?.amount)}
-                  <div style={{ fontSize: "15px" }}>
-                    (includes {Total?.currency == "USD" ? "$" : "₹"}
-                    {addCommasToNumber(Tax?.amount)} GST)
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <td>{Data?.paymentMethod?.name}</td>
+                  </tr>
+
+                  {giftWrap && (
+                    <tr>
+                      <td>Gift Wrap</td>
+
+                      <td>&#8377;50.00</td>
+                    </tr>
+                  )}
+
+                  {GiftCard && GiftCard.length > 0 && (
+                    <tr>
+                      <td>Coupon</td>
+                      <td>
+                        {GiftCard[0]?.initialBalance?.currency == "USD"
+                          ? "$"
+                          : "₹"}
+                        {GiftCard[0]?.initialBalance?.amount}
+                      </td>
+                    </tr>
+                  )}
+
+                  <tr>
+                    <td style={{ fontSize: "20px" }}>TOTAL:</td>
+
+                    <td style={{ fontSize: "20px" }}>
+                      {Total?.currency == "USD" ? "$" : "₹"}
+
+                      {addCommasToNumber(Total?.amount)}
+                      <div style={{ fontSize: "15px" }}>
+                        (includes {Total?.currency == "USD" ? "$" : "₹"}
+                        {addCommasToNumber(Tax?.amount)} GST)
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
         <div className="row pt-50">
           <div className="col-md-6">
