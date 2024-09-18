@@ -687,43 +687,67 @@
   }
 }
 
-
 .timeline-container {
-    position: relative;
-    margin-top: 30px;
-  }
+  position: relative;
+  margin-top: 30px;
+}
 
-  .timeline {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    position: relative;
-  }
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
 
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 15px; /* Adjust for positioning */
-    top: 0;
-    bottom: 0;
-    width: 2px; /* Line width */
-    background: #e6e6e6; /* Line color */
-  }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px; /* Adjust for positioning */
+  top: 0;
+  bottom: 0;
+  width: 2px; /* Line width */
+  background: #e6e6e6; /* Line color */
+}
 
-  .timeline-item {
-    position: relative;
-    padding: 10px 0;
-    margin-left: 30px; /* Adjust to align items with the line */
-  }
+.timeline-item {
+  position: relative;
+  padding: 10px 0;
+  margin-left: 30px; /* Adjust to align items with the line */
+}
 
-  .timeline-content {
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.timeline-content {
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .timeline-item:nth-child(even) .timeline-content {
-    background: #f9f9f9;
+.timeline-item:nth-child(even) .timeline-content {
+  background: #f9f9f9;
+}
+
+.order-updates-section {
+  height: 400px;
+  overflow-y: scroll;
+  @media (max-width: 767px) {
+    height: auto;
   }
+}
+.order-updates-section {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #ffffff #ffffff; /* For Firefox */
+}
+
+.order-updates-section::-webkit-scrollbar {
+  width: 2px; /* Width of the scrollbar */
+}
+
+.order-updates-section::-webkit-scrollbar-thumb {
+  background-color: #ffffff !important; /* Color of the scrollbar */
+  border-radius: 10px; /* Round scrollbar edges */
+}
+
+.order-updates-section::-webkit-scrollbar-track {
+  background: #ffffff !important; /* Track color */
+}

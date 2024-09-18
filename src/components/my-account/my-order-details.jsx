@@ -40,7 +40,7 @@ const MyOrderDetails = ({ data }) => {
         </p>
 
         <div className="row pt-20 pb-20">
-          <div className="col-lg-6 col-md-6">
+          <div className="col-lg-6 col-md-6 order-updates-section">
             <h3 style={{ fontWeight: "400", fontSize: "18px" }}>
               ORDER UPDATES
             </h3>
@@ -49,7 +49,10 @@ const MyOrderDetails = ({ data }) => {
               <ul className="timeline">
                 {Data?.events?.map((item, i) => (
                   <li key={i} className="timeline-item">
-                    <div className="timeline-content">{item.type}</div>
+                    <div className="timeline-content">
+                      <b>{item.type}</b> -{" "}
+                      {moment(item.createdAt).format("MMMM D, YYYY")}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -176,22 +179,20 @@ const MyOrderDetails = ({ data }) => {
               BILLING ADDRESS
             </h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.billingAddress?.firstName} {Data?.billingAddress?.lastName}
+              <b>Name:</b> {Data?.billingAddress?.firstName}{" "}
+              {Data?.billingAddress?.lastName}
             </p>
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.billingAddress?.streetAddress1}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.billingAddress?.city}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.billingAddress?.country?.country}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
+              <b>Address:</b> {Data?.billingAddress?.streetAddress1},<br />
+              {Data?.billingAddress?.city}, <br />
+              {Data?.billingAddress?.country?.country} -{" "}
               {Data?.billingAddress?.postalCode}
             </p>
+            {/* <p style={{ color: "gray", marginBottom: "0px" }}></p>
+            <p style={{ color: "gray", marginBottom: "0px" }}></p>
+            <p style={{ color: "gray", marginBottom: "0px" }}></p> */}
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.billingAddress?.phone}
+              <b>Phone:</b> {Data?.billingAddress?.phone}
             </p>
 
             <p></p>
@@ -201,23 +202,18 @@ const MyOrderDetails = ({ data }) => {
               SHIPPING ADDRESS
             </h4>
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.shippingAddress?.firstName}{" "}
+              <b>Name:</b> {Data?.shippingAddress?.firstName}{" "}
               {Data?.shippingAddress?.lastName}
             </p>
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.shippingAddress?.streetAddress1}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.shippingAddress?.city}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.shippingAddress?.country?.country}
-            </p>
-            <p style={{ color: "gray", marginBottom: "0px" }}>
+              <b>Address:</b> {Data?.shippingAddress?.streetAddress1},<br />
+              {Data?.shippingAddress?.city}, <br />
+              {Data?.shippingAddress?.country?.country} -{" "}
               {Data?.shippingAddress?.postalCode}
             </p>
+
             <p style={{ color: "gray", marginBottom: "0px" }}>
-              {Data?.shippingAddress?.phone}
+              <b>Phone:</b> {Data?.shippingAddress?.phone}
             </p>
           </div>
         </div>
