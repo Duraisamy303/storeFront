@@ -107,7 +107,7 @@ const MyOrderDetails = ({ data }) => {
                       <>
                         <td>
                           &#8377;
-                          {paymentMethod == "Cash On delivery" || giftWrap
+                          {giftWrap
                             ? Number(
                                 roundOff(ShippingAmount?.gross?.amount) - 50
                               ).toFixed(2)
