@@ -278,7 +278,7 @@ const DetailsWrapper = ({
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        // notifyError(err);
+        notifyError(err);
       } else {
         notifySuccess(`Product added to cart successfully`);
         cartRefetch();
@@ -312,7 +312,7 @@ const DetailsWrapper = ({
       });
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
         const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        notifyError(err);
+        // notifyError(err);
       } else {
         cartRefetch();
       }
@@ -458,7 +458,11 @@ const DetailsWrapper = ({
       productItem?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-    return discountPercentage.toFixed(2);
+    if (discountPercentage) {
+      return discountPercentage.toFixed(2);
+    } else {
+      return 0;
+    }
   };
 
   useEffect(() => {
@@ -511,14 +515,14 @@ const DetailsWrapper = ({
                       &#8377;
                       {addCommasToNumber(
                         variantDetails?.pricing?.price?.gross?.amount
-                      )}
+                      ) || 0}
                     </>
                   ) : (
                     <>
                       &#8377;
                       {addCommasToNumber(
                         productItem?.defaultVariant?.costPrice
-                      )}
+                      ) || 0}
                     </>
                   )}
                 </span>
@@ -541,7 +545,7 @@ const DetailsWrapper = ({
                       productItem?.pricing?.priceRange?.start?.gross?.amount ||
                         productItem?.node?.pricing?.priceRange?.start?.gross
                           ?.amount
-                    )}
+                    ) || 0}
                   </>
                 )}
               </>
@@ -563,14 +567,14 @@ const DetailsWrapper = ({
                       {"$"}
                       {addCommasToNumber(
                         variantDetails?.pricing?.price?.gross?.amount
-                      )}
+                      ) || 0}
                     </>
                   ) : (
                     <>
                       {"$"}
                       {addCommasToNumber(
                         productItem?.defaultVariant?.costPrice
-                      )}
+                      ) || 0}
                     </>
                   )}
                 </span>
@@ -594,7 +598,7 @@ const DetailsWrapper = ({
                       productItem?.pricing?.priceRange?.start?.gross?.amount ||
                         productItem?.node?.pricing?.priceRange?.start?.gross
                           ?.amount
-                    )}
+                    ) || 0}
                   </>
                 )}
               </>
