@@ -77,6 +77,8 @@ const DetailsWrapper = ({
   const [wishlistLoader, setWishlistLoader] = useState(false);
   const [index, setIndex] = useState(0);
   const [variantId, setVariantId] = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
 
   const [visibility, setVisibility] = useState({
     description: false,
@@ -450,14 +452,26 @@ const DetailsWrapper = ({
   const CategoryList = productItem?.category;
 
   const saveOff = () => {
-    const  discountedPrice = productItem?.pricing?.priceRange?.start?.gross?.amount
+    const discountedPrice =
+      productItem?.pricing?.priceRange?.start?.gross?.amount;
     const originalPrice =
-    productItem?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
+      productItem?.pricing?.priceRangeUndiscounted?.start?.gross?.amount;
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-      return discountPercentage.toFixed(2)
+    return discountPercentage.toFixed(2);
   };
 
+  useEffect(() => {
+    if (productItem?.variants?.length > 1) {
+      const amounts = productItem?.variants?.map(
+        (product) => product?.pricing?.price?.gross?.amount
+      );
+      const minAmount = Math.min(...amounts);
+      const maxAmount = Math.max(...amounts);
+      setMaxAmount(maxAmount);
+      setMinAmount(minAmount);
+    }
+  }, [productItem]);
 
   return (
     <div className="tp-product-details-wrapper">
@@ -483,86 +497,111 @@ const DetailsWrapper = ({
       <div className="tp-product-details-price-wrapper">
         {channel == "india-channel" ? (
           <div className="tp-product-price-wrapper-2">
-            {productItem?.pricing?.discount !== null && (
-              <div
-                className=""
-                style={{
-                  textDecoration: "line-through",
-                  color: "grey",
-                  fontWeight: 400,
-                  marginRight: "10px",
-                }}
-              >
-                &#8377;
-                {addCommasToNumber(
-                  productItem?.pricing?.priceRangeUndiscounted?.start?.gross
-                    ?.amount
-                )}
-              </div>
-            )}
-            <span className="tp-product-price-2 new-price">
-              {variantDetails ? (
-                <>&#8377; {variantDetails?.pricing?.price?.gross?.amount}</>
-              ) : (
-                <>
-                  &#8377;{" "}
-                  {addCommasToNumber(
-                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                      productItem?.node?.pricing?.priceRange?.start?.gross
-                        ?.amount
+            {productItem?.variants?.length <= 1 &&
+              RegularPrice(
+                productItem?.defaultVariant?.costPrice,
+                productItem?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="pr-5"
+                  style={{ textDecoration: "line-through", color: "gray" }}
+                >
+                  {variantDetails ? (
+                    <>
+                      &#8377;
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      &#8377;
+                      {addCommasToNumber(
+                        productItem?.defaultVariant?.costPrice
+                      )}
+                    </>
                   )}
-                </>
+                </span>
               )}
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ fontSize: "22px", fontWeight: "500" }}
+            >
+              <>
+                {/* For normal product */}
+                {productItem?.variants?.length > 1 ? (
+                  <>
+                    &#8377;{addCommasToNumber(minAmount)} - &#8377;
+                    {addCommasToNumber(maxAmount)}
+                  </>
+                ) : (
+                  <>
+                    &#8377;
+                    {addCommasToNumber(
+                      productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                        productItem?.node?.pricing?.priceRange?.start?.gross
+                          ?.amount
+                    )}
+                  </>
+                )}
+              </>
             </span>
           </div>
         ) : (
           <div className="tp-product-price-wrapper-2">
-            {productItem?.pricing?.discount !== null && (
-              <div
-                className=""
-                style={{
-                  textDecoration: "line-through",
-                  color: "grey",
-                  fontWeight: 400,
-                  marginRight: "10px",
-                }}
-              >
-                &#8377;
-                {addCommasToNumber(
-                  productItem?.pricing?.priceRangeUndiscounted?.start?.gross
-                    ?.amount
-                )}
-              </div>
-            )}
-            <span className="tp-product-price-2 new-price">
-              {variantDetails ? (
-                <>
-                  {"$"}
-                  {variantDetails?.pricing?.price?.gross?.amount}
-                </>
-              ) : (
-                <>
-                  {"$"}{" "}
-                  {addCommasToNumber(
-                    productItem?.pricing?.priceRange?.start?.gross?.amount ||
-                      productItem?.node?.pricing?.priceRange?.start?.gross
-                        ?.amount
+            {productItem?.variants?.length <= 1 &&
+              RegularPrice(
+                productItem?.defaultVariant?.costPrice,
+                productItem?.pricing?.priceRange?.start?.gross?.amount
+              ) && (
+                <span
+                  className="pr-5"
+                  style={{ textDecoration: "line-through", color: "gray" }}
+                >
+                  {variantDetails ? (
+                    <>
+                      {"$"}
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {"$"}
+                      {addCommasToNumber(
+                        productItem?.defaultVariant?.costPrice
+                      )}
+                    </>
                   )}
-                </>
+                </span>
               )}
+            <span
+              className="tp-product-price-2 new-price"
+              style={{ fontSize: "22px", fontWeight: "500" }}
+            >
+              <>
+                {/* For normal product */}
+                {productItem?.variants?.length > 1 ? (
+                  <>
+                    {"$"}
+                    {addCommasToNumber(minAmount)} - {"$"}
+                    {addCommasToNumber(maxAmount)}
+                  </>
+                ) : (
+                  <>
+                    {"$"}
+                    {addCommasToNumber(
+                      productItem?.pricing?.priceRange?.start?.gross?.amount ||
+                        productItem?.node?.pricing?.priceRange?.start?.gross
+                          ?.amount
+                    )}
+                  </>
+                )}
+              </>
             </span>
           </div>
         )}
       </div>
-      {productItem?.pricing?.discount !== null && (
-        <div
-          style={{
-            color: "#c3935b",
-            fontSize: "16px",
-            paddingBottom: "10px",
-          }}
-        >{`Save ${saveOff()}% OFF`}</div>
-      )}
 
       {productItem?.metadata?.length > 0 && (
         <p style={{ color: "black" }}>
@@ -606,34 +645,95 @@ const DetailsWrapper = ({
 
       <div className="w-full row">
         {productItem?.variants?.length > 1 && (
-          <div className="flex flex-wrap gap-3">
+          <>
             <div
-              className="text-bold text-lg"
-              style={{ fontSize: "16px", color: "black" }}
-            >
-              <span> Gift Card Amount</span>
-            </div>
-
-            <select
-              name="country"
-              id="country"
-              value={variantId}
-              className="nice-select"
-              onChange={(e) => {
-                variantsChange(e);
+              className="text-bold text-lg gap-3"
+              style={{
+                alignItems: variantId ? "end" : "center",
+                fontSize: "16px",
+                color: "black",
+                display: "flex",
+                paddingBottom: "10px",
+                borderBottom: "1px dashed #ddd",
+                marginBottom: "10px",
               }}
             >
-              <option value="">Select Amount</option>
-              {productItem?.variants?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item?.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              <div>
+                <span>Select Variant:</span>
+              </div>
+              <div style={{ textAlign: "end" }}>
+                {variantId && variantDetails && (
+                  <div className="">
+                    <button
+                      style={{ fontSize: "14px", color: "grey" }}
+                      onClick={() => {
+                        setVariantId("");
+                        setVariantDetails("");
+                      }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+                <select
+                  name="country"
+                  id="country"
+                  value={variantId}
+                  className="nice-select"
+                  onChange={(e) => {
+                    variantsChange(e);
+                  }}
+                >
+                  <option value="">Select Variant</option>
+                  {productItem?.variants?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item?.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {variantDetails && (
+              <span
+                className="tp-product-price-2 new-price "
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "500",
+                  paddingBottom: "10px",
+                }}
+              >
+                <>
+                  {/* giftwrap changed price product */}
+                  {checkChannel() === "india-channel" ? (
+                    <>
+                      &#8377;{" "}
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      $
+                      {addCommasToNumber(
+                        variantDetails?.pricing?.price?.gross?.amount
+                      )}
+                    </>
+                  )}
+                </>
+              </span>
+            )}
+          </>
         )}
       </div>
-
+      {productItem?.pricing?.discount !== null && (
+        <div
+          style={{
+            color: "#c3935b",
+            fontSize: "16px",
+            paddingBottom: "10px",
+          }}
+        >{`Save ${saveOff()}% OFF`}</div>
+      )}
       {/* {productItem?.variants?.length > 1 && (
         <div
           style={{
@@ -664,16 +764,22 @@ const DetailsWrapper = ({
           ))}
         </div>
       )} */}
-      <div className="mt-2">
-        <p style={{ fontSize: "16px", color: "black" }}>
-          {variantDetails ? (
-            <>{variantDetails?.quantityAvailable}</>
+      {productItem?.variants?.length > 1 ? (
+        variantId && variantDetails ? (
+          variantDetails?.quantityAvailable == 0 ||
+          productItem?.defaultVariant?.quantityAvailable == 0 ? (
+            <span style={{ color: "red", fontWeight: "500" }}>
+              Out of Stock
+            </span>
           ) : (
-            <>{productItem?.defaultVariant?.quantityAvailable}</>
-          )}
-          in stock
-        </p>
-      </div>
+            <span>In Stock</span>
+          )
+        ) : null
+      ) : productItem?.defaultVariant?.quantityAvailable == 0 ? (
+        <span style={{ color: "red", fontWeight: "500" }}>Out of Stock</span>
+      ) : (
+        <span>In Stock</span>
+      )}
 
       <div className="tp-product-details-action-item-wrapper d-sm-flex align-items-center">
         <div className="tp-product-details-add-to-cart mb-15">
