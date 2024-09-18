@@ -229,17 +229,16 @@ const InstagramAreaFour = () => {
           <div className="row " style={{ alignItems: "center" }}>
             <div className="col-md-4">
               <div className="main-discount">
-                <span className="discound-1">DISCOUNT OF</span> <br />
-                <span className="discound">20%</span>
-                <br /> <span className="discount-2">ON ALL NECKLACES</span>
+                <span className="discound-1">Exclusive</span> <br />
+                <span className="discound">Deals </span>
+                <br /> <span className="discount-2">Just for You!</span>
               </div>
               <p
                 style={{ textAlign: "center", color: "gray", fontSize: "14px" }}
               >
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
+                Whether it's a gift or a treat for yourself, now is the perfect
+                time to add a touch of luxury and stunning pieces to your
+                collection
               </p>
             </div>
 
@@ -389,8 +388,10 @@ const InstagramAreaFour = () => {
                         <div className="tp-instagram-icon-2 text-center">
                           <p
                             className="actor-hov-para"
-                            style={{ fontSize: "12px", cursor:"pointer" }}
-                            onClick={() => router.push(`/product-details/${item?.id}`)}
+                            style={{ fontSize: "12px", cursor: "pointer" }}
+                            onClick={() =>
+                              router.push(`/product-details/${item?.id}`)
+                            }
                           >
                             {item?.name}
                           </p>

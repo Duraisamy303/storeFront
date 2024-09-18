@@ -27,60 +27,59 @@ import { useRouter } from "next/router";
 // slider data
 const slider_data = [
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Exquisite earrings",
+    title: "To shine bright and elevate your style",
     img: slider_img_1,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Adorn your ears with timeless designs that speak of grace and beauty",
     shopId: "Q2F0ZWdvcnk6MTE2NDU=",
   },
   {
-    subtitle: "Find the ideal gift",
-    title: "JEWELLERY WITH A MODERN TWIST",
+    subtitle: "Elegant Jewellery",
+    title: "Reflecting timeless craftsmanship and heritage",
     img: slider_img_2,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Luxurious ethnic jewellery that is a blend of traditional motifs and modern sophistication, perfect for any occasion.",
 
     shopId: "Q2F0ZWdvcnk6MTE2NDI=",
   },
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Beautiful bracelets",
+    title: "Classic charm that never goes out of style",
     img: slider_img_3,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Every piece of our handcrafted bracelets is a work of art that resonates your unique style",
     shopId: "Q2F0ZWdvcnk6MTE2NDc=",
   },
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Designed to captivate",
+    title: "Timeless, handcrafted rings for every occasion",
     img: slider_img_4,
-    content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+    content: "Stunning collections that convey grace and sophistication",
     shopId: "Q2F0ZWdvcnk6MTE2NTU=",
   },
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Delicate Anklets",
+    title: "That blends tradition and modern flair",
     img: slider_img_5,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Adorn your ankles with stunning designs that complement every step",
     shopId: "Q2F0ZWdvcnk6MTIxNTI=",
   },
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Handcrafted Idols",
+    title: "For meaningful worship",
     img: slider_img_6,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Celebrate the richness of tradition and honour your heritage and express your devotion in a meaningful way",
     shopId: "Q2F0ZWdvcnk6MTM1ODc=",
   },
   {
-    subtitle: "Fine Jewellery",
-    title: "LUXURY CAN BE AFFORDABLE",
+    subtitle: "Stunning Accessories",
+    title: "To complete your look",
     img: slider_img_7,
     content:
-      "Looked up one of the more obscure latin words, consectetor, from a lorem ipusom passage, and going through the cites of the word",
+      "Provides the perfect finishing touch to showcase your individuality",
     shopId: "Q2F0ZWdvcnk6MTI0MTU=",
   },
 ];
@@ -205,7 +204,7 @@ const JewelryBanner = () => {
                   <div className="col-xl-6 col-lg-6 col-md-8">
                     <div className="tp-slider-content-4 p-relative z-index-1">
                       <span>{item.subtitle}</span>
-                      <h3 className="tp-slider-title-4">{item.title}</h3>
+                      <h3 className="tp-slider-title-4" style={{textTransform: "Uppercase"}}>{item.title}</h3>
                       <p className="tp-slider-content-4">{item?.content}</p>
                       <div className="tp-slider-btn-4">
                         <button
