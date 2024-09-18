@@ -27,7 +27,7 @@ const Success = ({ data }) => {
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
       <div className="container">
         <div className="row" style={{ justifyContent: "space-between" }}>
-          <div className="col-lg-7">
+          <div className="col-lg-5">
             {/* {paymentMethod != "Cash On delivery" && */}
             <p style={{ color: "gray" }}>
               Pay with{" "}
@@ -166,7 +166,7 @@ const Success = ({ data }) => {
               </table>
             </div>
           </div>
-          <div className="col-lg-4 ">
+          <div className="col-lg-6 ">
             <div
               style={{
                 padding: "20px 30px",
@@ -177,13 +177,13 @@ const Success = ({ data }) => {
               <p
                 style={{
                   color: "gray",
-                  fontSize: "22px",
+                  fontSize: "26px",
                   fontWeight: "600",
                   color: "green",
                 }}
               >
                 Thank You!
-                <br /> Your order has been received.
+                <br/> Your order has been received.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
                 <li style={{ paddingBottom: "8px" }}>

@@ -106,7 +106,7 @@ const Failed = ({ data, orderId }) => {
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
       <div className="container">
         <div className="row" style={{ justifyContent: "space-between" }}>
-          <div className="col-lg-7">
+          <div className="col-lg-5">
             <p style={{ color: "red" }}>Order Failed</p>
             <p style={{ color: "gray" }}>
               Pay with{" "}
@@ -172,7 +172,7 @@ const Failed = ({ data, orderId }) => {
                       <>
                         <td>
                           &#8377;
-                          {paymentMethod == "Cash On delivery" || giftWrap
+                          {paymentMethod == "Cash On delivery" && giftWrap
                             ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
                             : Number(roundOff(ShippingAmount)).toFixed(2)}
                         </td>
@@ -252,7 +252,7 @@ const Failed = ({ data, orderId }) => {
               </table>
             </div>
           </div>
-          <div className="col-lg-4 ">
+          <div className="col-lg-6 ">
             <div
               style={{
                 padding: "20px 30px",
@@ -260,7 +260,7 @@ const Failed = ({ data, orderId }) => {
                 boxShadow: "3px 3px 5px #f1f1f1",
               }}
             >
-              <p style={{ color: "gray", fontSize: "18px", fontWeight: "600" }}>
+              <p style={{ color: "gray", fontSize: "26px", fontWeight: "600", color:"red" }}>
                 Your order has been Failed.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
