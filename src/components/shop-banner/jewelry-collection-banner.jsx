@@ -26,10 +26,10 @@ const JewelryCollectionBanner = () => {
     lineHeight: "400px",
     textAlign: "center",
     background: "#f4f4f4",
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"center",
-    padding:"30px 20px"
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "30px 20px",
   };
 
   const customDotStyle = {
@@ -75,7 +75,7 @@ const JewelryCollectionBanner = () => {
                           <div style={contentStyle}>
                             <div>
                               <h5 className="carosel-adisicing">
-                                Adipisicing elit
+                                Voices of Satisfaction
                               </h5>
                               <h3 className="carosel-title">
                                 WHAT OUR CLIENTS SAY
@@ -94,11 +94,10 @@ const JewelryCollectionBanner = () => {
                                   fontSize: "14px",
                                 }}
                               >
-                                Breakfast agreeable incommode departure it an.
-                                By ignorant at on wondered relation. Enough at
-                                tastes really so cousin am of. Extensive
-                                therefore supported by extremity of contented is
-                                pursuit compact
+                                I purchased this beautifully crafted beads and
+                                kundan necklace from Prade, which had unique
+                                craftsmanship for which I received many
+                                compliments from my friends and relatives.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -108,9 +107,8 @@ const JewelryCollectionBanner = () => {
                                     fontSize: "14px",
                                   }}
                                 >
-                                  Helen Signy
-                                </span>{" "}
-                                - Happy Customer
+                                  Anjali
+                                </span>
                               </p>
                             </div>
                           </div>
@@ -120,7 +118,7 @@ const JewelryCollectionBanner = () => {
                           <div style={contentStyle}>
                             <div>
                               <h5 className="carosel-adisicing">
-                                Adipisicing elit
+                                Voices of Satisfaction
                               </h5>
                               <h3 className="carosel-title">
                                 WHAT OUR CLIENTS SAY
@@ -139,11 +137,10 @@ const JewelryCollectionBanner = () => {
                                   fontSize: "14px",
                                 }}
                               >
-                                Breakfast agreeable incommode departure it an.
-                                By ignorant at on wondered relation. Enough at
-                                tastes really so cousin am of. Extensive
-                                therefore supported by extremity of contented is
-                                pursuit compact
+                                I had recently purchased their Kundan earrings
+                                and they were excellent and perfectly matched my
+                                festival outfit, making my day even more
+                                special.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -153,9 +150,8 @@ const JewelryCollectionBanner = () => {
                                     fontSize: "14px",
                                   }}
                                 >
-                                  Katell Oanez
-                                </span>{" "}
-                                - Happy Customer
+                                  Diya
+                                </span>
                               </p>
                             </div>
                           </div>
@@ -165,7 +161,7 @@ const JewelryCollectionBanner = () => {
                           <div style={contentStyle}>
                             <div>
                               <h5 className="carosel-adisicing">
-                                Adipisicing elit
+                                Voices of Satisfaction
                               </h5>
                               <h3 className="carosel-title">
                                 WHAT OUR CLIENTS SAY
@@ -184,11 +180,10 @@ const JewelryCollectionBanner = () => {
                                   fontSize: "14px",
                                 }}
                               >
-                                Breakfast agreeable incommode departure it an.
-                                By ignorant at on wondered relation. Enough at
-                                tastes really so cousin am of. Extensive
-                                therefore supported by extremity of contented is
-                                pursuit compact
+                                I was searching for a unique ring, and Prade
+                                Jewellery had exactly what I wanted. The ring is
+                                stunning, with a design that truly stands out. I
+                                will recommend Prade to my friends.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -198,9 +193,52 @@ const JewelryCollectionBanner = () => {
                                     fontSize: "14px",
                                   }}
                                 >
-                                  Maelle Rozenn
-                                </span>{" "}
-                                - Happy Customer
+                                  Priya
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="profile-carosel">
+                          <div style={contentStyle}>
+                            <div>
+                              <h5 className="carosel-adisicing">
+                                Voices of Satisfaction
+                              </h5>
+                              <h3 className="carosel-title">
+                                WHAT OUR CLIENTS SAY
+                              </h3>
+                              <div className="profile-outer">
+                                <Image
+                                  src={profile3}
+                                  alt="profile-1"
+                                  className="carosel-profileImg"
+                                />
+                              </div>
+                              <p
+                                style={{
+                                  marginBottom: "5px",
+                                  color: "gray",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                Prade has an excellent collection of silver
+                                bangles, the team were helpful and guided me
+                                through their collection and helped me choose
+                                something I liked and it was so comfortable to
+                                wear.
+                              </p>
+                              <p style={{ color: "black", fontSize: "14px" }}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "black",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  Meera
+                                </span> 
                               </p>
                             </div>
                           </div>

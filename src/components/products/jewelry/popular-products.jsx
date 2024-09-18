@@ -53,7 +53,7 @@ const PopularProducts = () => {
     isLoading,
   } = useGetProductTypeQuery({ channel: "india-channel", first: 19 });
 
-  const { data: featureProduct,isLoading:loading } = useFeatureProductQuery({
+  const { data: featureProduct, isLoading: loading } = useFeatureProductQuery({
     channel: "india-channel",
     first: 21,
     after: null,
@@ -62,7 +62,6 @@ const PopularProducts = () => {
     },
   });
   console.log("featureProduct: ", featureProduct);
-
 
   const [featureProducts, setFeatureProducts] = useState([]);
   console.log("featureProducts: ", featureProducts);
@@ -74,11 +73,9 @@ const PopularProducts = () => {
 
   const featureProductData = () => {
     try {
-
-      const data=featureProduct?.data?.productsSearch?.edges
+      const data = featureProduct?.data?.productsSearch?.edges;
       console.log("data: ", data);
       setFeatureProducts(data);
-
 
       // if (featureProduct) {
       //   console.log("featureProduct: ", featureProduct);
@@ -110,7 +107,6 @@ const PopularProducts = () => {
       //           (item) => !idsToRemove.includes(item.node.id)
       //         );
 
-
       //       }
       //     }
       //   }
@@ -126,13 +122,13 @@ const PopularProducts = () => {
   if (loading) {
     content = <HomeTwoPopularPrdLoader loading={loading} />;
   }
-  if (!loading ) {
+  if (!loading) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!loading &&  featureProducts?.length === 0) {
+  if (!loading && featureProducts?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
   }
-  if (!loading  && featureProducts?.length > 0) {
+  if (!loading && featureProducts?.length > 0) {
     // const product_items = products.slice(0, 8);
     content = (
       <Swiper
@@ -176,12 +172,12 @@ const PopularProducts = () => {
                   className="popular-adipisicing"
                   style={{ fontWeight: "400" }}
                 >
-                  Adipisicing elit
+                  Handpicked Favourites
                 </h5>
                 <h4 style={{ fontWeight: "400" }}>FEATURED PRODUCTS</h4>
                 <p style={{ color: "gray", fontSize: "14px" }}>
-                  There are many variations of passages of lorem ipsum
-                  available.
+                  Explore the latest and most sought-after products, specially
+                  curated for you
                 </p>
               </div>
             </div>

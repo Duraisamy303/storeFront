@@ -210,7 +210,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
         style={{ backgroundColor: `#${bg_clr}` }}
       ></div>
       <div className="tp-banner-content-4" style={{ textAlign: "center" }}>
-        <img src={img?.src} alt="category-product home-category3-image"/>
+        <img src={img?.src} alt="category-product home-category3-image" />
         <h3 className="tp-banner-title-4">
           <Link href="/shop">{title}</Link>
         </h3>
@@ -274,8 +274,8 @@ const JewelryShopBanner = () => {
                     title="NECKLACES"
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing{" "}
-                        <br /> lacinia accumsan lorem sit amet.
+                        Make a statement with our exquisite collection of <br />
+                        handcrafted necklaces
                       </p>
                     }
                     isBtn={true}
@@ -288,8 +288,7 @@ const JewelryShopBanner = () => {
                     bg_clr="131418"
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                        lacinia accumsan lorem sit amet.
+                        Bold and delicate rings that reflect your unique style
                       </p>
                     }
                     img={banner_bg_2}
@@ -306,8 +305,7 @@ const JewelryShopBanner = () => {
                     title="BRACELETS"
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                        lacinia accumsan lorem sit amet.
+                        Dazzling designs that add a touch of grace to your wrist
                       </p>
                     }
                     isBtn={true}
@@ -325,8 +323,7 @@ const JewelryShopBanner = () => {
                     title="Other Accessories"
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                        <br /> lacinia accumsan lorem sit amet.
+                        To enhance your outfit and complement your look
                       </p>
                     }
                     isBtn={true}
@@ -342,8 +339,8 @@ const JewelryShopBanner = () => {
                     isBtn={true}
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Quisque lacinia accumsan lorem sit amet euismod.
+                        Discover the perfect pair to complement your look and
+                        personality
                       </p>
                     }
                   />
@@ -358,8 +355,7 @@ const JewelryShopBanner = () => {
                     isBtn={true}
                     content={
                       <p style={{ fontSize: "14px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Quisque lacinia accumsan lorem sit amet euismod.
+                        Graceful designs that complement every step
                       </p>
                     }
                   />
