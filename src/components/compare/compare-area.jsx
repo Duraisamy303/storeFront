@@ -219,182 +219,180 @@ const CompareArea = () => {
                               className=""
                               style={{ minWidth: "300px" }}
                             >
-                              <div className="tp-compare-thumb p-relative z-index-1">
-                                {/* <Image
+                              <div style={{display: "flex", justifyContent:"center"}}>
+                                <div
+                                  className="tp-compare-thumb p-relative z-index-1"
+                                  style={
+                                    compareData?.length === 1 ||
+                                    compareData?.length === 2
+                                      ? { width: "300px" }
+                                      : {
+                                          width: "100%",
+                                          height: "100%",
+                                          objectFit: "cover",
+                                        }
+                                  }
+                                >
+                                  {/* <Image
                                   src={profilePic(item?.node?.thumbnail?.url)}
                                   alt="compare"
                                   width={500}
                                   height={500}
                                   className=""
                                 /> */}
-                                {isImage(
-                                  profilePic(item?.node?.thumbnail?.url)
-                                ) ? (
-                                  <img
-                                    src={profilePic(item?.node?.thumbnail?.url)}
-                                    alt="compare"
-                                    style={
-                                      compareData?.length === 1|| compareData?.length === 2
-                                        ? { width: "300px" }
-                                        : {
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                          }
-                                    }
-                                  />
-                                ) : (
-                                  <video
-                                    src={item?.node?.thumbnail?.url}
-                                    alt="compare"
-                                    muted
-                                    loop
-                                    style={
-                                      compareData?.length === 1 || compareData?.length === 2
-                                        ? { width: "300px" }
-                                        : {
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover",
-                                          }
-                                    }
-                                  />
-                                )}
-
-                                <div className="tp-product-badge-2">
-                                  {item?.node?.defaultVariant
-                                    ?.quantityAvailable == 0 && (
-                                    <span
-                                      className="product-hot text-center"
-                                      style={{ padding: "15px 12px " }}
-                                    >
-                                      SOLD
-                                      <br /> OUT
-                                    </span>
-                                  )}
-                                </div>
-
-                                <h4 className="tp-compare-product-title">
-                                  <Link
-                                    href={`/product-details/${item?.node?.id}`}
-                                  >
-                                    {item?.node?.name}
-                                  </Link>
-                                </h4>
-
-                                <div
-                                  className="tp-compare-add-to-cart"
-                                  style={{ paddingBottom: "10px" }}
-                                >
-                                  {checkChannel() == "india-channel" ? (
-                                    <>
-                                      {RegularPrice(
-                                        item?.node?.defaultVariant?.costPrice,
-                                        item?.node?.pricing?.priceRange?.start
-                                          ?.gross?.amount
-                                      ) && (
-                                        <span
-                                          className="tp-product-price-1 pr-5 line-through "
-                                          style={{
-                                            textDecoration: "line-through",
-                                            color: "gray",
-                                          }}
-                                        >
-                                          ₹{" "}
-                                          {
-                                            item?.node?.defaultVariant
-                                              ?.costPrice
-                                          }
-                                        </span>
+                                  {isImage(
+                                    profilePic(item?.node?.thumbnail?.url)
+                                  ) ? (
+                                    <img
+                                      src={profilePic(
+                                        item?.node?.thumbnail?.url
                                       )}
-
-                                      <span
-                                        style={{
-                                          color: "#c2882b",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        {" "}
-                                        ₹
-                                        {roundOff(
-                                          item?.node?.pricing?.priceRange?.start
-                                            ?.gross?.amount
-                                        )}
-                                      </span>
-                                    </>
+                                      alt="compare"
+                                    />
                                   ) : (
-                                    <>
-                                      {RegularPrice(
-                                        item?.node?.defaultVariant?.costPrice,
-                                        item?.node?.pricing?.priceRange?.start
-                                          ?.gross?.amount
-                                      ) && (
-                                        <span
-                                          className="tp-product-price-1 pr-5 line-through "
-                                          style={{
-                                            textDecoration: "line-through",
-                                            color: "gray",
-                                          }}
-                                        >
-                                          ${" "}
-                                          {
-                                            item?.node?.defaultVariant
-                                              ?.costPrice
-                                          }
-                                        </span>
-                                      )}
-                                      <span
-                                        style={{
-                                          color: "#c2882b",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        $
-                                        {roundOff(
-                                          item?.node?.pricing?.priceRange?.start
-                                            ?.gross?.amount
-                                        )}
-                                      </span>
-                                    </>
+                                    <video
+                                      src={item?.node?.thumbnail?.url}
+                                      alt="compare"
+                                      muted
+                                      loop
+                                    />
                                   )}
-                                </div>
-                                {item?.node?.defaultVariant
-                                  ?.quantityAvailable != 0 && (
-                                  <div className="tp-compare-add-to-cart">
-                                    {datacartList?.data?.checkout?.lines?.some(
-                                      (prd) =>
-                                        prd?.variant?.product?.id ===
-                                        item?.node?.id
-                                    ) ? (
-                                      <button
-                                        onClick={() => router.push("/cart")}
-                                        className="tp-btn"
-                                        type="button"
-                                        style={{
-                                          backgroundColor: "#c2882b",
-                                          color: "white",
-                                        }}
+
+                                  <div className="tp-product-badge-2">
+                                    {item?.node?.defaultVariant
+                                      ?.quantityAvailable == 0 && (
+                                      <span
+                                        className="product-hot text-center"
+                                        style={{ padding: "15px 12px " }}
                                       >
-                                        View Cart
-                                      </button>
-                                    ) : (
-                                      <button
-                                        onClick={() => {
-                                          addToCartProductINR(item);
-                                          addToCartProductUSD(item);
-                                        }}
-                                        type="button"
-                                        className="tp-btn "
-                                        style={{
-                                          backgroundColor: "#c2882b",
-                                          color: "white",
-                                        }}
-                                      >
-                                        Add to Cart
-                                      </button>
+                                        SOLD
+                                        <br /> OUT
+                                      </span>
                                     )}
                                   </div>
-                                )}
+
+                                  <h4 className="tp-compare-product-title">
+                                    <Link
+                                      href={`/product-details/${item?.node?.id}`}
+                                    >
+                                      {item?.node?.name}
+                                    </Link>
+                                  </h4>
+
+                                  <div
+                                    className="tp-compare-add-to-cart"
+                                    style={{ paddingBottom: "10px" }}
+                                  >
+                                    {checkChannel() == "india-channel" ? (
+                                      <>
+                                        {RegularPrice(
+                                          item?.node?.defaultVariant?.costPrice,
+                                          item?.node?.pricing?.priceRange?.start
+                                            ?.gross?.amount
+                                        ) && (
+                                          <span
+                                            className="tp-product-price-1 pr-5 line-through "
+                                            style={{
+                                              textDecoration: "line-through",
+                                              color: "gray",
+                                            }}
+                                          >
+                                            ₹{" "}
+                                            {
+                                              item?.node?.defaultVariant
+                                                ?.costPrice
+                                            }
+                                          </span>
+                                        )}
+
+                                        <span
+                                          style={{
+                                            color: "#c2882b",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          {" "}
+                                          ₹
+                                          {roundOff(
+                                            item?.node?.pricing?.priceRange
+                                              ?.start?.gross?.amount
+                                          )}
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {RegularPrice(
+                                          item?.node?.defaultVariant?.costPrice,
+                                          item?.node?.pricing?.priceRange?.start
+                                            ?.gross?.amount
+                                        ) && (
+                                          <span
+                                            className="tp-product-price-1 pr-5 line-through "
+                                            style={{
+                                              textDecoration: "line-through",
+                                              color: "gray",
+                                            }}
+                                          >
+                                            ${" "}
+                                            {
+                                              item?.node?.defaultVariant
+                                                ?.costPrice
+                                            }
+                                          </span>
+                                        )}
+                                        <span
+                                          style={{
+                                            color: "#c2882b",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          $
+                                          {roundOff(
+                                            item?.node?.pricing?.priceRange
+                                              ?.start?.gross?.amount
+                                          )}
+                                        </span>
+                                      </>
+                                    )}
+                                  </div>
+                                  {item?.node?.defaultVariant
+                                    ?.quantityAvailable != 0 && (
+                                    <div className="tp-compare-add-to-cart">
+                                      {datacartList?.data?.checkout?.lines?.some(
+                                        (prd) =>
+                                          prd?.variant?.product?.id ===
+                                          item?.node?.id
+                                      ) ? (
+                                        <button
+                                          onClick={() => router.push("/cart")}
+                                          className="tp-btn"
+                                          type="button"
+                                          style={{
+                                            backgroundColor: "#c2882b",
+                                            color: "white",
+                                          }}
+                                        >
+                                          View Cart
+                                        </button>
+                                      ) : (
+                                        <button
+                                          onClick={() => {
+                                            addToCartProductINR(item);
+                                            addToCartProductUSD(item);
+                                          }}
+                                          type="button"
+                                          className="tp-btn "
+                                          style={{
+                                            backgroundColor: "#c2882b",
+                                            color: "white",
+                                          }}
+                                        >
+                                          Add to Cart
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </td>
                           );
