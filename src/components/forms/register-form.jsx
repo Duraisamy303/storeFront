@@ -8,6 +8,7 @@ import { CloseEye, OpenEye } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
+import ButtonLoader from "../loader/button-loader";
 
 // schema
 const schema = Yup.object().shape({
@@ -22,11 +23,16 @@ const schema = Yup.object().shape({
 
 const RegisterForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [registerUser, {}] = useRegisterUserMutation();
+  const [registerUser, { isLoading: loading }] = useRegisterUserMutation();
   const router = useRouter();
   const { redirect } = router.query;
   // react hook form
-  const {register,handleSubmit,formState: { errors },reset} = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     resolver: yupResolver(schema),
   });
   // on submit
@@ -37,7 +43,7 @@ const RegisterForm = () => {
       email: data.email,
       password: data.password,
     }).then((result) => {
-      if (result?.data?.data?.accountRegister?.errors?.length>0) {
+      if (result?.data?.data?.accountRegister?.errors?.length > 0) {
         notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {
         notifySuccess("Register successfully");
@@ -54,7 +60,9 @@ const RegisterForm = () => {
         <div className="tp-login-input-box">
           <div className="tp-login-input">
             <input
-              {...register("firstName", { required: `First name is required!` })}
+              {...register("firstName", {
+                required: `First name is required!`,
+              })}
               id="firstName"
               name="firstName"
               type="text"
@@ -74,7 +82,6 @@ const RegisterForm = () => {
               name="lastName"
               type="text"
               placeholder="Enter your last name"
-
             />
           </div>
           <div className="tp-login-input-title">
@@ -138,7 +145,7 @@ const RegisterForm = () => {
       </div>
       <div className="tp-login-bottom">
         <button type="submit" className="tp-login-btn w-100">
-          Sign Up
+          {loading ? <ButtonLoader /> : "Sign Up"}
         </button>
       </div>
     </form>

@@ -20,6 +20,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { cart_list } from "@/redux/features/cartSlice";
 import { useCheckoutTokenEmailUpdatesMutation } from "../../redux/features/card/cardApi";
+import ButtonLoader from "../loader/button-loader";
 
 // schema
 const schema = Yup.object().shape({
@@ -33,7 +34,7 @@ const LoginForm = () => {
 
   const dispatch = useDispatch();
 
-  const [loginUser, {}] = useLoginUserMutation();
+  const [loginUser, { isLoading: loginLoading }] = useLoginUserMutation();
 
   const [addWishlist, {}] = useAddWishlistMutation();
 
@@ -226,7 +227,7 @@ const LoginForm = () => {
       </div>
       <div className="tp-login-bottom">
         <button type="submit" className="tp-login-btn w-100">
-          Login
+          {loginLoading ? <ButtonLoader /> : "Login"}
         </button>
       </div>
     </form>

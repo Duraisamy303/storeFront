@@ -66,7 +66,7 @@ const CartMiniSidebar = () => {
       const productId = val?.variant?.product?.id;
       const allListData = AllListChannel?.data?.checkout?.lines;
       const fine = allListData?.find(
-        (item) => item?.variant?.product?.id === productId
+        (item) => item?.variant?.product?.id == productId
       );
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
