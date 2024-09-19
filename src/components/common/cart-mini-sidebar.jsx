@@ -80,7 +80,7 @@ const CartMiniSidebar = () => {
       });
       await removeToCart({
         checkoutToken: checkoutToken,
-        lineId: fine?.id,
+        lineId: val?.id,
       });
       cartRefetch();
       const res = await AllListChannelREfresh();
@@ -427,7 +427,7 @@ const CartMiniSidebar = () => {
                     router.push("/shop");
                     handleCloseCartMini();
                   }}
-                  className="tp-btn w-100 mt-20" 
+                  className="tp-btn w-100 mt-20"
                 >
                   Continue to Shop
                 </button>

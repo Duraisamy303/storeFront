@@ -95,7 +95,7 @@ const CartItem = ({
         checkoutToken: checkoutTokenINR,
         lineId: product.id,
       });
-      await removeToCart({ checkoutToken: checkoutToken, lineId: fine?.id });
+      await removeToCart({ checkoutToken: checkoutToken, lineId: product?.id });
 
       refetch();
       AllListChannelREfresh();
@@ -149,7 +149,6 @@ const CartItem = ({
                   loop
                 />
               )}
-             
             </div>
           </td>
           <td className="tp-cart-title">
