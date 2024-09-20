@@ -12,7 +12,7 @@ const ForgotArea = () => {
           <div className="col-xl-6 col-lg-8">
             <div className="tp-login-wrapper">
               <div className="tp-login-top text-center mb-30">
-                <h3 className="tp-login-title">Reset Passowrd</h3>
+                <h3 className="tp-login-title">Reset Password</h3>
                 <p>Enter your email address to request password reset.</p>
               </div>
               <div className="tp-login-option">
