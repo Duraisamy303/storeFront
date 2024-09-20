@@ -25,6 +25,10 @@ const ShopFilterOffCanvas = ({
   filterByPrice,
   maxPrice,
   resetFilter,
+  design,
+  finish,
+  stoneType,
+  style,
 }) => {
   const filter = useSelector((state) => state.shopFilter.filterData);
 
@@ -81,9 +85,12 @@ const ShopFilterOffCanvas = ({
                   <div className="tp-shop-widget-filter-info d-flex align-items-center justify-content-between">
                     <span className="input-range">
                       {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[0] ?addCommasToNumber( priceValue[0]) : 0} -{" "}
-                      {checkChannel() == "india-channel" ? "₹" : "$"}
-                      {priceValue[1] ? addCommasToNumber(priceValue[1]) : addCommasToNumber(maxPrice)}
+                      {priceValue[0]
+                        ? addCommasToNumber(priceValue[0])
+                        : 0} - {checkChannel() == "india-channel" ? "₹" : "$"}
+                      {priceValue[1]
+                        ? addCommasToNumber(priceValue[1])
+                        : addCommasToNumber(maxPrice)}
                     </span>
                     <button
                       className="tp-shop-widget-filter-btn"
@@ -97,7 +104,14 @@ const ShopFilterOffCanvas = ({
               </div>
             </div>
             {/* Finish */}
-            <FinishFilter setCurrPage={setCurrPage} shop_right={right_side} />
+            <FinishFilter
+              setCurrPage={setCurrPage}
+              shop_right={right_side}
+              design={design}
+              finish={finish}
+              stoneType={stoneType}
+              style={style}
+            />
 
             {/* style */}
             {/* <StyleFilter

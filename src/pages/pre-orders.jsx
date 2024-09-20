@@ -9,6 +9,7 @@ import {
   useGetCategoryListQuery,
   usePriceFilterMutation,
   useGetParentCategoryListQuery,
+  useFilterOptionMutation,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -59,6 +60,10 @@ const PreOrders = () => {
   const [currPage, setCurrPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [initialMaxPrice, setInitialMaxPrice] = useState(0);
+  const [productDesigns, setProductDesigns] = useState([]);
+  const [productFinishes, setProductFinishes] = useState([]);
+  const [productStoneTypes, setProductStoneTypes] = useState([]);
+  const [productStyles, setProductStyles] = useState([]);
 
   const filterByOtherAttribute = () => {
     let datas = {};
@@ -120,6 +125,8 @@ const PreOrders = () => {
   const { data: wishlistData } = useGetWishlistQuery();
 
   const [maximumPrice, { isLoading: maxPriceLoading }] = useMaxPriceMutation();
+
+  const [filterOptions] = useFilterOptionMutation();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
@@ -195,11 +202,13 @@ const PreOrders = () => {
       filters();
     } else {
       initialList();
+      filterOption();
     }
   }, [filter]);
 
   useEffect(() => {
     getProductMaxPrice();
+    filterOption();
   }, [router]);
 
   useEffect(() => {
@@ -320,6 +329,11 @@ const PreOrders = () => {
       setCursorAndList(res);
       dispatch(handleFilterSidebarClose());
     });
+    filterOptions({
+      filter: filters,
+    }).then((res) => {
+      finalFilterOptionList(res);
+    });
   };
 
   const filterByPrice = (type) => {
@@ -357,6 +371,11 @@ const PreOrders = () => {
       setPriceValue([priceValue[0], priceValue[1]]);
       setFilterList([...filterList, body]);
       dispatch(handleFilterSidebarClose());
+    });
+    filterOptions({
+      filter: bodyData,
+    }).then((res) => {
+      finalFilterOptionList(res);
     });
   };
 
@@ -405,6 +424,11 @@ const PreOrders = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     });
     setCursorAndList(res);
+    filterOptions({
+      filter: datas,
+    }).then((res) => {
+      finalFilterOptionList(res);
+    });
   };
 
   const filterPrevData = async () => {
@@ -417,6 +441,11 @@ const PreOrders = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     });
     setCursorAndList(res);
+    filterOptions({
+      filter: datas,
+    }).then((res) => {
+      finalFilterOptionList(res);
+    });
   };
 
   const finalNextData = async () => {
@@ -433,6 +462,7 @@ const PreOrders = () => {
     console.log("res: ", res);
 
     setCursorAndList(res);
+    
   };
 
   const finalPrevData = async () => {
@@ -465,6 +495,11 @@ const PreOrders = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
       setCursorAndList(res);
+    });
+    filterOptions({
+      filter: datas,
+    }).then((res) => {
+      finalFilterOptionList(res);
     });
   };
 
@@ -500,6 +535,11 @@ const PreOrders = () => {
       const totalPages = Math.ceil(data?.totalCount / PAGE_LIMIT);
       setTotalPages(totalPages);
       setTotalCount(data?.totalCount);
+    });
+    filterOptions({
+      filter: datas,
+    }).then((res) => {
+      finalFilterOptionList(res);
     });
   };
 
@@ -544,6 +584,32 @@ const PreOrders = () => {
     setInitialMaxPrice(initialMaxPrice);
     dispatch(handleFilterSidebarClose());
     setCursorAndList(res);
+    filterOption();
+
+  };
+
+  const filterOption = async () => {
+    try {
+      const datas = commonFilter();
+
+      const res = await filterOptions({
+        filter: datas,
+      });
+      console.log("res: ", res);
+
+      finalFilterOptionList(res);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const finalFilterOptionList = (res) => {
+    const data = res?.data?.data?.attributefilter;
+    console.log("data: ", data);
+    setProductDesigns(data.productDesigns);
+    setProductFinishes(data.productFinishes);
+    setProductStoneTypes(data.productStoneTypes);
+    setProductStyles(data.productStyles);
   };
 
   let content = null;
@@ -590,7 +656,6 @@ const PreOrders = () => {
           dispatch(filterData([]));
           refresh();
         }}
-
       />
       {productList?.length > 0 &&
         !isLoading &&
@@ -623,6 +688,10 @@ const PreOrders = () => {
         resetFilter={() => {
           refresh();
         }}
+        design={productDesigns}
+        finish={productFinishes}
+        stoneType={productStoneTypes}
+        style={productStyles}
       />
       <FooterTwo primary_style={true} />
     </Wrapper>

@@ -35,7 +35,10 @@ import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { useGetWishlistQuery } from "@/redux/features/productApi";
 import { useRouter } from "next/router";
 import Pagination from "../pagination/pagination";
-import { useMaxPriceMutation } from "../redux/features/productApi";
+import {
+  useFilterOptionMutation,
+  useMaxPriceMutation,
+} from "../redux/features/productApi";
 
 const ShopPage = () => {
   const dispatch = useDispatch();
@@ -68,6 +71,10 @@ const ShopPage = () => {
   const [isNext, setIsNext] = useState(false);
   const [isPrev, setIsPrev] = useState(false);
   const [sortBy, setSortBy] = useState(null);
+  const [productDesigns, setProductDesigns] = useState([]);
+  const [productFinishes, setProductFinishes] = useState([]);
+  const [productStoneTypes, setProductStoneTypes] = useState([]);
+  const [productStyles, setProductStyles] = useState([]);
 
   const PAGE_LIMIT = 21;
 
@@ -158,6 +165,7 @@ const ShopPage = () => {
   const { data: categoryData } = useGetParentCategoryListQuery();
 
   const [priceFilter, { isLoading: filterLoading }] = usePriceFilterMutation();
+
   const [maximumPrice] = useMaxPriceMutation();
 
   const [shopPagination, { isLoading: shopPaginationLoading }] =
@@ -172,6 +180,8 @@ const ShopPage = () => {
     useGetCategoryNameMutation();
 
   const [getTagName] = useGetTagNameMutation();
+
+  const [filterOptions] = useFilterOptionMutation();
 
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
@@ -228,6 +238,7 @@ const ShopPage = () => {
 
   useEffect(() => {
     getProductMaxPrice();
+    filterOption();
   }, [router]);
 
   useEffect(() => {
@@ -255,6 +266,7 @@ const ShopPage = () => {
       } else {
         productLists();
       }
+      filterOption()
     }
   }, [filter]);
 
@@ -471,6 +483,12 @@ const ShopPage = () => {
       dispatch(handleFilterSidebarClose());
     });
 
+    filterOptions({
+      filter: filters,
+    }).then((res) => {
+      finalFilterOptionList(res);
+    });
+
     // }
   };
 
@@ -513,6 +531,12 @@ const ShopPage = () => {
       setPriceValue([priceValue[0], priceValue[1]]);
       setFilterList([...filterList, body]);
       dispatch(handleFilterSidebarClose());
+    });
+
+    filterOptions({
+      filter: bodyData,
+    }).then((res) => {
+      finalFilterOptionList(res);
     });
   };
 
@@ -666,7 +690,6 @@ const ShopPage = () => {
 
   const filterNextData = async () => {
     const datas = commonFilter();
-    console.log("datas: ", datas);
     const res = await priceFilter({
       filter: datas,
       first: PAGE_LIMIT,
@@ -674,11 +697,15 @@ const ShopPage = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     });
     setCursorAndList(res);
+    const response = await filterOptions({
+      filter: datas,
+    });
+
+    finalFilterOptionList(response);
   };
 
   const filterPrevData = async () => {
     const datas = commonFilter();
-    console.log("datas: ", datas);
     const res = await priceFilter({
       filter: datas,
       last: PAGE_LIMIT,
@@ -686,6 +713,11 @@ const ShopPage = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     });
     setCursorAndList(res);
+    const response = await filterOptions({
+      filter: datas,
+    });
+
+    finalFilterOptionList(response);
   };
 
   const dynamicFilterPageData = async (endCursor) => {
@@ -702,6 +734,11 @@ const ShopPage = () => {
       setTotalPages(totalPages);
       setTotalCount(data?.totalCount);
     });
+    const res = await filterOptions({
+      filter: datas,
+    });
+
+    finalFilterOptionList(res);
   };
 
   const finalInitialFilterData = async (sortBy) => {
@@ -714,6 +751,11 @@ const ShopPage = () => {
     }).then((res) => {
       setCursorAndList(res);
     });
+    const res = await filterOptions({
+      filter: datas,
+    });
+
+    finalFilterOptionList(res);
   };
 
   const refreshFilterData = async (sortBy) => {
@@ -725,7 +767,13 @@ const ShopPage = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
       setCursorAndList(res);
+      
     });
+    const res = await filterOptions({
+      filter: datas,
+    });
+
+    finalFilterOptionList(res);
   };
   // --------------------------CATEGORY FILTER --------------------------------------
 
@@ -744,6 +792,28 @@ const ShopPage = () => {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const filterOption = async () => {
+    try {
+      const datas = commonFilter();
+
+      const res = await filterOptions({
+        filter: datas,
+      });
+
+      finalFilterOptionList(res);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  const finalFilterOptionList = (res) => {
+    const data = res?.data?.data?.attributefilter;
+    setProductDesigns(data.productDesigns);
+    setProductFinishes(data.productFinishes);
+    setProductStoneTypes(data.productStoneTypes);
+    setProductStyles(data.productStyles);
   };
 
   return (
@@ -821,7 +891,12 @@ const ShopPage = () => {
           setPriceValue([0, initialMaxPrice]);
           setInitialMaxPrice(initialMaxPrice);
           dispatch(handleFilterSidebarClose());
+          filterOption()
         }}
+        design={productDesigns}
+        finish={productFinishes}
+        stoneType={productStoneTypes}
+        style={productStyles}
       />
       <FooterTwo primary_style={true} />
       {/* </>

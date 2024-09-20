@@ -1864,3 +1864,35 @@ fragment CheckoutLineFragment on CheckoutLine {
     variables: { checkoutId, languageCode, promoCode },
   });
 };
+
+export const FILTER_OPTION = ({ filter }) => {
+  return {
+    query: `
+    query AttributeFilter($filter: ProductFilterInput!) {
+  attributefilter(filter: $filter, channel: "india-channel") {
+    productDesigns {
+      id
+      name
+      slug
+    }
+    productFinishes {
+      id
+      name
+      slug
+    }
+    productStoneTypes {
+      id
+      name
+      slug
+    }
+    productStyles {
+      id
+      name
+      slug
+    }
+  }
+}
+      `,
+    variables: { filter },
+  };
+};

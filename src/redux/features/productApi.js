@@ -33,6 +33,7 @@ import {
   PAYMENT_LIST,
   DELETE_COUPON,
   SHOP_PAGINATION,
+  FILTER_OPTION,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -726,10 +727,21 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    filterOption: builder.mutation({
+      query: ({ filter = {} }) => {
+        return configuration(
+          FILTER_OPTION({
+            filter,
+          })
+        );
+      },
+    }),
   }),
 });
 
 export const {
+  useFilterOptionMutation,
   useNewPreOrderProductsMutation,
   useMaxPriceMutation,
   useShopPaginationMutation,
