@@ -106,15 +106,24 @@ const CategoryContent = ({
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href={`/shop?categoryId=${item?.node?.id}`}
+                    className="cursor-pointer"
                     style={{
                       fontWeight: "500",
                       marginBottom: "0px",
                       color: "gray",
+                      cursor:"pointer"
+                    }}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: item?.node?.id }, // Your parameters
+                      });
                     }}
                   >
                     {item?.node?.name}
-                  </p>
+                  </a>
                 </li>
               );
             })}
@@ -238,12 +247,13 @@ const CategoryComponent = ({
       );
       if (result?.length > 0) {
         setCategoryImage(result[0]?.backgroundImageUrl);
-      }else{
-        setCategoryImage(CommonImage)
+      } else {
+        setCategoryImage(CommonImage);
       }
       setProductList(list);
     });
   };
+
   const renderContent = () => {
     if (productList?.length == 0) return null;
 
@@ -427,14 +437,22 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDU="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
+                      });
+                    }}
                   >
                     Earrings
-                  </p>
+                  </a>
+
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -461,14 +479,21 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDI="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Necklaces" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                      });
+                    }}
                   >
                     Necklaces
-                  </p>
+                  </a>
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -495,14 +520,21 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDc="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Bangles" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
+                      });
+                    }}
                   >
                     Bangles & Bracelets
-                  </p>
+                  </a>
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -529,14 +561,22 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NTU="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Rings" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
+                      });
+                    }}
                   >
                     Rings
-                  </p>
+                  </a>
+
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -563,14 +603,21 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTIxNTI="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Anklets" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
+                      });
+                    }}
                   >
                     Anklets
-                  </p>
+                  </a>
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -597,14 +644,21 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTM1ODc="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Idols" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTM1ODc=" }, // Your parameters
+                      });
+                    }}
                   >
                     Idols
-                  </p>
+                  </a>
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
@@ -633,14 +687,21 @@ const Menus = () => {
                     });
                   }}
                 >
-                  <p
+                  <a
+                    href="/shop?categoryId=Q2F0ZWdvcnk6MTI0MTU="
                     style={{ cursor: "pointer", marginBottom: "0px" }}
-                    className={`shop-submenu-catageroy-list-a ${
+                    className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "OtherAccessories" ? "active" : ""
                     }`}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/shop",
+                        query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
+                      });
+                    }}
                   >
                     Other Accessories
-                  </p>
+                  </a>
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
