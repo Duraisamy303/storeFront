@@ -1284,7 +1284,7 @@ export const PRODUCT_SEARCH = ({ search, channel }) => {
     query: `query GlobalSearch($channel: String!, $search: String!) {
   productsSearch(
     channel: $channel
-    first: 100
+    first: 20
     search: $search
     sortBy: {direction: DESC, field: CREATED_AT}
   ) {

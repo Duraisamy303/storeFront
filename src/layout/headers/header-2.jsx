@@ -41,6 +41,7 @@ import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/router";
 import { checkChannel, removeduplicate } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
+import ButtonLoader from "../../components/loader/button-loader";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const router = useRouter();
@@ -52,7 +53,8 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const [searchOption, setSearchOption] = useState([]);
 
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
-  const [searchProduct] = useProductSearchMutation();
+  const [searchProduct, { isLoading: searchLoading }] =
+    useProductSearchMutation();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
@@ -194,35 +196,49 @@ const HeaderTwo = ({ style_2 = false, data }) => {
     dispatch(userLoggedOut());
     router.push("/login");
   };
+  let timeoutId;
 
-  const handleSearch = async (search) => {
-    console.log("search: ", search);
-    try {
-      setSearchText(search);
-      if (search?.length > 3) {
-      }
-      const data = await searchProduct({
-        search: search,
-      });
+  const handleSearch = (search) => {
+    // Immediately update search text as user types
+    setSearchText(search);
 
-      const filter = data?.data?.data?.productsSearch?.edges?.map((item) => ({
-        name: item?.node?.name,
-        price: item?.node?.defaultVariant?.pricing?.price?.gross?.amount,
-        img: item?.node?.thumbnail?.url,
-        id: item?.node?.id,
-      }));
-      console.log("filter: ", filter);
+    // If the search term is less than 3 characters, don't proceed with API call
+    if (search.length <= 2) return;
 
-      if (search === "") {
-        setIsOpen2(false);
-      } else {
-        setIsOpen2(true);
-      }
-      const res = removeduplicate(filter);
-      setSearchOption(res);
-    } catch (error) {
-      console.log("error: ", error);
+    // Clear the existing timeout if there is any
+    if (timeoutId) {
+      clearTimeout(timeoutId);
     }
+
+    // Set a new timeout only for the API call
+    timeoutId = setTimeout(async () => {
+      try {
+        const data = await searchProduct({
+          search: search,
+        });
+
+        const filter = data?.data?.data?.productsSearch?.edges?.map((item) => ({
+          name: item?.node?.name,
+          price: item?.node?.defaultVariant?.pricing?.price?.gross?.amount,
+          img: item?.node?.thumbnail?.url,
+          id: item?.node?.id,
+        }));
+
+        console.log("filter: ", filter);
+
+        // Handle UI state based on the search term
+        if (search === "") {
+          setIsOpen2(false);
+        } else {
+          setIsOpen2(true);
+        }
+
+        const res = removeduplicate(filter);
+        setSearchOption(res);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    }, 1000); // Delay the API call by 500ms
   };
 
   const isImage = (url) => {
@@ -338,12 +354,17 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                               zIndex: "2",
                               width: "300px",
                               boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
-                              height:
-                                searchOption?.length > 5 ? "400px" : "auto",
+                              height: searchLoading
+                                ? "60px"
+                                : searchOption?.length > 5
+                                ? "400px"
+                                : "auto",
                               overflowY: "scroll",
                             }}
                           >
-                            {searchOption?.length > 0 ? (
+                            {searchLoading ? (
+                              <ButtonLoader color="#c3935b" size={30} />
+                            ) : searchOption?.length > 0 ? (
                               searchOption?.map((item, index) => (
                                 // <Link
                                 //   href={`/product/${item?.id}`}
