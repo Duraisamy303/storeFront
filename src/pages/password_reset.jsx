@@ -66,7 +66,6 @@ const ForgotPage = () => {
       token,
     }).then((result) => {
       const res = result?.data?.data?.setPassword;
-      console.log("result: ", res);
       if (res?.errors?.length > 0) {
         notifyError(res?.errors[0]?.message);
       } else {

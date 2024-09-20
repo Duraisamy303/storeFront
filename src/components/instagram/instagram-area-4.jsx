@@ -208,7 +208,6 @@ const InstagramAreaFour = () => {
     notifySuccess("Product to added to compare list");
     dispatch(compare_list(arr));
   };
-  console.log("productList: ", productList);
 
   const isImage = (url) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);

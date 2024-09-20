@@ -97,6 +97,13 @@ const RegisterForm = () => {
               name="email"
               type="email"
               placeholder="Enter your email"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(
+                  /[^a-zA-Z0-9@._-]/g,
+                  ""
+                );
+              }}
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             />
           </div>
           <div className="tp-login-input-title">

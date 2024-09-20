@@ -187,6 +187,13 @@ const LoginForm = () => {
               id="email"
               type="email"
               placeholder="prade@mail.com"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(
+                  /[^a-zA-Z0-9@._-]/g,
+                  ""
+                );
+              }}
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             />
           </div>
           <div className="tp-login-input-title">

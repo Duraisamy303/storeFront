@@ -61,10 +61,8 @@ const PopularProducts = () => {
       categories: ["Q2F0ZWdvcnk6MjQ5Njc="],
     },
   });
-  console.log("featureProduct: ", featureProduct);
 
   const [featureProducts, setFeatureProducts] = useState([]);
-  console.log("featureProducts: ", featureProducts);
   // decide what to render
 
   useEffect(() => {
