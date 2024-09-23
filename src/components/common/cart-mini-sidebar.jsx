@@ -31,6 +31,8 @@ const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
   const carts = useSelector((state) => state.cart);
 
+  const [removeIndex, setRemoveIndex] = useState(null);
+
   const [removeToCart, { isLoading: removeLoading }] =
     useRemoveToCartMutation();
 
@@ -64,8 +66,9 @@ const CartMiniSidebar = () => {
   const { total } = useCartInfo();
   const dispatch = useDispatch();
 
-  const handleRemovePrd = async (val) => {
+  const handleRemovePrd = async (val, index) => {
     try {
+      setRemoveIndex(index);
       const newTokenData = await AllListChannelREfresh();
 
       const productId = val?.variant?.product?.id;
@@ -127,6 +130,14 @@ const CartMiniSidebar = () => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
+  const isLoading = (index) => {
+    let loading = false;
+    if (removeIndex == index && removeLoading) {
+      loading = true;
+    }
+    return loading;
+  };
+
   return (
     <>
       <div
@@ -155,7 +166,7 @@ const CartMiniSidebar = () => {
             </div> */}
             {CartList?.length > 0 && (
               <div className="cartmini__widget">
-                {CartList?.map((item) => {
+                {CartList?.map((item, index) => {
                   return (
                     <>
                       {item.variant.quantityAvailable >= item.quantity ? (
@@ -249,13 +260,13 @@ const CartMiniSidebar = () => {
                               </span>
                             </div>
                           </div>
-                          {removeLoading ? (
+                          {isLoading(index) ? (
                             <div className="cartmini__del cursor-pointer">
                               <ButtonLoader color={COLORS.primary} />
                             </div>
                           ) : (
                             <a
-                              onClick={() => handleRemovePrd(item)}
+                              onClick={() => handleRemovePrd(item, index)}
                               className="cartmini__del cursor-pointer"
                             >
                               <i className="fa-regular fa-xmark"></i>
@@ -327,7 +338,7 @@ const CartMiniSidebar = () => {
                             </div>
                           </div>
                           <a
-                            onClick={() => handleRemovePrd(item)}
+                            onClick={() => handleRemovePrd(item, index)}
                             className="cartmini__del cursor-pointer"
                           >
                             <i className="fa-regular fa-xmark"></i>
