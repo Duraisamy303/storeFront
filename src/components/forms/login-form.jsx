@@ -66,7 +66,6 @@ const LoginForm = () => {
       if (data?.data?.data?.tokenCreate?.errors?.length > 0) {
         notifyError(data?.data?.data?.tokenCreate?.errors[0]?.message);
       } else {
-        notifySuccess("Login successfully");
         // if (!whishlist) {
         //   whishlist = [];
         // } else {
@@ -104,6 +103,7 @@ const LoginForm = () => {
           // }
         }
         router.push(redirect || "/");
+        notifySuccess("Login successfully");
       }
     });
     reset();

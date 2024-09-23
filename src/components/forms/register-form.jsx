@@ -46,10 +46,10 @@ const RegisterForm = () => {
       if (result?.data?.data?.accountRegister?.errors?.length > 0) {
         notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {
-        notifySuccess("Register successfully");
         setTimeout(() => {
           router.push("/login");
         }, 2000);
+        notifySuccess("Register successfully");
       }
     });
     // reset();

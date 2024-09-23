@@ -31,7 +31,7 @@ const ForgotForm = () => {
   const onSubmit = (data) => {
     resetPassword({
       email: data.email,
-      redirectUrl: "http://192.168.1.196:3000/password_rest/",
+      redirectUrl: "https://www1.prade.in/password_reset/",
     }).then((result) => {
       const res = result?.data?.data?.requestPasswordReset;
       console.log("result: ", result?.data?.data?.requestPasswordReset);

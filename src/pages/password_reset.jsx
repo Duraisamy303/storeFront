@@ -16,11 +16,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 // internal
 import { useResetPasswordMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import ButtonLoader from "../components/loader/button-loader";
 
 const ForgotPage = () => {
   const [showPass, setShowPass] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState(null);
+  const [token, setToken] = useState(null);
 
   const [resetPassword, { loading: loading }] = useResetPasswordMutation();
 
@@ -33,21 +36,13 @@ const ForgotPage = () => {
     ),
   });
 
-  let email = "";
-  let token = "";
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const paramssd = new URLSearchParams(window.location.search);
-      const resff =
-        "http://192.168.1.196:3000/password_rest/?email=testing%40gmail.com&token=c9qq11-623ae17e8d1ea67bc5d77c4c553e9af4";
-
-      const urlObj = new URL(resff);
-
-      // Use URLSearchParams to extract the query parameters
-      const params = new URLSearchParams(urlObj.search);
-
-      email = params.get("email");
-      token = params.get("token");
+      const urlParams = new URLSearchParams(window.location.search);
+      let email = urlParams.get("email");
+      let token = urlParams.get("token");
+      setEmail(email);
+      setToken(token);
     }
   }, []);
   const {
@@ -163,7 +158,7 @@ const ForgotPage = () => {
                     </div>
                     <div className="tp-login-bottom mb-15">
                       <button type="submit" className="tp-login-btn w-100">
-                        Send Mail
+                        {loading ? <ButtonLoader /> : "Send Mail"}
                       </button>
                     </div>
                   </form>
