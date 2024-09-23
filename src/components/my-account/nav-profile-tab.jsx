@@ -30,7 +30,6 @@ const ProfileInfo = () => {
     setUserEmail(UserEmail);
   }, []);
 
-  console.log(userFirstName, "userFirstName");
 
   return (
     <div className="profile__info">

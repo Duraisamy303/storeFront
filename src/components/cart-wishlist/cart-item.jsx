@@ -42,7 +42,8 @@ const CartItem = ({
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
 
-  const [removeToCart, {}] = useRemoveToCartMutation();
+  const [removeToCart, { isLoading: removeLoading }] =
+    useRemoveToCartMutation();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
@@ -58,29 +59,13 @@ const CartItem = ({
   const router = useRouter();
   const [productRemoveLoader, setProductRemoveLoader] = useState(false);
 
-  // const handleRemovePrd = () => {
-  //   const checkoutToken = localStorage.getItem("checkoutToken");
-  //   removeToCart({
-  //     checkoutToken,
-  //     lineId: product.id,
-  //   }).then((data) => {
-  //     const filter = cart.filter((item) => item.id != product.id);
-  //     dispatch(cart_list(filter));
-  //     refetch()
-  //   });
-  // };
-
-  useEffect(() => {
-    AllListChannelREfresh();
-  }, []);
-
   const handleRemovePrd = async (val) => {
     setProductRemoveLoader(true);
     try {
-      setProductRemoveLoader(true);
+      const newTokenData = await AllListChannelREfresh();
       const productId = product?.variant?.product?.id;
-      const allListData = AllListChannel?.data?.checkout?.lines;
-      const fine = allListData?.find(
+      const allListData = newTokenData?.data?.data?.checkout?.lines;
+      const find = allListData?.find(
         (item) => item?.variant?.product?.id === productId
       );
 
@@ -95,11 +80,10 @@ const CartItem = ({
         checkoutToken: checkoutTokenINR,
         lineId: product.id,
       });
-      await removeToCart({ checkoutToken: checkoutToken, lineId: product?.id });
+      await removeToCart({ checkoutToken: checkoutToken, lineId: find?.id });
 
       refetch();
       AllListChannelREfresh();
-      setProductRemoveLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -239,7 +223,7 @@ const CartItem = ({
                 onClick={() => handleRemovePrd()}
                 className="tp-cart-action-btn"
               >
-                {productRemoveLoader ? (
+                {removeLoading ? (
                   <ClipLoader color="red" size={13} />
                 ) : (
                   <Close />

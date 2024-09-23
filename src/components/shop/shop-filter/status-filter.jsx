@@ -85,7 +85,7 @@ const FinishFilter = ({
       ...styleList,
       ...designList,
       ...stoneList,
-      ...filterByStock,
+      // ...filterByStock,
     ].filter((item) =>
       filter?.some(
         (checkedItem) =>
@@ -153,8 +153,8 @@ const FinishFilter = ({
   return (
     <>
       <div className="tp-shop-widget mb-50">
-        <h3 className="tp-shop-widget-title">FILTER BY STOCK</h3>
-        <div className="tp-shop-widget-content">
+        {/* <h3 className="tp-shop-widget-title">FILTER BY STOCK</h3> */}
+        {/* <div className="tp-shop-widget-content">
           <div className="tp-shop-widget-checkbox">
             <ul className="filter-items filter-checkbox">
               {filterByStock?.map((s, i) => (
@@ -179,7 +179,7 @@ const FinishFilter = ({
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {finishList?.length > 0 && (

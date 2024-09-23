@@ -1255,3 +1255,7 @@ export const filterByStock = [
     name: "Out Of Stock",
   },
 ];
+
+export const COLORS = {
+  primary: "#c3935b",
+};

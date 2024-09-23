@@ -24,12 +24,15 @@ import {
 } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import { isPreOrderAndGiftCart } from "../../redux/features/cartSlice";
+import ButtonLoader from "../loader/button-loader";
+import { COLORS } from "../../utils/constant";
 
 const CartMiniSidebar = () => {
   const { cartMiniOpen } = useSelector((state) => state.cart);
   const carts = useSelector((state) => state.cart);
 
-  const [removeToCart, {}] = useRemoveToCartMutation();
+  const [removeToCart, { isLoading: removeLoading }] =
+    useRemoveToCartMutation();
 
   const [channel, setChannel] = useState("");
 
@@ -39,7 +42,7 @@ const CartMiniSidebar = () => {
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
-    useGetCartAllListQuery({});
+    useGetCartAllListQuery();
 
   const CartList = cartList?.data?.checkout?.lines;
 
@@ -49,7 +52,7 @@ const CartMiniSidebar = () => {
 
   useEffect(() => {
     AllListChannelREfresh();
-  }, []);
+  }, [AllListChannel]);
 
   useEffect(() => {
     const channels = checkChannel();
@@ -63,9 +66,11 @@ const CartMiniSidebar = () => {
 
   const handleRemovePrd = async (val) => {
     try {
+      const newTokenData = await AllListChannelREfresh();
+
       const productId = val?.variant?.product?.id;
-      const allListData = AllListChannel?.data?.checkout?.lines;
-      const fine = allListData?.find(
+      const allListData = newTokenData?.data?.data?.checkout?.lines;
+      const find = allListData?.find(
         (item) => item?.variant?.product?.id == productId
       );
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
@@ -80,7 +85,7 @@ const CartMiniSidebar = () => {
       });
       await removeToCart({
         checkoutToken: checkoutToken,
-        lineId: val?.id,
+        lineId: find?.id,
       });
       cartRefetch();
       const res = await AllListChannelREfresh();
@@ -244,12 +249,18 @@ const CartMiniSidebar = () => {
                               </span>
                             </div>
                           </div>
-                          <a
-                            onClick={() => handleRemovePrd(item)}
-                            className="cartmini__del cursor-pointer"
-                          >
-                            <i className="fa-regular fa-xmark"></i>
-                          </a>
+                          {removeLoading ? (
+                            <div className="cartmini__del cursor-pointer">
+                              <ButtonLoader color={COLORS.primary} />
+                            </div>
+                          ) : (
+                            <a
+                              onClick={() => handleRemovePrd(item)}
+                              className="cartmini__del cursor-pointer"
+                            >
+                              <i className="fa-regular fa-xmark"></i>
+                            </a>
+                          )}
                         </div>
                       ) : (
                         <div

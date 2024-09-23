@@ -810,10 +810,10 @@ const ShopPage = () => {
 
   const finalFilterOptionList = (res) => {
     const data = res?.data?.data?.attributefilter;
-    setProductDesigns(data.productDesigns);
-    setProductFinishes(data.productFinishes);
-    setProductStoneTypes(data.productStoneTypes);
-    setProductStyles(data.productStyles);
+    setProductDesigns(data?.productDesigns);
+    setProductFinishes(data?.productFinishes);
+    setProductStoneTypes(data?.productStoneTypes);
+    setProductStyles(data?.productStyles);
   };
 
   return (
