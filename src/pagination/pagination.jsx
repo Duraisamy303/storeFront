@@ -51,7 +51,11 @@ const Pagination = (props) => {
     } else {
       // Show '1 ... currentPage-2 currentPage currentPage+2 ... totalPages'
       pageNumbers.push(1, "...");
-      for (let i = currentPage - pageBuffer; i <= currentPage + pageBuffer; i++) {
+      for (
+        let i = currentPage - pageBuffer;
+        i <= currentPage + pageBuffer;
+        i++
+      ) {
         pageNumbers.push(i);
       }
       pageNumbers.push("...", totalPages);
@@ -66,6 +70,10 @@ const Pagination = (props) => {
         className="prev-button"
         onClick={handlePrevClick}
         disabled={currentPage === 1}
+        style={{
+          color: currentPage === 1 ? "grey" : "black",
+          cursor: currentPage === 1 ? "default" : " pointer",
+        }}
       >
         Prev
       </button>
@@ -89,6 +97,10 @@ const Pagination = (props) => {
 
       <button
         className="next-button"
+        style={{
+          color: currentPage === totalPages ? "grey" : "black",
+          cursor: currentPage === totalPages ? "default" : " pointer",
+        }}
         onClick={handleNextClick}
         disabled={currentPage === totalPages}
       >
