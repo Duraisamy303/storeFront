@@ -158,7 +158,7 @@ const ForgotPage = () => {
                     </div>
                     <div className="tp-login-bottom mb-15">
                       <button type="submit" className="tp-login-btn w-100">
-                        {loading ? <ButtonLoader /> : "Send Mail"}
+                        {loading ? <ButtonLoader /> : "Submit"}
                       </button>
                     </div>
                   </form>
