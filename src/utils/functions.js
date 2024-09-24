@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export const capitalizeFLetter = (string = "") => {
   if (string.length > 0) {
@@ -223,4 +224,34 @@ export const sortingBy = (e) => {
     sortBy = { direction: "DESC", field: "CREATED_AT" };
   }
   return sortBy;
+};
+
+export const showDeleteAlert = (onConfirm, onCancel) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn confirm-btn", // Add a custom class for the confirm button
+      cancelButton: "btn cancel-btn", // Add a custom class for the cancel button
+      popup: "sweet-alerts",
+    },
+    buttonsStyling: false,
+  });
+
+  swalWithBootstrapButtons
+    .fire({
+      title: "Are you sure to cancel order?",
+      // text: "You won't be able to Delete this!",
+      icon: "warning",
+      showCancelButton: true,
+      // confirmButtonText: 'Yes, delete it!',
+      // cancelButtonText: 'No, cancel!',
+      reverseButtons: true,
+      padding: "2em",
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        onConfirm(); // Call the onConfirm function if the user confirms the deletion
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        onCancel(); // Call the onCancel function if the user cancels the deletion
+      }
+    });
 };

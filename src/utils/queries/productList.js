@@ -578,14 +578,7 @@ export const LOOT_LIST = ({ channel, first, after, filter }) => {
 };
 
 export const MAX_PRICE = ({ first, channel, filter, after, sortBy }) => {
-  console.log(
-    "first, channel, filter, after, sortBy : ",
-    first,
-    channel,
-    filter,
-    after,
-    sortBy
-  );
+  
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int, $after: String, $channel: String!, $sortBy: ProductOrder, $filter: ProductFilterInput!) {

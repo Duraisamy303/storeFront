@@ -7,9 +7,10 @@ import {
 import { useRouter } from "next/router";
 import useRazorpay from "react-razorpay";
 import moment from "moment";
-import { roundOff } from "@/utils/functions";
+import { roundOff, showDeleteAlert } from "@/utils/functions";
 import { notifySuccess } from "@/utils/toast";
 import ButtonLoader from "../loader/button-loader";
+import Swal from "sweetalert2";
 
 const OrderList = () => {
   const {
@@ -91,16 +92,24 @@ const OrderList = () => {
     [Razorpay, successPayment, router]
   );
 
-  const cancelOrder = async (item) => {
-    try {
-      setCancelLoading(true);
-      await orderCancel({ id: item.id });
-      orderListRefetch();
-    } catch (error) {
-      console.log("error: ", error);
-    } finally {
-      setCancelLoading(false);
-    }
+  const cancelOrder = (item) => {
+    showDeleteAlert(
+      async () => {
+        try {
+          setCancelLoading(true);
+          await orderCancel({ id: item.id });
+          orderListRefetch();
+        } catch (error) {
+          console.log("error: ", error);
+        } finally {
+          setCancelLoading(false);
+        }
+        Swal.fire("Cancelled!", "Your file has been deleted.", "success");
+      },
+      () => {
+        Swal.fire("Order", "Your Order is safe :)", "info");
+      }
+    );
   };
 
   // Pagination Logic

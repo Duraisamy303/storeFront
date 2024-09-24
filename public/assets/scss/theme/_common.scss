@@ -904,3 +904,22 @@
   border-radius: 5px;
   padding: 5px 16px;
 }
+
+.confirm-btn {
+  background-color: white   !important;
+  color: grey !important;
+  border-width: 1px !important;
+  border-color:  #c38c36 !important;
+}
+.cancel-btn {
+  background-color:  #c38c36 !important;
+  color:white!important;
+  margin-right: 1em !important;
+}
+.swal2-actions {
+  justify-content: space-between; 
+}
+.swal2-confirm swal2-styled{
+  background-color:  #c38c36  !important;
+
+}
