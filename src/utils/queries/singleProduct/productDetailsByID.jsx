@@ -242,6 +242,10 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                 key
                 value
               }
+                media{
+                alt
+                url
+                }
             }
           }
         }
