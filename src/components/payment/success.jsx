@@ -62,7 +62,7 @@ const Success = ({ data }) => {
                         ) : (
                           <>
                             <td>
-                              ${roundOff(order.totalPrice?.gross?.amount)}
+                              ${addCommasToNumber(order.totalPrice?.gross?.amount)}
                             </td>
                           </>
                         )}
@@ -78,7 +78,7 @@ const Success = ({ data }) => {
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(SubTotal)}</td>
+                        <td>${addCommasToNumber(SubTotal)}</td>
                       </>
                     )}
                   </tr>
@@ -101,7 +101,7 @@ const Success = ({ data }) => {
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(ShippingAmount)}</td>
+                        <td>${addCommasToNumber(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
@@ -144,19 +144,19 @@ const Success = ({ data }) => {
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
                             (includes {Tax?.currency == "USD" ? "$" : "₹"}
-                            {addCommasToNumber(Tax?.amount)} GST)
+                            {roundOff(Tax?.amount)} GST)
                           </div>
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          ${roundOff(Total)}
+                          ${addCommasToNumber(Total)}
                           <div
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
                             (includes {Tax?.currency == "USD" ? "$" : "₹"}
-                            {roundOff(Tax?.amount)} GST)
+                            {addCommasToNumber(Tax?.amount)} GST)
                           </div>
                         </td>
                       </>
@@ -200,7 +200,7 @@ const Success = ({ data }) => {
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      ${roundOff(Total)}
+                      ${addCommasToNumber(Total)}
                     </span>
                   )}
                 </li>

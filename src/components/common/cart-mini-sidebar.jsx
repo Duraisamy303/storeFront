@@ -250,7 +250,7 @@ const CartMiniSidebar = () => {
                                 </span>
                               ) : (
                                 <span className="cartmini__price">
-                                  ${roundOff(item?.totalPrice?.gross?.amount)}
+                                  ${addCommasToNumber(item?.totalPrice?.gross?.amount)}
                                 </span>
                               )}
                               {/* )} */}
@@ -322,7 +322,7 @@ const CartMiniSidebar = () => {
                               ) : (
                                 <span className="cartmini__price">
                                   $
-                                  {roundOff(
+                                  {addCommasToNumber(
                                     item?.variant?.pricing?.price?.gross
                                       ?.amount ||
                                       item?.node?.pricing?.priceRange?.start
@@ -398,7 +398,7 @@ const CartMiniSidebar = () => {
                 ) : (
                   <span>
                     $
-                    {roundOff(
+                    {addCommasToNumber(
                       cartList?.data?.checkout?.totalPrice?.gross?.amount
                     )}
                     <div
@@ -409,7 +409,7 @@ const CartMiniSidebar = () => {
                       }}
                     >
                       (includes $
-                      {roundOff(
+                      {addCommasToNumber(
                         cartList?.data?.checkout?.totalPrice?.tax?.amount
                       )}{" "}
                       GST)

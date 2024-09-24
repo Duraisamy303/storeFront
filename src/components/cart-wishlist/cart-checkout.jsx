@@ -67,7 +67,7 @@ const CartCheckout = ({ cartData }) => {
           </span>
         ) : (
           <span className="tp-cart-checkout-top-price">
-            ${roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
+            ${addCommasToNumber(list?.data?.checkout?.totalPrice?.gross?.amount)}
           </span>
         )}
       </div>
@@ -127,7 +127,7 @@ const CartCheckout = ({ cartData }) => {
           </>
         ) : (
           <span>
-            ${roundOff(list?.data?.checkout?.totalPrice?.gross?.amount)}
+            ${addCommasToNumber(list?.data?.checkout?.totalPrice?.gross?.amount)}
             <br />
             <div
               style={{
@@ -137,7 +137,7 @@ const CartCheckout = ({ cartData }) => {
               }}
             >
               (includes $
-              {roundOff(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
+              {addCommasToNumber(list?.data?.checkout?.totalPrice?.tax?.amount)} GST)
             </div>
             {/* <span style={{ fontSize: "14px" }}>(includes ₹1,012.14 VAT)</span> */}
           </span>

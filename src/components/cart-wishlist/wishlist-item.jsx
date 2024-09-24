@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { notifyError, notifySuccess } from "@/utils/toast";
 
 // import { useGetWishlistQuery } from "@/redux/features/productApi";
-import { checkChannel, roundOff } from "../../utils/functions";
+import { addCommasToNumber, checkChannel, roundOff } from "../../utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../loader/button-loader";
 import { ClipLoader } from "react-spinners";
@@ -339,7 +339,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
             </td>
             <td className="tp-cart-price">
               <span>
-                ${roundOff(data?.pricing?.priceRange?.start?.gross?.amount)}
+                ${addCommasToNumber(data?.pricing?.priceRange?.start?.gross?.amount)}
               </span>
             </td>
 

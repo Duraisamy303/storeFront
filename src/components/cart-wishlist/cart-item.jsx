@@ -145,7 +145,7 @@ const CartItem = ({
             {channel == "india-channel" ? (
               <span>&#8377;{addCommasToNumber(price)}</span>
             ) : (
-              <span>${roundOff(price)}</span>
+              <span>${addCommasToNumber(price)}</span>
             )}
           </td>
           {/* quantity */}
@@ -205,10 +205,10 @@ const CartItem = ({
               ) : (
                 <>
                   {!isQuantity ? (
-                    <span style={{ color: "gray" }}>${roundOff(price)}</span>
+                    <span style={{ color: "gray" }}>${addCommasToNumber(price)}</span>
                   ) : (
                     <span style={{ color: "gray" }}>
-                      ${roundOff(price * quantity)}
+                      ${addCommasToNumber(price * quantity)}
                     </span>
                   )}
                 </>
@@ -261,7 +261,7 @@ const CartItem = ({
       </td> */}
           {/* price */}
           <td className="tp-cart-price">
-            <span>&#8377;{roundOff(price * orderQuantity)}</span>
+            <span>&#8377;{addCommasToNumber(price * orderQuantity)}</span>
           </td>
           {/* quantity */}
           {isQuantity && (
@@ -302,9 +302,9 @@ const CartItem = ({
           <td className="tp-cart-quantity">
             <div className="tp-product-quantity mt-10 mb-10">
               {!isQuantity ? (
-                <span>&#8377;{roundOff(price)}</span>
+                <span>&#8377;{addCommasToNumber(price)}</span>
               ) : (
-                <span>${roundOff(price * orderQuantity)}</span>
+                <span>${addCommasToNumber(price * orderQuantity)}</span>
               )}
             </div>
           </td>

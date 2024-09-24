@@ -42,7 +42,7 @@ const Failed = ({ data, orderId }) => {
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: roundOff(total) * 100,
+          amount: total * 100,
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: "Products",
@@ -140,7 +140,10 @@ const Failed = ({ data, orderId }) => {
                         ) : (
                           <>
                             <td>
-                              ${roundOff(order.totalPrice?.gross?.amount)}
+                              $
+                              {addCommasToNumber(
+                                order.totalPrice?.gross?.amount
+                              )}
                             </td>
                           </>
                         )}
@@ -156,7 +159,7 @@ const Failed = ({ data, orderId }) => {
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(SubTotal)}</td>
+                        <td>${addCommasToNumber(SubTotal)}</td>
                       </>
                     )}
                   </tr>
@@ -173,13 +176,17 @@ const Failed = ({ data, orderId }) => {
                         <td>
                           &#8377;
                           {giftWrap
-                            ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
-                            : Number(roundOff(ShippingAmount)).toFixed(2)}
+                            ? Number(
+                                addCommasToNumber(ShippingAmount) - 50
+                              ).toFixed(2)
+                            : Number(addCommasToNumber(ShippingAmount)).toFixed(
+                                2
+                              )}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(ShippingAmount)}</td>
+                        <td>${addCommasToNumber(ShippingAmount)}</td>
                       </>
                     )}
                   </tr>
@@ -230,19 +237,19 @@ const Failed = ({ data, orderId }) => {
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
                             (includes {Tax?.currency == "USD" ? "$" : "₹"}
-                            {roundOff(Tax?.amount)} GST)
+                            {addCommasToNumber(Tax?.amount)} GST)
                           </div>
                         </td>
                       </>
                     ) : (
                       <>
                         <td style={{ color: "black", fontWeight: "600" }}>
-                          ${roundOff(Total)}
+                          ${addCommasToNumber(Total)}
                           <div
                             style={{ fontSize: "15px", fontWeight: "normal" }}
                           >
                             (includes {Tax?.currency == "USD" ? "$" : "₹"}
-                            {roundOff(Tax?.amount)} GST)
+                            {addCommasToNumber(Tax?.amount)} GST)
                           </div>
                         </td>
                       </>
@@ -260,7 +267,14 @@ const Failed = ({ data, orderId }) => {
                 boxShadow: "3px 3px 5px #f1f1f1",
               }}
             >
-              <p style={{ color: "gray", fontSize: "26px", fontWeight: "600", color:"red" }}>
+              <p
+                style={{
+                  color: "gray",
+                  fontSize: "26px",
+                  fontWeight: "600",
+                  color: "red",
+                }}
+              >
                 Your order has been Failed.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
@@ -278,7 +292,7 @@ const Failed = ({ data, orderId }) => {
                     </span>
                   ) : (
                     <span style={{ fontWeight: "600", color: "black" }}>
-                      ${roundOff(Total)}
+                      ${addCommasToNumber(Total)}
                     </span>
                   )}
                 </li>

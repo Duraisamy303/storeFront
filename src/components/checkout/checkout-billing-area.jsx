@@ -176,6 +176,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const [createCheckoutId] = useCreateCheckoutIdMutation();
 
   const [updateDeliveryMethod] = useCheckoutUpdateMutation();
+
   const [getCheckoutDetails] = useGetCheckoutDetailsMutation();
 
   const [updateDeliveryMethodCODAndGiftWrap] =
@@ -596,7 +597,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
           key_secret: "rRfAuSd9PLwbhIwUlBpTy4Gv",
-          amount: roundOff(total) * 100,
+          amount: total * 100,
           // order_id:orderId,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: state.firstName + " " + state.lastName,
@@ -618,8 +619,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
             if (res?.razorpay_payment_id) {
               notifySuccess("Payment Successful");
               const data = await successPayment({
-                amountAuthorized: roundOff(total),
-                amountCharged: roundOff(total),
+                amountAuthorized: total,
+                amountCharged: total,
                 pspReference: res?.razorpay_payment_id,
               });
               localStorage.removeItem("checkoutTokenUSD");
@@ -1884,7 +1885,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </>
                       ) : (
                         <span>
-                          ${roundOff(item?.totalPrice?.gross?.amount)}
+                          ${addCommasToNumber(item?.totalPrice?.gross?.amount)}
                         </span>
                       )}
                     </li>
@@ -1933,7 +1934,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         </span>
                       ) : (
                         <span>
-                          <span>${roundOff(state?.shippingCost)}</span>
+                          <span>${addCommasToNumber(state?.shippingCost)}</span>
                         </span>
                       )}
                     </li>
@@ -1953,7 +1954,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         ) : (
                           <span>
                             <span>
-                              ${roundOff(item?.currentBalance?.amount)}
+                              ${addCommasToNumber(item?.currentBalance?.amount)}
                             </span>
                           </span>
                         )}
@@ -1967,7 +1968,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                         <span>&#8377;{roundOff(50)}</span>
                       ) : (
                         <span>
-                          <span>${roundOff(50)}</span>
+                          <span>${addCommasToNumber(50)}</span>
                         </span>
                       )}
                     </li>
@@ -1989,7 +1990,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           )}
                           <br />
                           <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                            (includes &#8377;{roundOff(state?.tax)} GST)
+                            (includes &#8377;{addCommasToNumber(state?.tax)} GST)
                           </span>
                         </p>
                       </>
@@ -2002,11 +2003,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             textAlign: "right",
                           }}
                         >
-                          {state?.total && <>${roundOff(state?.total)}</>}
+                          {state?.total && <>${addCommasToNumber(state?.total)}</>}
 
                           <br />
                           <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                            (includes ${roundOff(state?.tax)} GST)
+                            (includes ${addCommasToNumber(state?.tax)} GST)
                           </span>
                         </p>
                       </>
