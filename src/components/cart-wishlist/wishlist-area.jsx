@@ -17,7 +17,6 @@ const WishlistArea = () => {
 
   const { data: wishlistDefaultData, refetch: wishlistDefaultRefetch } =
     useGetWishlistDefaultQuery();
-  console.log("✌️wishlistDefaultData --->", wishlistDefaultData);
 
   const { data: wishlistData, refetch: wishlistRefetch } =
     useGetWishlistQuery();
@@ -35,7 +34,6 @@ const WishlistArea = () => {
       ? wishlistData?.data?.wishlists?.edges?.map((item) => item?.node)
       : wishlistDefaultData?.data?.wishlists?.edges?.map((item) => item?.node);
 
-  console.log("list", list);
 
   const getWishlistList = async (prd) => {
     try {

@@ -30,9 +30,7 @@ import ButtonLoader from "../loader/button-loader";
 import { ClipLoader } from "react-spinners";
 
 const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
-  console.log("✌️product --->", product);
   const { variant, img, name, pricing } = product || {};
-  console.log("✌️title --->", name);
 
   const dispatch = useDispatch();
 
@@ -95,7 +93,35 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
       const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
       const response = await addToCartMutation({
         checkoutToken: checkoutTokenINR,
-        variantId: product?.product?.defaultVariant.id,
+        variantId:
+          product?.product?.defaultVariant.id ||
+          product?.defaultChannelProduct?.defaultVariant?.id,
+      });
+
+      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
+        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
+        console.log("err: ", err);
+        notifyError(err);
+      } else {
+        addToCartProductUSD();
+      }
+
+      setCartLoader(false);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const addToCartProductUSD = async () => {
+    setCartLoader(true);
+    try {
+      setCartLoader(true);
+      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
+      const response = await addToCartMutation({
+        checkoutToken: checkoutTokenUSD,
+        variantId:
+          product?.product?.defaultVariant.id ||
+          product?.defaultChannelProduct?.defaultVariant?.id,
       });
 
       if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
@@ -114,35 +140,9 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
     }
   };
 
-  const addToCartProductUSD = async () => {
-    setCartLoader(true);
-    try {
-      setCartLoader(true);
-      const checkoutTokenUSD = localStorage.getItem("checkoutTokenUSD");
-      const response = await addToCartMutation({
-        checkoutToken: checkoutTokenUSD,
-        variantId: product?.defaultChannelProduct?.defaultVariant?.id,
-      });
-      if (response.data?.data?.checkoutLinesAdd?.errors?.length > 0) {
-        const err = response.data?.data?.checkoutLinesAdd?.errors[0]?.message;
-        // notifyError(err);
-      } else {
-        notifySuccess(`Product added to cart successfully`);
-        cartRefetch();
-        dispatch(openCartMini());
-        AllListChannelREfresh();
-      }
-
-      setCartLoader(false);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   const isHiddenCategory = data?.category?.some(
     (item) => item.name === "Hidden"
   );
-  console.log("✌️isHiddenCategory --->", isHiddenCategory);
 
   const isImage = (url) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
@@ -242,9 +242,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
                   if (isAddToCart) {
                     router.push("/cart");
                   } else {
-                    checkChannel() === "india-channel"
-                      ? addToCartProductINR()
-                      : addToCartProductUSD();
+                    addToCartProductINR();
                   }
                 }}
                 type="button"
@@ -379,9 +377,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
                   if (isAddToCart) {
                     router.push("/cart");
                   } else {
-                    checkChannel === "india-channel"
-                      ? addToCartProductINR()
-                      : addToCartProductUSD();
+                    addToCartProductINR();
                   }
                 }}
                 type="button"
