@@ -8,6 +8,7 @@ import { CloseEye, OpenEye } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import { useChangePasswordMutation } from "@/redux/features/auth/authApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import ButtonLoader from "../loader/button-loader";
 
 // schema
 const schema = Yup.object().shape({
@@ -29,7 +30,8 @@ const schemaTwo = Yup.object().shape({
 
 const ChangePassword = () => {
   const { user } = useSelector((state) => state.auth);
-  const [changePassword, {}] = useChangePasswordMutation();
+  const [changePassword, { isLoading: submitLoading }] =
+    useChangePasswordMutation();
 
   const [showPass, setShowPass] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -68,7 +70,6 @@ const ChangePassword = () => {
           "An error occurred while changing password. Please try again later."
         );
       });
-    
   };
 
   return (
@@ -163,7 +164,7 @@ const ChangePassword = () => {
           <div className="col-xxl-6 col-md-6">
             <div className="profile__btn">
               <button type="submit" className="tp-btn">
-                Update
+                {submitLoading ? <ButtonLoader /> : "Update"}
               </button>
             </div>
           </div>
