@@ -292,10 +292,18 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
             }
             name
             description
-            variants {
-              id
-              sku
+           variants {
+          id
+          name
+          sku
+           pricing {
+            price {
+              gross {
+                amount
+              }
             }
+          }
+        }
             thumbnail {
               url
               alt
@@ -1112,10 +1120,18 @@ export const PRE_ORDER_LIST = ({
             }
           }
         }
-        defaultVariant {
+       defaultVariant {
           id
           sku
           quantityAvailable
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
         }
         category {
           id
@@ -1136,14 +1152,33 @@ export const PRE_ORDER_LIST = ({
         }
         variants {
           id
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+          name
         }
         description
         metadata {
           key
           value
         }
-        defaultVariant {
+       defaultVariant {
           id
+          sku
+          quantityAvailable
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
         }
         seoDescription
         seoTitle

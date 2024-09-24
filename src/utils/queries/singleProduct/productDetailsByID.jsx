@@ -207,8 +207,18 @@ export const RELATED_PRODUCT = ({ id, channel }) => {
                 alt
               }
               variants {
-                id
+            id
+            pricing {
+              price {
+                gross {
+                  amount
+                  currency
+                }
+                currency
               }
+            }
+            name
+          }
               pricing {
                 priceRange {
                   start {
