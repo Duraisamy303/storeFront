@@ -5,13 +5,7 @@ import Loader from "../loader/loader";
 import { profilePic } from "@/utils/constant";
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 
-const DetailsThumbWrapperQuick = ({
-  imgWidth = 416,
-  imgHeight = 480,
-  videoId = false,
-  status,
-  product,
-}) => {
+const DetailsThumbWrapperQuick = ({ videoId = false, status, product }) => {
   const imageUrls = product?.media?.map((item) => item?.url);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [activeImg, setActiveImg] = useState(imageUrls?.[0]);
@@ -52,29 +46,24 @@ const DetailsThumbWrapperQuick = ({
 
   return (
     <>
-      <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
+      <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex quickview-first-section pt-30 pt-lg-0">
         <nav
-          className="product-side-nav-img"
+          className="product-side-nav-img quickview-nav-wrapper "
           style={{
-            height: imageUrls?.length > 2 ? "420px" : "auto",
+            height: imageUrls?.length > 4 ? "420px" : "auto",
             overflow: "hidden",
           }}
         >
           {" "}
-          <div className="nav nav-tabs flex-sm-column">
+          <div className="nav nav-tabs quickview-nav-tabs-main ">
             {imageUrls?.map((item, i) => (
               <button
                 key={i}
-                className={`nav-link ${item === activeImg ? "active" : ""}`}
+                className={`nav-link quickview-nav-image  ${
+                  item === activeImg ? "active" : ""
+                }`}
                 onClick={() => handleImageActive(item)}
                 id={`image-${i}`}
-                style={{
-                  border: "none",
-                  background: "none",
-                  padding: 0,
-                  width: "175px",
-                  height: "205px",
-                }}
               >
                 {/* <Image
                   src={profilePic(item)}
@@ -104,43 +93,21 @@ const DetailsThumbWrapperQuick = ({
               </button>
             ))}
           </div>
-          {imageUrls?.length > 2 && (
+          {imageUrls?.length > 3 && (
             <>
               {" "}
               <UpOutlined
-                className="prev-btn"
+                className=" quickview-nav-prev-btn"
                 onClick={() => handleNavigationClick("prev")}
-                style={{
-                  fontSize: "12px",
-                  background: "#f2efec",
-                  borderRadius: "50%",
-                  padding: "3px",
-                  color: "black",
-                  position: "absolute",
-                  left: "70px",
-                  top: "20px",
-                  opacity: "0.8",
-                }}
               />
               <DownOutlined
-                className="next-btn"
+                className="quickview-nav-next-btn"
                 onClick={() => handleNavigationClick("next")}
-                style={{
-                  fontSize: "12px",
-                  background: "#f2efec",
-                  borderRadius: "50%",
-                  padding: "3px",
-                  color: "black",
-                  position: "absolute",
-                  left: "70px",
-                  bottom: "80px",
-                  opacity: "0.8",
-                }}
               />
             </>
           )}
         </nav>
-        <div className="tab-content m-img">
+        <div className="tab-content m-img quickview-tab-content">
           <div className="tab-pane fade show active">
             <div className="tp-product-details-nav-main-thumb p-relative">
               {loading ? (
@@ -157,14 +124,12 @@ const DetailsThumbWrapperQuick = ({
                     <img
                       src={profilePic(activeImg)}
                       alt="product img"
-                      width={imgWidth}
-                      height={imgHeight}
+                      className="quickview-main-image"
                     />
                   ) : (
                     <video
                       src={profilePic(activeImg)}
-                      width={imgWidth}
-                      height={imgHeight}
+                      className="quickview-main-image"
                       autoPlay
                       muted // Ensure it's muted to autoplay without user interaction
                       loop // Ensure it loops indefinitely
