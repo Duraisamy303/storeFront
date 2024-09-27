@@ -846,6 +846,24 @@
   bottom: 35px;
 }
 
+:where(.css-dev-only-do-not-override-d2lrxs).ant-carousel .slick-dots-bottom {
+  bottom: 20px;
+}
+
+:where(.css-d2lrxs).ant-carousel .slick-dots-bottom {
+  bottom: 20px;
+}
+@media(max-width: 768px) {
+  :where(.css-dev-only-do-not-override-d2lrxs).ant-carousel .slick-dots-bottom {
+    bottom: 30px;
+  }
+
+  :where(.css-d2lrxs).ant-carousel .slick-dots-bottom {
+    bottom: 30px;
+  }
+}
+
+
 .tp-product-action-7 {
   position: absolute;
   bottom: 3px;

@@ -138,9 +138,9 @@ const JewelryCollectionBanner = () => {
                                 }}
                               >
                                 I had recently purchased their Kundan earrings
-                                and they were excellent and perfectly matched my
-                                festival outfit, making my day even more
-                                special.
+                                and they were excellent and perfectly
+                                <br /> matched my festival outfit, making my day
+                                even more special.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -182,8 +182,8 @@ const JewelryCollectionBanner = () => {
                               >
                                 I was searching for a unique ring, and Prade
                                 Jewellery had exactly what I wanted. The ring is
-                                stunning, with a design that truly stands out. I
-                                will recommend Prade to my friends.
+                                stunning, with a design that truly stands out.
+                                <br /> I will recommend Prade to my friends.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -238,7 +238,7 @@ const JewelryCollectionBanner = () => {
                                   }}
                                 >
                                   Meera
-                                </span> 
+                                </span>
                               </p>
                             </div>
                           </div>
