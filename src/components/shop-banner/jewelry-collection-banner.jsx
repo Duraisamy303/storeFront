@@ -17,6 +17,7 @@ import actor4 from "@assets/img/collection-actor-4.jpg";
 import actor5 from "@assets/img/collection-actor-5.jpg";
 import actor6 from "@assets/img/collection-actor-6.jpg";
 import { useRouter } from "next/router";
+import { arrow } from "@popperjs/core";
 
 const JewelryCollectionBanner = () => {
   const Router = useRouter();
@@ -50,7 +51,8 @@ const JewelryCollectionBanner = () => {
     customPaging: (i, active) => (
       <div style={active ? activeDotStyle : customDotStyle}></div>
     ), // Custom dots rendering
-    dots: true,
+    dots: false,
+    arrows: true,
     autoplay: true,
   };
 
@@ -69,22 +71,25 @@ const JewelryCollectionBanner = () => {
               <div className="col-xl-6 col-lg-6 gx-0 gy-0">
                 <div className="tp-collection-thumb-wrapper-4 p-relative fix z-index-1">
                   <div>
-                    <div className="carosel-outer">
+                    <div className="carousel-outer">
                       <Carousel {...settings}>
-                        <div className="profile-carosel">
+                        <div className="profile-carousel">
                           <div style={contentStyle}>
                             <div>
-                              <h5 className="carosel-adisicing">
+                              <h5 className="carousel-adisicing">
                                 Voices of Satisfaction
                               </h5>
-                              <h3 className="carosel-title">
+                              <h3
+                                className="carousel-title"
+                                style={{ fontWeight: "400" }}
+                              >
                                 WHAT OUR CLIENTS SAY
                               </h3>
                               <div className="profile-outer">
                                 <Image
                                   src={profile1}
                                   alt="profile-1"
-                                  className="carosel-profileImg"
+                                  className="carousel-profileImg"
                                 />
                               </div>
                               <p
@@ -114,20 +119,20 @@ const JewelryCollectionBanner = () => {
                           </div>
                         </div>
 
-                        <div className="profile-carosel">
+                        <div className="profile-carousel">
                           <div style={contentStyle}>
                             <div>
-                              <h5 className="carosel-adisicing">
+                              <h5 className="carousel-adisicing">
                                 Voices of Satisfaction
                               </h5>
-                              <h3 className="carosel-title">
+                              <h3 className="carousel-title"  style={{ fontWeight: "400" }}>
                                 WHAT OUR CLIENTS SAY
                               </h3>
                               <div className="profile-outer">
                                 <Image
                                   src={profile2}
-                                  alt="profile-1"
-                                  className="carosel-profileImg"
+                                  alt="profile-2"
+                                  className="carousel-profileImg"
                                 />
                               </div>
                               <p
@@ -138,9 +143,9 @@ const JewelryCollectionBanner = () => {
                                 }}
                               >
                                 I had recently purchased their Kundan earrings
-                                and they were excellent and perfectly
-                                <br /> matched my festival outfit, making my day
-                                even more special.
+                                and they were excellent and perfectly matched my
+                                festival outfit, making my day even more
+                                special.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -157,20 +162,20 @@ const JewelryCollectionBanner = () => {
                           </div>
                         </div>
 
-                        <div className="profile-carosel">
+                        <div className="profile-carousel">
                           <div style={contentStyle}>
                             <div>
-                              <h5 className="carosel-adisicing">
+                              <h5 className="carousel-adisicing">
                                 Voices of Satisfaction
                               </h5>
-                              <h3 className="carosel-title">
+                              <h3 className="carousel-title"  style={{ fontWeight: "400" }}>
                                 WHAT OUR CLIENTS SAY
                               </h3>
                               <div className="profile-outer">
                                 <Image
                                   src={profile3}
-                                  alt="profile-1"
-                                  className="carosel-profileImg"
+                                  alt="profile-3"
+                                  className="carousel-profileImg"
                                 />
                               </div>
                               <p
@@ -182,8 +187,8 @@ const JewelryCollectionBanner = () => {
                               >
                                 I was searching for a unique ring, and Prade
                                 Jewellery had exactly what I wanted. The ring is
-                                stunning, with a design that truly stands out.
-                                <br /> I will recommend Prade to my friends.
+                                stunning, with a design that truly stands out. I
+                                will recommend Prade to my friends.
                               </p>
                               <p style={{ color: "black", fontSize: "14px" }}>
                                 <span
@@ -200,20 +205,20 @@ const JewelryCollectionBanner = () => {
                           </div>
                         </div>
 
-                        <div className="profile-carosel">
+                        <div className="profile-carousel">
                           <div style={contentStyle}>
                             <div>
-                              <h5 className="carosel-adisicing">
+                              <h5 className="carousel-adisicing">
                                 Voices of Satisfaction
                               </h5>
-                              <h3 className="carosel-title">
+                              <h3 className="carousel-title"  style={{ fontWeight: "400" }}>
                                 WHAT OUR CLIENTS SAY
                               </h3>
                               <div className="profile-outer">
                                 <Image
                                   src={profile3}
-                                  alt="profile-1"
-                                  className="carosel-profileImg"
+                                  alt="profile-4"
+                                  className="carousel-profileImg"
                                 />
                               </div>
                               <p
