@@ -80,32 +80,22 @@ const ShopPage = () => {
 
   const PAGE_LIMIT = 21;
 
-  const filterByOtherAttribute = () => {
-    let datas = {};
-
-    // if (find == undefined) {
-    if (filter?.length > 0) {
-      filter?.forEach((item) => {
-        if (item?.type === "finish") {
-          datas.productFinish = item?.id;
-        } else if (item?.type === "style") {
-          datas.productstyle = item?.id;
-        } else if (item?.type === "design") {
-          datas.prouctDesign = item?.id;
-        } else if (item?.type === "stone") {
-          datas.productStoneType = item?.id;
-        } else if (item.type === "stock") {
-          datas.stockAvailability = item.id;
-        }
-      });
-    }
-
-    return datas;
-  };
-
   const commonFilter = () => {
     let filters = {};
-    // console.log("filter: ", filter);
+
+    if (filter?.price) {
+      filters.price = {
+        gte: filter?.price?.min ? filter?.price?.min : priceValue[0],
+        lte: filter?.price?.max ? filter?.price?.max : priceValue[1],
+      };
+    }
+
+    if (filter?.attributes) {
+      filters = {
+        ...filters, // Keep the existing price filter
+        attributes: filter?.attributes, // Merge other filters
+      };
+    }
 
     if (router?.query?.categoryId) {
       filters.categories = router?.query?.categoryId;
@@ -113,21 +103,6 @@ const ShopPage = () => {
 
     if (router?.query?.tag) {
       filters.tag = router?.query?.tag;
-    }
-
-    if (filter?.length > 0) {
-      const find = filter?.find((item) => item?.type == "price");
-      filters.price = {
-        gte: find?.min ? find?.min : priceValue[0],
-        lte: find?.max ? find?.max : priceValue[1],
-      };
-      filters.attributes = filter.attributes;
-
-      // const otherFilters = filterByOtherAttribute();
-      // filters = {
-      //   ...filters, // Keep the existing price filter
-      //   ...otherFilters, // Merge other filters
-      // };
     }
 
     return filters;
@@ -136,20 +111,26 @@ const ShopPage = () => {
   const initialFilter = () => {
     let filters = {};
 
+    if (filter?.price) {
+      filters.price = {
+        gte: 0,
+        lte: maxPrice,
+      };
+    }
+
+    if (filter?.attributes) {
+      filters = {
+        ...filters, // Keep the existing price filter
+        attributes: filter?.attributes, // Merge other filters
+      };
+    }
+
     if (router?.query?.categoryId) {
       filters.categories = router?.query?.categoryId;
     }
 
     if (router?.query?.tag) {
       filters.tag = router?.query?.tag;
-    }
-
-    if (filter?.length > 0) {
-      const otherFilters = filterByOtherAttribute();
-      filters = {
-        ...filters, // Keep the existing price filter
-        ...otherFilters, // Merge other filters
-      };
     }
     return filters;
   };
@@ -206,21 +187,22 @@ const ShopPage = () => {
     shopTitle = `Shop / ${tagName}`;
   }
 
-  useEffect(() => {
-    getAttributeList();
-  }, []);
+  // useEffect(() => {
+  //   getAttributeList();
+  // }, []);
 
-  const getAttributeList = async () => {
-    try {
-      const res = await attributeLists();
-      const data = res?.data?.data?.attributes?.edges?.map(
-        (item) => item?.node
-      );
-      setAttributeList(data);
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
+  // const getAttributeList = async () => {
+  //   try {
+  //     const res = await attributeLists();
+  //     console.log("res: ", res);
+  //     const data = res?.data?.data?.attributes?.edges?.map(
+  //       (item) => item?.node
+  //     );
+  //     setAttributeList(data);
+  //   } catch (error) {
+  //     console.log("error: ", error);
+  //   }
+  // };
 
   useEffect(() => {
     if (wishlistData) {
@@ -300,7 +282,7 @@ const ShopPage = () => {
 
     if (filter) {
       filters();
-    } 
+    }
   }, [filter]);
 
   useEffect(() => {
@@ -497,14 +479,7 @@ const ShopPage = () => {
         attributes: filter?.attributes, // Merge other filters
       };
     }
-    console.log("final: ", filters);
 
-    // dispatch(filterData(filters));
-
-    // else {
-    //   let datas = [...filter, find];
-    //   dispatch(filterData(datas));
-    // }
     if (router?.query?.categoryId) {
       filters.categories = router?.query?.categoryId;
     }
@@ -536,8 +511,6 @@ const ShopPage = () => {
   };
 
   const filterByPrice = () => {
-    console.log("priceValue: ", priceValue);
-
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
@@ -545,9 +518,8 @@ const ShopPage = () => {
       bodyData.categories = router?.query?.categoryId;
     }
     if (router?.query?.tag) {
-      bodyData.categories = router?.query?.tag;
+      bodyData.tag = router?.query?.tag;
     }
-    console.log("bodyData: ", bodyData);
 
     priceFilter({
       filter: bodyData,
@@ -623,7 +595,7 @@ const ShopPage = () => {
         if (
           router?.query?.categoryId ||
           router?.query?.tag ||
-          filter?.length > 0
+          filter
         ) {
           filterNextData();
         } else {
@@ -633,7 +605,7 @@ const ShopPage = () => {
         if (
           router?.query?.categoryId ||
           router?.query?.tag ||
-          filter?.length > 0
+          filter
         ) {
           filterPrevData();
         } else {
@@ -644,7 +616,7 @@ const ShopPage = () => {
           if (
             router?.query?.categoryId ||
             router?.query?.tag ||
-            filter?.length > 0
+            filter
           ) {
             finalInitialFilterData(sortBy);
           } else {
@@ -726,7 +698,7 @@ const ShopPage = () => {
     });
 
     const data = res?.data?.data?.findProductsEndcursor;
-    if (router?.query?.categoryId || router?.query?.tag || filter?.length > 0) {
+    if (router?.query?.categoryId || router?.query?.tag || filter) {
       dynamicFilterPageData(data?.pageInfo?.endCursor);
     } else {
       dynamicPageData(data?.pageInfo?.endCursor);
@@ -855,11 +827,19 @@ const ShopPage = () => {
   };
 
   const finalFilterOptionList = (res) => {
-    const data = res?.data?.data?.attributefilter;
-    setProductDesigns(data?.productDesigns);
-    setProductFinishes(data?.productFinishes);
-    setProductStoneTypes(data?.productStoneTypes);
-    setProductStyles(data?.productStyles);
+    const data = res?.data?.data?.attributefilter?.filter?.edges;
+    const parsedFilterData = JSON.parse(
+      res?.data?.data?.attributefilter?.filterData
+    );
+    if (parsedFilterData?.edges?.length > 0) {
+      setAttributeList(parsedFilterData?.edges?.map((item) => item.node));
+    } else {
+      setAttributeList([]);
+    }
+    // setProductDesigns(data?.productDesigns);
+    // setProductFinishes(data?.productFinishes);
+    // setProductStoneTypes(data?.productStoneTypes);
+    // setProductStyles(data?.productStyles);
   };
 
   return (

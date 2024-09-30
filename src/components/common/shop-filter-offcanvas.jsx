@@ -14,6 +14,7 @@ import FinishFilter from "../shop/shop-filter/status-filter";
 import InputRange from "@/ui/input-range";
 import { checkChannel } from "@/utils/functions";
 import { addCommasToNumber } from "../../utils/functions";
+import ButtonLoader from "../loader/button-loader";
 
 const ShopFilterOffCanvas = ({
   all_products,
@@ -22,13 +23,8 @@ const ShopFilterOffCanvas = ({
   filterByPrice,
   maxPrice,
   resetFilter,
-  design,
-  finish,
-  stoneType,
-  style,
   attributeList,
 }) => {
-
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { priceFilterValues, setCurrPage } = otherProps;
@@ -86,6 +82,7 @@ const ShopFilterOffCanvas = ({
                       onClick={() => filterByPrice(priceValue)}
                     >
                       Filter
+                      {/* {productLoading ? <ButtonLoader /> : "Filter"} */}
                     </button>
                   </div>
                 </div>
@@ -94,14 +91,9 @@ const ShopFilterOffCanvas = ({
             <FinishFilter
               setCurrPage={setCurrPage}
               shop_right={right_side}
-              design={design}
-              finish={finish}
-              stoneType={stoneType}
-              style={style}
               attributeList={attributeList}
             />
 
-           
             <ResetButton
               shop_right={right_side}
               onClick={() => resetFilter()}
