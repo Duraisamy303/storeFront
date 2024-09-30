@@ -1,310 +1,132 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  handleFilterSidebarClose,
   filterData,
+  handleFilterSidebarClose,
 } from "@/redux/features/shop-filter-slice";
-import {
-  useGetFinishListQuery,
-  useGetStyleListQuery,
-  useGetDesignListQuery,
-} from "@/redux/features/productApi";
-import { useGetStoneListQuery } from "../../../redux/features/productApi";
-import { mergeAndRemoveDuplicates } from "@/utils/functions";
-import { filterByStock } from "@/utils/constant";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const FinishFilter = ({
-  setCurrPage,
-  shop_right = false,
-  design,
-  finish,
-  stoneType,
-  style,
-}) => {
-  const filter = useSelector((state) => state.shopFilter.filterData);
-
+const FinishFilter = ({ attributeList }) => {
   const dispatch = useDispatch();
 
-  const [finishList, setFinishList] = useState([]);
+  // Get the current filter from Redux state
+  const filter = useSelector((state) => state.shopFilter.filterData);
 
-  const [styleList, setStyleList] = useState([]);
-
-  const [designList, setDesignList] = useState([]);
-
-  const [stoneList, setStoneList] = useState([]);
-
-  const [checkedItem, setCheckedItem] = useState([]);
+  // Initialize checkedItems state from the filter data
+  const [checkedItems, setCheckedItems] = useState(() => {});
 
   useEffect(() => {
-    if (design?.length > 0) {
-      const modify = design?.map((item) => ({
-        ...item,
-        type: "design",
-      }));
+    const initialState = {};
+    const attributes = filter?.attributes || []; // Ensure attributes is an array
+    attributes.forEach((attr) => {
+      initialState[attr.slug.toLowerCase()] = Array.isArray(attr.values)
+        ? attr.values
+        : []; // Ensure values is an array
+    });
+    initialState;
+    setCheckedItems(initialState);
+  }, [filter]);
 
-      setDesignList(modify);
-    } else {
-      setDesignList([]);
+
+  const handleCheckboxChange = (attributeSlug, choiceSlug) => {
+    // Create a new state object to avoid directly mutating checkedItems
+    const normalizedAttributeSlug = attributeSlug.toLowerCase();
+    const normalizedChoiceSlug = choiceSlug.toLowerCase();
+
+    // Create a copy of the checkedItems state
+    const newState = { ...checkedItems };
+
+    // Initialize choices for the current attribute if it doesn't exist
+    if (!newState[normalizedAttributeSlug]) {
+      newState[normalizedAttributeSlug] = [];
     }
-    if (finish?.length > 0) {
-      const modify = finish?.map((item) => ({
-        ...item,
-        type: "finish",
-      }));
 
-      setFinishList(modify);
+    // Toggle the selection of the choice
+    if (newState[normalizedAttributeSlug].includes(normalizedChoiceSlug)) {
+      // Remove the choice if it's already selected
+      newState[normalizedAttributeSlug] = newState[
+        normalizedAttributeSlug
+      ].filter((slug) => slug !== normalizedChoiceSlug);
     } else {
-      setFinishList([]);
+      // Add the choice if it's not already selected
+      newState[normalizedAttributeSlug] = [
+        ...newState[normalizedAttributeSlug],
+        normalizedChoiceSlug,
+      ]; // Use spread to ensure immutability
     }
-    if (stoneType?.length > 0) {
-      const modify = stoneType?.map((item) => ({
-        ...item,
-        type: "stone",
-      }));
 
-      setStoneList(modify);
-    } else {
-      setStoneList([]);
+    // Clean up the attribute if no choices are left
+    if (newState[normalizedAttributeSlug].length === 0) {
+      delete newState[normalizedAttributeSlug];
     }
-    if (style?.length > 0) {
-      const modify = style?.map((item) => ({
-        ...item,
-        type: "style",
-      }));
 
-      setStyleList(modify);
-    } else {
-      setStyleList([]);
-    }
-  }, [design, finish, stoneType, style]);
+    // Convert newState into the final format
+    const final = Object.keys(newState).map((slug) => ({
+      slug,
+      values: newState[slug],
+    }));
 
-  useEffect(() => {
-    const initialCheckedItems = [
-      ...finishList,
-      ...styleList,
-      ...designList,
-      ...stoneList,
-      // ...filterByStock,
-    ].filter((item) =>
-      filter?.some(
-        (checkedItem) =>
-          checkedItem.id === item.id && checkedItem.type === item.type
-      )
-    );
+    // Update the checked items state
+    setCheckedItems(newState);
 
-    setCheckedItem(initialCheckedItems);
-  }, [finishList, styleList, stoneList, designList, filter]);
-
-  const handleCheckboxChange = (data, type) => {
-    let item = {
-      ...data,
-      type,
+    const finalData = {
+      attributes: final,
     };
-    let filters = [...filter];
-
-    if (type === "stock") {
-      let allVal;
-      const isChecked = filters?.some(
-        (selectedItem) =>
-          selectedItem.id === item.id && selectedItem.type === item.type
-      );
-      if (isChecked) {
-        allVal = filters.filter(
-          (selectedItem) => selectedItem.type !== item.type
-        );
-      } else {
-        allVal = [
-          ...filters.filter((selectedItem) => selectedItem.type !== item.type),
-          item,
-        ];
-      }
-
-      setCheckedItem(allVal);
-      dispatch(filterData(allVal));
-      dispatch(handleFilterSidebarClose());
-    } else {
-      const isChecked = filters?.some(
-        (selectedItem) =>
-          selectedItem.id === item.id && selectedItem.type === item.type
-      );
-
-      let updatedItems;
-      if (isChecked) {
-        updatedItems = filters?.filter(
-          (selectedItem) =>
-            selectedItem.id !== item.id || selectedItem.type !== item.type
-        );
-        filters = updatedItems;
-      } else {
-        updatedItems = [
-          ...checkedItem.filter((selectedItem) => selectedItem.type !== type),
-          item,
-        ];
-      }
-
-      const arr = mergeAndRemoveDuplicates(updatedItems, filters);
-      setCheckedItem(arr);
-      dispatch(filterData(arr));
-      dispatch(handleFilterSidebarClose());
+    if (filter?.price) {
+      finalData.price = filter.price;
     }
+
+    // Dispatch only the current state of checked attributes
+    dispatch(filterData(finalData)); // Dispatching the current checked state
   };
 
   return (
     <>
-      <div className="tp-shop-widget mb-50">
-        {/* <h3 className="tp-shop-widget-title">FILTER BY STOCK</h3> */}
-        {/* <div className="tp-shop-widget-content">
-          <div className="tp-shop-widget-checkbox">
-            <ul className="filter-items filter-checkbox">
-              {filterByStock?.map((s, i) => (
-                <li key={s?.id} className="filter-item checkbox">
-                  <input
-                    id={s?.id}
-                    type="radio"
-                    name="stock" // Group all stock items under the same name to enforce radio behavior
-                    readOnly
-                    checked={checkedItem.some(
-                      (selectedItem) => selectedItem.id === s.id
-                    )}
-                    onChange={() => handleCheckboxChange(s, "stock")}
-                  />
-                  <label
-                    onClick={() => handleCheckboxChange(s, "stock")}
-                    htmlFor={s?.name}
-                  >
-                    {s?.name}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div> */}
-      </div>
-
-      {finishList?.length > 0 && (
-        <div className="tp-shop-widget mb-50">
-          <h3 className="tp-shop-widget-title">FILTER BY FINISH</h3>
-          <div className="tp-shop-widget-content">
-            <div className="tp-shop-widget-checkbox">
-              <ul className="filter-items filter-checkbox">
-                {finishList?.map((s, i) => (
-                  <li key={i?.id} className="filter-item checkbox">
-                    <input
-                      id={s?.id}
-                      type="checkbox"
-                      readOnly
-                      checked={checkedItem?.some(
-                        (selectedItem) => selectedItem.id === s.id
-                      )}
-                      onChange={() => handleCheckboxChange(s, "finish")}
-                    />
-                    <label
-                      onClick={() => handleCheckboxChange(s, "finish")}
-                      htmlFor={s?.name}
-                    >
-                      {s?.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
+      {attributeList?.length > 0 &&
+        attributeList.map((attribute) => {
+          const normalizedAttributeSlug = attribute.slug.toLowerCase();
+          return (
+            <div key={attribute?.id} className="tp-shop-widget mb-50">
+              <h3 className="tp-shop-widget-title">
+                {attribute.name?.toUpperCase()}
+              </h3>
+              <div className="tp-shop-widget-content">
+                <div className="tp-shop-widget-checkbox">
+                  <ul className="filter-items filter-checkbox">
+                    {attribute?.choices?.edges?.map((choice) => {
+                      const normalizedChoiceSlug =
+                        choice?.node?.slug.toLowerCase();
+                      return (
+                        <li
+                          key={choice?.node?.slug}
+                          className="filter-item checkbox"
+                        >
+                          <input
+                            id={choice?.node?.slug}
+                            type="checkbox"
+                            checked={
+                              checkedItems[normalizedAttributeSlug]?.includes(
+                                normalizedChoiceSlug
+                              ) || false
+                            }
+                            onChange={() =>
+                              handleCheckboxChange(
+                                attribute.slug,
+                                choice?.node?.slug
+                              )
+                            }
+                          />
+                          <label htmlFor={choice?.node?.slug}>
+                            {choice?.node?.name}
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {styleList?.length > 0 && (
-        <div className="tp-shop-widget mb-50">
-          <h3 className="tp-shop-widget-title">FILTER BY STYLE</h3>
-          <div className="tp-shop-widget-content">
-            <div className="tp-shop-widget-checkbox">
-              <ul className="filter-items filter-checkbox">
-                {styleList?.map((s, i) => (
-                  <li key={i?.id} className="filter-item checkbox">
-                    <input
-                      id={s?.id}
-                      type="checkbox"
-                      readOnly
-                      checked={checkedItem.some(
-                        (selectedItem) => selectedItem.id === s.id
-                      )}
-                      onChange={() => handleCheckboxChange(s, "style")}
-                    />
-                    <label
-                      onClick={() => handleCheckboxChange(s, "style")}
-                      htmlFor={s?.name}
-                    >
-                      {s?.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {designList?.length > 0 && (
-        <div className="tp-shop-widget mb-50">
-          <h3 className="tp-shop-widget-title">FILTER BY DESIGNS</h3>
-          <div className="tp-shop-widget-content">
-            <div className="tp-shop-widget-checkbox">
-              <ul className="filter-items filter-checkbox">
-                {designList?.map((s, i) => (
-                  <li key={i?.id} className="filter-item checkbox">
-                    <input
-                      id={s?.id}
-                      type="checkbox"
-                      readOnly
-                      checked={checkedItem.some(
-                        (selectedItem) => selectedItem.id === s.id
-                      )}
-                      onChange={() => handleCheckboxChange(s, "design")}
-                    />
-                    <label
-                      onClick={() => handleCheckboxChange(s, "design")}
-                      htmlFor={s?.name}
-                    >
-                      {s?.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {stoneList?.length > 0 && (
-        <div className="tp-shop-widget mb-50">
-          <h3 className="tp-shop-widget-title">FILTER BY STONE TYPE</h3>
-          <div className="tp-shop-widget-content">
-            <div className="tp-shop-widget-checkbox">
-              <ul className="filter-items filter-checkbox">
-                {stoneList?.map((s, i) => (
-                  <li key={i?.id} className="filter-item checkbox">
-                    <input
-                      id={s?.id}
-                      type="checkbox"
-                      readOnly
-                      checked={checkedItem.some(
-                        (selectedItem) => selectedItem.id === s.id
-                      )}
-                      onChange={() => handleCheckboxChange(s, "stone")}
-                    />
-                    <label
-                      onClick={() => handleCheckboxChange(s, "stone")}
-                      htmlFor={s?.name}
-                    >
-                      {s?.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+          );
+        })}
     </>
   );
 };

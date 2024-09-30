@@ -9,8 +9,6 @@ export const PRODUCT_LIST = ({
   sortBy,
   filter,
 }) => {
-  console.log("filter: ", filter);
-
   return JSON.stringify({
     query: `
 query ProductListPaginated($first: Int, $last :Int, $after: String, $before: String, $channel: String!, $sortBy: ProductOrder,$filter:ProductFilterInput!) {
@@ -578,7 +576,6 @@ export const LOOT_LIST = ({ channel, first, after, filter }) => {
 };
 
 export const MAX_PRICE = ({ first, channel, filter, after, sortBy }) => {
-  
   return JSON.stringify({
     query: `
     query ProductListPaginated($first: Int, $after: String, $channel: String!, $sortBy: ProductOrder, $filter: ProductFilterInput!) {
@@ -1064,6 +1061,37 @@ export const STATE_LIST = ({ code }) => {
     }
     `,
     variables: { code },
+  });
+};
+
+export const ATTRIBUTE_LIST = () => {
+  return JSON.stringify({
+    query: `
+   query AttributeList {
+  attributes(
+    channel: "india-channel"
+    filter: {visibleInStorefront: true}
+    first: 100
+  ) {
+    edges {
+      node {
+        id
+        name
+        slug
+        choices(first: 5) {
+          edges {
+            node {
+              slug
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `,
+    variables: {},
   });
 };
 

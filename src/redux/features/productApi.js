@@ -34,6 +34,7 @@ import {
   DELETE_COUPON,
   SHOP_PAGINATION,
   FILTER_OPTION,
+  ATTRIBUTE_LIST,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -620,6 +621,16 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
+    attributeList: builder.mutation({
+      query: () => {
+        return configuration(
+          ATTRIBUTE_LIST()
+        );
+      },
+    }),
+
+    
+
     orderCancel: builder.mutation({
       query: ({ id }) => {
         return configuration(
@@ -791,4 +802,5 @@ export const {
   useGetYouMayLikeMutation,
   usePaymentListMutation,
   useLootSaleProductQuery,
+  useAttributeListMutation
 } = productApi;

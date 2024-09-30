@@ -14,6 +14,7 @@ import {
   usePriceFilterMutation,
   useNewProductListMutation,
   useShopPaginationMutation,
+  useAttributeListMutation,
 } from "@/redux/features/productApi";
 import ErrorMsg from "@/components/common/error-msg";
 import ShopFilterOffCanvas from "@/components/common/shop-filter-offcanvas";
@@ -75,6 +76,7 @@ const ShopPage = () => {
   const [productFinishes, setProductFinishes] = useState([]);
   const [productStoneTypes, setProductStoneTypes] = useState([]);
   const [productStyles, setProductStyles] = useState([]);
+  const [attributeList, setAttributeList] = useState([]);
 
   const PAGE_LIMIT = 21;
 
@@ -103,6 +105,7 @@ const ShopPage = () => {
 
   const commonFilter = () => {
     let filters = {};
+    // console.log("filter: ", filter);
 
     if (router?.query?.categoryId) {
       filters.categories = router?.query?.categoryId;
@@ -118,13 +121,15 @@ const ShopPage = () => {
         gte: find?.min ? find?.min : priceValue[0],
         lte: find?.max ? find?.max : priceValue[1],
       };
+      filters.attributes = filter.attributes;
 
-      const otherFilters = filterByOtherAttribute();
-      filters = {
-        ...filters, // Keep the existing price filter
-        ...otherFilters, // Merge other filters
-      };
+      // const otherFilters = filterByOtherAttribute();
+      // filters = {
+      //   ...filters, // Keep the existing price filter
+      //   ...otherFilters, // Merge other filters
+      // };
     }
+
     return filters;
   };
 
@@ -186,6 +191,8 @@ const ShopPage = () => {
   const [createCheckoutTokenWithoutEmail] =
     useCreateCheckoutTokenWithoutEmailMutation();
 
+  const [attributeLists] = useAttributeListMutation();
+
   let products = productsData?.data?.productsSearch?.edges;
 
   const { categoryId, tag } = router?.query || {};
@@ -198,6 +205,22 @@ const ShopPage = () => {
   } else if (tag) {
     shopTitle = `Shop / ${tagName}`;
   }
+
+  useEffect(() => {
+    getAttributeList();
+  }, []);
+
+  const getAttributeList = async () => {
+    try {
+      const res = await attributeLists();
+      const data = res?.data?.data?.attributes?.edges?.map(
+        (item) => item?.node
+      );
+      setAttributeList(data);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   useEffect(() => {
     if (wishlistData) {
@@ -255,20 +278,34 @@ const ShopPage = () => {
     getCategoryList();
   }, [categoryData]);
 
+  // useEffect(() => {
+  //   console.log("filter: ", filter);
+
+  //   if (filter) {
+  //     filters();
+  //   } else {
+  //     if (router?.query?.categoryId) {
+  //       filterByCategory();
+  //     } else if (router?.query?.tag) {
+  //       filterByTags();
+  //     } else {
+  //       productLists();
+  //     }
+  //     filterOption();
+  //   }
+  // }, [filter]);
+
   useEffect(() => {
-    if (filter?.length > 0) {
+    console.log("filter: ", filter);
+
+    if (filter) {
       filters();
-    } else {
-      if (router?.query?.categoryId) {
-        filterByCategory();
-      } else if (router?.query?.tag) {
-        filterByTags();
-      } else {
-        productLists();
-      }
-      filterOption()
-    }
+    } 
   }, [filter]);
+
+  useEffect(() => {
+    dispatch(filterData({}));
+  }, [router]);
 
   useEffect(() => {
     if (router?.query?.categoryId) {
@@ -447,21 +484,27 @@ const ShopPage = () => {
 
   const filters = () => {
     let filters = {};
-    const find = filter?.find((item) => item?.type == "price");
-    filters.price = {
-      gte: find?.min ? find?.min : priceValue[0],
-      lte: find?.max ? find?.max : priceValue[1],
-    };
-    if (filter?.length > 0) {
-      const otherFilters = filterByOtherAttribute();
+    if (filter?.price) {
+      filters.price = {
+        gte: filter?.price?.min ? filter?.price?.min : priceValue[0],
+        lte: filter?.price?.max ? filter?.price?.max : priceValue[1],
+      };
+    }
+
+    if (filter?.attributes) {
       filters = {
         ...filters, // Keep the existing price filter
-        ...otherFilters, // Merge other filters
+        attributes: filter?.attributes, // Merge other filters
       };
-    } else {
-      let datas = [...filter, find];
-      dispatch(filterData(datas));
     }
+    console.log("final: ", filters);
+
+    // dispatch(filterData(filters));
+
+    // else {
+    //   let datas = [...filter, find];
+    //   dispatch(filterData(datas));
+    // }
     if (router?.query?.categoryId) {
       filters.categories = router?.query?.categoryId;
     }
@@ -492,7 +535,9 @@ const ShopPage = () => {
     // }
   };
 
-  const filterByPrice = (type) => {
+  const filterByPrice = () => {
+    console.log("priceValue: ", priceValue);
+
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
@@ -502,6 +547,8 @@ const ShopPage = () => {
     if (router?.query?.tag) {
       bodyData.categories = router?.query?.tag;
     }
+    console.log("bodyData: ", bodyData);
+
     priceFilter({
       filter: bodyData,
       first: PAGE_LIMIT,
@@ -514,22 +561,22 @@ const ShopPage = () => {
       setTotalPages(totalPages);
       setTotalCount(data?.totalCount);
 
-      const body = {
-        type: "price",
+      const price = {
         min: priceValue[0],
         max: priceValue[1],
       };
 
-      let filteredList = filter;
+      let filteredList = { ...filter, price };
+      console.log("filteredList: ", filteredList);
 
-      if (type === "priceRange") {
-        filteredList = filter?.filter((item) => item.type !== "price");
-      }
+      // if (type === "priceRange") {
+      //   filteredList = filter?.filter((item) => item.type !== "price");
+      // }
 
-      const listd = [...filteredList, body];
-      dispatch(filterData(listd));
+      // const listd = [...filteredList, body];
+      dispatch(filterData(filteredList));
       setPriceValue([priceValue[0], priceValue[1]]);
-      setFilterList([...filterList, body]);
+      setFilterList([...filterList, price]);
       dispatch(handleFilterSidebarClose());
     });
 
@@ -767,7 +814,6 @@ const ShopPage = () => {
       sortBy: sortBy || { direction: "DESC", field: "CREATED_AT" },
     }).then((res) => {
       setCursorAndList(res);
-      
     });
     const res = await filterOptions({
       filter: datas,
@@ -849,7 +895,7 @@ const ShopPage = () => {
         totalCount={totalCount}
         page={currentPage}
         clearFilter={() => {
-          dispatch(filterData([]));
+          dispatch(filterData({}));
           refresh();
         }}
       />
@@ -887,16 +933,17 @@ const ShopPage = () => {
           } else {
             refresh();
           }
-          dispatch(filterData([]));
+          dispatch(filterData({}));
           setPriceValue([0, initialMaxPrice]);
           setInitialMaxPrice(initialMaxPrice);
           dispatch(handleFilterSidebarClose());
-          filterOption()
+          filterOption();
         }}
         design={productDesigns}
         finish={productFinishes}
         stoneType={productStoneTypes}
         style={productStyles}
+        attributeList={attributeList}
       />
       <FooterTwo primary_style={true} />
       {/* </>

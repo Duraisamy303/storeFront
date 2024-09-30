@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   filterSidebar: false,
-  filterData:[]
+  filterData:{}
 };
 
 export const shopFilterSlice = createSlice({
