@@ -143,7 +143,7 @@ const DetailsWrapper = ({
   }, [productItem]);
 
   const [isAddWishlist, setWishlist] = useState(false);
-
+  const [attributeValue, setAttributeValue] = useState(false);
   const cart = useSelector((state) => state.cart?.cart_list);
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
@@ -403,6 +403,19 @@ const DetailsWrapper = ({
   const NextProductClick = () => {
     router.push(`/product-details/${nextProduct?.id}`);
   };
+
+  useEffect(() => {
+    const hasAttributeValues = productItem?.attributes?.some((attribute) =>
+      attribute?.values?.length > 0 ? true : false
+    );
+    setAttributeValue(hasAttributeValues);
+  }, [productItem]);
+
+  useEffect(() => {
+    console.log("AttributeValue: ", attributeValue);
+  }, [attributeValue]);
+
+  // Rest of your component code...
 
   const multiVariantPrice = () => {
     if (checkChannel() == "india-channel") {
@@ -1512,7 +1525,7 @@ const DetailsWrapper = ({
               </>
             )}
           </div>
-          {productItem?.attributes?.length > 0 && (
+          { attributeValue === true && (
             <div
               style={{
                 borderBottom: "1px solid #EAEBED",
