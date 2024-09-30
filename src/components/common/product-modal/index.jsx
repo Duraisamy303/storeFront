@@ -3,11 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactModal from "react-modal";
 // internal
 import { handleModalClose } from "@/redux/features/productModalSlice";
-import DetailsThumbWrapper from "@/components/product-details/details-thumb-wrapper";
-import DetailsWrapper from "@/components/product-details/details-wrapper";
-import { initialOrderQuantity } from "@/redux/features/cartSlice";
-import DetailsWrapperQuick from "@/components/product-details/details-wrapper-quick";
 import DetailsThumbWrapperQuick from "@/components/product-details/details-thumb-wrapper-quick";
+import DetailsWrapperQuick from "@/components/product-details/details-wrapper-quick";
 
 const customStyles = {
   content: {
@@ -17,7 +14,8 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    height: "calc(100% - 300px)",
+    height: "calc(100% - 50px)",
+
   },
 };
 
@@ -26,21 +24,31 @@ const ProductModal = () => {
     (state) => state.productModal
   );
 
-  const { img, imageURLs, status, sku } = productItem || {};
-  const imageUrls = productItem?.images?.map((item) => item?.url);
+  const { img, status } = productItem || {};
 
   const [activeImg, setActiveImg] = useState(img);
   const [channel, setChannel] = useState("");
 
   const dispatch = useDispatch();
-  // active image change when img change
+
   useEffect(() => {
-    dispatch(initialOrderQuantity());
     const channel = localStorage.getItem("channel");
     setChannel(channel);
-  }, [img, dispatch]);
+  }, []);
 
-  // handle image active
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden"; // Prevent scroll
+    } else {
+      document.body.style.overflow = "auto"; // Restore scroll
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
 
   return (
     <div>
@@ -66,7 +74,6 @@ const ProductModal = () => {
             {/* product-details-wrapper start */}
             <DetailsWrapperQuick
               productItem={productItem}
-              // handleImageActive={handleImageActive}
               activeImg={activeImg}
             />
             {/* product-details-wrapper end */}

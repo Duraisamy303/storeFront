@@ -11,9 +11,6 @@ import {
 } from "@/redux/features/shop-filter-slice";
 import ResetButton from "../shop/shop-filter/reset-button";
 import FinishFilter from "../shop/shop-filter/status-filter";
-import StyleFilter from "../shop/shop-filter/style-filter";
-import DesignFilter from "../shop/shop-filter/design-filter";
-import StoneFilter from "../shop/shop-filter/stone-filter";
 import InputRange from "@/ui/input-range";
 import { checkChannel } from "@/utils/functions";
 import { addCommasToNumber } from "../../utils/functions";
@@ -29,7 +26,9 @@ const ShopFilterOffCanvas = ({
   finish,
   stoneType,
   style,
+  attributeList,
 }) => {
+
   const filter = useSelector((state) => state.shopFilter.filterData);
 
   const { priceFilterValues, setCurrPage } = otherProps;
@@ -38,11 +37,6 @@ const ShopFilterOffCanvas = ({
 
   const { filterSidebar } = useSelector((state) => state.shopFilter);
   const dispatch = useDispatch();
-
-  // const maxPrice = all_products?.reduce((max, item) => {
-  //   const price = item?.node?.pricing?.priceRange?.start?.gross?.amount || 0;
-  //   return price > max ? price : max;
-  // }, 0);
 
   return (
     <>
@@ -62,12 +56,6 @@ const ShopFilterOffCanvas = ({
             </button>
           </div>
           <div className="tp-shop-sidebar">
-            {/* filter */}
-            {/* <PriceFilter
-              priceFilterValues={priceFilterValues}
-              maxPrice={maxPrice}
-              filterByPrice={filterByPrice}
-            /> */}
             <div className="tp-shop-widget mb-35">
               <h3 className="tp-shop-widget-title no-border">Price Filter</h3>
 
@@ -103,7 +91,6 @@ const ShopFilterOffCanvas = ({
                 </div>
               </div>
             </div>
-            {/* Finish */}
             <FinishFilter
               setCurrPage={setCurrPage}
               shop_right={right_side}
@@ -111,34 +98,10 @@ const ShopFilterOffCanvas = ({
               finish={finish}
               stoneType={stoneType}
               style={style}
+              attributeList={attributeList}
             />
 
-            {/* style */}
-            {/* <StyleFilter
-              setCurrPage={setCurrPage}
-              shop_right={right_side}
-              finishFilterData={finishFilterData}
-            /> */}
-
-            {/* design */}
-            {/* <DesignFilter
-              setCurrPage={setCurrPage}
-              shop_right={right_side}
-              finishFilterData={finishFilterData}
-            /> */}
-
-            {/* stone */}
-            {/* <StoneFilter
-              setCurrPage={setCurrPage}
-              shop_right={right_side}
-              finishFilterData={finishFilterData}
-            /> */}
-
-            {/* <CategoryFilter setCurrPage={setCurrPage} shop_right={right_side} />
-            <ColorFilter setCurrPage={setCurrPage} shop_right={right_side} />
-            <TopRatedProducts />
-            <ProductBrand setCurrPage={setCurrPage} shop_right={right_side} /> */}
-            {/* reset filter */}
+           
             <ResetButton
               shop_right={right_side}
               onClick={() => resetFilter()}
@@ -147,12 +110,10 @@ const ShopFilterOffCanvas = ({
         </div>
       </div>
 
-      {/* overlay start */}
       <div
         onClick={() => dispatch(handleFilterSidebarClose())}
         className={`body-overlay ${filterSidebar ? "opened" : ""}`}
       ></div>
-      {/* overlay end */}
     </>
   );
 };

@@ -255,3 +255,13 @@ export const showDeleteAlert = (onConfirm, onCancel) => {
       }
     });
 };
+
+
+export const objIsEmpty = (obj) => {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false; // Found a property, so the object is not empty
+    }
+  }
+  return true; // No properties found, object is empty
+};

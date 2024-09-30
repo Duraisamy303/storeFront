@@ -397,7 +397,7 @@ const Menus = () => {
   const [lastHoveredCategory, setLastHoveredCategory] = useState("Earrings");
 
   useEffect(() => {
-    dispatch(filterData([]));
+    dispatch(filterData({}));
   }, [router]);
 
   return (
