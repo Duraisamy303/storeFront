@@ -278,7 +278,6 @@ const ShopPage = () => {
   // }, [filter]);
 
   useEffect(() => {
-    console.log("filter: ", filter);
 
     if (filter) {
       filters();
@@ -539,7 +538,6 @@ const ShopPage = () => {
       };
 
       let filteredList = { ...filter, price };
-      console.log("filteredList: ", filteredList);
 
       // if (type === "priceRange") {
       //   filteredList = filter?.filter((item) => item.type !== "price");
@@ -875,8 +873,16 @@ const ShopPage = () => {
         totalCount={totalCount}
         page={currentPage}
         clearFilter={() => {
+          if (router?.query?.categoryId || router?.query?.tag) {
+            refreshFilterData(sortBy);
+          } else {
+            refresh();
+          }
           dispatch(filterData({}));
-          refresh();
+          setPriceValue([0, initialMaxPrice]);
+          setInitialMaxPrice(initialMaxPrice);
+          dispatch(handleFilterSidebarClose());
+          filterOption();
         }}
       />
       {productList?.length > 0 &&
@@ -908,9 +914,12 @@ const ShopPage = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
+          console.log("resetFilter: ", );
           if (router?.query?.categoryId || router?.query?.tag) {
+            console.log(" if: ",  );
             refreshFilterData(sortBy);
           } else {
+            console.log("else: ");
             refresh();
           }
           dispatch(filterData({}));

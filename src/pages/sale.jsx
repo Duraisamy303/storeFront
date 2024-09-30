@@ -320,12 +320,10 @@ const PreOrders = () => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
-  
     if (router?.query?.tag) {
       bodyData.tag = router?.query?.tag;
     }
     bodyData.categories = ["Q2F0ZWdvcnk6MTIwMjQ="];
-    
 
     priceFilter({
       filter: bodyData,
@@ -446,7 +444,6 @@ const PreOrders = () => {
     console.log("res: ", res);
 
     setCursorAndList(res);
-    
   };
 
   const finalPrevData = async () => {
@@ -644,7 +641,6 @@ const PreOrders = () => {
         totalCount={totalCount}
         page={currentPage}
         clearFilter={() => {
-          dispatch(filterData([]));
           refresh();
         }}
       />
@@ -680,7 +676,6 @@ const PreOrders = () => {
           refresh();
         }}
         attributeList={attributeList}
-
       />
       <FooterTwo primary_style={true} />
     </Wrapper>
