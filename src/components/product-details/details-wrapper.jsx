@@ -1555,18 +1555,21 @@ const DetailsWrapper = ({
                       </tr>
                     </thead> */}
                     <tbody>
-                      {productItem?.attributes?.map((attribute) => (
-                        <tr className="tr" key={attribute?.id}>
-                          <td className="td">
-                            {attribute?.attribute?.name}
-                          </td>
-                          <td className="td">
-                            {attribute?.values
-                              ?.map((value) => value?.name)
-                              .join(", ")}
-                          </td>
-                        </tr>
-                      ))}
+                      {productItem?.attributes?.map(
+                        (attribute) =>
+                          attribute?.values?.length > 0 && (
+                            <tr className="tr" key={attribute?.id}>
+                              <td className="td">
+                                {attribute?.attribute?.name}
+                              </td>
+                              <td className="td">
+                                {attribute?.values
+                                  ?.map((value) => value?.name)
+                                  .join(", ")}
+                              </td>
+                            </tr>
+                          )
+                      )}
                     </tbody>
                   </table>
                 </div>
