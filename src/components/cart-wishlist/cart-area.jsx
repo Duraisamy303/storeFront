@@ -120,7 +120,7 @@ const CartArea = () => {
       <section className="tp-cart-area pb-50 mt-50">
         <div className="container-fluid">
           {CartList?.length === 0 && (
-            <div className="text-center pt-50">
+            <div className="text-center pt-50 pb-50">
               <h3>No Cart Items Found</h3>
               <Link href="/shop" className="tp-cart-checkout-btn mt-20">
                 Continue Shopping
@@ -225,7 +225,7 @@ const CartArea = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-3 col-lg-4 col-md-6">
+                <div className="col-xl-3 col-lg-4 col-md-6 mb-0 md-mb-30">
                   <CartCheckout cartData={cartData} />
                 </div>
               </div>

@@ -1140,7 +1140,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       >
         <div className="container ">
           {cartList?.data?.checkout?.lines?.length == 0 && (
-            <div className="tp-checkout-empty">
+            <div className="tp-checkout-empty pb-50">
               <h3 className="py-2">No items found in cart to checkout</h3>
               <Link href="/shop" className="tp-checkout-btn">
                 Return to shop

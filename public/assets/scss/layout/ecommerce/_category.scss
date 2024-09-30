@@ -740,9 +740,9 @@
   //     padding-top: 100px;
   // }
 
-//   .actors-outer {
-//     padding-bottom: 60px;
-//   }
+  //   .actors-outer {
+  //     padding-bottom: 60px;
+  //   }
 }
 
 @media (max-width: 500px) {
@@ -846,13 +846,30 @@
   bottom: 35px;
 }
 
+:where(.css-dev-only-do-not-override-d2lrxs).ant-carousel .slick-dots-bottom {
+  bottom: 20px;
+}
+
+:where(.css-d2lrxs).ant-carousel .slick-dots-bottom {
+  bottom: 20px;
+}
+@media (max-width: 768px) {
+  :where(.css-dev-only-do-not-override-d2lrxs).ant-carousel .slick-dots-bottom {
+    bottom: 30px;
+  }
+
+  :where(.css-d2lrxs).ant-carousel .slick-dots-bottom {
+    bottom: 30px;
+  }
+}
+
 .tp-product-action-7 {
   position: absolute;
   bottom: 3px;
   right: 20px;
   visibility: hidden;
 
-  @media (max-width:1600px) {
+  @media (max-width: 1600px) {
     right: 10px;
   }
 }
@@ -861,4 +878,36 @@
   top: 100px;
   left: 20%;
   visibility: hidden;
+}
+
+// home what our client say section
+.carousel-outer {
+  /* Center the carousel */
+  position: relative;
+}
+.carousel-adisicing {
+  color:#c3935b;
+  padding-bottom: 10px;
+  margin: 0px;
+  font-weight: 400;
+}
+.carousel-profileImg {
+  border-radius: 50%; /* Optional: Make profile image circular */
+  width: 100px; /* Adjust size as needed */
+  height: 100px;
+}
+
+.slick-prev,
+.slick-next {
+  color: rgb(194, 136, 43) !important; /* Change arrow color */
+  font-size: 20px; /* Adjust size */
+  position: absolute;
+  z-index: 2;
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  opacity: 0.8;
 }

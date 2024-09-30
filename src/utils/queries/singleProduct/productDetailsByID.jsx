@@ -35,7 +35,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     media {
       url
-        alt
+      alt
       title
       caption
       description
@@ -58,7 +58,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
           }
         }
       }
-        sku
+      sku
     }
     created
     description
@@ -107,7 +107,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
       id
       name
     }
-      getUpsells {
+    getUpsells {
       name
       productId
       id
@@ -119,6 +119,14 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     }
     seoTitle
     seoDescription
+    attributes {
+      attribute {
+        name
+      }
+      values {
+        name
+      }
+    }
   }
 }
     `,
