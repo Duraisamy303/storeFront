@@ -365,6 +365,8 @@ export const CHECKOUT_DELIVERY_METHOD = ({ checkoutid, deliveryMethodId }) => {
               currency
             }
           }
+         codAmount
+         giftWrapAmount
           
         }
         errors {
@@ -1144,21 +1146,34 @@ export const GET_CHECKOUT_DETAILS = ({ id, languageCode }) => {
 export const GIFT_WRAP_UPDATE = ({ checkoutId, isgiftwrap }) => {
   return {
     query: `
-    mutation CheckoutGiftWrapUpdate($checkoutId: ID!, $isgiftwrap:Boolean!) {
-      checkoutGiftWrapUpdate(
-        checkoutId: $checkoutId
-        isgiftwrap: $isgiftwrap
-      ) {
-        errors {
-          code
+   mutation CheckoutGiftWrapUpdate($checkoutId: ID!, $isgiftwrap: Boolean!) {
+  checkoutGiftWrapUpdate(checkoutId: $checkoutId, isgiftwrap: $isgiftwrap) {
+    errors {
+      code
+    }
+    checkout {
+      id
+      isGiftWrap
+      giftWrapAmount
+      codAmount
+      totalPrice {
+        gross {
+          amount
         }
-        checkout {
-          id
-          isGiftWrap
-       
+        tax {
+          amount
+          currency
+        }
+      }
+      shippingPrice {
+        gross {
+          amount
+          currency
         }
       }
     }
+  }
+}
       `,
     variables: { checkoutId, isgiftwrap },
   };
@@ -1189,13 +1204,37 @@ export const CHECKOUT_PAYMENT_METHOD_UPDATE = ({
 }) => {
   return {
     query: `
-    mutation CheckoutPaymentMethodUpdate($checkoutId:ID!,$paymentMethod:ID!) {
-      checkoutPaymentMethodUpdate(checkoutId:$checkoutId,paymentMethod:$paymentMethod){
-        errors{
-          code
+   mutation CheckoutPaymentMethodUpdate($checkoutId: ID!, $paymentMethod: ID!) {
+  checkoutPaymentMethodUpdate(
+    checkoutId: $checkoutId
+    paymentMethod: $paymentMethod
+  ) {
+    errors {
+      code
+    }
+    checkout {
+      id
+      isGiftWrap
+      giftWrapAmount
+      codAmount
+      totalPrice {
+        gross {
+          amount
+        }
+        tax {
+          amount
+          currency
+        }
+      }
+      shippingPrice {
+        gross {
+          amount
+          currency
         }
       }
     }
+  }
+}
     
       `,
     variables: { checkoutId, paymentMethod },

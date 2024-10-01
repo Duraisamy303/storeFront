@@ -56,6 +56,7 @@ import { pincode } from "@/utils/constant";
 import { DeleteOutlined } from "@ant-design/icons";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import pradeLogo from "@assets/img/prade-logo.png";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -148,6 +149,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
     preOrderMsg: false,
     notes: "",
     checkoutId: "",
+    giftWrapAmount: 0,
+    codAmount: 0,
   });
 
   useEffect(() => {
@@ -429,6 +432,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
         checkoutId,
         isgiftwrap,
       });
+      const response = res?.data?.data?.checkoutGiftWrapUpdate?.checkout;
+
+      const total = response?.totalPrice?.gross?.amount;
+      const tax = response?.totalPrice?.tax?.amount;
+      const shippingCost = response?.shippingPrice?.gross?.amount;
+      setState({
+        shippingCost,
+        tax,
+        total,
+        giftWrapAmount: response.giftWrapAmount,
+        codAmount: response.codAmount,
+      });
     } catch (error) {
       // notifyError(error);
       console.error("Error:", error);
@@ -438,7 +453,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
   const handleSubmit = async (data) => {
     try {
       const errors = validateInputs();
-      console.log("errors: ", errors);
       if (Object.keys(errors).length === 0) {
         if (state.createAccount) {
           await createAccount();
@@ -602,10 +616,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
           name: state.firstName + " " + state.lastName,
           description: state.notes,
-          image: "https://example.com/your_logo",
+          image: pradeLogo,
           modal: {
             ondismiss: async (res) => {
-              console.log("ondismiss: ");
               localStorage.removeItem("checkoutTokenUSD");
               localStorage.removeItem("checkoutTokenINR");
               dispatch(cart_list([]));
@@ -695,10 +708,18 @@ const CheckoutBillingArea = ({ register, errors }) => {
         } else {
           const response =
             res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
+          console.log("response: ", response);
+
           const total = response?.totalPrice?.gross?.amount;
           const tax = response?.totalPrice?.tax?.amount;
           const shippingCost = response?.shippingPrice?.gross?.amount;
-          setState({ shippingCost, tax, total });
+          setState({
+            shippingCost,
+            tax,
+            total,
+            giftWrapAmount: response.giftWrapAmount,
+            codAmount: response.codAmount,
+          });
           // handlePayment(checkoutId);
         }
       }
@@ -941,23 +962,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
     const checkedOption = updatedPaymentType.find((item) => item.checked)?.name;
 
-    if (checkedOption == "Cash On Delivery") {
-      if (state.checkedGiftwrap) {
-        checkedGiftWrap_checkedCOD(state.checkedGiftwrap);
+    if (checkedOption != "Cash On Delivery") {
+      //   if (state.checkedGiftwrap) {
+      //     checkedGiftWrap_checkedCOD(state.checkedGiftwrap);
+      //   } else {
+      //     unCheckedGiftWrap_checkedCOD(state.checkedGiftwrap);
+      //   }
+      // } else {
+      // if (state.checkedGiftwrap) {
+      //   checkedGiftWrap_uncheckedCOD(state.checkedGiftwrap);
+      // } else {
+      if (state.diffAddress) {
+        updateDelivertMethod(state.selectedCountry1);
       } else {
-        unCheckedGiftWrap_checkedCOD(state.checkedGiftwrap);
-      }
-    } else {
-      if (state.checkedGiftwrap) {
-        checkedGiftWrap_uncheckedCOD(state.checkedGiftwrap);
-      } else {
-        if (state.diffAddress) {
-          updateDelivertMethod(state.selectedCountry1);
-        } else {
-          updateDelivertMethod(state.selectedCountry);
-        }
+        updateDelivertMethod(state.selectedCountry);
       }
     }
+    // }
     setState({
       paymentType: updatedPaymentType,
       selectedPaymentType: checkedOption,
@@ -976,6 +997,20 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const res = await paymentMethodUpdate({
         paymentMethod,
       });
+
+      const response = res?.data?.data?.checkoutPaymentMethodUpdate?.checkout;
+
+      const total = response?.totalPrice?.gross?.amount;
+      const tax = response?.totalPrice?.tax?.amount;
+      const shippingCost = response?.shippingPrice?.gross?.amount;
+      setState({
+        shippingCost,
+        tax,
+        total,
+        giftWrapAmount: response.giftWrapAmount,
+        codAmount: response.codAmount,
+      });
+
     } catch (error) {
       console.log("error: ", error);
     }
@@ -1961,14 +1996,16 @@ const CheckoutBillingArea = ({ register, errors }) => {
                       </li>
                     ))}
 
-                  {state.checkedGiftwrap && (
+                  {state.giftWrapAmount > 0 && (
                     <li className="tp-order-info-list-total">
                       <span>Gift Wrap</span>
                       {checkChannel() == "india-channel" ? (
-                        <span>&#8377;{roundOff(50)}</span>
+                        <span>&#8377;{state.giftWrapAmount}</span>
                       ) : (
                         <span>
-                          <span>${addCommasToNumber(50)}</span>
+                          <span>
+                            ${addCommasToNumber(state.giftWrapAmount)}
+                          </span>
                         </span>
                       )}
                     </li>
@@ -1990,7 +2027,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                           )}
                           <br />
                           <span style={{ fontWeight: "400", fontSize: "14px" }}>
-                            (includes &#8377;{addCommasToNumber(state?.tax)} GST)
+                            (includes &#8377;{addCommasToNumber(state?.tax)}{" "}
+                            GST)
                           </span>
                         </p>
                       </>
@@ -2003,7 +2041,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             textAlign: "right",
                           }}
                         >
-                          {state?.total && <>${addCommasToNumber(state?.total)}</>}
+                          {state?.total && (
+                            <>${addCommasToNumber(state?.total)}</>
+                          )}
 
                           <br />
                           <span style={{ fontWeight: "400", fontSize: "14px" }}>
@@ -2100,7 +2140,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
                             checked={state.checkedGiftwrap}
                             onChange={(e) => {
                               checkoutGiftWrapUpdate(e.target.checked);
-                              handleGiftWrapChanged(e.target.checked);
+                              setState({ checkedGiftwrap: e.target.checked });
+                              // handleGiftWrapChanged(e.target.checked);
                             }}
                           />
                           <label
