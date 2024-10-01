@@ -461,6 +461,16 @@ export const PRODUCT_FILTER = ({
         }
         variants {
           id
+          name
+          sku
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
         }
         description
         metadata {
