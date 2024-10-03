@@ -371,47 +371,23 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const hasGiftCard = state.orderData?.lines?.some(
         (line) => line?.variant?.product?.category.name === "Gift Card"
       );
-      if (checkChannel() == "india-channel") {
-        if (
-          state.total > 3000 &&
-          state.total < 30000 &&
-          !hasPreOrders &&
-          !hasGiftCard
-        ) {
-          if (state.diffAddress) {
-            if (state.selectedCountry1 == "IN") {
-              if (pincode.includes(Number(state.postalCode1))) {
-                isShowCOD = true;
-              }
-            }
-          } else {
-            if (state.selectedCountry == "IN") {
-              if (pincode.includes(Number(state.postalCode))) {
-                isShowCOD = true;
-              }
-            }
-          }
-        }
+      let totalValid;
+      if (checkChannel() === "india-channel") {
+        totalValid = state.total > 3000 && state.total < 30000;
       } else {
-        if (
-          state.total > 39 &&
-          state.total < 390 &&
-          !hasPreOrders &&
-          !hasGiftCard
-        ) {
-          if (state.diffAddress) {
-            if (state.selectedCountry1 == "IN") {
-              if (pincode.includes(Number(state.postalCode1))) {
-                isShowCOD = true;
-              }
-            }
-          } else {
-            if (state.selectedCountry == "IN") {
-              if (pincode.includes(Number(state.postalCode))) {
-                isShowCOD = true;
-              }
-            }
-          }
+        totalValid = state.total > 39 && state.total < 390;
+      }
+
+      if (totalValid && !hasPreOrders && !hasGiftCard) {
+        const country = state.diffAddress
+          ? state.selectedCountry1
+          : state.selectedCountry;
+        const postalCode = state.diffAddress
+          ? state.postalCode1
+          : state.postalCode;
+
+        if (country === "IN" && pincode.includes(Number(postalCode))) {
+          isShowCOD = true;
         }
       }
 
