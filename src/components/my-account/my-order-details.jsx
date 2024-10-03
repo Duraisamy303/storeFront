@@ -1,6 +1,6 @@
 import { addCommasToNumber, checkChannel, roundOff } from "@/utils/functions";
 import moment from "moment/moment";
-import React from "react";
+import React, { useEffect } from "react";
 
 const MyOrderDetails = ({ data }) => {
   const Data = data?.data?.order;
@@ -11,6 +11,8 @@ const MyOrderDetails = ({ data }) => {
   const GiftCard = data?.data?.order?.giftCards;
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
+  const codAmount = data?.data?.order?.codAmount;
+  const giftWrapAmount = data?.data?.order?.giftWrapAmount;
 
   const FormatDate = moment(Data?.created).format("MMMM D, YYYY");
   return (
@@ -106,19 +108,18 @@ const MyOrderDetails = ({ data }) => {
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;
-                          {giftWrap
-                            ? Number(
-                                roundOff(ShippingAmount?.gross?.amount) - 50
-                              ).toFixed(2)
-                            : Number(
-                                roundOff(ShippingAmount?.gross?.amount)
-                              ).toFixed(2)}
+                          {codAmount === 0
+                            ? `₹${addCommasToNumber(ShippingAmount)}` // Using ₹ for INR
+                            : `₹${addCommasToNumber(codAmount)}`}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>${roundOff(ShippingAmount?.gross?.amount)}</td>
+                        <td>
+                          {codAmount === 0
+                            ? `$${addCommasToNumber(ShippingAmount)}`
+                            : `$${addCommasToNumber(codAmount)}`}
+                        </td>
                       </>
                     )}
                   </tr>
@@ -139,7 +140,10 @@ const MyOrderDetails = ({ data }) => {
                     <tr>
                       <td>Gift Wrap</td>
 
-                      <td>&#8377;50.00</td>
+                      <td>
+                        {checkChannel() === "india-channel" ? "₹" : "$"}
+                        {giftWrapAmount}
+                      </td>
                     </tr>
                   )}
 

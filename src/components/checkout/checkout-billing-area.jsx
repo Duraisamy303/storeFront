@@ -1035,7 +1035,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const response = res?.data?.data?.checkoutPaymentMethodUpdate?.checkout;
 
       const total = response?.totalPrice?.gross?.amount;
+
       const tax = response?.totalPrice?.tax?.amount;
+
       let shippingCost = 0;
       if (option == "Razorpay") {
         shippingCost = response?.shippingPrice?.gross?.amount;
@@ -1046,8 +1048,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
         shippingCost,
         tax,
         total,
-        giftWrapAmount: response.giftWrapAmount,
-        codAmount: response.codAmount,
+        giftWrapAmount: response?.giftWrapAmount,
+        codAmount: response?.codAmount,
       });
     } catch (error) {
       console.log("error: ", error);

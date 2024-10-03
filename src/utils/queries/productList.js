@@ -160,7 +160,8 @@ export const ORDER_LIST = ({ orderId }) => {
             currency
           }
         }
-
+    codAmount
+    giftWrapAmount
       }
     }
     `,

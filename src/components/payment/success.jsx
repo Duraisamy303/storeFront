@@ -22,6 +22,8 @@ const Success = ({ data }) => {
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
   const GiftCard = data?.data?.order?.giftCards;
+  const codAmount = data?.data?.order?.codAmount;
+  const giftWrapAmount = data?.data?.order?.giftWrapAmount;
 
   return (
     <section className="tp-login-area pb-80 pt-80 p-relative z-index-1 fix">
@@ -62,7 +64,10 @@ const Success = ({ data }) => {
                         ) : (
                           <>
                             <td>
-                              ${addCommasToNumber(order.totalPrice?.gross?.amount)}
+                              $
+                              {addCommasToNumber(
+                                order.totalPrice?.gross?.amount
+                              )}
                             </td>
                           </>
                         )}
@@ -93,15 +98,18 @@ const Success = ({ data }) => {
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;
-                          {giftWrap
-                            ? Number(roundOff(ShippingAmount) - 50).toFixed(2)
-                            : Number(roundOff(ShippingAmount)).toFixed(2)}
+                          {codAmount === 0
+                            ? `₹${addCommasToNumber(ShippingAmount)}` // Using ₹ for INR
+                            : `₹${addCommasToNumber(codAmount)}`}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>${addCommasToNumber(ShippingAmount)}</td>
+                        <td>
+                          {codAmount === 0
+                            ? `$${addCommasToNumber(ShippingAmount)}`
+                            : `$${addCommasToNumber(codAmount)}`}
+                        </td>
                       </>
                     )}
                   </tr>
@@ -110,7 +118,10 @@ const Success = ({ data }) => {
                     <tr>
                       <td>Gift Wrap</td>
 
-                      <td>&#8377;50.00</td>
+                      <td>
+                        {checkChannel() === "india-channel" ? "₹" : "$"}
+                        {giftWrapAmount}
+                      </td>
                     </tr>
                   )}
 
@@ -183,7 +194,7 @@ const Success = ({ data }) => {
                 }}
               >
                 Thank You!
-                <br/> Your order has been received.
+                <br /> Your order has been received.
               </p>
               <ul style={{ paddingLeft: "20px", fontSize: "18px" }}>
                 <li style={{ paddingBottom: "8px" }}>

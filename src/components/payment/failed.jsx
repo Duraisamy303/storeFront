@@ -25,6 +25,8 @@ const Failed = ({ data, orderId }) => {
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
   const GiftCard = data?.data?.order?.giftCards;
+  const codAmount = data?.data?.order?.codAmount;
+  const giftWrapAmount = data?.data?.order?.giftWrapAmount;
 
   const [Razorpay] = useRazorpay();
 
@@ -174,19 +176,18 @@ const Failed = ({ data, orderId }) => {
                     {checkChannel() === "india-channel" ? (
                       <>
                         <td>
-                          &#8377;
-                          {giftWrap
-                            ? Number(
-                                addCommasToNumber(ShippingAmount) - 50
-                              ).toFixed(2)
-                            : Number(addCommasToNumber(ShippingAmount)).toFixed(
-                                2
-                              )}
+                          {codAmount === 0
+                            ? `₹${addCommasToNumber(ShippingAmount)}` // Using ₹ for INR
+                            : `₹${addCommasToNumber(codAmount)}`}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td>${addCommasToNumber(ShippingAmount)}</td>
+                        <td>
+                          {codAmount === 0
+                            ? `$${addCommasToNumber(ShippingAmount)}`
+                            : `$${addCommasToNumber(codAmount)}`}
+                        </td>
                       </>
                     )}
                   </tr>
@@ -195,7 +196,10 @@ const Failed = ({ data, orderId }) => {
                     <tr>
                       <td>Gift Wrap</td>
 
-                      <td>&#8377;50.00</td>
+                      <td>
+                        {checkChannel() === "india-channel" ? "₹" : "$"}
+                        {giftWrapAmount}
+                      </td>
                     </tr>
                   )}
 
