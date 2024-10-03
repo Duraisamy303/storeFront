@@ -371,23 +371,45 @@ const CheckoutBillingArea = ({ register, errors }) => {
       const hasGiftCard = state.orderData?.lines?.some(
         (line) => line?.variant?.product?.category.name === "Gift Card"
       );
-
-      if (
-        state.total > 3000 &&
-        state.total < 30000 &&
-        !hasPreOrders &&
-        !hasGiftCard
-      ) {
-        if (state.diffAddress) {
-          if (state.selectedCountry1 == "IN") {
-            if (pincode.includes(Number(state.postalCode1))) {
-              isShowCOD = true;
+      if (checkChannel() == "india-channel") {
+        if (
+          state.total > 3000 &&
+          state.total < 30000 &&
+          !hasPreOrders &&
+          !hasGiftCard
+        ) {
+          if (state.diffAddress) {
+            if (state.selectedCountry1 == "IN") {
+              if (pincode.includes(Number(state.postalCode1))) {
+                isShowCOD = true;
+              }
+            }
+          } else {
+            if (state.selectedCountry == "IN") {
+              if (pincode.includes(Number(state.postalCode))) {
+                isShowCOD = true;
+              }
             }
           }
-        } else {
-          if (state.selectedCountry == "IN") {
-            if (pincode.includes(Number(state.postalCode))) {
-              isShowCOD = true;
+        }
+      } else {
+        if (
+          state.total > 39 &&
+          state.total < 390 &&
+          !hasPreOrders &&
+          !hasGiftCard
+        ) {
+          if (state.diffAddress) {
+            if (state.selectedCountry1 == "IN") {
+              if (pincode.includes(Number(state.postalCode1))) {
+                isShowCOD = true;
+              }
+            }
+          } else {
+            if (state.selectedCountry == "IN") {
+              if (pincode.includes(Number(state.postalCode))) {
+                isShowCOD = true;
+              }
             }
           }
         }
@@ -693,13 +715,56 @@ const CheckoutBillingArea = ({ register, errors }) => {
     [Razorpay]
   );
 
-  const updateDelivertMethod = async (country) => {
+  const updateDelivertMethodAfterChoosePaymentMothod = async (
+    country,
+    paymentType
+  ) => {
     try {
       const checkoutId = localStorage.getItem("checkoutId");
       if (checkoutId) {
         const res = await updateDeliveryMethod({
           checkoutid: checkoutId,
           country,
+          paymentType,
+        });
+        if (res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length > 0) {
+          notifyError(
+            res?.data?.data?.checkoutDeliveryMethodUpdate?.errors[0]?.message
+          );
+        } else {
+          updatePaymentMethod(paymentType);
+
+          // const response =
+          //   res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
+          //   console.log(" res?.data?.data?.checkoutDeliveryMethodUpdate: ",  res?.data?.data?.checkoutDeliveryMethodUpdate);
+
+          // const total = response?.totalPrice?.gross?.amount;
+          // const tax = response?.totalPrice?.tax?.amount;
+          // const shippingCost = response?.shippingPrice?.gross?.amount;
+          // setState({
+          //   shippingCost,
+          //   tax,
+          //   total,
+          //   giftWrapAmount: response?.giftWrapAmount,
+          //   codAmount: response?.codAmount,
+          // });
+          // handlePayment(checkoutId);
+        }
+      }
+    } catch (error) {
+      notifyError(error);
+      console.log("error: ", error);
+    }
+  };
+
+  const updateDelivertMethod = async (country, paymentType) => {
+    try {
+      const checkoutId = localStorage.getItem("checkoutId");
+      if (checkoutId) {
+        const res = await updateDeliveryMethod({
+          checkoutid: checkoutId,
+          country,
+          paymentType,
         });
         if (res?.data?.data?.checkoutDeliveryMethodUpdate?.errors?.length > 0) {
           notifyError(
@@ -708,7 +773,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         } else {
           const response =
             res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
-          console.log("response: ", response);
 
           const total = response?.totalPrice?.gross?.amount;
           const tax = response?.totalPrice?.tax?.amount;
@@ -717,8 +781,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
             shippingCost,
             tax,
             total,
-            giftWrapAmount: response.giftWrapAmount,
-            codAmount: response.codAmount,
+            giftWrapAmount: response?.giftWrapAmount,
+            codAmount: response?.codAmount,
           });
           // handlePayment(checkoutId);
         }
@@ -748,7 +812,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
           },
           note: state.notes,
         });
-        updateDelivertMethod(e.target.value);
+        updateDelivertMethod(e.target.value, state.selectedPaymentType);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -772,7 +836,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
         },
         note: state.notes,
       });
-      updateDelivertMethod(e.target.value);
+      updateDelivertMethod(e.target.value, state.selectedPaymentType);
     } catch (e) {
       console.log("e: ", e);
     }
@@ -962,28 +1026,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
     const checkedOption = updatedPaymentType.find((item) => item.checked)?.name;
 
-    if (checkedOption != "Cash On Delivery") {
-      //   if (state.checkedGiftwrap) {
-      //     checkedGiftWrap_checkedCOD(state.checkedGiftwrap);
-      //   } else {
-      //     unCheckedGiftWrap_checkedCOD(state.checkedGiftwrap);
-      //   }
-      // } else {
-      // if (state.checkedGiftwrap) {
-      //   checkedGiftWrap_uncheckedCOD(state.checkedGiftwrap);
-      // } else {
-      if (state.diffAddress) {
-        updateDelivertMethod(state.selectedCountry1);
-      } else {
-        updateDelivertMethod(state.selectedCountry);
-      }
+    if (state.diffAddress) {
+      updateDelivertMethodAfterChoosePaymentMothod(
+        state.selectedCountry1,
+        checkedOption
+      );
+    } else {
+      updateDelivertMethodAfterChoosePaymentMothod(
+        state.selectedCountry,
+        checkedOption
+      );
     }
-    // }
+
     setState({
       paymentType: updatedPaymentType,
       selectedPaymentType: checkedOption,
     });
-    updatePaymentMethod(checkedOption);
   };
 
   const updatePaymentMethod = async (option) => {
@@ -1002,7 +1060,12 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
       const total = response?.totalPrice?.gross?.amount;
       const tax = response?.totalPrice?.tax?.amount;
-      const shippingCost = response?.shippingPrice?.gross?.amount;
+      let shippingCost = 0;
+      if (option == "Razorpay") {
+        shippingCost = response?.shippingPrice?.gross?.amount;
+      } else {
+        shippingCost = response?.codAmount;
+      }
       setState({
         shippingCost,
         tax,
@@ -1010,91 +1073,91 @@ const CheckoutBillingArea = ({ register, errors }) => {
         giftWrapAmount: response.giftWrapAmount,
         codAmount: response.codAmount,
       });
-
     } catch (error) {
       console.log("error: ", error);
     }
   };
-  const handleGiftWrapChanged = (checked) => {
-    setState({ checkedGiftwrap: checked });
-    if (checked) {
-      if (state.selectedPaymentType == "Cash On Delivery") {
-        checkedGiftWrap_checkedCOD(checked);
-      } else {
-        checkedGiftWrap_uncheckedCOD(checked);
-      }
-    } else {
-      if (state.selectedPaymentType == "Cash On Delivery") {
-        unCheckedGiftWrap_checkedCOD(checked);
-      } else {
-        if (state.diffAddress) {
-          updateDelivertMethod(state.selectedCountry1);
-        } else {
-          updateDelivertMethod(state.selectedCountry);
-        }
-      }
-    }
-  };
 
-  const checkedGiftWrap_uncheckedCOD = (checked) => {
-    let deliveryMethodId = "";
-    if (checkChannel() == "india-channel") {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTA=";
-    } else {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTI=";
-    }
-    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
-  };
+  // const handleGiftWrapChanged = (checked) => {
+  //   setState({ checkedGiftwrap: checked });
+  //   if (checked) {
+  //     if (state.selectedPaymentType == "Cash On Delivery") {
+  //       checkedGiftWrap_checkedCOD(checked);
+  //     } else {
+  //       checkedGiftWrap_uncheckedCOD(checked);
+  //     }
+  //   } else {
+  //     if (state.selectedPaymentType == "Cash On Delivery") {
+  //       unCheckedGiftWrap_checkedCOD(checked);
+  //     } else {
+  //       if (state.diffAddress) {
+  //         updateDelivertMethod(state.selectedCountry1);
+  //       } else {
+  //         updateDelivertMethod(state.selectedCountry);
+  //       }
+  //     }
+  //   }
+  // };
 
-  const unCheckedGiftWrap_checkedCOD = (checked) => {
-    let deliveryMethodId = "";
-    if (checkChannel() == "india-channel") {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTQ=";
-    } else {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTY=";
-    }
-    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
-  };
+  // const checkedGiftWrap_uncheckedCOD = (checked) => {
+  //   let deliveryMethodId = "";
+  //   if (checkChannel() == "india-channel") {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTA=";
+  //   } else {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTI=";
+  //   }
+  //   updateDelivertMethodCodAndGift(deliveryMethodId, checked);
+  // };
 
-  const checkedGiftWrap_checkedCOD = (checked) => {
-    let deliveryMethodId = "";
-    if (checkChannel() == "india-channel") {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTc=";
-    } else {
-      deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTg=";
-    }
-    updateDelivertMethodCodAndGift(deliveryMethodId, checked);
-  };
+  // const unCheckedGiftWrap_checkedCOD = (checked) => {
+  //   let deliveryMethodId = "";
+  //   if (checkChannel() == "india-channel") {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTQ=";
+  //   } else {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTY=";
+  //   }
+  //   updateDelivertMethodCodAndGift(deliveryMethodId, checked);
+  // };
 
-  const updateDelivertMethodCodAndGift = async (
-    deliveryMethodId,
-    checked = false
-  ) => {
-    try {
-      const checkoutid = localStorage.getItem("checkoutId");
-      const res = await updateDeliveryMethodCODAndGiftWrap({
-        checkoutid,
-        deliveryMethodId,
-      });
-      const data = res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
-      //Reduce 50 repee if giftwrap true
-      let shippingCost = "";
+  // const checkedGiftWrap_checkedCOD = (checked) => {
+  //   let deliveryMethodId = "";
+  //   if (checkChannel() == "india-channel") {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTc=";
+  //   } else {
+  //     deliveryMethodId = "U2hpcHBpbmdNZXRob2Q6MTg=";
+  //   }
+  //   updateDelivertMethodCodAndGift(deliveryMethodId, checked);
+  // };
 
-      if (checked) {
-        shippingCost = data?.shippingPrice?.gross?.amount - 50;
-      } else {
-        shippingCost = data?.shippingPrice?.gross?.amount;
-      }
+  // const updateDelivertMethodCodAndGift = async (
+  //   deliveryMethodId,
+  //   checked = false
+  // ) => {
+  //   try {
+  //     const checkoutid = localStorage.getItem("checkoutId");
+  //     const res = await updateDeliveryMethodCODAndGiftWrap({
+  //       checkoutid,
+  //       deliveryMethodId,
+  //     });
+  //     const data = res?.data?.data?.checkoutDeliveryMethodUpdate?.checkout;
+  //     //Reduce 50 repee if giftwrap true
+  //     let shippingCost = "";
 
-      setState({
-        total: data?.totalPrice?.gross?.amount,
-        tax: data?.totalPrice?.tax?.amount,
-        shippingCost,
-      });
-    } catch (error) {
-      console.log("error: ", error);
-    }
-  };
+  //     if (checked) {
+  //       shippingCost = data?.shippingPrice?.gross?.amount - 50;
+  //     } else {
+  //       shippingCost = data?.shippingPrice?.gross?.amount;
+  //     }
+
+  //     setState({
+  //       total: data?.totalPrice?.gross?.amount,
+  //       tax: data?.totalPrice?.tax?.amount,
+  //       shippingCost,
+  //     });
+  //   } catch (error) {
+  //     console.log("error: ", error);
+  //   }
+  // };
 
   const handleRemoveDiscount = async () => {
     try {
