@@ -30,7 +30,7 @@ const EmailVerifyPage = () => {
       if (error?.length > 0) {
         setErrorMessage(error[0]?.message);
       } else {
-        setSuccessMessage("Email verification successful. You can login.");
+        setSuccessMessage("Email verification successful. You can login");
       }
     });
   };
@@ -66,18 +66,18 @@ const EmailVerifyPage = () => {
                     ) : errorMessage ? (
                       <h4 style={{ color: "red" }}>{errorMessage}</h4>
                     ) : successMessage ? (
-                      <>
+                      <div className="items-center justify-center text-center">
                         <h4 style={{ color: "green" }}>{successMessage}</h4>
                         <div className="tp-login-bottom">
                           <button
                             type="submit"
-                            className="tp-login-btn"
+                            className="tp-login-btn  w-100"
                             onClick={() => router.push("/login")}
                           >
                             {"Login"}
                           </button>
                         </div>
-                      </>
+                      </div>
                     ) : null}
                   </div>
                 </div>
