@@ -1,28 +1,57 @@
-export const REGISTER = ({ firstName, lastName, email, password }) => {
+export const REGISTER = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  redirectUrl,
+}) => {
   return {
     query: `
-    mutation RegisterMutation($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
-      accountRegister(input: {email: $email, password: $password, channel: "india-channel", firstName: $firstName, lastName: $lastName}) {
-        errors {
-          field
-          code
-          message
-        }
-        user {
-          email
-          isActive
-          isConfirmed
-          lastName
-          firstName
-          id
-        }
-      }
+   mutation RegisterMutation($firstName: String!, $lastName: String!, $email: String!, $password: String!, $redirectUrl: String = "") {
+  accountRegister(
+    input: {email: $email, password: $password, channel: "india-channel", firstName: $firstName, lastName: $lastName, redirectUrl: $redirectUrl}
+  ) {
+    errors {
+      field
+      code
+      message
     }
+    user {
+      email
+      isActive
+      isConfirmed
+      lastName
+      firstName
+      id
+    }
+  }
+}
     `,
-    variables: { firstName, lastName, email, password },
+    variables: { firstName, lastName, email, password, redirectUrl },
   };
 };
 
+export const VERIFY_EMAIL = ({ email, token }) => {
+  return {
+    query: `
+mutation ConfirmAccount($token: String!, $email:String!) {
+  confirmAccount(token: $token,email:$email) {
+    user {
+      id
+      email
+      firstName
+      lastName
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+`,
+    variables: { email, token },
+  };
+};
 export const GET_ORDER_LIST_BY_EMAIL = ({ email }) => {
   return {
     query: `

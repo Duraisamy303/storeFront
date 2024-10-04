@@ -42,14 +42,15 @@ const RegisterForm = () => {
       lastName: data.lastName,
       email: data.email,
       password: data.password,
+      redirectUrl:"https://www1.prade.in/email_verify"
     }).then((result) => {
       if (result?.data?.data?.accountRegister?.errors?.length > 0) {
         notifyError(result?.data?.data?.accountRegister?.errors[0].message);
       } else {
         setTimeout(() => {
           router.push("/login");
-        }, 2000);
-        notifySuccess("Register successfully");
+        }, 5000);
+        notifySuccess("Verification email sent! Please check your email inbox");
       }
     });
     // reset();

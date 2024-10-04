@@ -8,15 +8,16 @@ import {
   FORGET_PASSWORD,
   GET_ORDER_LIST_BY_EMAIL,
   REGISTER,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  VERIFY_EMAIL
 } from "@/utils/queries/register/register";
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     registerUser: builder.mutation({
-      query: ({ firstName, lastName, email, password }) =>
-        configuration(REGISTER({ firstName, lastName, email, password })),
+      query: ({ firstName, lastName, email, password,redirectUrl }) =>
+        configuration(REGISTER({ firstName, lastName, email, password,redirectUrl })),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -181,8 +182,17 @@ export const authApi = apiSlice.injectEndpoints({
       },
     }),
 
+  forgetPassword: builder.mutation({
+      query: ({ email,redirectUrl,token }) => {
+        return configuration(FORGET_PASSWORD({ email,redirectUrl,token }));
+      },
+    }),
 
-
+    verifyEmail: builder.mutation({
+      query: ({ email, token }) => {
+        return configuration(VERIFY_EMAIL({ email, token }));
+      },
+    }),
     // updateProfile password
     updateProfile: builder.mutation({
       query: ({ id, ...data }) => ({
@@ -245,5 +255,6 @@ export const {
   useSignUpProviderMutation,
   useGetOrderListQuery,
   useForgetPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useVerifyEmailMutation
 } = authApi;
