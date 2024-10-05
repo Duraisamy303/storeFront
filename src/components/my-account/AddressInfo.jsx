@@ -382,8 +382,8 @@ const AddressInfo = () => {
             </button>
           </div>
           <div className="row">
-            {AddressData &&
-              AddressData.map((address, index) => (
+            {AddressData?.length > 0 ? (
+              AddressData?.map((address, index) => (
                 <div
                   key={index}
                   className={`col-md-${AddressData.length === 1 ? 12 : 6}`}
@@ -531,7 +531,18 @@ const AddressInfo = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                No Address Found
+              </div>
+            )}
           </div>
         </>
       )}
