@@ -59,6 +59,7 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import pradeLogo from "@assets/img/prade-logo.png";
 import AddressModal from "./addressComponent";
+import { useGetAddressListQuery } from "../../redux/features/productApi";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -193,6 +194,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const [paymentMethodList] = usePaymentMethodListMutation();
 
+  const { data: getAddressList, refetch: addressRefetch } =
+    useGetAddressListQuery();
+
+  const addressList = getAddressList?.data?.me?.addresses;
+
   const handleInputChange = (e, fieldName) => {
     setState({ [fieldName]: e.target.value });
   };
@@ -200,9 +206,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
   useEffect(() => {
     if (stateList?.data?.addressValidationRules?.countryAreaChoices) {
       const list = stateList?.data?.addressValidationRules?.countryAreaChoices;
-      console.log("list: ", list);
       const uniqueStateList = getUniqueStates(list);
-      console.log("uniqueStateList: ", uniqueStateList);
       setState({
         stateList: uniqueStateList,
       });
@@ -452,8 +456,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
-  console.log("codAmount: ", state.codAmount);
-
   const handleSubmit = async (data) => {
     try {
       const errors = validateInputs();
@@ -592,6 +594,9 @@ const CheckoutBillingArea = ({ register, errors }) => {
           router.push(`/order-success/${orderId}`);
         } else {
           handlePayment(orderId, state.total);
+        }
+        if (localStorage.getItem("token")) {
+          addressRefetch();
         }
         setState({ orderLoading: false });
 
@@ -1370,22 +1375,24 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 style={{ display: "flex", alignItems: "center" }}
               >
                 <h3 className="tp-checkout-bill-title">Billing Details</h3>
-                {localStorage.getItem("token") && (
-                  <button
-                    type="button"
-                    style={{
-                      padding: "5px 10px 5px 10px",
-                      backgroundColor: "#c3925a",
-                      borderRadius: 20,
-                      color: "white",
-                      marginBottom: 30,
-                      marginLeft: 10,
-                    }}
-                    onClick={() => setState({ isBillingOpen: true })}
-                  >
-                    {"Set Address"}
-                  </button>
-                )}
+                {localStorage.getItem("token") &&
+                  addressList &&
+                  addressList?.length > 0 && (
+                    <button
+                      type="button"
+                      style={{
+                        padding: "5px 10px 5px 10px",
+                        backgroundColor: "#c3925a",
+                        borderRadius: 20,
+                        color: "white",
+                        marginBottom: 30,
+                        marginLeft: 10,
+                      }}
+                      onClick={() => setState({ isBillingOpen: true })}
+                    >
+                      {"Set Address"}
+                    </button>
+                  )}
               </div>
               <div className="tp-checkout-bill-form">
                 <div className="tp-checkout-bill-inner">
@@ -1767,22 +1774,25 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   onChange={(e) => setState({ diffAddress: e.target.checked })}
                 />
                 <label htmlFor="remeber">Ship to a Different Address?</label>
-                {localStorage.getItem("token") && state.diffAddress && (
-                  <button
-                    type="button"
-                    style={{
-                      padding: "5px 10px 5px 10px",
-                      backgroundColor: "#c3925a",
-                      borderRadius: 20,
-                      color: "white",
-                      marginBottom: 30,
-                      marginLeft: 10,
-                    }}
-                    onClick={() => setState({ isShippingOpen: true })}
-                  >
-                    {"Set Address"}
-                  </button>
-                )}
+                {localStorage.getItem("token") &&
+                  addressList &&
+                  addressList?.length > 0 &&
+                  state.diffAddress && (
+                    <button
+                      type="button"
+                      style={{
+                        padding: "5px 10px 5px 10px",
+                        backgroundColor: "#c3925a",
+                        borderRadius: 20,
+                        color: "white",
+                        marginBottom: 30,
+                        marginLeft: 10,
+                      }}
+                      onClick={() => setState({ isShippingOpen: true })}
+                    >
+                      {"Set Address"}
+                    </button>
+                  )}
               </div>
               {state.diffAddress && (
                 <div className="tp-checkout-bill-form">
