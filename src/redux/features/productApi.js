@@ -35,6 +35,7 @@ import {
   SHOP_PAGINATION,
   FILTER_OPTION,
   ATTRIBUTE_LIST,
+  ADD_NEW_ADDRESS,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -623,13 +624,9 @@ export const productApi = apiSlice.injectEndpoints({
 
     attributeList: builder.mutation({
       query: () => {
-        return configuration(
-          ATTRIBUTE_LIST()
-        );
+        return configuration(ATTRIBUTE_LIST());
       },
     }),
-
-    
 
     orderCancel: builder.mutation({
       query: ({ id }) => {
@@ -748,10 +745,21 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    addNewAddress: builder.mutation({
+      query: ({input}) => {
+        return configuration(
+          ADD_NEW_ADDRESS({
+            input,
+          })
+        );
+      },
+    }),
   }),
 });
 
 export const {
+  useAddNewAddressMutation,
   useFilterOptionMutation,
   useNewPreOrderProductsMutation,
   useMaxPriceMutation,
@@ -802,5 +810,5 @@ export const {
   useGetYouMayLikeMutation,
   usePaymentListMutation,
   useLootSaleProductQuery,
-  useAttributeListMutation
+  useAttributeListMutation,
 } = productApi;

@@ -226,7 +226,7 @@ export const sortingBy = (e) => {
   return sortBy;
 };
 
-export const showDeleteAlert = (onConfirm, onCancel) => {
+export const showDeleteAlert = (onConfirm, onCancel, title) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn confirm-btn", // Add a custom class for the confirm button
@@ -238,7 +238,7 @@ export const showDeleteAlert = (onConfirm, onCancel) => {
 
   swalWithBootstrapButtons
     .fire({
-      title: "Are you sure to cancel order?",
+      title: title ? title : "Are you sure to cancel order?",
       // text: "You won't be able to Delete this!",
       icon: "warning",
       showCancelButton: true,
@@ -255,7 +255,6 @@ export const showDeleteAlert = (onConfirm, onCancel) => {
       }
     });
 };
-
 
 export const objIsEmpty = (obj) => {
   for (let key in obj) {

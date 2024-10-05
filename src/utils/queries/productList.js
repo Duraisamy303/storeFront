@@ -1944,3 +1944,28 @@ export const FILTER_OPTION = ({ filter }) => {
     variables: { filter },
   };
 };
+
+export const ADD_NEW_ADDRESS = ({ input }) => {
+  return {
+    query: `
+    mutation AddAddress($input: AddressInput!) {
+  accountAddressCreate(input: $input) {
+    address {
+      id
+      streetAddress1
+      city
+      postalCode
+      country {
+        code
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `,
+    variables: { input },
+  };
+};
