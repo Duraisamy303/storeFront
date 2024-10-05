@@ -39,7 +39,16 @@ const BillingAddressModal = (props) => {
         okText="Use this address"
         cancelText="Cancel"
         width={800} // Adjusted modal width for better fit
-        closeIcon={<span style={{ fontSize: "16px", cursor: "pointer" }}>✖</span>} // Custom close icon
+        closeIcon={
+          <span style={{ fontSize: "16px", cursor: "pointer" }}>✖</span>
+        } // Custom close icon
+        okButtonProps={{
+          style: {
+            backgroundColor: "#c3935b", // Set background color to red
+            color: "white", // Set text color to white
+            border: "none", // Optional: Remove border
+          },
+        }}
       >
         <div
           className="address-container"
@@ -49,7 +58,11 @@ const BillingAddressModal = (props) => {
             gap: "15px", // Space between address blocks
           }}
         >
-          <Radio.Group onChange={handleAddressChange} value={selectedAddressId} style={{ width: "100%" }}>
+          <Radio.Group
+            onChange={handleAddressChange}
+            value={selectedAddressId}
+            style={{ width: "100%" }}
+          >
             {address?.map((address) => (
               <div
                 key={address.id}
@@ -63,12 +76,13 @@ const BillingAddressModal = (props) => {
               >
                 <Radio value={address.id} style={{ display: "block" }}>
                   <div>
-                    <div className="address-name" style={{ fontWeight: "bold", fontSize: "16px" }}>
+                    <div
+                      className="address-name"
+                      style={{ fontWeight: "bold", fontSize: "16px" }}
+                    >
                       {`${address?.firstName} ${address?.lastName}`}
                     </div>
-                    {address?.companyName && (
-                      <div>{address?.companyName}</div>
-                    )}
+                    {address?.companyName && <div>{address?.companyName}</div>}
                     <div>{address?.streetAddress1}</div>
                     {address?.streetAddress2 && (
                       <div>{address?.streetAddress2}</div>
