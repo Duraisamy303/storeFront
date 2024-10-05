@@ -63,22 +63,17 @@ const CategoryContent = ({
   const [parentCategoryId, setParentCategoryId] = useState("");
 
   const filterByCategory = async () => {
-    let categoryId = "";
-    if (categoryName === "Earrings") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDU=";
-    } else if (categoryName === "Necklaces") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDI=";
-    } else if (categoryName === "Bangles") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDc=";
-    } else if (categoryName === "Rings") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NTU=";
-    } else if (categoryName === "Anklets") {
-      categoryId = "Q2F0ZWdvcnk6MTIxNTI=";
-    } else if (categoryName === "Idols") {
-      categoryId = "Q2F0ZWdvcnk6MTM1ODc=";
-    } else if (categoryName === "OtherAccessories") {
-      categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
-    }
+    const categoryMap = {
+      Earrings: "Q2F0ZWdvcnk6MTE2NDU=",
+      Necklaces: "Q2F0ZWdvcnk6MTE2NDI=",
+      Bangles: "Q2F0ZWdvcnk6MTE2NDc=",
+      Rings: "Q2F0ZWdvcnk6MTE2NTU=",
+      Anklets: "Q2F0ZWdvcnk6MTIxNTI=",
+      Idols: "Q2F0ZWdvcnk6MTM1ODc=",
+      OtherAccessories: "Q2F0ZWdvcnk6MTI0MTU=",
+    };
+
+    const categoryId = categoryMap[categoryName] || ""; // Retrieve the category ID or set to an empty string if not found
     setParentCategoryId(categoryId);
   };
 
@@ -113,7 +108,7 @@ const CategoryContent = ({
                       fontWeight: "500",
                       marginBottom: "0px",
                       color: "gray",
-                      cursor:"pointer"
+                      cursor: "pointer",
                     }}
                     onClick={() => {
                       router.push({
@@ -134,11 +129,19 @@ const CategoryContent = ({
         ) : (
           <div>
             <div>
-              <img
-                src={commonImage}
-                alt="category image"
-                style={{ width: "100%", height: "250px" }}
-              />
+              {commonImage ? (
+                <img
+                  src={commonImage}
+                  alt="category image"
+                  style={{ width: "100%", height: "250px" }}
+                />
+              ) : (
+                <img
+                  src={CommonImage}
+                  alt="category image"
+                  style={{ width: "100%", height: "250px" }}
+                />
+              )}
             </div>
             <div style={{ textAlign: "center", padding: "20px 0px" }}>
               <h4 style={{ fontWeight: "400" }}>
@@ -183,6 +186,39 @@ const CategoryComponent = ({
 
   const [subCatList, { isLoading: loadingProduct }] = useSubCatListMutation();
 
+  const categoryMap = {
+    Earrings: {
+      id: "Q2F0ZWdvcnk6MTE2NDU=",
+      title: "ALL EARRINGS",
+    },
+    Necklaces: {
+      id: "Q2F0ZWdvcnk6MTE2NDI=",
+      title: "ALL NECKLACES",
+    },
+    Bangles: {
+      id: "Q2F0ZWdvcnk6MTE2NDc=",
+      title: "ALL BANGLES & BRACELETS",
+    },
+    Rings: {
+      id: "Q2F0ZWdvcnk6MTE2NTU=",
+      title: "ALL RINGS",
+    },
+    Anklets: {
+      id: "Q2F0ZWdvcnk6MTIxNTI=",
+      title: "ALL ANKLETS",
+    },
+    OtherAccessories: {
+      id: "Q2F0ZWdvcnk6MTI0MTU=",
+      title: "ALL OTHER ACCESSORIES",
+    },
+    Idols: {
+      id: "Q2F0ZWdvcnk6MTM1ODc=",
+      title: "IDOLS",
+    },
+  };
+
+  const currentCategory = hoveredCategory || lastHoveredCategory;
+
   const handleCategoryHover = (category) => {
     setHoveredCategory(category);
     setLastHoveredCategory(category);
@@ -194,68 +230,41 @@ const CategoryComponent = ({
   };
 
   useEffect(() => {
-    filterByCategory();
+    if (currentCategory) {
+      filterByCategory(currentCategory);
+    }
   }, [hoveredCategory, lastHoveredCategory]);
 
-  const filterByCategory = async () => {
-    let categoryId = "";
-    if (hoveredCategory === "Earrings" || lastHoveredCategory === "Earrings") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDU=";
-    } else if (
-      hoveredCategory === "Necklaces" ||
-      lastHoveredCategory === "Necklaces"
-    ) {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDI=";
-    } else if (
-      hoveredCategory === "Bangles" ||
-      lastHoveredCategory === "Bangles"
-    ) {
-      categoryId = "Q2F0ZWdvcnk6MTE2NDc=";
-    } else if (hoveredCategory === "Rings" || lastHoveredCategory === "Rings") {
-      categoryId = "Q2F0ZWdvcnk6MTE2NTU=";
-    } else if (
-      hoveredCategory === "Anklets" ||
-      lastHoveredCategory === "Anklets"
-    ) {
-      categoryId = "Q2F0ZWdvcnk6MTIxNTI=";
-    } else if (
-      hoveredCategory === "OtherAccessories" ||
-      lastHoveredCategory === "OtherAccessories"
-    ) {
-      categoryId = "Q2F0ZWdvcnk6MTI0MTU=";
-    } else if (hoveredCategory === "Idols" || lastHoveredCategory === "Idols") {
-      categoryId = "Q2F0ZWdvcnk6MTM1ODc=";
+  const filterByCategory = async (category) => {
+    const categoryId = categoryMap[category]?.id || "";
+
+    if (categoryId) {
+      const SubCategory = await subCatList({ parentid: categoryId });
+      setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
+
+      priceFilter({
+        filter: { categories: categoryId },
+        sortBy: { direction: "DESC", field: "CREATED_AT" },
+        first: 12,
+        after: null,
+      }).then((res) => {
+        const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
+        const result = list
+          ?.map((item) => item.node?.category)
+          ?.flatMap((subArray) =>
+            subArray.find(
+              (item) => item.id === categoryId && item.backgroundImageUrl !== ""
+            )
+          );
+
+        setCategoryImage(result?.[0]?.backgroundImageUrl || commonImage);
+        setProductList(list);
+      });
     }
-    const SubCategory = await subCatList({
-      parentid: categoryId,
-    });
-
-    setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
-
-    priceFilter({
-      filter: { categories: categoryId },
-      sortBy: { direction: "DESC", field: "CREATED_AT" },
-      first: 12,
-      after: null,
-    }).then((res) => {
-      const list = res?.data?.data?.productsSearch?.edges?.slice(0, 11);
-      const cat = list?.map((item) => item.node?.category);
-      const result = cat?.flatMap((subArray) =>
-        subArray.find(
-          (item) => item.id === categoryId && item.backgroundImageUrl !== ""
-        )
-      );
-      if (result?.length > 0) {
-        setCategoryImage(result[0]?.backgroundImageUrl);
-      } else {
-        setCategoryImage(CommonImage);
-      }
-      setProductList(list);
-    });
   };
 
   const renderContent = () => {
-    if (productList?.length == 0) return null;
+    if (productList?.length === 0) return null;
 
     return loadingProduct || productLoading ? (
       <SingleLoader loading={loadingProduct} />
@@ -266,20 +275,18 @@ const CategoryComponent = ({
         className="tp-category-slider-active-4 swiper-container"
       >
         {productList?.map((item) => (
-          <div
-            className="col-lg-3 menus-product-list"
-            style={{ padding: "0px 8px 0px 0px", width: "250px" }}
-            key={item?.id}
-          >
-            <SwiperSlide>
+          <SwiperSlide key={item?.id}>
+            <div
+              className="col-lg-3 menus-product-list"
+              style={{ padding: "0px 8px 0px 0px", width: "250px" }}
+            >
               <MenusProductSlider product={item} />
-            </SwiperSlide>
-          </div>
+            </div>
+          </SwiperSlide>
         ))}
       </Swiper>
     ) : (
       <div
-        className=""
         style={{
           fontSize: "20px",
           display: "flex",
@@ -287,93 +294,25 @@ const CategoryComponent = ({
           justifyContent: "center",
         }}
       >
-        Product No Found
+        Product Not Found
       </div>
     );
   };
 
   const renderCategoryContent = () => {
-    switch (hoveredCategory || lastHoveredCategory) {
-      case "Earrings":
-        return (
-          <CategoryContent
-            title="ALL EARRINGS"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "Necklaces":
-        return (
-          <CategoryContent
-            title="ALL NECKLACES"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "Bangles":
-        return (
-          <CategoryContent
-            title="ALL BANGLES & BRACELETS"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "Rings":
-        return (
-          <CategoryContent
-            title="ALL RINGS"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "Anklets":
-        return (
-          <CategoryContent
-            title="ALL ANKLETS"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "Idols":
-        return (
-          <CategoryContent
-            title="IDOLS"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      case "OtherAccessories":
-        return (
-          <CategoryContent
-            title="ALL OTHER ACCESSORIES"
-            commonImage={categoryImage}
-            lists={subCategoryLists}
-            categoryName={lastHoveredCategory}
-          >
-            {renderContent()}
-          </CategoryContent>
-        );
-      default:
-        return null;
-    }
+    if (!currentCategory || !categoryMap[currentCategory]) return null;
+
+    const { title } = categoryMap[currentCategory];
+    return (
+      <CategoryContent
+        title={title}
+        commonImage={categoryImage}
+        lists={subCategoryLists}
+        categoryName={lastHoveredCategory}
+      >
+        {renderContent()}
+      </CategoryContent>
+    );
   };
 
   return <div>{renderCategoryContent()}</div>;

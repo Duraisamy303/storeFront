@@ -278,7 +278,6 @@ const ShopPage = () => {
   // }, [filter]);
 
   useEffect(() => {
-
     if (filter) {
       filters();
     }
@@ -590,32 +589,20 @@ const ShopPage = () => {
       setPrevPage(currentPage);
     } else {
       if (number === prevPage + 1) {
-        if (
-          router?.query?.categoryId ||
-          router?.query?.tag ||
-          filter
-        ) {
+        if (router?.query?.categoryId || router?.query?.tag || filter) {
           filterNextData();
         } else {
           finalNextData();
         }
       } else if (number === prevPage - 1) {
-        if (
-          router?.query?.categoryId ||
-          router?.query?.tag ||
-          filter
-        ) {
+        if (router?.query?.categoryId || router?.query?.tag || filter) {
           filterPrevData();
         } else {
           finalPrevData();
         }
       } else {
         if (number == 1) {
-          if (
-            router?.query?.categoryId ||
-            router?.query?.tag ||
-            filter
-          ) {
+          if (router?.query?.categoryId || router?.query?.tag || filter) {
             finalInitialFilterData(sortBy);
           } else {
             finalInitialData(sortBy);
@@ -825,10 +812,12 @@ const ShopPage = () => {
   };
 
   const finalFilterOptionList = (res) => {
-    const data = res?.data?.data?.attributefilter?.filter?.edges;
-    const parsedFilterData = JSON.parse(
-      res?.data?.data?.attributefilter?.filterData
-    );
+    let parsedFilterData;
+    if (res?.data?.data?.attributefilter?.filterData) {
+      parsedFilterData = JSON?.parse(
+        res?.data?.data?.attributefilter?.filterData
+      );
+    }
     if (parsedFilterData?.edges?.length > 0) {
       setAttributeList(parsedFilterData?.edges?.map((item) => item.node));
     } else {
@@ -914,12 +903,9 @@ const ShopPage = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
-          console.log("resetFilter: ", );
           if (router?.query?.categoryId || router?.query?.tag) {
-            console.log(" if: ",  );
             refreshFilterData(sortBy);
           } else {
-            console.log("else: ");
             refresh();
           }
           dispatch(filterData({}));

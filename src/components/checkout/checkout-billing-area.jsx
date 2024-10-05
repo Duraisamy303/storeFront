@@ -44,6 +44,7 @@ import {
 import {
   checkChannel,
   getUniqueStates,
+  objIsEmpty,
   validLoginAndReg,
 } from "../../utils/functions";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
@@ -57,6 +58,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import pradeLogo from "@assets/img/prade-logo.png";
+import AddressModal from "./addressComponent";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -151,6 +153,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
     checkoutId: "",
     giftWrapAmount: 0,
     codAmount: 0,
+    isBillingOpen: false,
+    isShippingOpen: false,
   });
 
   useEffect(() => {
@@ -447,6 +451,8 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.error("Error:", error);
     }
   };
+
+  console.log("codAmount: ", state.codAmount);
 
   const handleSubmit = async (data) => {
     try {
@@ -1201,6 +1207,66 @@ const CheckoutBillingArea = ({ register, errors }) => {
     }
   };
 
+  const setBillingAddress = (data) => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (!objIsEmpty(data?.country)) {
+      const body = {
+        target: {
+          value: data?.country?.code,
+        },
+      };
+      handleSelectChange(body);
+    }
+    setState({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      selectedCountry: data?.country?.code,
+      selectedState: data.countryArea,
+      streetAddress1: data.streetAddress1,
+      city: data.city,
+      postalCode: data.postalCode,
+      phone: data.phone,
+      companyName: data.companyName,
+    });
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+
+      setState({
+        email: user?.user?.email,
+      });
+    }
+  };
+
+  const setShippingAddress = (data) => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (!objIsEmpty(data?.country)) {
+      const body = {
+        target: {
+          value: data?.country?.code,
+        },
+      };
+      shippingCoutryChange(body);
+    }
+
+    setState({
+      firstName1: data.firstName,
+      lastName1: data.lastName,
+      selectedCountry1: data?.country?.code,
+      selectedState1: data.countryArea,
+      streetAddress2: data.streetAddress1,
+      city1: data.city,
+      postalCode1: data.postalCode,
+      phone1: data.phone,
+      companyName1: data.companyName,
+    });
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+      setState({
+        email1: user?.user?.email,
+      });
+    }
+  };
+
   return (
     <>
       <section
@@ -1298,9 +1364,29 @@ const CheckoutBillingArea = ({ register, errors }) => {
       {cart?.length > 0 && (
         <div className="row no-gutter">
           <div className="col-lg-7">
-            <div className="tp-checkout-bill-area">
-              <h3 className="tp-checkout-bill-title">Billing Details</h3>
-
+            <div className="tp-checkout-bill-area ">
+              <div
+                className=" w-100"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <h3 className="tp-checkout-bill-title">Billing Details</h3>
+                {localStorage.getItem("token") && (
+                  <button
+                    type="button"
+                    style={{
+                      padding: "5px 10px 5px 10px",
+                      backgroundColor: "#c3925a",
+                      borderRadius: 20,
+                      color: "white",
+                      marginBottom: 30,
+                      marginLeft: 10,
+                    }}
+                    onClick={() => setState({ isBillingOpen: true })}
+                  >
+                    {"Set Address"}
+                  </button>
+                )}
+              </div>
               <div className="tp-checkout-bill-form">
                 <div className="tp-checkout-bill-inner">
                   <div className="row">
@@ -1681,6 +1767,22 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   onChange={(e) => setState({ diffAddress: e.target.checked })}
                 />
                 <label htmlFor="remeber">Ship to a Different Address?</label>
+                {localStorage.getItem("token") && state.diffAddress && (
+                  <button
+                    type="button"
+                    style={{
+                      padding: "5px 10px 5px 10px",
+                      backgroundColor: "#c3925a",
+                      borderRadius: 20,
+                      color: "white",
+                      marginBottom: 30,
+                      marginLeft: 10,
+                    }}
+                    onClick={() => setState({ isShippingOpen: true })}
+                  >
+                    {"Set Address"}
+                  </button>
+                )}
               </div>
               {state.diffAddress && (
                 <div className="tp-checkout-bill-form">
@@ -1997,16 +2099,27 @@ const CheckoutBillingArea = ({ register, errors }) => {
                     )}
 
                   {/* total */}
-                  {state?.shippingCost && (
+                  {(state?.shippingCost || state?.codAmount > 0) && (
                     <li className="tp-order-info-list-total">
                       <span>
                         {state.selectedPaymentType == "Cash On Delivery"
                           ? "COD Fee"
                           : "Shipping"}
                       </span>
+
                       {checkChannel() == "india-channel" ? (
+                        state.codAmount > 0 ? (
+                          <span>
+                            &#8377;{addCommasToNumber(state?.codAmount)}
+                          </span>
+                        ) : (
+                          <span>
+                            &#8377;{addCommasToNumber(state?.shippingCost)}
+                          </span>
+                        )
+                      ) : state.codAmount > 0 ? (
                         <span>
-                          &#8377;{addCommasToNumber(state?.shippingCost)}
+                          &#8377;{addCommasToNumber(state?.codAmount)}
                         </span>
                       ) : (
                         <span>
@@ -2316,8 +2429,14 @@ const CheckoutBillingArea = ({ register, errors }) => {
                   purposes described in our <b>privacy policy</b>.
                 </p>
               </div>
-
-              <div className="tp-checkout-btn-wrapper pt-20">
+              <button
+                type="submit"
+                className="tp-login-btn w-100"
+                onClick={() => handleSubmit()}
+              >
+                {state.orderLoading ? <ButtonLoader /> : "Place Order"}
+              </button>
+              {/* <div className="tp-checkout-btn-wrapper pt-20">
                 <button
                   type="submit"
                   className="tp-checkout-btn w-100"
@@ -2325,11 +2444,24 @@ const CheckoutBillingArea = ({ register, errors }) => {
                 >
                   {state.orderLoading ? <ButtonLoader /> : "Place Order"}
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       )}
+      <AddressModal
+        title={"Set Billing Address"}
+        open={state.isBillingOpen}
+        close={() => setState({ isBillingOpen: false })}
+        selectedAddress={(data) => setBillingAddress(data)}
+      />
+
+      <AddressModal
+        title={"Set Shipping Address"}
+        open={state.isShippingOpen}
+        close={() => setState({ isShippingOpen: false })}
+        selectedAddress={(data) => setShippingAddress(data)}
+      />
     </>
   );
 };
