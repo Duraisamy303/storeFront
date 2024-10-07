@@ -8,6 +8,7 @@ import logo from "@assets/img/logo/logo.svg";
 import useSticky from "@/hooks/use-sticky";
 import useCartInfo from "@/hooks/use-cart-info";
 import {
+  cart_list,
   compare_list,
   openCartMini,
   openUserSidebar,
@@ -195,6 +196,11 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const handleLogout = () => {
     dispatch(userLoggedOut());
     router.push("/login");
+    if (token) {
+      localStorage.clear();
+      dispatch(cart_list([]));
+    }
+
   };
   let timeoutId;
 

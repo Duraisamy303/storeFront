@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { mobile_menu } from "@/data/menu-data";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
-import { closeUserSidebar } from "@/redux/features/cartSlice";
+import { cart_list, closeUserSidebar } from "@/redux/features/cartSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
@@ -32,6 +32,10 @@ const MobileMenus = () => {
     dispatch(userLoggedOut());
     dispatch(closeUserSidebar());
     router.push("/login");
+    if (token) {
+      localStorage.clear();
+      dispatch(cart_list([]));
+    }
   };
 
   return (

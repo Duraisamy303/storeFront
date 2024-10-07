@@ -52,6 +52,11 @@ const UserMiniSidebar = () => {
     router.push("/login");
     dispatch(userLoggedOut());
     dispatch(closeUserSidebar());
+    if (token) {
+      localStorage.clear();
+      dispatch(cart_list([]));
+    }
+
     
   };
 

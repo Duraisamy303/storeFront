@@ -134,10 +134,9 @@ const PreOrders = () => {
       const data = await createCheckoutTokenWithoutEmail({
         channel: "india-channel",
       });
-      const datas = data?.json();
       localStorage.setItem(
         "checkoutTokenINR",
-        datas?.data?.data?.checkoutCreate?.checkout?.token
+        data?.data?.data?.checkoutCreate?.checkout?.token
       );
     } catch (error) {
       console.error("Error:", error);
