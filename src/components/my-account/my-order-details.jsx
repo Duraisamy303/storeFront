@@ -1,4 +1,9 @@
-import { addCommasToNumber, checkChannel, roundOff } from "@/utils/functions";
+import {
+  addCommasToNumber,
+  checkChannel,
+  formatCurrency,
+  roundOff,
+} from "@/utils/functions";
 import moment from "moment/moment";
 import React, { useEffect } from "react";
 
@@ -7,7 +12,7 @@ const MyOrderDetails = ({ data }) => {
   const SubTotal = data?.data?.order?.subtotal.gross;
   const Total = data?.data?.order?.total.gross;
   const Tax = data?.data?.order?.total.tax;
-  const ShippingAmount = data?.data?.order?.shippingPrice;
+  const ShippingAmount = data?.data?.order?.shippingPrice?.gross;
   const GiftCard = data?.data?.order?.giftCards;
   const giftWrap = data?.data?.order?.isGiftWrap;
   const paymentMethod = data?.data?.order?.paymentMethod?.name;
@@ -105,23 +110,12 @@ const MyOrderDetails = ({ data }) => {
                         : "Shipping"}
                     </td>
 
-                    {checkChannel() === "india-channel" ? (
-                      <>
-                        <td>
-                          {codAmount === 0
-                            ? `₹${addCommasToNumber(ShippingAmount)}` // Using ₹ for INR
-                            : `₹${addCommasToNumber(codAmount)}`}
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td>
-                          {codAmount === 0
-                            ? `$${addCommasToNumber(ShippingAmount)}`
-                            : `$${addCommasToNumber(codAmount)}`}
-                        </td>
-                      </>
-                    )}
+                    <td>
+                      {formatCurrency(ShippingAmount?.currency)}
+                      {addCommasToNumber(
+                        codAmount !== 0 ? codAmount : ShippingAmount?.amount
+                      )}
+                    </td>
                   </tr>
 
                   <tr>

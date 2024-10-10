@@ -264,3 +264,11 @@ export const objIsEmpty = (obj) => {
   }
   return true; // No properties found, object is empty
 };
+
+export const formatCurrency = (currency) => {
+  if (currency === "INR") {
+    return "₹";
+  } else {
+    return "$";
+  }
+};
