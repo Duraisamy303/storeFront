@@ -135,7 +135,7 @@ const MyOrderDetails = ({ data }) => {
                       <td>Gift Wrap</td>
 
                       <td>
-                        {checkChannel() === "india-channel" ? "₹" : "$"}
+                        {formatCurrency(ShippingAmount?.currency)}
                         {giftWrapAmount}
                       </td>
                     </tr>
