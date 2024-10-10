@@ -15,7 +15,7 @@ import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import MenusProductSlider from "./menus-product-slider";
 import { HomeTwoPopularPrdLoader } from "@/components/loader";
-import CommonImage from "@assets/img/earring-menu-pic-1.png";
+import CommonImage from "../../../../public/assets/img/earring-menu-pic-1.png";
 import Loader from "../../../components/loader/loader";
 import { useDispatch } from "react-redux";
 import { filterData } from "@/redux/features/shop-filter-slice";
@@ -137,7 +137,7 @@ const CategoryContent = ({
                 />
               ) : (
                 <img
-                  src={CommonImage}
+                  src={"/assets/img/earring-menu-pic-1.png"}
                   alt="category image"
                   style={{ width: "100%", height: "250px" }}
                 />
@@ -655,7 +655,7 @@ const Menus = () => {
             <div className="col-lg-10">
               <div className="tp-mega-menu-item">
                 <CategoryComponent
-                  commonImage="/path/to/your/common/image.jpg" // Add the path to your common image
+                  commonImage="/assets/img/earring-menu-pic-1.png" // Add the path to your common image
                   lastHoveredCategory={lastHoveredCategory}
                   setLastHoveredCategory={setLastHoveredCategory}
                 />
