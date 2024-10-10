@@ -16,6 +16,7 @@ const EmailVerifyPage = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
+    localStorage.clear();
     if (email && token) {
       verifyEmail(email, token);
     }
