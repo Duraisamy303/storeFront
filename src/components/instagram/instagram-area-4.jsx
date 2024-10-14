@@ -94,6 +94,7 @@ const InstagramAreaFour = () => {
             (item) => !idsToRemove.includes(item.id)
           );
           setProduct(products);
+        
         }
       }
     } catch (error) {
@@ -389,7 +390,7 @@ const InstagramAreaFour = () => {
                             className="actor-hov-para"
                             style={{ fontSize: "12px", cursor: "pointer" }}
                             onClick={() =>
-                              router.push(`/product-details/${item?.id}`)
+                              router.push(`/product-details/${item?.slug}`)
                             }
                           >
                             {item?.name}

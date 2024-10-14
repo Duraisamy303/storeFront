@@ -39,6 +39,7 @@ const CartItem = ({
   quantityAvailable,
   refetch,
 }) => {
+
   const cartData = useSelector((state) => state.cart.cart_list);
   const cart = cartData?.node || cartData;
 
@@ -105,7 +106,7 @@ const CartItem = ({
           <td className="tp-cart-img">
             <div
               onClick={() =>
-                router.push(`/product-details/${product?.variant?.product?.id}`)
+                router.push(`/product-details/${product?.variant?.product?.slug}`)
               }
             >
               {/* <Image
@@ -136,7 +137,7 @@ const CartItem = ({
             </div>
           </td>
           <td className="tp-cart-title">
-            <Link href={`/product-details/${product?.variant?.product?.id}`}>
+            <Link href={`/product-details/${product?.variant?.product?.slug}`}>
               {title}
             </Link>
           </td>
@@ -240,7 +241,7 @@ const CartItem = ({
           <td className="tp-cart-img">
             <div
               onClick={() =>
-                router.push(`/product-details/${product?.variant?.product?.id}`)
+                router.push(`/product-details/${product?.variant?.product?.slug}`)
               }
             >
               <Image
@@ -253,7 +254,7 @@ const CartItem = ({
           </td>
           {/* title */}
           <td className="tp-cart-title">
-            <Link href={`/product-details/${_id}`}>{title}</Link>
+            <Link href={`/product-details/${product?.variant?.product?.slug}`}>{title}</Link>
           </td>
 
           {/* <td className="tp-cart-price">

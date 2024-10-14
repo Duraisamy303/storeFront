@@ -398,10 +398,10 @@ const DetailsWrapper = ({
   }, [nextProductData]);
 
   const PreviousProductClick = () => {
-    router.push(`/product-details/${previousProduct?.id}`);
+    router.push(`/product-details/${previousProduct?.slug}`);
   };
   const NextProductClick = () => {
-    router.push(`/product-details/${nextProduct?.id}`);
+    router.push(`/product-details/${nextProduct?.slug}`);
   };
 
   useEffect(() => {
@@ -528,7 +528,6 @@ const DetailsWrapper = ({
     }
   };
 
-  console.log("productItem", productItem);
   return (
     <div className="tp-product-details-wrapper">
       <div style={{ display: "flex", justifyContent: "space-between" }}>

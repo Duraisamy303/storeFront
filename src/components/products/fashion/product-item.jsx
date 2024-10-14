@@ -39,7 +39,7 @@ import ButtonLoader from "@/components/loader/button-loader";
 const ProductItem = ({ products, style_2 = false, updateData }) => {
   const [channel, setChannel] = useState("india-channel");
 
-  let product = products.node;
+  let product = products?.node;
 
   const router = useRouter();
 
@@ -244,7 +244,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
       }`}
     >
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
-        <Link href={`/product-details/${product?.id}`}>
+        <Link href={`/product-details/${product?.slug}`}>
           {/* <Image
             // src={img}
             src={profilePic(img)}
@@ -494,7 +494,7 @@ const ProductItem = ({ products, style_2 = false, updateData }) => {
             {capitalizeFLetter(product?.category[0]?.name)}
           </h3>
           <h3 className="tp-product-title-2">
-            <Link href={`/product-details/${product?.id}`}>
+            <Link href={`/product-details/${product?.slug}`}>
               {capitalizeFLetter(product?.name)}
             </Link>
           </h3>

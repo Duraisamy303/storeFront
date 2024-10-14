@@ -34,7 +34,7 @@ const ProductItem = ({
   primary_style = false,
   data,
 }) => {
-  const { id, thumbnail, name, discount, pricing, tags, status, video } =
+  const { id, thumbnail, name, discount, pricing, tags, status, video,slug } =
     product || {};
   const cart = useSelector((state) => state.cart?.cart_list);
   const [addToCartMutation, { data: productsData, isError, isLoading }] =
@@ -161,7 +161,7 @@ const ProductItem = ({
       } ${prdCenter ? "text-center" : ""}`}
     >
       <div className="tp-product-thumb-3 mb-15 fix p-relative z-index-1">
-        <Link href={`/product-details/${id}`}>
+        <Link href={`/product-details/${slug}`}>
           {/* <Image
 src={profilePic(thumbnail?.url)}
 alt="product image"
@@ -383,7 +383,7 @@ Add To Cart
       <div className="tp-product-content-3" style={{ textAlign: "center" }}>
         {/* <div className="tp-product-tag-3"><span>{tags[1]}</span></div> */}
         <h3 className="tp-product-title-3">
-          <Link href={`/product-details/${id}`}>{name}</Link>
+          <Link href={`/product-details/${slug}`}>{name}</Link>
         </h3>
         <p style={{ color: "gray", marginBottom: "0px" }}>
           {product?.category?.name}

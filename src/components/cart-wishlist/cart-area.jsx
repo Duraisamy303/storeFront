@@ -98,7 +98,7 @@ const CartArea = () => {
         if (CartList[0]?.variant?.product?.getCrosssells?.length > 0)
           for (let item of CartList[0]?.variant?.product?.getCrosssells) {
             try {
-              const res = await getYouMayLike({ productId: item?.productId });
+              const res = await getYouMayLike({ productId: item?.slug });
               productDetails.push(res?.data);
             } catch (error) {
               console.error(
@@ -247,7 +247,7 @@ const CartArea = () => {
                         className="tp-product-related-slider-active swiper-container mb-10"
                       >
                         {youMayLikeData?.map((item) => (
-                          <SwiperSlide key={item._id}>
+                          <SwiperSlide key={item?.slug}>
                             <ProductItem
                               product={item?.data?.product}
                               primary_style={true}

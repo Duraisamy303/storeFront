@@ -1,8 +1,8 @@
 export const SINGLE_PRODUCT = ({ productId, channel }) => {
   return JSON.stringify({
     query: `
-   query MyQuery($productId: ID!, $channel: String!) {
-  product(id: $productId, channel: $channel) {
+   query MyQuery($productId: String!, $channel: String!) {
+  product(slug: $productId, channel: $channel) {
     id
     name
     slug
@@ -141,6 +141,7 @@ export const NEXT_PRODUCT = ({ nextProductId, channel }) => {
       product(slug: $nextProductId, channel: $channel) {
         id
         name
+        slug
         thumbnail {
           url
           alt
@@ -170,6 +171,7 @@ export const PREV_PRODUCT = ({ prevProductId, channel }) => {
       product(slug: $prevProductId, channel: $channel) {
         id
         name
+        slug
         thumbnail {
           url
           alt

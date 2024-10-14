@@ -303,6 +303,7 @@ export const GET_PRODUCTLIST_BY_ID = ({ ids, channel }) => {
             }
           }
         }
+          slug
             thumbnail {
               url
               alt
@@ -1359,6 +1360,7 @@ export const PRODUCT_SEARCH = ({ search, channel }) => {
       node {
         id
         name
+        slug
         defaultVariant {
           pricing {
             price {

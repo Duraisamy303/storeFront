@@ -176,7 +176,7 @@ const CartMiniSidebar = () => {
                               onClick={() => {
                                 dispatch(closeCartMini());
                                 router.push(
-                                  `/product-details/${item?.variant?.product?.id}`
+                                  `/product-details/${item?.variant?.product?.slug}`
                                 );
                               }}
                             >
@@ -233,7 +233,7 @@ const CartMiniSidebar = () => {
                           <div className="cartmini__content">
                             <h5 className="cartmini__title">
                               <Link
-                                href={`/product-details/${item?.variant?.product?.id}`}
+                                href={`/product-details/${item?.variant?.product?.slug}`}
                               >
                                 {item?.variant?.product?.name ||
                                   item?.node?.name}
@@ -284,7 +284,7 @@ const CartMiniSidebar = () => {
                               onClick={() => {
                                 dispatch(closeCartMini());
                                 router.push(
-                                  `/product-details/${item?.variant?.product?.id}`
+                                  `/product-details/${item?.variant?.product?.slug}`
                                 );
                               }}
                             >
@@ -302,7 +302,7 @@ const CartMiniSidebar = () => {
                           <div className="cartmini__content">
                             <h5 className="cartmini__title">
                               <Link
-                                href={`/product-details/${item?.variant?.product?.id}`}
+                                href={`/product-details/${item?.variant?.product?.slug}`}
                               >
                                 {item?.variant?.product?.name ||
                                   item?.node?.name}

@@ -228,9 +228,10 @@ const HeaderTwo = ({ style_2 = false, data }) => {
           price: item?.node?.defaultVariant?.pricing?.price?.gross?.amount,
           img: item?.node?.thumbnail?.url,
           id: item?.node?.id,
-        }));
+          slug: item?.node?.slug,
 
-        console.log("filter: ", filter);
+
+        }));
 
         // Handle UI state based on the search term
         if (search === "") {
@@ -424,7 +425,7 @@ const HeaderTwo = ({ style_2 = false, data }) => {
                                   </div>
 
                                   <Link
-                                    href={`/product-details/${item?.id}`}
+                                    href={`/product-details/${item?.slug}`}
                                     key={item?.id}
                                     className="dropdown-item"
                                   >

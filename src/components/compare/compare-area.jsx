@@ -28,11 +28,8 @@ import { profilePic } from "@/utils/constant";
 import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 
 const CompareArea = () => {
-  const { data: wishlistData } = useGetWishlistQuery();
 
-  const { compareItems } = useSelector((state) => state.compare);
 
-  const compareList = useSelector((state) => state.cart.compare_list);
 
   const cart = useSelector((state) => state.cart.cart_list);
 
@@ -273,7 +270,7 @@ const CompareArea = () => {
 
                                   <h4 className="tp-compare-product-title">
                                     <Link
-                                      href={`/product-details/${item?.node?.id}`}
+                                      href={`/product-details/${item?.node?.slug}`}
                                     >
                                       {item?.node?.name}
                                     </Link>

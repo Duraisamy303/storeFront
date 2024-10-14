@@ -218,7 +218,7 @@ const MenusProductSlider = ({ product, loginPopup, loading }) => {
   return (
     <>
       <div className="tp-category-item-7 p-relative z-index-1 fix text-center">
-        <Link href={`/product-details/${product?.node?.id}`}>
+        <Link href={`/product-details/${product?.node?.slug}`}>
           <div
             className="tp-category-thumb-4 include-bg"
             style={{

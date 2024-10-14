@@ -825,6 +825,7 @@ export const GET_WISHLIST_LIST = ({ userEmail }) => {
           }
             id
           name
+          slug
           pricing {
             priceRange {
               start {
@@ -862,6 +863,7 @@ export const GET_WISHLIST_LIST_DEFAULT_CHANNEL = ({ userEmail }) => {
           }
           id
           name
+          slug
           pricing {
             priceRange {
               start {

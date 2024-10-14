@@ -158,7 +158,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
             }`}
           >
             <td className="tp-cart-img">
-              <Link href={`/product-details/${product?.product?.id}`}>
+              <Link href={`/product-details/${product?.product?.slug}`}>
                 {/* <Image
             src={
               profilePic(product?.product?.media[0]?.url) ||
@@ -195,7 +195,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
               </Link>
             </td>
             <td className="tp-cart-title">
-              <Link href={`/product-details/${product?.product?.id}`}>
+              <Link href={`/product-details/${product?.product?.slug}`}>
                 {product?.product?.name}
               </Link>
             </td>
@@ -287,7 +287,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
           >
             <td className="tp-cart-img">
               <Link
-                href={`/product-details/${product?.defaultChannelProduct?.id}`}
+                href={`/product-details/${product?.defaultChannelProduct?.slug}`}
               >
                 {/* <Image
             src={
@@ -329,7 +329,7 @@ const WishlistItem = ({ product, refetchWishlist, refetchWishlistDefault }) => {
             </td>
             <td className="tp-cart-title">
               <Link
-                href={`/product-details/${product?.defaultChannelProduct?.id}`}
+                href={`/product-details/${product?.defaultChannelProduct?.slug}`}
               >
                 {product?.defaultChannelProduct?.name}
               </Link>
