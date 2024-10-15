@@ -92,11 +92,11 @@ export const CART_LIST = ({ checkoutToken }) => {
                 }
                   getUpsells {
             name
-            productId
+            slug
           }
           getCrosssells {
             name
-            productId
+            slug
           }
               }
               pricing {

@@ -17,7 +17,7 @@ export default function GiftCart() {
     isLoading,
     isError,
     refetch: productRefetch,
-  } = useGetProductQuery({ productId: "UHJvZHVjdDo1NzMwOQ==" });
+  } = useGetProductQuery({ productId: "gift-card" });
   const product = productData?.data?.product;
 
   // const [state, setState] = useSetState({
