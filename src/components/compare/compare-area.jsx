@@ -28,9 +28,6 @@ import { profilePic } from "@/utils/constant";
 import { RegularPrice, checkChannel, roundOff } from "@/utils/functions";
 
 const CompareArea = () => {
-
-
-
   const cart = useSelector((state) => state.cart.cart_list);
 
   const { data: datacartList, refetch: cartRefetch } = useGetCartListQuery();
@@ -122,27 +119,6 @@ const CompareArea = () => {
       : false;
   });
 
-  const description = (item) => {
-    if (item) {
-      try {
-        const jsonObject = JSON.parse(item);
-        const items =
-          jsonObject?.blocks?.find((block) => block.type === "list")?.data
-            ?.items || [];
-        return (
-          <ul>
-            {items.map((text, index) => (
-              <li key={index}>{text}</li>
-            ))}
-          </ul>
-        );
-      } catch (e) {
-        console.error("Invalid JSON:", e);
-        return <span>Invalid description</span>;
-      }
-    }
-    return null;
-  };
 
   const addToCartProductINR = async (product) => {
     try {
@@ -216,7 +192,12 @@ const CompareArea = () => {
                               className=""
                               style={{ minWidth: "300px" }}
                             >
-                              <div style={{display: "flex", justifyContent:"center"}}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
                                 <div
                                   className="tp-compare-thumb p-relative z-index-1"
                                   style={
@@ -399,16 +380,65 @@ const CompareArea = () => {
                       {/* Description */}
                       <tr>
                         <th style={{ fontWeight: "400" }}>DESCRIPTION</th>
-                        {compareData?.map((item) => (
-                          <td key={item?.node?.id}>
-                            <div className="tp-compare-add-to-cart">
-                              <span style={{ color: "gray" }}>
-                                {description(item?.node?.description)}
-                              </span>
-                            </div>
-                          </td>
-                        ))}
+                        {compareData?.map(({ node }) => {
+                          const descriptionBlocks = JSON.parse(
+                            node.description
+                          )?.blocks;
+
+                          return (
+                            <td key={node.id}>
+                              {/* Render description blocks */}
+                              {descriptionBlocks?.map((block) => (
+                                <div
+                                  key={block.id}
+                                  style={{ marginTop: "10px" }}
+                                >
+                                  {/* Handle paragraph type */}
+                                  {block.type === "paragraph" && (
+                                    <p
+                                      style={{
+                                        color: "gray",
+                                        marginBottom: "5px",
+                                      }}
+                                    >
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: block.data.text,
+                                        }}
+                                      />
+                                    </p>
+                                  )}
+
+                                  {/* Handle header type */}
+                                  {block.type === "header" && (
+                                    <h5 style={{ fontWeight: "400" }}>
+                                      {block.data.text}
+                                    </h5>
+                                  )}
+
+                                  {/* Handle list type */}
+                                  {block.type === "list" && (
+                                    <ul style={{ paddingLeft: "20px" }}>
+                                      {block?.data?.items?.map((item, index) => (
+                                        <li
+                                          key={index}
+                                          style={{ color: "gray" }}
+                                          dangerouslySetInnerHTML={{
+                                            __html: item?.includes("<b>")
+                                              ? `<b>${item}</b>`
+                                              : item,
+                                          }}
+                                        />
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              ))}
+                            </td>
+                          );
+                        })}
                       </tr>
+
                       {/* SKU */}
                       <tr>
                         <th style={{ fontWeight: "400" }}>SKU</th>
