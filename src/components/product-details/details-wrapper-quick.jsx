@@ -92,7 +92,7 @@ const DetailsWrapper = ({
     isLoading: productLoading,
     isError: productError,
     refetch: productRefetch,
-  } = useGetProductQuery({ productId: productItem?.id });
+  } = useGetProductQuery({ productId: productItem?.slug });
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
 
