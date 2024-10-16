@@ -366,12 +366,10 @@ const PreOrders = () => {
     if (prevPage === null) {
       setPrevPage(currentPage);
     } else {
-      console.log("else1: ");
       if (number === prevPage + 1) {
         if (filter) {
           filterNextData();
         } else {
-          console.log("else2: ");
           finalNextData();
         }
       } else if (number === prevPage - 1) {
@@ -399,7 +397,6 @@ const PreOrders = () => {
 
   const filterNextData = async () => {
     const datas = commonFilter();
-    console.log("datas: ", datas);
     const res = await priceFilter({
       filter: datas,
       first: PAGE_LIMIT,
@@ -416,7 +413,6 @@ const PreOrders = () => {
 
   const filterPrevData = async () => {
     const datas = commonFilter();
-    console.log("datas: ", datas);
     const res = await priceFilter({
       filter: datas,
       last: PAGE_LIMIT,
@@ -432,7 +428,6 @@ const PreOrders = () => {
   };
 
   const finalNextData = async () => {
-    console.log("endCursor: ", endCursor);
     const res = await productListRefetch({
       first: PAGE_LIMIT,
       after: endCursor,
@@ -442,7 +437,6 @@ const PreOrders = () => {
       },
       filter: commonFilter(),
     });
-    console.log("res: ", res);
 
     setCursorAndList(res);
     
@@ -538,7 +532,6 @@ const PreOrders = () => {
 
   const setCursorAndList = (res) => {
     const data = res?.data?.data?.productsSearch;
-    console.log("data: ", data);
     const list = data?.edges;
     setProductList(list);
     setStartCursor(data?.pageInfo?.startCursor);
@@ -578,7 +571,6 @@ const PreOrders = () => {
       const res = await filterOptions({
         filter: datas,
       });
-      console.log("res: ", res);
 
       finalFilterOptionList(res);
     } catch (error) {

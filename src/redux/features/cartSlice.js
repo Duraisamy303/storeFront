@@ -129,7 +129,6 @@ export const cartSlice = createSlice({
     },
 
     openUserSidebar: (state, { payload }) => {
-      console.log("clicked");
       state.userMiniOpen = true;
     },
     closeUserSidebar: (state, { payload }) => {

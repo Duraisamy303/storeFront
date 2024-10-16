@@ -72,7 +72,6 @@ const PopularProducts = () => {
   const featureProductData = () => {
     try {
       const data = featureProduct?.data?.productsSearch?.edges;
-      console.log("data: ", data);
       setFeatureProducts(data);
 
       // if (featureProduct) {

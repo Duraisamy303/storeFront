@@ -1449,7 +1449,6 @@ const DetailsWrapper = ({
             {visibility?.description && (
               <>
                 {JSON.parse(productItem?.description)?.blocks?.map((block) => {
-                  console.log("✌️block --->", block);
 
                   return (
                     <>

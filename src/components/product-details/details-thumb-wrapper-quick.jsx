@@ -38,7 +38,6 @@ const DetailsThumbWrapperQuick = ({ videoId = false, status, product }) => {
     });
   };
 
-  console.log("imageUrls", imageUrls);
 
   const isImage = (url) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);

@@ -39,7 +39,6 @@ const Failed = ({ data, orderId }) => {
   const handlePayment = useCallback(
     async (total, orderId) => {
       try {
-        console.log("options: ");
 
         const options = {
           key: "rzp_test_tEMCtcfElFdYts",
@@ -63,7 +62,6 @@ const Failed = ({ data, orderId }) => {
             },
           },
           handler: async (res) => {
-            console.log("res: ", res);
             if (res?.razorpay_payment_id) {
               notifySuccess("Payment Successful");
 

@@ -472,17 +472,14 @@ const InstagramAreaFour = () => {
                               lineHeight: "14px",
                             }}
                             onClick={() => {
-                              console.log("onClick: ");
                               if (
                                 cartList?.data?.checkout?.lines?.some(
                                   (prd) => prd?.variant?.product?.id == item?.id
                                 )
                               ) {
-                                console.log(" if: ");
 
                                 router.push("/cart");
                               } else {
-                                console.log(" else: ");
 
                                 addToCartProductINR(item);
                                 addToCartProductUSD(item);

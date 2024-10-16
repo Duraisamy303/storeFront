@@ -106,13 +106,11 @@ const AddressInfo = () => {
 
   const [updateAddress, { isLoading: updateAddressLoading }] =
     useUpdateAddressMutation();
-  console.log("updateAddressLoading: ", updateAddressLoading);
 
   const [deleteAddress] = useDeleteAddressMutation();
 
   const [addAddress, { isLoading: addAddressLoading }] =
     useAddNewAddressMutation();
-  console.log("addAddressLoading: ", addAddressLoading);
 
   const [defaultBillingAddress, {}] =
     useUpdateBillingAddressAddressSectionMutation();
@@ -133,7 +131,6 @@ const AddressInfo = () => {
   });
 
   const handleCountryChange1 = (e) => {
-    console.log("value: ", e);
     setState({
       selectedCountry: e.target.value,
       selectedState: "",
@@ -247,7 +244,6 @@ const AddressInfo = () => {
           postalCode: state.postalCode,
           companyName: state.companyName,
         };
-        console.log("input: ", input);
 
         const res = await addAddress({
           input,
@@ -265,7 +261,6 @@ const AddressInfo = () => {
           clearForm();
           notifySuccess("Address created successfully");
         }
-        console.log("res: ", res);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -294,7 +289,6 @@ const AddressInfo = () => {
         input,
       })
         .then((result) => {
-          console.log("result: ", result);
           if (result?.data?.data?.accountAddressUpdate?.errors?.length > 0) {
             // notifyError(result?.data?.accountAddressUpdate?.error[0]?.message);
             notifyError(

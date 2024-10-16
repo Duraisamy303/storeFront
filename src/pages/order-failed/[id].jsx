@@ -13,7 +13,6 @@ const PaymentFailed = () => {
   const router = useRouter();
   const orderId = router?.query?.id;
   const { data } = useOrderListQuery({ orderId: orderId });
-  console.log("data: ", data);
 
   const [createCheckoutTokenWithoutEmail, { data: checkoutTokens }] =
     useCreateCheckoutTokenWithoutEmailMutation();

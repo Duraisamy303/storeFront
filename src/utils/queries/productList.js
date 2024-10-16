@@ -667,7 +667,6 @@ export const FINISH_LIST = () => {
 };
 
 export const ORDER_CANCEL = ({ id }) => {
-  console.log("ORDER_CANCEL: ", id);
   return JSON.stringify({
     query: `mutation customerCancelOrder($id: ID!) {
       customerOrderCancel(id: $id) {

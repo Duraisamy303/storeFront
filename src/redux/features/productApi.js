@@ -363,7 +363,6 @@ export const productApi = apiSlice.injectEndpoints({
     payment: builder.mutation({
       query: ({ amountAuthorized, amountCharged, pspReference }) => {
         const id = localStorage.getItem("orderId");
-        console.log("id : ", id);
         const body = {
           id,
           currency: checkChannel() == "india-channel" ? "INR" : "USD",
@@ -375,7 +374,6 @@ export const productApi = apiSlice.injectEndpoints({
           availableActions: ["REFUND"],
           externalUrl: "https://saleor.io/payment-id/123",
         };
-        console.log("body: ", body);
 
         return configuration(
           PAYMENT_SUCCESS({
@@ -440,7 +438,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     updateEmail: builder.mutation({
       query: ({ checkoutId, email }) => {
-        console.log("checkoutId,email: ", checkoutId, email);
         return configuration(
           UPDATE_EMAIL({
             checkoutId,
@@ -579,7 +576,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     updateBillingAddressAddressSection: builder.mutation({
       query: ({ addressId }) => {
-        console.log("addressId: ", addressId);
         return configuration(
           UPDATE_BILLING_ADDRESS_ADDRESS_SECTION({
             addressId,
@@ -590,7 +586,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     updateShippingAddressAddressSection: builder.mutation({
       query: ({ addressId }) => {
-        console.log("addressId: ", addressId);
         return configuration(
           UPDATE_SHIPPING_ADDRESS_ADDRESS_SECTION({
             addressId,
@@ -601,7 +596,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     updateAddress: builder.mutation({
       query: ({ addressId, input }) => {
-        console.log("addressId,input: ", addressId, input);
         return configuration(
           UPDATE_ADDRESS({
             addressId,
@@ -613,7 +607,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     deleteAddress: builder.mutation({
       query: ({ id }) => {
-        console.log("id: ", id);
         return configuration(
           DELETE_ADDRESS({
             id,
@@ -674,7 +667,6 @@ export const productApi = apiSlice.injectEndpoints({
         sortBy,
         filter = {},
       }) => {
-        console.log("after: ", after);
         let channel = "";
         const channels = localStorage.getItem("channel");
         if (!channels) {
@@ -691,7 +683,6 @@ export const productApi = apiSlice.injectEndpoints({
 
     shopPagination: builder.mutation({
       query: ({ first = null, after = null, sortBy, page, filter = {} }) => {
-        console.log("shopPagination: ", filter);
 
         let channel = "";
         const channels = localStorage.getItem("channel");

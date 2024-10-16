@@ -510,7 +510,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       } else {
         shippingAddress = sample;
       }
-      console.log("shippingAddress: ", shippingAddress);
 
       const checkoutId = localStorage.getItem("checkoutId");
       if (checkoutId) {
@@ -844,14 +843,11 @@ const CheckoutBillingArea = ({ register, errors }) => {
     //   fieldsToValidate.push({ name: "selectedState", label: "State" });
     // }
 
-    console.log("fieldsToValidate: ", fieldsToValidate);
 
     const errors = {};
-    console.log("state.phone: ", state.phone);
 
     const valid = state.phone && isValidPhoneNumber(state.phone);
 
-    console.log("valid: ", valid);
     if (!valid) {
       errors.phone = "Please enter a valid phone";
     }
@@ -861,7 +857,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         errors[name] = `${label} is required`;
       }
     });
-    console.log("errors: ", errors);
 
     if (state.selectedPaymentType == "") {
       errors.paymentType = "Payment type is required";
@@ -903,7 +898,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       // }
       const valid = state.phone1 && isValidPhoneNumber(state.phone1);
 
-      console.log("valid: ", valid);
       if (!valid) {
         errors.phone1 = "Please enter a valid phone";
       }
@@ -1155,7 +1149,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         promoCode: checkoutAllData?.voucherCode,
       });
 
-      console.log("res", res);
 
       const data = res?.data?.data?.checkoutRemovePromoCode;
 
@@ -1174,12 +1167,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
       notifyError("Error while removing coupon");
     }
 
-    console.log("removed");
   };
 
   const handlePhoneChange = (value) => {
     const valid = value && isValidPhoneNumber(value);
-    console.log("valid: ", valid);
     if (valid == false) {
       setState({
         errors: { ...state.errors, phone: "Please enter a valid phone number" },
@@ -1195,7 +1186,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
 
   const handlePhone1Change = (value) => {
     const valid = value && isValidPhoneNumber(value);
-    console.log("valid: ", valid);
     if (valid == false) {
       setState({
         errors: {

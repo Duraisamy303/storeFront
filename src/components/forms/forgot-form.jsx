@@ -34,7 +34,6 @@ const ForgotForm = () => {
       redirectUrl: "https://www1.prade.in/password_reset/",
     }).then((result) => {
       const res = result?.data?.data?.requestPasswordReset;
-      console.log("result: ", result?.data?.data?.requestPasswordReset);
       if (res?.errors?.length > 0) {
         notifyError(res?.errors[0]?.message);
       } else {

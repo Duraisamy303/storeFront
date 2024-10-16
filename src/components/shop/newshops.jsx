@@ -12,7 +12,6 @@ export default function Newshops(props) {
     updateRange,
     data
   } = props;
-  console.log("products: ", products);
 
 
   function CommonLoader({ loading, spinner }) {

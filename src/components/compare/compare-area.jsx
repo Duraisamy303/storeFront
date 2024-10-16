@@ -163,7 +163,6 @@ const CompareArea = () => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);
   };
 
-  console.log("compareData", compareData);
 
   return (
     <>
