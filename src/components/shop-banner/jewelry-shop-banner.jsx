@@ -69,7 +69,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                      query: { category: "necklaces" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline", color: "white" }}
@@ -87,7 +87,7 @@ function BannerItem({ cls, bg_clr, bg, content, title, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
+                      query: { category: "other_accessories" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline", color: "white" }}
@@ -131,7 +131,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
+                        query: { category: "anklets" }, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}
@@ -179,7 +179,7 @@ function BannerItem2({ cls, bg_clr, content, title, img, isBtn = false }) {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
+                        query: { category: "earrings" }, // Your parameters
                       });
                     }}
                     style={{ textDecoration: "underline" }}
@@ -215,7 +215,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
           <Link href="/shop">{title}</Link>
         </h3>
         <span>{content}</span>
-        {title === "RINGS" ? (
+        {title == "RINGS" ? (
           <>
             {isBtn && (
               <div className="tp-banner-btn-4">
@@ -223,7 +223,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
+                      query: { category: "finger_rings" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}
@@ -241,7 +241,7 @@ function BannerItem3({ cls, bg_clr, content, title, img, isBtn = false }) {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
+                      query: { category: "bangles__bracelets" }, // Your parameters
                     });
                   }}
                   style={{ textDecoration: "underline" }}

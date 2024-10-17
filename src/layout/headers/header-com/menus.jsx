@@ -56,6 +56,7 @@ const CategoryContent = ({
   lists,
   categoryName,
 }) => {
+
   const router = useRouter();
   useEffect(() => {
     filterByCategory();
@@ -64,13 +65,13 @@ const CategoryContent = ({
 
   const filterByCategory = async () => {
     const categoryMap = {
-      Earrings: "Q2F0ZWdvcnk6MTE2NDU=",
-      Necklaces: "Q2F0ZWdvcnk6MTE2NDI=",
-      Bangles: "Q2F0ZWdvcnk6MTE2NDc=",
-      Rings: "Q2F0ZWdvcnk6MTE2NTU=",
-      Anklets: "Q2F0ZWdvcnk6MTIxNTI=",
-      Idols: "Q2F0ZWdvcnk6MTM1ODc=",
-      OtherAccessories: "Q2F0ZWdvcnk6MTI0MTU=",
+      Earrings: "earrings",
+      Necklaces: "necklaces",
+      bangles__bracelets: "bangles__bracelets",
+      finger_rings: "finger_rings",
+      Anklets: "anklets",
+      Idols: "idols",
+      OtherAccessories: "other_accessories",
     };
 
     const categoryId = categoryMap[categoryName] || ""; // Retrieve the category ID or set to an empty string if not found
@@ -93,16 +94,16 @@ const CategoryContent = ({
                     borderBottom: "1px solid #e8e3e3",
                     marginBottom: "10px",
                   }}
-                  key={item?.node?.id}
+                  key={item?.node?.slug}
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: item?.node?.id }, // Your parameters
+                      query: { category: item?.node?.slug }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href={`/shop?categoryId=${item?.node?.id}`}
+                    href={`/shop?category=${item?.node?.slug}`}
                     className="cursor-pointer"
                     style={{
                       fontWeight: "500",
@@ -113,7 +114,7 @@ const CategoryContent = ({
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: item?.node?.id }, // Your parameters
+                        query: { category: item?.node?.slug }, // Your parameters
                       });
                     }}
                   >
@@ -153,7 +154,7 @@ const CategoryContent = ({
                 onClick={() => {
                   router?.push({
                     pathname: "/shop",
-                    query: { categoryId: parentCategoryId }, // Your parameters
+                    query: { category: parentCategoryId }, // Your parameters
                   });
                 }}
               >
@@ -188,31 +189,31 @@ const CategoryComponent = ({
 
   const categoryMap = {
     Earrings: {
-      id: "Q2F0ZWdvcnk6MTE2NDU=",
+      id: "earrings",
       title: "ALL EARRINGS",
     },
     Necklaces: {
-      id: "Q2F0ZWdvcnk6MTE2NDI=",
+      id: "necklaces",
       title: "ALL NECKLACES",
     },
-    Bangles: {
-      id: "Q2F0ZWdvcnk6MTE2NDc=",
+    bangles__bracelets: {
+      id: "bangles__bracelets",
       title: "ALL BANGLES & BRACELETS",
     },
-    Rings: {
-      id: "Q2F0ZWdvcnk6MTE2NTU=",
+    finger_rings: {
+      id: "finger_rings",
       title: "ALL RINGS",
     },
     Anklets: {
-      id: "Q2F0ZWdvcnk6MTIxNTI=",
+      id: "anklets",
       title: "ALL ANKLETS",
     },
     OtherAccessories: {
-      id: "Q2F0ZWdvcnk6MTI0MTU=",
+      id: "other_accessories",
       title: "ALL OTHER ACCESSORIES",
     },
     Idols: {
-      id: "Q2F0ZWdvcnk6MTM1ODc=",
+      id: "idols",
       title: "IDOLS",
     },
   };
@@ -239,11 +240,11 @@ const CategoryComponent = ({
     const categoryId = categoryMap[category]?.id || "";
 
     if (categoryId) {
-      const SubCategory = await subCatList({ parentid: categoryId });
+      const SubCategory = await subCatList({ slug: categoryId });
       setSubCategoryLists(SubCategory?.data?.data?.category?.children?.edges);
 
       priceFilter({
-        filter: { categories: categoryId },
+        filter: { categorySlugs: categoryId },
         sortBy: { direction: "DESC", field: "CREATED_AT" },
         first: 12,
         after: null,
@@ -253,7 +254,7 @@ const CategoryComponent = ({
           ?.map((item) => item.node?.category)
           ?.flatMap((subArray) =>
             subArray.find(
-              (item) => item.id === categoryId && item.backgroundImageUrl !== ""
+              (item) => item.slug === categoryId && item.backgroundImageUrl !== ""
             )
           );
 
@@ -372,12 +373,12 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
+                      query: { category: "earrings" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDU="
+                    href="/shop?category=earrings"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Earrings" ? "active" : ""
@@ -385,7 +386,7 @@ const Menus = () => {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDU=" }, // Your parameters
+                        query: { category: "earrings" }, // Your parameters
                       });
                     }}
                   >
@@ -414,12 +415,12 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                      query: { category: "necklaces" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDI="
+                    href="/shop?category=necklaces"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Necklaces" ? "active" : ""
@@ -427,7 +428,7 @@ const Menus = () => {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDI=" }, // Your parameters
+                        query: { category: "necklaces" }, // Your parameters
                       });
                     }}
                   >
@@ -443,9 +444,9 @@ const Menus = () => {
 
                 <li
                   className={`shop-submenu-catageroy-list ${
-                    lastHoveredCategory === "Bangles" ? "active" : ""
+                    lastHoveredCategory === "bangles__bracelets" ? "active" : ""
                   }`}
-                  onMouseEnter={() => setLastHoveredCategory("Bangles")}
+                  onMouseEnter={() => setLastHoveredCategory("bangles__bracelets")}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -455,20 +456,20 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
+                      query: { category: "bangles__bracelets" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NDc="
+                    href="/shop?category=bangles__bracelets"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
-                      lastHoveredCategory === "Bangles" ? "active" : ""
+                      lastHoveredCategory === "bangles__bracelets" ? "active" : ""
                     }`}
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NDc=" }, // Your parameters
+                        query: { category: "bangles__bracelets" }, // Your parameters
                       });
                     }}
                   >
@@ -477,16 +478,16 @@ const Menus = () => {
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
-                      lastHoveredCategory === "Bangles" ? "active" : ""
+                      lastHoveredCategory === "bangles__bracelets" ? "active" : ""
                     }`}
                   />
                 </li>
 
                 <li
                   className={`shop-submenu-catageroy-list ${
-                    lastHoveredCategory === "Rings" ? "active" : ""
+                    lastHoveredCategory === "finger_rings" ? "active" : ""
                   }`}
-                  onMouseEnter={() => setLastHoveredCategory("Rings")}
+                  onMouseEnter={() => setLastHoveredCategory("finger_rings")}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -496,20 +497,20 @@ const Menus = () => {
                   onClick={() => {
                     router.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
+                      query: { category: "finger_rings" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTE2NTU="
+                    href="/shop?category=finger_rings"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
-                      lastHoveredCategory === "Rings" ? "active" : ""
+                      lastHoveredCategory === "finger_rings" ? "active" : ""
                     }`}
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTE2NTU=" }, // Your parameters
+                        query: { category: "finger_rings" }, // Your parameters
                       });
                     }}
                   >
@@ -519,7 +520,7 @@ const Menus = () => {
                   <RightOutlined
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a ${
-                      lastHoveredCategory === "Rings" ? "active" : ""
+                      lastHoveredCategory === "finger_rings" ? "active" : ""
                     }`}
                   />
                 </li>
@@ -538,12 +539,12 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
+                      query: { category: "anklets" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTIxNTI="
+                    href="/shop?category=anklets"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Anklets" ? "active" : ""
@@ -551,7 +552,7 @@ const Menus = () => {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTIxNTI=" }, // Your parameters
+                        query: { category: "anklets" }, // Your parameters
                       });
                     }}
                   >
@@ -579,12 +580,12 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTM1ODc=" }, // Your parameters
+                      query: { category: "idols" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTM1ODc="
+                    href="/shop?category=idols"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "Idols" ? "active" : ""
@@ -592,7 +593,7 @@ const Menus = () => {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTM1ODc=" }, // Your parameters
+                        query: { category: "idols" }, // Your parameters
                       });
                     }}
                   >
@@ -622,12 +623,12 @@ const Menus = () => {
                   onClick={() => {
                     router?.push({
                       pathname: "/shop",
-                      query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
+                      query: { category: "other_accessories" }, // Your parameters
                     });
                   }}
                 >
                   <a
-                    href="/shop?categoryId=Q2F0ZWdvcnk6MTI0MTU="
+                    href="/shop?category=other_accessories"
                     style={{ cursor: "pointer", marginBottom: "0px" }}
                     className={`shop-submenu-catageroy-list-a cursor-pointer ${
                       lastHoveredCategory === "OtherAccessories" ? "active" : ""
@@ -635,7 +636,7 @@ const Menus = () => {
                     onClick={() => {
                       router.push({
                         pathname: "/shop",
-                        query: { categoryId: "Q2F0ZWdvcnk6MTI0MTU=" }, // Your parameters
+                        query: { category: "other_accessories" }, // Your parameters
                       });
                     }}
                   >

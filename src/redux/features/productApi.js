@@ -548,14 +548,14 @@ export const productApi = apiSlice.injectEndpoints({
     }),
 
     subCatList: builder.mutation({
-      query: ({ parentid }) => {
-        return configuration(SUB_CAT_LIST({ parentid }));
+      query: ({ slug }) => {
+        return configuration(SUB_CAT_LIST({ slug }));
       },
     }),
 
     getCategoryName: builder.mutation({
-      query: ({ categoryid }) => {
-        return configuration(CATEGORY_NAME({ categoryid }));
+      query: ({ categoryid,slug }) => {
+        return configuration(CATEGORY_NAME({ slug }));
       },
       providesTags: ["Products"],
     }),

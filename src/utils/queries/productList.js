@@ -371,7 +371,8 @@ export const PARENT_CATEGORY_LIST = ({ channel }) => {
     first: 100
     level: 0
     where: {}
-    filter: {ids: ["Q2F0ZWdvcnk6MTI0MTU=","Q2F0ZWdvcnk6MTIxNTI=","Q2F0ZWdvcnk6MTE3NDE=","Q2F0ZWdvcnk6MTE2NTU=","Q2F0ZWdvcnk6MTE2NTI=","Q2F0ZWdvcnk6MTE2NDc="]}
+     filter: {ids: ["Q2F0ZWdvcnk6MTI0MTU=","Q2F0ZWdvcnk6MTIxNTI=","Q2F0ZWdvcnk6MTE3NDE=","Q2F0ZWdvcnk6MTE2NTU=","Q2F0ZWdvcnk6MTE2NTI=","Q2F0ZWdvcnk6MTE2NDc="]}
+
   ) {
     edges {
       node {
@@ -446,6 +447,7 @@ export const PRODUCT_FILTER = ({
         category {
           id
           name
+          slug
           description
           backgroundImageUrl
         }
@@ -550,6 +552,7 @@ export const LOOT_LIST = ({ channel, first, after, filter }) => {
         }
         category {
           id
+          slug
           name
           description
         }
@@ -1479,34 +1482,34 @@ export const PRODUCT_20_PERCENTAGE = ({ channel, first, after, filter }) => {
   });
 };
 
-export const SUB_CAT_LIST = ({ parentid }) => {
+export const SUB_CAT_LIST = ({ slug }) => {
   return {
     query: `
-    query GetSubCategoryList($parentid: ID!) {
-      category(id: $parentid) {
-        id
-        name
-        children(first: 100) {
-          edges {
-            node {
-              id
-              name
-              slug
-            }
-          }
+    query GetSubCategoryList( $slug: String = "") {
+  category( slug: $slug) {
+    id
+    name
+    children(first: 100) {
+      edges {
+        node {
+          id
+          name
+          slug
         }
       }
     }
+  }
+}
       `,
-    variables: { parentid },
+    variables: { slug },
   };
 };
 
-export const CATEGORY_NAME = ({ categoryid }) => {
+export const CATEGORY_NAME = ({ categoryid,slug }) => {
   return JSON.stringify({
     query: `
-    query GetCategoryName($categoryid: ID!) {
-  category(id: $categoryid) {
+ query GetCategoryName($slug: String = "", $categoryId: ID) {
+  category(slug: $slug, id: $categoryId) {
     name
     parent {
       id
@@ -1515,7 +1518,7 @@ export const CATEGORY_NAME = ({ categoryid }) => {
   }
 }
       `,
-    variables: { categoryid },
+    variables: { categoryid,slug },
   });
 };
 

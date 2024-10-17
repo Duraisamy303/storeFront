@@ -1408,7 +1408,7 @@ const DetailsWrapper = ({
                       onClick={() => {
                         router.push({
                           pathname: "/shop",
-                          query: { categoryId: category?.id }, // Your parameters
+                          query: { category: category?.slug}, // Your parameters
                         });
                       }}
                     >
@@ -1732,7 +1732,7 @@ const DetailsWrapper = ({
                       onClick={() => {
                         router.push({
                           pathname: "/shop",
-                          query: { categoryId: category?.id }, // Your parameters
+                          query: { category: category?.slug }, // Your parameters
                         });
                       }}
                     >

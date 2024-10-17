@@ -10,7 +10,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
   const router = useRouter();
   const categories = title.split(" / ");
 
-  const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
+  const [categoryId, setCategoryId] = useState("earrings");
   const [categoryopen, setCategoryOpen] = useState(false);
 
   // Initialize ParentCategoryId
@@ -19,22 +19,22 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
 
     // Set ParentCategoryId based on categories[1]
     if (categories[1] === "Earrings") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NQ==";
+      ParentCategoryId = "earrings";
     }
     if (categories[1] === "Necklaces") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NzA=";
+      ParentCategoryId = "necklaces";
     }
     if (categories[1] === "Bangles & Bracelets") {
-      ParentCategoryId = "Q2F0ZWdvcnk6Njc=";
+      ParentCategoryId = "bangles__bracelets";
     }
     if (categories[1] === "Finger Rings") {
-      ParentCategoryId = "Q2F0ZWdvcnk6MTIwNw==";
+      ParentCategoryId = "finger_rings";
     }
     if (categories[1] === "Anklets data") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
+      ParentCategoryId = "anklets";
     }
-    if (categories[1] === " Other Accessories") {
-      ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+    if (categories[1] === "Other Accessories") {
+      ParentCategoryId = "other_accessories";
     }
     setCategoryId(ParentCategoryId);
 
@@ -47,10 +47,10 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
   const [catName, setCatName] = useState([]);
 
   const filterByCategoryName = async () => {
-    const categoryId = product?.category?.id;
+    const categoryId = product?.category?.slug;
     try {
       const res = await getCategoryName({
-        categoryid: categoryId,
+        slug: categoryId,
       });
 
       const list = res?.data?.data?.category?.name;
@@ -59,6 +59,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
       console.log(err);
     }
   };
+
   return (
     <>
       <section
@@ -80,7 +81,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                       onClick={() => {
                         router.push({
                           pathname: "/shop",
-                          query: { categoryId: categoryId }, // Your parameters
+                          query: { category: categoryId }, // Your parameters
                         });
                       }}
                       style={{ cursor: "pointer" }}
@@ -116,7 +117,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                               onClick={() => {
                                 router.push({
                                   pathname: "/shop",
-                                  query: { categoryId: item?.node?.id }, // Your parameters
+                                  query: { category: item?.node?.slug }, // Your parameters
                                 });
                               }}
                             >
@@ -157,7 +158,7 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                                     onClick={() => {
                                       router.push({
                                         pathname: "/shop",
-                                        query: { categoryId: item?.node?.id }, // Your parameters
+                                        query: { category: item?.node?.slug }, // Your parameters
                                       });
                                     }}
                                   >

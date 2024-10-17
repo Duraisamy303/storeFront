@@ -8,7 +8,7 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
   const router = useRouter();
 
   const categories = category?.split(" / ");
-  const [categoryId, setCategoryId] = useState("Q2F0ZWdvcnk6NQ==");
+  const [categoryId, setCategoryId] = useState("earrings");
 
   // Initialize ParentCategoryId
   useEffect(() => {
@@ -16,22 +16,22 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
 
     // Set ParentCategoryId based on categories[1]
     if (categories[1] === "Earrings") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NQ==";
+      ParentCategoryId = "earrings";
     }
     if (categories[1] === "Necklaces") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NzA=";
+      ParentCategoryId = "necklaces";
     }
     if (categories[1] === "Bangles & Bracelets") {
-      ParentCategoryId = "Q2F0ZWdvcnk6Njc=";
+      ParentCategoryId = "bangles__bracelets";
     }
     if (categories[1] === "Finger Rings") {
-      ParentCategoryId = "Q2F0ZWdvcnk6MTIwNw==";
+      ParentCategoryId = "finger_rings";
     }
     if (categories[1] === "Anklets data") {
-      ParentCategoryId = "Q2F0ZWdvcnk6NzM1";
+      ParentCategoryId = "anklets";
     }
     if (categories[1] === " Other Accessories") {
-      ParentCategoryId = "Q2F0ZWdvcnk6Mzk0Nw==";
+      ParentCategoryId = "other_accessories";
     }
  
     setCategoryId(ParentCategoryId);

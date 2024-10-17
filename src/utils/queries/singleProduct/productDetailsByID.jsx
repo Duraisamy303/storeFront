@@ -28,6 +28,7 @@ export const SINGLE_PRODUCT = ({ productId, channel }) => {
     category {
       id
       name
+      slug
     }
     thumbnail(size: 1024, format: WEBP) {
       url

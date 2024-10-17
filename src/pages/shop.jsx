@@ -78,6 +78,9 @@ const ShopPage = () => {
   const [productStyles, setProductStyles] = useState([]);
   const [attributeList, setAttributeList] = useState([]);
 
+  const  categoryId = router?.query?.category;
+
+
   const PAGE_LIMIT = 21;
 
   const commonFilter = () => {
@@ -97,8 +100,8 @@ const ShopPage = () => {
       };
     }
 
-    if (router?.query?.categoryId) {
-      filters.categories = router?.query?.categoryId;
+    if (categoryId) {
+      filters.categorySlugs = categoryId;
     }
 
     if (router?.query?.tag) {
@@ -125,8 +128,8 @@ const ShopPage = () => {
       };
     }
 
-    if (router?.query?.categoryId) {
-      filters.categories = router?.query?.categoryId;
+    if (categoryId) {
+      filters.categorySlugs = categoryId;
     }
 
     if (router?.query?.tag) {
@@ -176,7 +179,8 @@ const ShopPage = () => {
 
   let products = productsData?.data?.productsSearch?.edges;
 
-  const { categoryId, tag } = router?.query || {};
+  const {  tag } = router?.query || {};
+
   let shopTitle = "Shop";
 
   if (categoryId) {
@@ -230,7 +234,7 @@ const ShopPage = () => {
   }, []);
 
   useEffect(() => {
-    if (router?.query?.categoryId) {
+    if (categoryId) {
       filterByCategoryName();
     }
   }, [router]);
@@ -266,7 +270,7 @@ const ShopPage = () => {
   //   if (filter) {
   //     filters();
   //   } else {
-  //     if (router?.query?.categoryId) {
+  //     if (categoryId) {
   //       filterByCategory();
   //     } else if (router?.query?.tag) {
   //       filterByTags();
@@ -288,7 +292,7 @@ const ShopPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (router?.query?.categoryId) {
+    if (categoryId) {
       filterByCategory();
     }
   }, [router]);
@@ -428,7 +432,7 @@ const ShopPage = () => {
 
   const filterByCategory = () => {
     const datas = {
-      categories: router?.query?.categoryId,
+      categorySlugs: categoryId,
     };
 
     priceFilter({
@@ -478,8 +482,8 @@ const ShopPage = () => {
       };
     }
 
-    if (router?.query?.categoryId) {
-      filters.categories = router?.query?.categoryId;
+    if (categoryId) {
+      filters.categorySlugs = categoryId;
     }
 
     if (router?.query?.tag) {
@@ -512,8 +516,8 @@ const ShopPage = () => {
     const bodyData = {
       price: { gte: priceValue[0], lte: priceValue[1] },
     };
-    if (router?.query?.categoryId) {
-      bodyData.categories = router?.query?.categoryId;
+    if (categoryId) {
+      bodyData.categorySlugs = categoryId;
     }
     if (router?.query?.tag) {
       bodyData.tag = router?.query?.tag;
@@ -559,7 +563,7 @@ const ShopPage = () => {
   const filterByCategoryName = async () => {
     try {
       const res = await getCategoryName({
-        categoryid: router?.query?.categoryId,
+        slug:categoryId
       });
       const list = res?.data?.data?.category?.name;
       setCatName(list);
@@ -589,20 +593,20 @@ const ShopPage = () => {
       setPrevPage(currentPage);
     } else {
       if (number === prevPage + 1) {
-        if (router?.query?.categoryId || router?.query?.tag || filter) {
+        if (categoryId || router?.query?.tag || filter) {
           filterNextData();
         } else {
           finalNextData();
         }
       } else if (number === prevPage - 1) {
-        if (router?.query?.categoryId || router?.query?.tag || filter) {
+        if (categoryId || router?.query?.tag || filter) {
           filterPrevData();
         } else {
           finalPrevData();
         }
       } else {
         if (number == 1) {
-          if (router?.query?.categoryId || router?.query?.tag || filter) {
+          if (categoryId || router?.query?.tag || filter) {
             finalInitialFilterData(sortBy);
           } else {
             finalInitialData(sortBy);
@@ -683,7 +687,7 @@ const ShopPage = () => {
     });
 
     const data = res?.data?.data?.findProductsEndcursor;
-    if (router?.query?.categoryId || router?.query?.tag || filter) {
+    if (categoryId || router?.query?.tag || filter) {
       dynamicFilterPageData(data?.pageInfo?.endCursor);
     } else {
       dynamicPageData(data?.pageInfo?.endCursor);
@@ -862,7 +866,7 @@ const ShopPage = () => {
         totalCount={totalCount}
         page={currentPage}
         clearFilter={() => {
-          if (router?.query?.categoryId || router?.query?.tag) {
+          if (categoryId || router?.query?.tag) {
             refreshFilterData(sortBy);
           } else {
             refresh();
@@ -903,7 +907,7 @@ const ShopPage = () => {
         filterByPrice={(val) => filterByPrice("priceRange")}
         maxPrice={maxPrice}
         resetFilter={() => {
-          if (router?.query?.categoryId || router?.query?.tag) {
+          if (categoryId || router?.query?.tag) {
             refreshFilterData(sortBy);
           } else {
             refresh();

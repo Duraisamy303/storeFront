@@ -32,7 +32,7 @@ const slider_data = [
     img: slider_img_1,
     content:
       "Adorn your ears with timeless designs that speak of grace and beauty",
-    shopId: "Q2F0ZWdvcnk6MTE2NDU=",
+    shopId: "earrings",
   },
   {
     subtitle: "Elegant Jewellery",
@@ -41,7 +41,7 @@ const slider_data = [
     content:
       "Luxurious ethnic jewellery that is a blend of traditional motifs and modern sophistication, perfect for any occasion.",
 
-    shopId: "Q2F0ZWdvcnk6MTE2NDI=",
+    shopId: "necklaces",
   },
   {
     subtitle: "Beautiful bracelets",
@@ -49,14 +49,14 @@ const slider_data = [
     img: slider_img_3,
     content:
       "Every piece of our handcrafted bracelets is a work of art that resonates your unique style",
-    shopId: "Q2F0ZWdvcnk6MTE2NDc=",
+    shopId: "bangles__bracelets",
   },
   {
     subtitle: "Designed to captivate",
     title: "Timeless, handcrafted rings for every occasion",
     img: slider_img_4,
     content: "Stunning collections that convey grace and sophistication",
-    shopId: "Q2F0ZWdvcnk6MTE2NTU=",
+    shopId: "finger_rings",
   },
   {
     subtitle: "Delicate Anklets",
@@ -64,7 +64,7 @@ const slider_data = [
     img: slider_img_5,
     content:
       "Adorn your ankles with stunning designs that complement every step",
-    shopId: "Q2F0ZWdvcnk6MTIxNTI=",
+    shopId: "anklets",
   },
   {
     subtitle: "Handcrafted Idols",
@@ -72,7 +72,7 @@ const slider_data = [
     img: slider_img_6,
     content:
       "Celebrate the richness of tradition and honour your heritage and express your devotion in a meaningful way",
-    shopId: "Q2F0ZWdvcnk6MTM1ODc=",
+    shopId: "idols",
   },
   {
     subtitle: "Stunning Accessories",
@@ -80,26 +80,26 @@ const slider_data = [
     img: slider_img_7,
     content:
       "Provides the perfect finishing touch to showcase your individuality",
-    shopId: "Q2F0ZWdvcnk6MTI0MTU=",
+    shopId: "other_accessories",
   },
 ];
 
 // slider nav data
 const slider_nav_data = [
-  { icon: nav_icon_1, title: <>EARRINGS</>, id: "Q2F0ZWdvcnk6MTE2NDU=" },
-  { icon: nav_icon_3, title: <>NECKLACES</>, id: "Q2F0ZWdvcnk6MTE2NDI=" },
+  { icon: nav_icon_1, title: <>EARRINGS</>, id: "earrings" },
+  { icon: nav_icon_3, title: <>NECKLACES</>, id: "necklaces" },
   {
     icon: nav_icon_2,
     title: <>BANGLES & BRACELETS</>,
-    id: "Q2F0ZWdvcnk6MTE2NDc=",
+    id: "bangles__bracelets",
   },
-  { icon: nav_icon_4, title: <>RINGS</>, id: "Q2F0ZWdvcnk6MTE2NTU=" },
-  { icon: nav_icon_5, title: <>ANKLETS</>, id: "Q2F0ZWdvcnk6MTIxNTI=" },
-  { icon: nav_icon_8, title: <>IDOLS</>, id: "Q2F0ZWdvcnk6MTM1ODc=" },
+  { icon: nav_icon_4, title: <>RINGS</>, id: "finger_rings" },
+  { icon: nav_icon_5, title: <>ANKLETS</>, id: "anklets" },
+  { icon: nav_icon_8, title: <>IDOLS</>, id: "idols" },
   {
     icon: nav_icon_7,
     title: <>OTHER ACCESSORIES</>,
-    id: "Q2F0ZWdvcnk6MTI0MTU=",
+    id: "other_accessories",
   },
 ];
 
@@ -211,7 +211,7 @@ const JewelryBanner = () => {
                           onClick={() => {
                             router.push({
                               pathname: "/shop",
-                              query: { categoryId: item.shopId }, // Your parameters
+                              query: { category: item?.shopId }, // Your parameters
                             });
                           }}
                           className="tp-btn tp-btn-border tp-btn-border-white"
