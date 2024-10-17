@@ -626,7 +626,7 @@ const PreOrders = () => {
           shopPaginationLoading
         }
         updateData={() => setCartUpdate(true)}
-        subtitle="Pre Orders"
+        subtitle="Loot Sale"
         updateRange={(range) => handleChanges(range)}
         maxPrice={maxPrice}
         totalCount={totalCount}

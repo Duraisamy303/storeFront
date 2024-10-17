@@ -43,22 +43,18 @@ const ProductDetailsBreadcrumb = ({ category, title, parentSlug }) => {
                 <span>
                   <>Home</>
                 </span>{" "}
-              
                 <span>
                   <span
-                  // onClick={() => {
-                  //   if (categories[1] === "Gift Card") {
-                  //     router.push("/gift-card");
-                  //   } else {
-                  //     router.push({
-                  //       pathname: "/shop",
-                  //       query: { category: categoryId }, // Your parameters
-                  //     });
-                  //   }
-                  // }}
-                  // style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (categories[0] == "Shop") {
+                        router.push({
+                          pathname: "/shop",
+                        });
+                      }
+                    }}
+                    style={{ cursor: "pointer" }}
                   >
-                     / {categories[0]}
+                    / {categories[0]}
                   </span>
                   {/* <Link href="/shop"> {categories[0]}</Link>{" "} */}
                   {categories[1] && (

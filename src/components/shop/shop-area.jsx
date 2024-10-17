@@ -31,6 +31,7 @@ const ShopArea = ({
   clearFilter,
   parentSlug,
 }) => {
+
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
 
@@ -109,6 +110,7 @@ const ShopArea = ({
   }
 
   const categories = subtitle.split(" / ");
+  console.log("categories: ", categories);
   const [categoryId, setCategoryId] = useState("earrings");
 
   // Initialize ParentCategoryId
@@ -231,7 +233,19 @@ const ShopArea = ({
               </span>{" "}
               /{" "}
               <span style={{ color: "black", fontWeight: "600" }}>
-                <Link href="/shop">{categories[0]}</Link>{" "}
+                {/* <Link href="/shop">{categories[0]}</Link>{" "} */}
+                <span
+                  onClick={() => {
+                    if (categories[0] == "Shop") {
+                      router.push({
+                        pathname: "/shop",
+                      });
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  {categories[0]}
+                </span>
                 {categories[1] && (
                   <span
                     onClick={() => {

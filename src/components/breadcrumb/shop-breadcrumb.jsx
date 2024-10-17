@@ -13,7 +13,6 @@ const ShopBreadcrumb = ({
   product,
   parentSlug,
 }) => {
-
   const router = useRouter();
   const categories = title.split(" / ");
 
@@ -79,7 +78,18 @@ const ShopBreadcrumb = ({
                     title == "Shop" ? "shop-banner-title" : "other-banner-title"
                   }`}
                 >
-                  <Link href="/shop">{categories[0]}</Link>{" "}
+                  <span
+                    onClick={() => {
+                      if (categories[0] == "Shop") {
+                        router.push({
+                          pathname: "/shop",
+                        });
+                      }
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {categories[0]}
+                  </span>
                   {categories[1] && (
                     <span
                       onClick={() => {
