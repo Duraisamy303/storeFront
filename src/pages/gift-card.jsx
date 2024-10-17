@@ -42,6 +42,8 @@ export default function GiftCart() {
 
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
+  const [parentSlug, setParentSlug] = useState("");
+
 
   useEffect(() => {
     if (product?.category?.id) {
@@ -61,6 +63,8 @@ export default function GiftCart() {
 
       if (res?.data?.data?.category?.parent?.name) {
         setParentCatName(res?.data?.data?.category?.parent?.name);
+        setParentSlug(res?.data?.data?.category?.parent?.slug);
+
       }
     } catch (err) {
       console.log(err);
@@ -91,6 +95,7 @@ export default function GiftCart() {
           pageTitle={shopTitle}
           detailsRefetch={productRefetch}
           isGiftCard={true}
+          parentSlug={parentSlug}
         />
       </>
     );
@@ -103,6 +108,7 @@ export default function GiftCart() {
         title="Gift Card"
         subtitle="Gift Card"
         BgImage={banner}
+        parentSlug={parentSlug}
       />
       {/* <ProductDetailsArea
         productItem={product}

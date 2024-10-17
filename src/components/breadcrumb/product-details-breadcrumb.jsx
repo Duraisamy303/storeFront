@@ -3,8 +3,7 @@ import { SmDot } from "@/svg";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const ProductDetailsBreadcrumb = ({ category, title }) => {
-
+const ProductDetailsBreadcrumb = ({ category, title, parentSlug }) => {
   const router = useRouter();
 
   const categories = category?.split(" / ");
@@ -17,23 +16,19 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
     // Set ParentCategoryId based on categories[1]
     if (categories[1] === "Earrings") {
       ParentCategoryId = "earrings";
-    }
-    if (categories[1] === "Necklaces") {
+    } else if (categories[1] === "Necklaces") {
       ParentCategoryId = "necklaces";
-    }
-    if (categories[1] === "Bangles & Bracelets") {
+    } else if (categories[1] === "Bangles & Bracelets") {
       ParentCategoryId = "bangles__bracelets";
-    }
-    if (categories[1] === "Finger Rings") {
+    } else if (categories[1] === "Finger Rings") {
       ParentCategoryId = "finger_rings";
-    }
-    if (categories[1] === "Anklets data") {
+    } else if (categories[1] === "Anklets data") {
       ParentCategoryId = "anklets";
-    }
-    if (categories[1] === " Other Accessories") {
+    } else if (categories[1] === " Other Accessories") {
       ParentCategoryId = "other_accessories";
+    } else {
+      ParentCategoryId = parentSlug;
     }
- 
     setCategoryId(ParentCategoryId);
   }, [categories[1]]);
 
@@ -46,31 +41,44 @@ const ProductDetailsBreadcrumb = ({ category, title }) => {
               <div>
                 <span className="breadcrumb-icon"></span>
                 <span>
-                  <a href="/">Home</a>
+                  <>Home</>
                 </span>{" "}
-                /
+              
                 <span>
-                  <Link href="/shop"> {categories[0]}</Link>{" "}
+                  <span
+                  // onClick={() => {
+                  //   if (categories[1] === "Gift Card") {
+                  //     router.push("/gift-card");
+                  //   } else {
+                  //     router.push({
+                  //       pathname: "/shop",
+                  //       query: { category: categoryId }, // Your parameters
+                  //     });
+                  //   }
+                  // }}
+                  // style={{ cursor: "pointer" }}
+                  >
+                     / {categories[0]}
+                  </span>
+                  {/* <Link href="/shop"> {categories[0]}</Link>{" "} */}
                   {categories[1] && (
                     <span
-                      onClick={() => {
-                        if (categories[1] === "Gift Card") {
-                          router.push("/gift-card");
-                        } else {
-                          router.push({
-                            pathname: "/shop",
-                            query: { categoryId: categoryId }, // Your parameters
-                          });
-                        }
-                      }}
-                      style={{ cursor: "pointer" }}
+                    // onClick={() => {
+                    //   if (categories[1] === "Gift Card") {
+                    //     router.push("/gift-card");
+                    //   } else {
+                    //     router.push({
+                    //       pathname: "/shop",
+                    //       query: { category: categoryId }, // Your parameters
+                    //     });
+                    //   }
+                    // }}
+                    // style={{ cursor: "pointer" }}
                     >
                       / {categories[1]}
                     </span>
                   )}
-                  {categories[2] && (
-                    <span style={{ cursor: "pointer" }}>/ {categories[2]}</span>
-                  )}
+                  {categories[2] && <span style={{}}>/ {categories[2]}</span>}
                 </span>
                 {/* <span>{title}</span> */}
               </div>

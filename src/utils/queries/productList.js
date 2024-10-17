@@ -1505,20 +1505,22 @@ export const SUB_CAT_LIST = ({ slug }) => {
   };
 };
 
-export const CATEGORY_NAME = ({ categoryid,slug }) => {
+export const CATEGORY_NAME = ({ categoryid, slug }) => {
   return JSON.stringify({
     query: `
  query GetCategoryName($slug: String = "", $categoryId: ID) {
   category(slug: $slug, id: $categoryId) {
     name
+    slug
     parent {
       id
       name
+      slug
     }
   }
 }
       `,
-    variables: { categoryid,slug },
+    variables: { categoryid, slug },
   });
 };
 

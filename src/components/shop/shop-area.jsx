@@ -29,6 +29,7 @@ const ShopArea = ({
   totalCount,
   page,
   clearFilter,
+  parentSlug,
 }) => {
   const { priceFilterValues, selectHandleFilter, currPage, setCurrPage } =
     otherProps;
@@ -117,21 +118,18 @@ const ShopArea = ({
     // Set ParentCategoryId based on categories[1]
     if (categories[1] === "Earrings") {
       ParentCategoryId = "earrings";
-    }
-    if (categories[1] === "Necklaces") {
+    } else if (categories[1] === "Necklaces") {
       ParentCategoryId = "necklaces";
-    }
-    if (categories[1] === "Bangles & Bracelets") {
+    } else if (categories[1] === "Bangles & Bracelets") {
       ParentCategoryId = "bangles__bracelets";
-    }
-    if (categories[1] === "Finger Rings") {
+    } else if (categories[1] === "Finger Rings") {
       ParentCategoryId = "finger_rings";
-    }
-    if (categories[1] === "Anklets data") {
+    } else if (categories[1] === "Anklets data") {
       ParentCategoryId = "anklets";
-    }
-    if (categories[1] === "Other Accessories") {
+    } else if (categories[1] === "Other Accessories") {
       ParentCategoryId = "other_accessories";
+    } else {
+      ParentCategoryId = parentSlug;
     }
     setCategoryId(ParentCategoryId);
   }, [categories[1]]);
@@ -237,10 +235,12 @@ const ShopArea = ({
                 {categories[1] && (
                   <span
                     onClick={() => {
-                      router.push({
-                        pathname: "/shop",
-                        query: { category: categoryId }, // Your parameters
-                      });
+                      if (parentSlug) {
+                        router.push({
+                          pathname: "/shop",
+                          query: { category: categoryId }, // Your parameters
+                        });
+                      }
                     }}
                     style={{ cursor: "pointer" }}
                   >

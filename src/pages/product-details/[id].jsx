@@ -153,6 +153,8 @@ const ProductDetailsPage = ({ query }) => {
 
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
+  const [parentSlug, setParentSlug] = useState("");
+
 
   useEffect(() => {
     if (product?.category?.id) {
@@ -172,6 +174,8 @@ const ProductDetailsPage = ({ query }) => {
 
       if (res?.data?.data?.category?.parent?.name) {
         setParentCatName(res?.data?.data?.category?.parent?.name);
+        setParentSlug(res?.data?.data?.category?.parent?.slug);
+
       }
     } catch (err) {
       console.log(err);
@@ -204,6 +208,7 @@ const ProductDetailsPage = ({ query }) => {
           detailsRefetch={detailProductRefetch}
           youMayLikeData={youMayLikeData}
           isGiftCard={false}
+          parentSlug={parentSlug}
         />
       </>
     );

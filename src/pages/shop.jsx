@@ -62,6 +62,7 @@ const ShopPage = () => {
 
   const [catName, setCatName] = useState("");
   const [parentCatName, setParentCatName] = useState("");
+  const [parentSlug, setParentSlug] = useState("");
   const [tagName, setTagName] = useState("");
   const [pageInfo, setPageInfo] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
@@ -78,8 +79,7 @@ const ShopPage = () => {
   const [productStyles, setProductStyles] = useState([]);
   const [attributeList, setAttributeList] = useState([]);
 
-  const  categoryId = router?.query?.category;
-
+  const categoryId = router?.query?.category;
 
   const PAGE_LIMIT = 21;
 
@@ -179,7 +179,7 @@ const ShopPage = () => {
 
   let products = productsData?.data?.productsSearch?.edges;
 
-  const {  tag } = router?.query || {};
+  const { tag } = router?.query || {};
 
   let shopTitle = "Shop";
 
@@ -563,13 +563,14 @@ const ShopPage = () => {
   const filterByCategoryName = async () => {
     try {
       const res = await getCategoryName({
-        slug:categoryId
+        slug: categoryId,
       });
       const list = res?.data?.data?.category?.name;
       setCatName(list);
 
       if (res?.data?.data?.category?.parent?.name) {
         setParentCatName(res?.data?.data?.category?.parent?.name);
+        setParentSlug(res?.data?.data?.category?.parent?.slug);
       }
     } catch (err) {
       console.log(err);
@@ -839,6 +840,7 @@ const ShopPage = () => {
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb
         title={shopTitle}
+        parentSlug={parentSlug}
         // title="Shop"
         subtitle="Shop"
         bgImage={shopBanner}
@@ -853,6 +855,7 @@ const ShopPage = () => {
         all_products={productList}
         products={productList}
         otherProps={otherProps}
+        parentSlug={parentSlug}
         productLoading={
           productLoadings ||
           productPagiLoading ||

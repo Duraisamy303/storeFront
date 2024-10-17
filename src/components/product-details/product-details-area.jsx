@@ -16,7 +16,8 @@ const ProductDetailsArea = ({
   pageTitle,
   detailsRefetch,
   youMayLikeData,
-  isGiftCard
+  isGiftCard,
+  parentSlug
 }) => {
   const router = useRouter();
   const { media, imageURLs, videoId, status } = productItem || {};
@@ -99,6 +100,7 @@ const ProductDetailsArea = ({
                 detailsBottom={false}
                 pageTitle={pageTitle}
                 isGiftCard={isGiftCard}
+                parentSlug={parentSlug}
               />
               {/* product-details-wrapper end */}
             </div>

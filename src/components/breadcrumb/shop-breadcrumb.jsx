@@ -3,10 +3,17 @@ import { capitalizeFLetter } from "../../utils/functions";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useGetCategoryNameMutation } from "@/redux/features/productApi";
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined } from "@ant-design/icons";
 
+const ShopBreadcrumb = ({
+  title,
+  subtitle,
+  bgImage,
+  catList,
+  product,
+  parentSlug,
+}) => {
 
-const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
   const router = useRouter();
   const categories = title.split(" / ");
 
@@ -20,21 +27,18 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
     // Set ParentCategoryId based on categories[1]
     if (categories[1] === "Earrings") {
       ParentCategoryId = "earrings";
-    }
-    if (categories[1] === "Necklaces") {
+    } else if (categories[1] === "Necklaces") {
       ParentCategoryId = "necklaces";
-    }
-    if (categories[1] === "Bangles & Bracelets") {
+    } else if (categories[1] === "Bangles & Bracelets") {
       ParentCategoryId = "bangles__bracelets";
-    }
-    if (categories[1] === "Finger Rings") {
+    } else if (categories[1] === "Finger Rings") {
       ParentCategoryId = "finger_rings";
-    }
-    if (categories[1] === "Anklets data") {
+    } else if (categories[1] === "Anklets data") {
       ParentCategoryId = "anklets";
-    }
-    if (categories[1] === "Other Accessories") {
+    } else if (categories[1] === "Other Accessories") {
       ParentCategoryId = "other_accessories";
+    } else {
+      ParentCategoryId = parentSlug;
     }
     setCategoryId(ParentCategoryId);
 
@@ -79,10 +83,12 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                   {categories[1] && (
                     <span
                       onClick={() => {
-                        router.push({
-                          pathname: "/shop",
-                          query: { category: categoryId }, // Your parameters
-                        });
+                        if (parentSlug) {
+                          router.push({
+                            pathname: "/shop",
+                            query: { category: categoryId }, // Your parameters
+                          });
+                        }
                       }}
                       style={{ cursor: "pointer" }}
                     >
@@ -124,7 +130,11 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                               {item?.node?.name?.toUpperCase()}
                             </h5>
                             <p className="shop-banner-categoryList-count">
-                              {item?.node?.productsWithoutHiddenCategory?.totalCount} Products
+                              {
+                                item?.node?.productsWithoutHiddenCategory
+                                  ?.totalCount
+                              }{" "}
+                              Products
                             </p>
                           </li>
                         ))}
@@ -135,7 +145,8 @@ const ShopBreadcrumb = ({ title, subtitle, bgImage, catList, product }) => {
                         style={{
                           fontWeight: "500",
                           fontSize: "18px",
-                          cursor: "pointer", marginBottom:"0px"
+                          cursor: "pointer",
+                          marginBottom: "0px",
                         }}
                         onClick={() => setCategoryOpen(!categoryopen)}
                       >

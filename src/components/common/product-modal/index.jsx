@@ -15,12 +15,11 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     height: "calc(100% - 50px)",
-
   },
 };
 
 const ProductModal = () => {
-  const { productItem, isModalOpen } = useSelector(
+  const { productItem, isModalOpen, parentSlug } = useSelector(
     (state) => state.productModal
   );
 
@@ -75,6 +74,7 @@ const ProductModal = () => {
             <DetailsWrapperQuick
               productItem={productItem}
               activeImg={activeImg}
+              parentSlug={parentSlug}
             />
             {/* product-details-wrapper end */}
           </div>

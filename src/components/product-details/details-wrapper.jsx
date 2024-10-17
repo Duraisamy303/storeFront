@@ -55,6 +55,7 @@ const DetailsWrapper = ({
   detailsBottom = false,
   pageTitle,
   isGiftCard,
+  parentSlug
 }) => {
   const {
     sku,
@@ -535,6 +536,7 @@ const DetailsWrapper = ({
           <ProductDetailsBreadcrumb
             category={pageTitle}
             title={productItem?.name}
+            parentSlug={parentSlug}
           />
         </div>
 

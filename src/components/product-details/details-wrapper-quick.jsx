@@ -54,6 +54,7 @@ const DetailsWrapper = ({
   handleImageActive,
   activeImg,
   detailsBottom = false,
+  parentSlug,
 }) => {
   const {
     sku,
@@ -484,6 +485,7 @@ const DetailsWrapper = ({
           <ProductDetailsBreadcrumb
             category={productItem?.category[0]?.name}
             title={productItem?.name}
+            parentSlug={parentSlug}
           />
         </div>
       </div>
@@ -888,13 +890,13 @@ const DetailsWrapper = ({
         </p>
         <p
           style={{ color: "#55585b", cursor: "pointer" }}
-          onClick={() => {
-            router.push({
-              pathname: "/shop",
-              query: { categoryId: ProductData?.category?.id }, // Your parameters
-            });
-            dispatch(handleModalClose());
-          }}
+          // onClick={() => {
+          //   router.push({
+          //     pathname: "/shop",
+          //     query: { category: ProductData?.category?.slug }, // Your parameters
+          //   });
+          //   dispatch(handleModalClose());
+          // }}
         >
           <b>Categories:</b>{" "}
           {productItem?.category?.map((category, index) => {
@@ -905,8 +907,9 @@ const DetailsWrapper = ({
                 onClick={() => {
                   router.push({
                     pathname: "/shop",
-                    query: { categoryId: category?.id }, // Your parameters
+                    query: { category: category?.slug }, // Your parameters
                   });
+                  dispatch(handleModalClose());
                 }}
               >
                 {category?.name}
