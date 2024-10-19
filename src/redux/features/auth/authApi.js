@@ -80,30 +80,7 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          localStorage.setItem("token", result.data.data.tokenCreate.token);
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify({
-              accessToken: result.data.data.tokenCreate.token,
-              user: result.data.data.tokenCreate.user,
-              refreshToken: result.data.data.tokenCreate.refreshToken,
-            })
-          );
-          // Cookies.set(
-          //   "userInfo",
-          //   JSON.stringify({
-          //     accessToken: result.data.data.tokenCreate.token,
-          //     user: result.data.data.tokenCreate.user,
-          //     refreshToken: result.data.data.tokenCreate.refreshToken,
-          //   }),
-          //   { expires: 0.5 }
-          // );
-          dispatch(
-            userLoggedIn({
-              accessToken: result.data.data.token,
-              user: result.data.data.user,
-            })
-          );
+         
         } catch (err) {
           // do nothing
         }

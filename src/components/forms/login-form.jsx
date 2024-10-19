@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cart_list } from "@/redux/features/cartSlice";
 import { useCheckoutTokenEmailUpdatesMutation } from "../../redux/features/card/cardApi";
 import ButtonLoader from "../loader/button-loader";
+import { userLoggedIn } from "@/redux/features/auth/authSlice";
 
 // schema
 const schema = Yup.object().shape({
@@ -77,6 +78,21 @@ const LoginForm = () => {
         //   }
         // }
         //For india channel
+        localStorage.setItem("token", data?.data.data.tokenCreate.token);
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({
+            accessToken: data?.data.data.tokenCreate.token,
+            user: data?.data.data.tokenCreate.user,
+            refreshToken: data?.data.data.tokenCreate.refreshToken,
+          })
+        );
+        dispatch(
+          userLoggedIn({
+            accessToken: data?.data.data.token,
+            user: data?.data.data.user,
+          })
+        );
         const checkoutTokenINR = localStorage.getItem("checkoutTokenINR");
         if (!checkoutTokenINR || checkoutTokenINR === "undefined") {
           createCheckoutTokenINR(data?.data?.data?.tokenCreate?.user?.email);
