@@ -71,7 +71,7 @@ const ForgotPage = () => {
   };
   return (
     <Wrapper>
-      <SEO pageTitle="Login" />
+      <SEO pageTitle="Reset Password" />
       <HeaderTwo style_2={true} />
       <CommonBreadcrumb
         title="Forgot Password"
