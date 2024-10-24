@@ -77,6 +77,8 @@ const ForgotPage = () => {
         title="Forgot Password"
         subtitle="Reset Password"
         center={true}
+        pt={"0px"}
+        pb={"0px"}
       />
       <section className="tp-login-area pb-140 p-relative z-index-1 fix">
         <LoginShapes />

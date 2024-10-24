@@ -7,12 +7,14 @@ const CommonBreadcrumb = ({
   center = false,
   bg_clr = false,
   content,
+  pt,
+  pb,
 }) => {
   return (
     <section
-      className={`breadcrumb__area ${
-        center ? "text-center" : ""
-      } include-bg pt-50 pb-50`}
+      className={`breadcrumb__area ${center ? "text-center" : ""} include-bg ${
+        pt ? pt : "pt-50"
+      } ${pb ? pb : "pb-50"} `}
       style={{
         backgroundImage: `url(${BgImage?.src})`,
         display: "flex",
