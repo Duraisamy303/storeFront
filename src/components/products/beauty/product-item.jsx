@@ -150,6 +150,8 @@ const ProductItem = ({
 
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
+    notifySuccess("Product to added to compare list");
+
   };
   const isImage = (url) => {
     return /\.(jpg|webp|jpeg|png|gif)$/i.test(url);

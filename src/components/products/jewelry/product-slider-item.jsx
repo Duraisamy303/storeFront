@@ -155,6 +155,8 @@ const ProductSliderItem = ({ product, loginPopup, loading }) => {
     arr.push(prd.node);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
+    notifySuccess("Product to added to compare list");
+
   };
   const img = product?.node?.thumbnail?.url;
   const Product_name = product?.node?.name;

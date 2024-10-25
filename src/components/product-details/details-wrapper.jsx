@@ -344,6 +344,8 @@ const DetailsWrapper = ({
     arr.push(prd);
     localStorage.setItem("compareList", JSON.stringify(arr));
     dispatch(compare_list(arr));
+    notifySuccess("Product to added to compare list");
+
   };
 
   useEffect(() => {
