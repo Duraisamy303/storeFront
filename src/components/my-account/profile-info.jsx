@@ -9,6 +9,7 @@ import Wishlist from "@assets/img/whislist.png"
 import Order from "@assets/img/order.png"
 import ChangePassword from "@assets/img/change-passwprd.png";
 import Image from "next/image";
+import { useLogoutMutation } from "../../redux/features/productApi";
 const NavProfileTab = ({ orderData }) => {
   const {user} = useSelector(state => state.auth)
   const dispatch = useDispatch();
@@ -16,11 +17,25 @@ const NavProfileTab = ({ orderData }) => {
 
 const [ userName, setUserName] = useState("");
 
-  // handle logout
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    router.push('/login')
-  }
+const [logoutRefetch] = useLogoutMutation();
+ 
+
+  const handleLogout = async () => {
+    try {
+      const res = await logoutRefetch({});
+
+      dispatch(userLoggedOut());
+      router.push("/login");
+      if (localStorage.getItem("token")) {
+        dispatch(cart_list([]));
+        localStorage.clear();
+
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   useEffect(() => {
 
     const user = localStorage.getItem("userInfo");

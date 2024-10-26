@@ -36,6 +36,7 @@ import {
   FILTER_OPTION,
   ATTRIBUTE_LIST,
   ADD_NEW_ADDRESS,
+  LOGOUT,
 } from "@/utils/queries/productList";
 import {
   RELATED_PRODUCT,
@@ -51,6 +52,7 @@ import {
   STATE_LIST,
   LOOT_LIST,
   MAX_PRICE,
+  USER_INFO,
 } from "../../utils/queries/productList";
 import {
   GET_WISHLIST_LIST,
@@ -553,6 +555,12 @@ export const productApi = apiSlice.injectEndpoints({
       },
     }),
 
+    userInfo: builder.mutation({
+      query: () => {
+        return configuration(USER_INFO());
+      },
+    }),
+
     getCategoryName: builder.mutation({
       query: ({ categoryid,slug }) => {
         return configuration(CATEGORY_NAME({ slug }));
@@ -746,6 +754,15 @@ export const productApi = apiSlice.injectEndpoints({
         );
       },
     }),
+
+    logout: builder.mutation({
+      query: () => {
+        console.log("query: ", );
+        return configuration(
+          LOGOUT({})
+        );
+      },
+    }),
   }),
 });
 
@@ -802,4 +819,6 @@ export const {
   usePaymentListMutation,
   useLootSaleProductQuery,
   useAttributeListMutation,
+  useUserInfoMutation,
+  useLogoutMutation
 } = productApi;

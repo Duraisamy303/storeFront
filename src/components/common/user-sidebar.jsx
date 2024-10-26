@@ -19,6 +19,7 @@ import {
 import SEO from "../seo";
 import { useRouter } from "next/router";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
+import { useLogoutMutation } from "@/redux/features/productApi";
 
 const UserMiniSidebar = () => {
   const { userMiniOpen } = useSelector((state) => state.cart);
@@ -27,6 +28,9 @@ const UserMiniSidebar = () => {
   const router = useRouter();
 
   const [removeToCart, {}] = useRemoveToCartMutation();
+
+  const [logoutRefetch] = useLogoutMutation();
+
 
   const cartData = useSelector((state) => state.cart?.cart_list);
   const cart = cartData?.node || cartData;
@@ -48,16 +52,20 @@ const UserMiniSidebar = () => {
 
   // handle close cart mini
 
-  const closeCart = () => {
-    router.push("/login");
-    dispatch(userLoggedOut());
+  const closeCart = async () => {
+    try {
+      await logoutRefetch();
     dispatch(closeUserSidebar());
-    if (token) {
-      localStorage.clear();
-      dispatch(cart_list([]));
-    }
+      dispatch(userLoggedOut());
+      router.push("/login");
+      if (localStorage.getItem("token")) {
+        dispatch(cart_list([]));
+        localStorage.clear();
 
-    
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { cart_list } from "@/redux/features/cartSlice";
+import { useLogoutMutation } from "@/redux/features/productApi";
 
 // language
 function Language({ active, handleActive }) {
@@ -63,15 +64,27 @@ function Currency({ active, handleActive }) {
 // setting
 function ProfileSetting({ active, handleActive }) {
   const { user } = useSelector((state) => state.auth);
+
+  const [logoutRefetch] = useLogoutMutation();
+  
+
   const dispatch = useDispatch();
+
   const router = useRouter();
+
   // handle logout
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    router.push("/");
-    if (localStorage.getItem("token")) {
-      localStorage.clear();
-      dispatch(cart_list([]));
+  const handleLogout = async () => {
+    try {
+      await logoutRefetch();
+      dispatch(userLoggedOut());
+      router.push("/login");
+      if (localStorage.getItem("token")) {
+        dispatch(cart_list([]));
+        localStorage.clear();
+
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
   return (

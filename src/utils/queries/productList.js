@@ -1539,6 +1539,40 @@ export const TAG_NAME = ({ id }) => {
   });
 };
 
+export const USER_INFO = () => {
+  return JSON.stringify({
+    query: `
+ query {
+  me {
+    id
+    email
+    firstName
+    lastName
+    
+  }
+}
+      `,
+    variables: {},
+  });
+};
+
+export const LOGOUT = () => {
+  return JSON.stringify({
+    query: `
+    mutation {
+      tokensDeactivateAll {
+        errors {
+          field
+          message
+          code
+        }
+      }
+    }
+      `,
+    variables: {},
+  });
+};
+
 // address section
 
 export const ADDRESS_LIST = () => {

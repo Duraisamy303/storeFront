@@ -6,10 +6,14 @@ import { userLoggedOut } from "@/redux/features/auth/authSlice";
 import { cart_list, closeUserSidebar } from "@/redux/features/cartSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { useLogoutMutation } from "@/redux/features/productApi";
 
 const MobileMenus = () => {
   const [isActiveMenu, setIsActiveMenu] = useState("");
   const [token, setToken] = useState("");
+
+  const [logoutRefetch] = useLogoutMutation();
+
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -28,13 +32,19 @@ const MobileMenus = () => {
     setToken(token);
   }, []);
 
-  const closeCart = () => {
-    dispatch(userLoggedOut());
-    dispatch(closeUserSidebar());
-    router.push("/login");
-    if (token) {
-      localStorage.clear();
-      dispatch(cart_list([]));
+  const closeCart = async () => {
+    try {
+      const res = await logoutRefetch({});
+      dispatch(userLoggedOut());
+      dispatch(closeUserSidebar());
+      router.push("/login");
+      if (token) {
+        dispatch(cart_list([]));
+        localStorage.clear();
+
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 

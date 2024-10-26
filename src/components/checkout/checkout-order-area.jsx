@@ -96,7 +96,6 @@ const CheckoutOrderArea = () => {
         // order_id: "ORD20156712",
         handler: async (res) => {
           notifySuccess("Payment Successful");
-          console.log(res);
           const completeResponse = await checkoutComplete({ id: checkoutId });
         },
         prefill: {

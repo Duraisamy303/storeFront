@@ -43,6 +43,7 @@ import { useRouter } from "next/router";
 import { checkChannel, removeduplicate } from "@/utils/functions";
 import { profilePic } from "@/utils/constant";
 import ButtonLoader from "../../components/loader/button-loader";
+import { useLogoutMutation } from "../../redux/features/productApi";
 
 const HeaderTwo = ({ style_2 = false, data }) => {
   const router = useRouter();
@@ -56,6 +57,8 @@ const HeaderTwo = ({ style_2 = false, data }) => {
   const { data: cartList, refetch: cartRefetch } = useGetCartListQuery();
   const [searchProduct, { isLoading: searchLoading }] =
     useProductSearchMutation();
+
+  const [logoutRefetch] = useLogoutMutation();
 
   const { data: AllListChannel, refetch: AllListChannelREfresh } =
     useGetCartAllListQuery({});
@@ -193,14 +196,19 @@ const HeaderTwo = ({ style_2 = false, data }) => {
     };
   }, []);
 
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    router.push("/login");
-    if (token) {
-      localStorage.clear();
-      dispatch(cart_list([]));
-    }
+  const handleLogout = async () => {
+    try {
+      const res= await logoutRefetch({});
+      dispatch(userLoggedOut());
+      router.push("/login");
+      if (localStorage.getItem("token")) {
+        dispatch(cart_list([]));
+       localStorage.clear();
 
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
   let timeoutId;
 
@@ -229,8 +237,6 @@ const HeaderTwo = ({ style_2 = false, data }) => {
           img: item?.node?.thumbnail?.url,
           id: item?.node?.id,
           slug: item?.node?.slug,
-
-
         }));
 
         // Handle UI state based on the search term

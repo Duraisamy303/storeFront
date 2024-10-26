@@ -17,6 +17,8 @@ const authSlice = createSlice({
     userLoggedOut: (state) => {
       localStorage.removeItem("token")
       localStorage.removeItem("userInfo")
+      localStorage.removeItem("checkoutTokenUSD")
+      localStorage.removeItem("checkoutTokenINR")
       state=initialState
       Cookies.remove('userInfo');
       // localStorage.clear();

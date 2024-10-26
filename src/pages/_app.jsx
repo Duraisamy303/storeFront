@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { setContext } from "@apollo/client/link/context";
 import Loader from "@/components/loader/loader";
+import UserInfoHandler from "../layout/userInfoHandler";
 if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap");
 }
@@ -125,6 +126,17 @@ export default function App({ Component, pageProps }) {
     gtag("config", "G-7TTX2YVRPQ");
   }, []); // Empty dependency array ensures this runs once on mount
 
+
+  useEffect(() => {
+    // Initialize dataLayer and gtag on client side only
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-7TTX2YVRPQ");
+  }, []);
+
   return (
     <>
       <ApolloProvider client={client}>
@@ -133,6 +145,7 @@ export default function App({ Component, pageProps }) {
         >
           <Provider store={store}>
             {/* <Elements stripe={stripePromise}> */}
+              <UserInfoHandler />
             <div id="root">
               {!paths.includes(router.pathname) &&
                 !isOrderSuccessPath &&

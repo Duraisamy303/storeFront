@@ -110,7 +110,6 @@ const ShopArea = ({
   }
 
   const categories = subtitle.split(" / ");
-  console.log("categories: ", categories);
   const [categoryId, setCategoryId] = useState("earrings");
 
   // Initialize ParentCategoryId
