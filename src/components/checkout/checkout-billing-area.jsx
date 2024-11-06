@@ -60,6 +60,7 @@ import "react-phone-number-input/style.css";
 import pradeLogo from "@assets/img/prade-logo.png";
 import AddressModal from "./addressComponent";
 import { useGetAddressListQuery } from "../../redux/features/productApi";
+import CCAvenue from "../../components/ccAvenue/ccAvenue";
 
 const CheckoutBillingArea = ({ register, errors }) => {
   const { user } = useSelector((state) => state.auth);
@@ -572,6 +573,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("error: ", error);
     }
   };
+
   const checkoutCompletes = async (checkoutId) => {
     try {
       const completeResponse = await checkoutComplete({ id: checkoutId });
@@ -591,8 +593,10 @@ const CheckoutBillingArea = ({ register, errors }) => {
           localStorage.removeItem("checkoutTokenINR");
           dispatch(cart_list([]));
           router.push(`/order-success/${orderId}`);
-        } else {
+        } else if (checkedOption == "Razorpay") {
           handlePayment(orderId, state.total);
+        } else if (checkedOption == "CCAvenue") {
+          ccAvenuePayment(orderId, state.total);
         }
         if (localStorage.getItem("token")) {
           addressRefetch();
@@ -613,6 +617,7 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.log("error: ", error);
     }
   };
+
   const handlePayment = useCallback(
     async (orderId, total) => {
       try {
@@ -700,6 +705,43 @@ const CheckoutBillingArea = ({ register, errors }) => {
     },
     [Razorpay]
   );
+
+  const ccAvenuePayment = async (orderId, amount) => {
+    try {
+      let paymentData = {
+        merchant_id: "315511", // Merchant ID (Required)
+        order_id:orderId, // Order ID - It can be generated from our project
+        amount: amount, // Payment Amount (Required)
+        currency: "INR", // Payment Currency Type (Required)
+        billing_email: "madhanumk@gmail.com", // Billing Email (Optional)
+        billing_name: "Madhan", // Billing Name (Optional)
+        billing_address: `chennai`,
+        billing_city: "Coimbatore", // Billing City (Optional)
+        billing_state: "Tamilnadu", // Billing State (Optional)
+        billing_zip: "621703", // Billing Zip (Optional)
+        billing_country: "India", // Billing COuntry (Optional)
+        redirect_url: `https://www1.prade.in/ccavenue-handle1`, // Success URL (Required)
+        cancel_url: `https://www1.prade.in/chit/add-chit`,
+        merchant_param1: "", // Extra Information (Optional)
+        // merchant_param2: merchant_param2, // Extra Information (Optional)
+        merchant_param3: "", // Extra Information (Optional)
+        merchant_param4: "", // Extra Information (Optional)
+        merchant_param5: "", // Extra Information (Optional)
+        // language: 'EN', // Language (Optional)
+        // billing_tel: state.localCode, // Billing Mobile Number (Optional)
+        // sub_account_id: "",
+      };
+
+      console.log(paymentData);
+
+      let encReq = CCAvenue.getEncryptedOrder(paymentData);
+      let accessCode = "AVGO93LF57AY79OGYA";
+      let URL = `https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction&merchant_id=${paymentData.merchant_id}6&encRequest=${encReq}&access_code=${accessCode}`;
+      router.push(URL);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const updateDelivertMethodAfterChoosePaymentMothod = async (
     country,
@@ -842,7 +884,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
     // if (state.stateList?.length > 0) {
     //   fieldsToValidate.push({ name: "selectedState", label: "State" });
     // }
-
 
     const errors = {};
 
@@ -1149,7 +1190,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
         promoCode: checkoutAllData?.voucherCode,
       });
 
-
       const data = res?.data?.data?.checkoutRemovePromoCode;
 
       if (data?.errors && data.errors.length > 0) {
@@ -1166,7 +1206,6 @@ const CheckoutBillingArea = ({ register, errors }) => {
       console.error("Error while removing coupon:", err);
       notifyError("Error while removing coupon");
     }
-
   };
 
   const handlePhoneChange = (value) => {
